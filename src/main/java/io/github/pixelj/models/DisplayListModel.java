@@ -9,6 +9,7 @@ import javax.swing.event.ListDataListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
@@ -20,8 +21,9 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
     public DisplayListModel() {
     }
 
-    public DisplayListModel(Collection<E> elements) {
-        source.addAll(elements);
+    public DisplayListModel(@NotNull Collection<E> elements) {
+        final var collection = elements.stream().filter(Objects::nonNull).toList();
+        source.addAll(collection);
         display.addAll(source.stream().filter(filter).sorted().toList());
     }
 
