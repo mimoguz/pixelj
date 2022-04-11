@@ -51,7 +51,11 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
 
     public void clear() {
         source.clear();
-        display.clear();
+        if (!display.isEmpty()) {
+            final var index1 = display.size() - 1;
+            display.clear();
+            fireIntervalRemovedEvent(0, index1);
+        }
     }
 
     protected void fireContentsChangedEvent(int index0, int index1) {
@@ -115,6 +119,7 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
         final var element = display.get(index);
         source.remove(element);
         display.remove(index);
+        fireIntervalRemovedEvent(index, index);
     }
 
     @Override
@@ -128,7 +133,13 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
 
     public void setFilter(@NotNull Predicate<E> value) {
         filter = value;
+        if (!display.isEmpty()) {
+            final var index1 = display.size() - 1;
+            display.clear();
+            fireIntervalRemovedEvent(0, index1);
+        }
         display.addAll(source.stream().filter(filter).sorted().toList());
+        if (!display.isEmpty()) fireIntervalAddedEvent(0, display.size() - 1);
     }
 
     private int findPlace(@NotNull E element) {
