@@ -82,7 +82,11 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
 
     @Override
     public int getSize() {
-        return 0;
+        return display.size();
+    }
+
+    public int getSourceSize() {
+        return source.size();
     }
 
     public void remove(@NotNull E element) {
