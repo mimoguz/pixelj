@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class CharacterListActions {
-    private final ApplicationAction showAddDialogAction = new ApplicationAction(
+    public final ApplicationAction showAddDialogAction = new ApplicationAction(
             "showAddDialog",
             (e) -> System.out.println("Show add dialog action"),
             "showAddDialogAction",
@@ -23,7 +23,7 @@ public class CharacterListActions {
             null,
             KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK)
     );
-    private final ApplicationAction showRemoveDialogAction = new ApplicationAction(
+    public final ApplicationAction showRemoveDialogAction = new ApplicationAction(
             "showRemoveDialog",
             (e) -> System.out.println("Show remove dialog action"),
             "showRemoveDialogAction",
@@ -33,7 +33,7 @@ public class CharacterListActions {
             null,
             KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK)
     );
-    private final Collection<ApplicationAction> all = List.of(showAddDialogAction, showRemoveDialogAction);
+    public final Collection<ApplicationAction> all = List.of(showAddDialogAction, showRemoveDialogAction);
     private @Nullable DisplayListModel<CharacterModel> listModel;
     private @Nullable ListSelectionModel selectionModel;
     private final ListSelectionListener selectionListener = e -> {
@@ -51,19 +51,7 @@ public class CharacterListActions {
 
     public CharacterListActions() {
     }
-
-    public Collection<ApplicationAction> getAll() {
-        return all;
-    }
-
-    public ApplicationAction getShowAddDialogAction() {
-        return showAddDialogAction;
-    }
-
-    public ApplicationAction getShowRemoveDialogAction() {
-        return showRemoveDialogAction;
-    }
-
+    
     public void setListModel(@Nullable DisplayListModel<CharacterModel> value) {
         listModel = value;
     }
