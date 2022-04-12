@@ -25,7 +25,7 @@ public class Resources {
     }
 
     @NotNull
-    private static Resources get() {
+    public static Resources get() {
         if (instance == null) {
             initialize(new OneDarkColors());
         }
@@ -44,6 +44,11 @@ public class Resources {
     @NotNull
     public FontIcon getIcon(@NotNull Icons icon, @NotNull Color color) {
         return new FontIcon(icon.codePoint, color, iconFont);
+    }
+
+    @NotNull
+    public FontIcon getIcon(@NotNull Icons icon, @NotNull Color color, @NotNull Color disabledColor) {
+        return new FontIcon(icon.codePoint, color, disabledColor, iconFont);
     }
 
     @NotNull

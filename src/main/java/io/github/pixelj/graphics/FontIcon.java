@@ -11,10 +11,12 @@ public class FontIcon implements Icon {
     private final int height;
     private final String symbol;
     private final int width;
+    private Color disabledForeground;
     private Color foreground;
 
-    public FontIcon(int codePoint, @NotNull Color foreground, @NotNull Font font) {
+    public FontIcon(int codePoint, @NotNull Color foreground, @NotNull Color disabledForeground, @NotNull Font font) {
         this.foreground = foreground;
+        this.disabledForeground = disabledForeground;
         this.font = font;
         symbol = new String(new int[]{codePoint}, 0, 1);
 
@@ -29,13 +31,25 @@ public class FontIcon implements Icon {
         width = metrics.charWidth(codePoint);
     }
 
+    public FontIcon(int codePoint, @NotNull Color foreground, @NotNull Font font) {
+        this(codePoint, foreground, foreground, font);
+    }
+
+    public Color getDisabledForeground() {
+        return disabledForeground;
+    }
+
+    public void setDisabledForeground(Color value) {
+        disabledForeground = value;
+    }
+
     @NotNull
     public Color getForeground() {
         return foreground;
     }
 
-    public void setForeground(@NotNull Color foreground) {
-        this.foreground = foreground;
+    public void setForeground(@NotNull Color value) {
+        foreground = value;
     }
 
     @Override
@@ -53,7 +67,7 @@ public class FontIcon implements Icon {
         final var g = (Graphics2D) graphics.create();
         g.setFont(font);
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g.setColor(foreground);
+        g.setColor(component.isEnabled() ? foreground : disabledForeground);
         g.drawString(symbol, x, y + g.getFontMetrics().getAscent());
         g.dispose();
     }
