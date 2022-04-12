@@ -3,16 +3,14 @@ package io.github.pixelj.actions;
 import io.github.pixelj.resources.Icons;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 public class GlobalActions {
     public static final ApplicationAction exportAction = new ApplicationAction(
-      "export",
+            "export",
             (e) -> System.out.println("Export action"),
             "exportAction",
             null,
@@ -52,7 +50,7 @@ public class GlobalActions {
             Icons.FILE_NEW,
             null,
             null,
-            KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK)
+            KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_DOWN_MASK)
     );
 
     public static final ApplicationAction saveAction = new ApplicationAction(
@@ -63,7 +61,7 @@ public class GlobalActions {
             Icons.FILE_NEW,
             null,
             null,
-            KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK)
+            KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK)
     );
 
     public static final ApplicationAction saveAsAction = new ApplicationAction(
@@ -74,31 +72,8 @@ public class GlobalActions {
             Icons.FILE_NEW,
             null,
             null,
-            KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK)
+            KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK)
     );
-
-    public static final ApplicationAction showMetricsAction = new ApplicationAction(
-            "showMetrics",
-            (e) -> System.out.println("Show metrics action"),
-            "showMetricsAction",
-            null,
-            Icons.FILE_NEW,
-            null,
-            null,
-            KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK)
-    );
-
-    public static final ApplicationAction showSettingsAction = new ApplicationAction(
-            "showSettings",
-            (e) -> System.out.println("Show settings action"),
-            "showSettingsAction",
-            null,
-            Icons.FILE_NEW,
-            null,
-            null,
-            KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK)
-    );
-
     public static final ApplicationAction showHelpAction = new ApplicationAction(
             "showHelp",
             (e) -> System.out.println("Show help action"),
@@ -107,9 +82,28 @@ public class GlobalActions {
             Icons.FILE_NEW,
             null,
             null,
-            KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK)
+            KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0)
     );
-
+    public static final ApplicationAction showMetricsAction = new ApplicationAction(
+            "showMetrics",
+            (e) -> System.out.println("Show metrics action"),
+            "showMetricsAction",
+            null,
+            Icons.FILE_NEW,
+            null,
+            null,
+            KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_DOWN_MASK)
+    );
+    public static final ApplicationAction showSettingsAction = new ApplicationAction(
+            "showSettings",
+            (e) -> System.out.println("Show settings action"),
+            "showSettingsAction",
+            null,
+            Icons.FILE_NEW,
+            null,
+            null,
+            KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, InputEvent.CTRL_DOWN_MASK)
+    );
     public static final Collection<ApplicationAction> all = List.of(
             exportAction,
             newProjectAction,
