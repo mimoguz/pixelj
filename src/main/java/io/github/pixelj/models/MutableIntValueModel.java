@@ -5,7 +5,8 @@ import io.github.pixelj.util.Changeable;
 import javax.swing.event.EventListenerList;
 
 /**
- * Base class for models with a single integer value that can be observed
+ * CharacterModel and KerningPairModel both have a single integer value that can be observed.
+ * This is the base class for them.
  */
 public class MutableIntValueModel implements Changeable<MutableIntValueModel, IntValueChangeEvent, IntValueChangeListener> {
     private final EventListenerList listeners = new EventListenerList();
