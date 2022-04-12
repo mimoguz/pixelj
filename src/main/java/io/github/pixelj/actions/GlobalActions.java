@@ -34,7 +34,7 @@ public class GlobalActions {
             (e) -> System.out.println("Open project action"),
             "openProjectAction",
             null,
-            Icons.FILE_NEW,
+            Icons.FILE_OPEN,
             null,
             null,
             KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK)
@@ -44,7 +44,7 @@ public class GlobalActions {
             (e) -> System.exit(0),
             "quitAction",
             null,
-            Icons.FILE_NEW,
+            Icons.EXIT,
             null,
             null,
             KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_DOWN_MASK)
@@ -54,7 +54,7 @@ public class GlobalActions {
             (e) -> System.out.println("Save action"),
             "saveAction",
             null,
-            Icons.FILE_NEW,
+            Icons.FILE_SAVE,
             null,
             null,
             KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK)
@@ -64,7 +64,7 @@ public class GlobalActions {
             (e) -> System.out.println("Save as action"),
             "saveAsAction",
             null,
-            Icons.FILE_NEW,
+            Icons.FILE_SAVE_AS,
             null,
             null,
             KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK)
@@ -74,7 +74,7 @@ public class GlobalActions {
             (e) -> System.out.println("Show help action"),
             "showHelpAction",
             null,
-            Icons.FILE_NEW,
+            Icons.HELP,
             null,
             null,
             KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0)
@@ -84,7 +84,7 @@ public class GlobalActions {
             (e) -> System.out.println("Show metrics action"),
             "showMetricsAction",
             null,
-            Icons.FILE_NEW,
+            Icons.METRICS,
             null,
             null,
             KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_DOWN_MASK)
@@ -94,7 +94,7 @@ public class GlobalActions {
             (e) -> System.out.println("Show settings action"),
             "showSettingsAction",
             null,
-            Icons.FILE_NEW,
+            Icons.SETTINGS,
             null,
             null,
             KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, InputEvent.CTRL_DOWN_MASK)
