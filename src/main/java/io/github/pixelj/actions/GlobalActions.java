@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class GlobalActions {
-    public static final ApplicationAction exportAction = new ApplicationAction(
+    private final ApplicationAction exportAction = new ApplicationAction(
             "export",
             (e) -> System.out.println("Export action"),
             "exportAction",
@@ -19,8 +19,7 @@ public class GlobalActions {
             null,
             KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK)
     );
-
-    public static final ApplicationAction newProjectAction = new ApplicationAction(
+    private final ApplicationAction newProjectAction = new ApplicationAction(
             "newProject",
             (e) -> System.out.println("New project action"),
             "newProjectAction",
@@ -30,8 +29,7 @@ public class GlobalActions {
             null,
             KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK)
     );
-
-    public static final ApplicationAction openProjectAction = new ApplicationAction(
+    private final ApplicationAction openProjectAction = new ApplicationAction(
             "openProject",
             (e) -> System.out.println("Open project action"),
             "openProjectAction",
@@ -41,8 +39,7 @@ public class GlobalActions {
             null,
             KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK)
     );
-
-    public static final ApplicationAction quitAction = new ApplicationAction(
+    private final ApplicationAction quitAction = new ApplicationAction(
             "quit",
             (e) -> System.exit(0),
             "quitAction",
@@ -52,8 +49,7 @@ public class GlobalActions {
             null,
             KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_DOWN_MASK)
     );
-
-    public static final ApplicationAction saveAction = new ApplicationAction(
+    private final ApplicationAction saveAction = new ApplicationAction(
             "saveProject",
             (e) -> System.out.println("Save action"),
             "saveAction",
@@ -63,8 +59,7 @@ public class GlobalActions {
             null,
             KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK)
     );
-
-    public static final ApplicationAction saveAsAction = new ApplicationAction(
+    private final ApplicationAction saveAsAction = new ApplicationAction(
             "saveAs",
             (e) -> System.out.println("Save as action"),
             "saveAsAction",
@@ -74,8 +69,7 @@ public class GlobalActions {
             null,
             KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK)
     );
-
-    public static final ApplicationAction showHelpAction = new ApplicationAction(
+    private final ApplicationAction showHelpAction = new ApplicationAction(
             "showHelp",
             (e) -> System.out.println("Show help action"),
             "showHelpAction",
@@ -85,8 +79,7 @@ public class GlobalActions {
             null,
             KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0)
     );
-
-    public static final ApplicationAction showMetricsAction = new ApplicationAction(
+    private final ApplicationAction showMetricsAction = new ApplicationAction(
             "showMetrics",
             (e) -> System.out.println("Show metrics action"),
             "showMetricsAction",
@@ -96,8 +89,7 @@ public class GlobalActions {
             null,
             KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_DOWN_MASK)
     );
-
-    public static final ApplicationAction showSettingsAction = new ApplicationAction(
+    private final ApplicationAction showSettingsAction = new ApplicationAction(
             "showSettings",
             (e) -> System.out.println("Show settings action"),
             "showSettingsAction",
@@ -107,8 +99,7 @@ public class GlobalActions {
             null,
             KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, InputEvent.CTRL_DOWN_MASK)
     );
-
-    public static final Collection<ApplicationAction> all = List.of(
+    private final Collection<ApplicationAction> all = List.of(
             exportAction,
             newProjectAction,
             openProjectAction,
@@ -119,4 +110,44 @@ public class GlobalActions {
             showSettingsAction,
             showHelpAction
     );
+
+    public Collection<ApplicationAction> getAll() {
+        return all;
+    }
+
+    public ApplicationAction getExportAction() {
+        return exportAction;
+    }
+
+    public ApplicationAction getNewProjectAction() {
+        return newProjectAction;
+    }
+
+    public ApplicationAction getOpenProjectAction() {
+        return openProjectAction;
+    }
+
+    public ApplicationAction getQuitAction() {
+        return quitAction;
+    }
+
+    public ApplicationAction getSaveAction() {
+        return saveAction;
+    }
+
+    public ApplicationAction getSaveAsAction() {
+        return saveAsAction;
+    }
+
+    public ApplicationAction getShowHelpAction() {
+        return showHelpAction;
+    }
+
+    public ApplicationAction getShowMetricsAction() {
+        return showMetricsAction;
+    }
+
+    public ApplicationAction getShowSettingsAction() {
+        return showSettingsAction;
+    }
 }
