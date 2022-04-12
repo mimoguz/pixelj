@@ -6,12 +6,15 @@ import javax.swing.*;
 import javax.swing.event.EventListenerList;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Predicate;
 
+/**
+ * A list model that keeps its visible elements always filtered and sorted.
+ * <p>
+ * It's Intended to be used for CharacterModels and KerningPairModels, and uses a HashSet for backing collection
+ * (so assumes no hash collisions).
+ */
 public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
     private final ArrayList<E> display = new ArrayList<>();
     private final EventListenerList listeners = new EventListenerList();
@@ -60,6 +63,14 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
         }
     }
 
+    public int countWhere(@NotNull Predicate<E> predicate) {
+        return (int) source.stream().filter(predicate).count();
+    }
+
+    public List<E> find(@NotNull Predicate<E> predicate) {
+        return source.stream().filter(predicate).toList();
+    }
+
     protected void fireContentsChangedEvent(int index0, int index1) {
         final var lst = listeners.getListeners(ListDataListener.class).clone();
         for (var index = lst.length - 1; index >= 0; index--) {
@@ -81,16 +92,25 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
         }
     }
 
+    /**
+     * @param index Index to visible list
+     */
     @Override
     public E getElementAt(int index) {
         return null;
     }
 
+    /**
+     * @return Size of the visible list
+     */
     @Override
     public int getSize() {
         return display.size();
     }
 
+    /**
+     * @return Size of the backing collection
+     */
     public int getSourceSize() {
         return source.size();
     }
@@ -117,6 +137,9 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
         if (index0 >= 0) fireIntervalRemovedEvent(index0, index1);
     }
 
+    /**
+     * @param index Index to visible list
+     */
     public void removeAt(int index) {
         final var element = display.get(index);
         source.remove(element);
@@ -142,6 +165,10 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
         }
         display.addAll(source.stream().filter(filter).sorted().toList());
         if (!display.isEmpty()) fireIntervalAddedEvent(0, display.size() - 1);
+    }
+
+    public boolean sourceContains(E element) {
+        return source.contains(element);
     }
 
     private int findPlace(@NotNull E element) {
