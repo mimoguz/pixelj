@@ -74,6 +74,7 @@ public class GlobalActions {
             null,
             KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK)
     );
+
     public static final ApplicationAction showHelpAction = new ApplicationAction(
             "showHelp",
             (e) -> System.out.println("Show help action"),
@@ -84,6 +85,7 @@ public class GlobalActions {
             null,
             KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0)
     );
+
     public static final ApplicationAction showMetricsAction = new ApplicationAction(
             "showMetrics",
             (e) -> System.out.println("Show metrics action"),
@@ -94,6 +96,7 @@ public class GlobalActions {
             null,
             KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_DOWN_MASK)
     );
+
     public static final ApplicationAction showSettingsAction = new ApplicationAction(
             "showSettings",
             (e) -> System.out.println("Show settings action"),
@@ -104,6 +107,7 @@ public class GlobalActions {
             null,
             KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, InputEvent.CTRL_DOWN_MASK)
     );
+
     public static final Collection<ApplicationAction> all = List.of(
             exportAction,
             newProjectAction,
