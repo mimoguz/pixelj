@@ -140,11 +140,22 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
     /**
      * @param index Index to visible list
      */
-    public void removeAt(int index) {
+    public void removeElementAt(int index) {
         final var element = display.get(index);
         source.remove(element);
         display.remove(index);
         fireIntervalRemovedEvent(index, index);
+    }
+
+    /**
+     * @param from Index to visible list, inclusive
+     * @param until Index to visible list, exclusive
+     */
+    public void removeInterval(int from, int until) {
+        final var elements = display.subList(from, until);
+        elements.forEach(source::remove);
+        display.removeAll(elements);
+        fireIntervalRemovedEvent(from, until);
     }
 
     @Override
