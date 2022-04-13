@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class PainterActions {
-    private boolean active = true;
+    private boolean enabled = true;
     private @Nullable GlyphPainter painter;
     public final ApplicationAction symmetryToggleAction = new ApplicationAction(
             "symmetryToggleAction",
@@ -273,12 +273,12 @@ public class PainterActions {
         painter = value;
     }
 
-    public boolean isActive() {
-        return active;
+    public boolean isEnabled() {
+        return enabled;
     }
 
-    public void setActive(boolean value) {
-        active = value;
-        Actions.setEnabled(this.all, active);
+    public void setEnabled(boolean value) {
+        enabled = value;
+        Actions.setEnabled(this.all, enabled);
     }
 }

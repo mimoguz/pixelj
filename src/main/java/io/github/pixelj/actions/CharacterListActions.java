@@ -35,15 +35,17 @@ public class CharacterListActions {
             KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK)
     );
     public final Collection<ApplicationAction> all = List.of(showAddDialogAction, showRemoveDialogAction);
-    private boolean active = true;
+    private boolean enabled = true;
     private @Nullable DisplayListModel<CharacterModel> listModel;
     private @Nullable ListSelectionModel selectionModel;
     private final ListSelectionListener selectionListener = e -> {
         showRemoveDialogAction.setEnabled(selectionModel.getMinSelectionIndex() >= 0);
     };
 
-    public CharacterListActions(@NotNull DisplayListModel<CharacterModel> listModel,
-                                @NotNull ListSelectionModel selectionModel) {
+    public CharacterListActions(
+            @NotNull DisplayListModel<CharacterModel> listModel,
+            @NotNull ListSelectionModel selectionModel
+    ) {
         this.listModel = listModel;
         this.selectionModel = selectionModel;
         selectionModel.addListSelectionListener(selectionListener);
@@ -52,13 +54,13 @@ public class CharacterListActions {
     public CharacterListActions() {
     }
 
-    public boolean isActive() {
-        return active;
+    public boolean isEnabled() {
+        return enabled;
     }
 
-    public void setActive(boolean value) {
-        active = value;
-        Actions.setEnabled(all, active);
+    public void setEnabled(boolean value) {
+        enabled = value;
+        Actions.setEnabled(all, enabled);
     }
 
     public void setListModel(@Nullable DisplayListModel<CharacterModel> value) {

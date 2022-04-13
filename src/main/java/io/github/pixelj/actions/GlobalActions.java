@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class GlobalActions {
+    private boolean enabled = true;
     final ApplicationAction exportAction = new ApplicationAction(
             "exportAction",
             (e, action) -> System.out.println("Export action"),
@@ -110,4 +111,13 @@ public class GlobalActions {
             showSettingsAction,
             showHelpAction
     );
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(final boolean value) {
+        enabled = value;
+        Actions.setEnabled(all, enabled);
+    }
 }
