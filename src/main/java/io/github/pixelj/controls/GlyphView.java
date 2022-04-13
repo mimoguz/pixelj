@@ -34,6 +34,12 @@ public class GlyphView extends JPanel
         this.lines.addAll(Arrays.stream(lines).toList());
     }
 
+    public void detach() {
+        if (model != null) {
+            model.getGlyph().removeChangeListener(this);
+        }
+    }
+
     @Override
     public Class<ViewChangeListener> getListenerClass() {
         return ViewChangeListener.class;

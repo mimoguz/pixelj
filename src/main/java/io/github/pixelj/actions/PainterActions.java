@@ -20,10 +20,10 @@ public class PainterActions {
             (e, action) -> {
                 if (painter != null) {
                     painter.setSymmetrical(!painter.isSymmetrical());
+                    // Fix selected state if the action performed not because of a button press but its shortcut:
+                    if (e.getSource() instanceof JToggleButton) return;
+                    action.putValue(Action.SELECTED_KEY, painter.isSymmetrical());
                 }
-                // Fix selected state if the action performed not because of a button press but its shortcut:
-                if (e.getSource() instanceof JToggleButton) return;
-                action.putValue(Action.SELECTED_KEY, painter.isSymmetrical());
             },
             null,
             "symmetryToggleActionTooltip",
