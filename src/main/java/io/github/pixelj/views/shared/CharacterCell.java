@@ -1,9 +1,8 @@
-package io.github.pixelj.views;
+package io.github.pixelj.views.shared;
 
 import io.github.pixelj.controls.GlyphView;
 import io.github.pixelj.models.CharacterModel;
 import io.github.pixelj.resources.Resources;
-import io.github.pixelj.views.shared.Borders;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -20,6 +19,10 @@ public class CharacterCell extends JPanel {
     public CharacterCell(int maxPictureSize) {
         this.maxPictureSize = maxPictureSize;
 
+        final var letterSize = new Dimension(30, 30);
+        letter.setMinimumSize(letterSize);
+        letter.setPreferredSize(letterSize);
+
         titleBox.setLayout(new BoxLayout(title, BoxLayout.Y_AXIS));
         titleBox.setOpaque(false);
         titleBox.setBackground(new Color(0, 0, 0, 0));
@@ -33,14 +36,13 @@ public class CharacterCell extends JPanel {
         add(picture);
         add(Box.createHorizontalStrut(8));
         add(letter);
-        add(Box.createHorizontalStrut(8))
+        add(Box.createHorizontalStrut(8));
         add(titleBox);
         add(Box.createHorizontalGlue());
     }
 
-    public void fill(@NotNull CharacterModel model) {
-        picture.setModel(model);
-        picture.detach();
+    public void set(@NotNull CharacterModel model) {
+        picture.setModel(model, false);
 
         final var pictureSize = Math.max(model.getGlyph().getWidth(), model.getGlyph().getHeight());
         if (pictureSize > maxPictureSize) {

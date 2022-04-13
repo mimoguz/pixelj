@@ -14,14 +14,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class GlyphView extends JPanel
-        implements
-        BinaryImage.ImageChangeListener,
-        Changeable<GlyphView, GlyphView.ViewChangeEvent, GlyphView.ViewChangeListener> {
-
+        implements Changeable<GlyphView, GlyphView.ViewChangeEvent, GlyphView.ViewChangeListener> {
     private final Color backgroundColor;
     private final ArrayList<Line> lines = new ArrayList<>();
     private final EventListenerList listeners = new EventListenerList();
     private @Nullable CharacterModel model;
+    private final BinaryImage.ImageChangeListener imageChangeListener = (source, event) -> {
+        if (model == null || source != model.getGlyph()) return;
+        // TODO: Repaint only changed region
+        repaint();
+        fireChangeEvent(this, ViewChangeEvent.GLYPH_MODIFIED);
+    };
     private @Nullable Image overlay;
     private boolean showLines = false;
     private boolean showOverlay = false;
@@ -33,12 +36,6 @@ public class GlyphView extends JPanel
 
     public void addLines(Line... lines) {
         this.lines.addAll(Arrays.stream(lines).toList());
-    }
-
-    public void detach() {
-        if (model != null) {
-            model.getGlyph().removeChangeListener(this);
-        }
     }
 
     @Override
@@ -55,22 +52,9 @@ public class GlyphView extends JPanel
         return model;
     }
 
+
     public void setModel(CharacterModel value) {
-        if (model == value) return;
-
-        if (model != null) {
-            model.getGlyph().removeChangeListener(this);
-            fireChangeEvent(this, ViewChangeEvent.MODEL_UNLOADED);
-        }
-
-        this.model = value;
-
-        if (model != null) {
-            model.getGlyph().addChangeListener(this);
-            fireChangeEvent(this, ViewChangeEvent.MODEL_LOADED);
-        }
-
-        autoSize();
+        setModel(value, true);
     }
 
     public @Nullable Image getOverlay() {
@@ -113,14 +97,6 @@ public class GlyphView extends JPanel
     }
 
     @Override
-    public void onChange(BinaryImage source, BinaryImage.ImageChangeEvent event) {
-        if (model == null || source != model.getGlyph()) return;
-        // TODO: Repaint only changed region
-        repaint();
-        fireChangeEvent(this, ViewChangeEvent.GLYPH_MODIFIED);
-    }
-
-    @Override
     public void paintComponent(Graphics graphics) {
         final var g = (Graphics2D) graphics.create();
         if (model != null) {
@@ -140,6 +116,24 @@ public class GlyphView extends JPanel
 
     public void removeLines(Line... lines) {
         this.lines.removeAll(Arrays.stream(lines).toList());
+    }
+
+    public void setModel(CharacterModel value, boolean listen) {
+        if (model == value) return;
+
+        if (model != null) {
+            model.getGlyph().removeChangeListener(imageChangeListener);
+            fireChangeEvent(this, ViewChangeEvent.MODEL_UNLOADED);
+        }
+
+        this.model = value;
+
+        if (model != null) {
+            if (listen) model.getGlyph().addChangeListener(imageChangeListener);
+            fireChangeEvent(this, ViewChangeEvent.MODEL_LOADED);
+        }
+
+        autoSize();
     }
 
     private void autoSize() {
