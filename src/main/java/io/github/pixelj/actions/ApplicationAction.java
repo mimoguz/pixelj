@@ -83,8 +83,11 @@ public class ApplicationAction extends AbstractAction {
     }
 
     public @NotNull ApplicationAction setAccelerator(@NotNull KeyStroke value) {
-        putValue(Action.SMALL_ICON, value);
-        putValue(Action.LARGE_ICON_KEY, value);
+        putValue(Action.ACCELERATOR_KEY, value);
         return this;
+    }
+
+    public @NotNull ApplicationAction setAccelerator(int key, int mask) {
+        return setAccelerator(KeyStroke.getKeyStroke(key, mask));
     }
 }

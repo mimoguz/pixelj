@@ -31,7 +31,7 @@ public class PainterActions {
     )
             .setTooltipKey("symmetryToggleActionTooltip")
             .setIcon(Icons.HISTORY_UNDO, null, null)
-            .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.ALT_DOWN_MASK));
+            .setAccelerator(KeyEvent.VK_S, InputEvent.ALT_DOWN_MASK);
 
     public final ApplicationAction historyUndoAction = new ApplicationAction(
             "painterHistoryUndoAction",
@@ -43,7 +43,7 @@ public class PainterActions {
     )
             .setTooltipKey("painterHistoryUndoActionTooltip")
             .setIcon(Icons.HISTORY_UNDO, null, null)
-            .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK));
+            .setAccelerator(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK);
 
     public final ApplicationAction historyRedoAction = new ApplicationAction(
             "painterHistoryRedoAction",
@@ -55,7 +55,7 @@ public class PainterActions {
     )
             .setTooltipKey("painterHistoryRedoActionTooltip")
             .setIcon(Icons.HISTORY_UNDO, null, null)
-            .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_DOWN_MASK));
+            .setAccelerator(KeyEvent.VK_Y, InputEvent.CTRL_DOWN_MASK);
 
     public final ApplicationAction clipboardCutAction = new ApplicationAction(
             "painterClipboardCutAction",
@@ -67,7 +67,7 @@ public class PainterActions {
     )
             .setTooltipKey("painterClipboardCutActionTooltip")
             .setIcon(Icons.HISTORY_UNDO, null, null)
-            .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK));
+            .setAccelerator(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK);
 
     public final ApplicationAction clipboardCopyAction = new ApplicationAction(
             "painterClipboardCopyAction",
@@ -79,7 +79,7 @@ public class PainterActions {
     )
             .setTooltipKey("painterClipboardCopyActionTooltip")
             .setIcon(Icons.HISTORY_UNDO, null, null)
-            .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
+            .setAccelerator(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK);
 
     public final ApplicationAction clipboardPasteAction = new ApplicationAction(
             "painterClipboardPasteAction",
@@ -91,7 +91,7 @@ public class PainterActions {
     )
             .setTooltipKey("painterClipboardPasteActionTooltip")
             .setIcon(Icons.HISTORY_UNDO, null, null)
-            .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_DOWN_MASK));
+            .setAccelerator(KeyEvent.VK_V, InputEvent.CTRL_DOWN_MASK);
 
     public final ApplicationAction clipboardImportAction = new ApplicationAction(
             "painterClipboardImportAction",
@@ -103,10 +103,7 @@ public class PainterActions {
     )
             .setTooltipKey("painterClipboardImportActionTooltip")
             .setIcon(Icons.HISTORY_UNDO, null, null)
-            .setAccelerator(KeyStroke.getKeyStroke(
-                    KeyEvent.VK_V,
-                    InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK
-            ));
+            .setAccelerator(KeyEvent.VK_V, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK);
 
     public final ApplicationAction flipVerticallyAction = new ApplicationAction(
             "flipVerticallyAction",
@@ -118,7 +115,7 @@ public class PainterActions {
     )
             .setTooltipKey("flipVerticallyActionTooltip")
             .setIcon(Icons.HISTORY_UNDO, null, null)
-            .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.ALT_DOWN_MASK));
+            .setAccelerator(KeyEvent.VK_V, InputEvent.ALT_DOWN_MASK);
 
     public final ApplicationAction flipHorizontallyAction = new ApplicationAction(
             "flipHorizontallyAction",
@@ -130,7 +127,7 @@ public class PainterActions {
     )
             .setTooltipKey("flipHorizontallyActionTooltip")
             .setIcon(Icons.HISTORY_UNDO, null, null)
-            .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, InputEvent.ALT_DOWN_MASK));
+            .setAccelerator(KeyEvent.VK_H, InputEvent.ALT_DOWN_MASK);
 
     public final ApplicationAction rotateLeftAction = new ApplicationAction(
             "rotateLeftAction",
@@ -142,7 +139,7 @@ public class PainterActions {
     )
             .setTooltipKey("rotateLeftActionTooltip")
             .setIcon(Icons.HISTORY_UNDO, null, null)
-            .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.ALT_DOWN_MASK));
+            .setAccelerator(KeyEvent.VK_L, InputEvent.ALT_DOWN_MASK);
 
     public final ApplicationAction rotateRightAction = new ApplicationAction(
             "rotateRightAction",
@@ -154,7 +151,7 @@ public class PainterActions {
     )
             .setTooltipKey("rotateRightActionTooltip")
             .setIcon(Icons.HISTORY_UNDO, null, null)
-            .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.ALT_DOWN_MASK));
+            .setAccelerator(KeyEvent.VK_R, InputEvent.ALT_DOWN_MASK);
 
     public final ApplicationAction moveLeftAction = new ApplicationAction(
             "moveLeftAction",
@@ -166,7 +163,7 @@ public class PainterActions {
     )
             .setTooltipKey("moveLeftActionTooltip")
             .setIcon(Icons.HISTORY_UNDO, null, null)
-            .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, InputEvent.ALT_DOWN_MASK));
+            .setAccelerator(KeyEvent.VK_LEFT, InputEvent.ALT_DOWN_MASK);
 
     public final ApplicationAction moveRightAction = new ApplicationAction(
             "moveRightAction",
@@ -178,7 +175,7 @@ public class PainterActions {
     )
             .setTooltipKey("moveRightActionTooltip")
             .setIcon(Icons.HISTORY_UNDO, null, null)
-            .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, InputEvent.ALT_DOWN_MASK));
+            .setAccelerator(KeyEvent.VK_RIGHT, InputEvent.ALT_DOWN_MASK);
 
     public final ApplicationAction moveUpAction = new ApplicationAction(
             "moveUpAction",
@@ -190,7 +187,7 @@ public class PainterActions {
     )
             .setTooltipKey("moveUpActionTooltip")
             .setIcon(Icons.HISTORY_UNDO, null, null)
-            .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_UP, InputEvent.ALT_DOWN_MASK));
+            .setAccelerator(KeyEvent.VK_UP, InputEvent.ALT_DOWN_MASK);
 
     public final ApplicationAction moveDownAction = new ApplicationAction(
             "moveDownAction",
@@ -202,7 +199,7 @@ public class PainterActions {
     )
             .setTooltipKey("moveDownActionTooltip")
             .setIcon(Icons.HISTORY_UNDO, null, null)
-            .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.ALT_DOWN_MASK));
+            .setAccelerator(KeyEvent.VK_DOWN, InputEvent.ALT_DOWN_MASK);
 
     public final ApplicationAction eraseAction = new ApplicationAction(
             "eraseAction",
@@ -214,7 +211,7 @@ public class PainterActions {
     )
             .setTooltipKey("eraseActionTooltip")
             .setIcon(Icons.HISTORY_UNDO, null, null)
-            .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.ALT_DOWN_MASK));
+            .setAccelerator(KeyEvent.VK_X, InputEvent.ALT_DOWN_MASK);
 
     public final Collection<ApplicationAction> all = List.of(
             historyUndoAction,

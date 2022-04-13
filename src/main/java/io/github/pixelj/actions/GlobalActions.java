@@ -17,7 +17,7 @@ public class GlobalActions {
     )
             .setTextKey("exportAction")
             .setIcon(Icons.FILE_EXPORT, null, null)
-            .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK));
+            .setAccelerator(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK);
 
     final ApplicationAction newProjectAction = new ApplicationAction(
             "newProjectAction",
@@ -25,7 +25,7 @@ public class GlobalActions {
     )
             .setTextKey("newProjectAction")
             .setIcon(Icons.FILE_NEW, null, null)
-            .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
+            .setAccelerator(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK);
 
     final ApplicationAction openProjectAction = new ApplicationAction(
             "openProjectAction",
@@ -33,7 +33,7 @@ public class GlobalActions {
     )
             .setTextKey("openProjectAction")
             .setIcon(Icons.FILE_OPEN, null, null)
-            .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
+            .setAccelerator(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK);
 
     final ApplicationAction quitAction = new ApplicationAction(
             "quitAction",
@@ -41,7 +41,7 @@ public class GlobalActions {
     )
             .setTextKey("quitAction")
             .setIcon(Icons.EXIT, null, null)
-            .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_DOWN_MASK));
+            .setAccelerator(KeyEvent.VK_Q, InputEvent.CTRL_DOWN_MASK);
 
     final ApplicationAction saveAction = new ApplicationAction(
             "saveProjectAction",
@@ -49,7 +49,7 @@ public class GlobalActions {
     )
             .setTextKey("saveAction")
             .setIcon(Icons.FILE_SAVE, null, null)
-            .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
+            .setAccelerator(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK);
 
     final ApplicationAction saveAsAction = new ApplicationAction(
             "saveAsAction",
@@ -57,10 +57,7 @@ public class GlobalActions {
     )
             .setTextKey("saveAsAction")
             .setIcon(Icons.FILE_SAVE_AS, null, null)
-            .setAccelerator(KeyStroke.getKeyStroke(
-                    KeyEvent.VK_S,
-                    InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK
-            ));
+            .setAccelerator(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK);
 
     final ApplicationAction showHelpAction = new ApplicationAction(
             "showHelpAction",
@@ -68,7 +65,7 @@ public class GlobalActions {
     )
             .setTextKey("showHelpAction")
             .setIcon(Icons.HELP, null, null)
-            .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+            .setAccelerator(KeyEvent.VK_F1, 0);
 
     final ApplicationAction showMetricsAction = new ApplicationAction(
             "showMetricsAction",
@@ -76,7 +73,7 @@ public class GlobalActions {
     )
             .setTextKey("showMetricsAction")
             .setIcon(Icons.METRICS, null, null)
-            .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_DOWN_MASK));
+            .setAccelerator(KeyEvent.VK_M, InputEvent.CTRL_DOWN_MASK);
 
     final ApplicationAction showSettingsAction = new ApplicationAction(
             "showSettingsAction",
@@ -84,7 +81,7 @@ public class GlobalActions {
     )
             .setTextKey("showSettingsAction")
             .setIcon(Icons.SETTINGS, null, null)
-            .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, InputEvent.CTRL_DOWN_MASK));
+            .setAccelerator(KeyEvent.VK_PERIOD, InputEvent.CTRL_DOWN_MASK);
 
     final Collection<ApplicationAction> all = List.of(
             exportAction,
