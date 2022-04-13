@@ -16,24 +16,18 @@ import java.util.List;
 public class CharacterListActions {
     public final ApplicationAction showAddDialogAction = new ApplicationAction(
             "showAddDialog",
-            (e, action) -> System.out.println("Show add dialog action"),
-            "showAddDialogAction",
-            null,
-            Icons.FILE_NEW,
-            null,
-            null,
-            KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK)
-    );
+            (e, action) -> System.out.println("Show add dialog action")
+    )
+            .setTextKey("showAddDialogAction")
+            .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, InputEvent.ALT_DOWN_MASK));
+
     public final ApplicationAction showRemoveDialogAction = new ApplicationAction(
             "showRemoveDialog",
-            (e, action) -> System.out.println("Show remove dialog action"),
-            "showRemoveDialogAction",
-            null,
-            Icons.FILE_NEW,
-            null,
-            null,
-            KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK)
-    );
+            (e, action) -> System.out.println("Show remove dialog action")
+    )
+            .setTextKey("showRemoveDialogAction")
+            .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, InputEvent.ALT_DOWN_MASK));
+
     public final Collection<ApplicationAction> all = List.of(showAddDialogAction, showRemoveDialogAction);
     private boolean enabled = true;
     private @Nullable DisplayListModel<CharacterModel> listModel;

@@ -38,12 +38,22 @@ public class ApplicationAction extends AbstractAction {
             putValue(Action.ACCELERATOR_KEY, accelerator);
         }
         if (iconVariant != null) {
-            final var icon = res.getIcon(iconVariant, iconColor != null ? iconColor : res.colors.icon(),
-                    disabledIconColor != null ? disabledIconColor : res.colors.disabledIcon()
-            );
-            putValue(Action.SMALL_ICON, icon);
-            putValue(Action.LARGE_ICON_KEY, icon);
+            setIcon(iconVariant, iconColor, disabledIconColor);
         }
+    }
+
+    public ApplicationAction(@NotNull String key, @NotNull BiConsumer<ActionEvent, Action> consumer) {
+        this(key, consumer, null, null, null, null, null, null);
+    }
+
+    public @NotNull ApplicationAction setTextKey(@NotNull String value) {
+        putValue(Action.NAME, value);
+        return this;
+    }
+
+    public @NotNull ApplicationAction setTooltipKey(@NotNull String value) {
+        putValue(Action.SHORT_DESCRIPTION, value);
+        return this;
     }
 
     @Override
@@ -53,5 +63,28 @@ public class ApplicationAction extends AbstractAction {
 
     public @NotNull String getKey() {
         return key;
+    }
+
+    public @NotNull ApplicationAction setIcon(
+            @NotNull Icons iconVariant,
+            @Nullable Color color,
+            @Nullable Color disabledColor
+    ) {
+        final var res = Resources.get();
+
+        final var icon = res.getIcon(
+                iconVariant,
+                color != null ? color : res.colors.icon(),
+                disabledColor != null ? disabledColor : res.colors.disabledIcon()
+        );
+        putValue(Action.SMALL_ICON, icon);
+        putValue(Action.LARGE_ICON_KEY, icon);
+        return this;
+    }
+
+    public @NotNull ApplicationAction setAccelerator(@NotNull KeyStroke value) {
+        putValue(Action.SMALL_ICON, value);
+        putValue(Action.LARGE_ICON_KEY, value);
+        return this;
     }
 }
