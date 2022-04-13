@@ -20,7 +20,9 @@ public class GlyphView extends JPanel
     private final EventListenerList listeners = new EventListenerList();
     private @Nullable CharacterModel model;
     private final BinaryImage.ImageChangeListener imageChangeListener = (source, event) -> {
-        if (model == null || source != model.getGlyph()) return;
+        if (model == null || source != model.getGlyph()) {
+            return;
+        }
         // TODO: Repaint only changed region
         repaint();
         fireChangeEvent(this, ViewChangeEvent.GLYPH_MODIFIED);
@@ -52,7 +54,6 @@ public class GlyphView extends JPanel
         return model;
     }
 
-
     public void setModel(CharacterModel value) {
         setModel(value, true);
     }
@@ -62,7 +63,8 @@ public class GlyphView extends JPanel
     }
 
     public void setOverlay(Image value) {
-        if (overlay == value) return;
+        if (overlay == value)
+            return;
         overlay = value;
         repaint();
     }
@@ -81,7 +83,8 @@ public class GlyphView extends JPanel
     }
 
     public void setLinesVisible(boolean value) {
-        if (value == showLines) return;
+        if (value == showLines)
+            return;
         this.showLines = value;
         repaint();
     }
@@ -91,7 +94,8 @@ public class GlyphView extends JPanel
     }
 
     public void setOverlayVisible(boolean value) {
-        if (value == showOverlay) return;
+        if (value == showOverlay)
+            return;
         this.showOverlay = value;
         repaint();
     }
@@ -100,10 +104,7 @@ public class GlyphView extends JPanel
     public void paintComponent(Graphics graphics) {
         final var g = (Graphics2D) graphics.create();
         if (model != null) {
-            g.setRenderingHint(
-                    RenderingHints.KEY_INTERPOLATION,
-                    RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR
-            );
+            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
             model.getGlyph().draw(g, 0, 0, getWidth(), getHeight());
             drawOverlay(g);
             drawLines(g);
@@ -119,7 +120,8 @@ public class GlyphView extends JPanel
     }
 
     public void setModel(CharacterModel value, boolean listen) {
-        if (model == value) return;
+        if (model == value)
+            return;
 
         if (model != null) {
             model.getGlyph().removeChangeListener(imageChangeListener);
@@ -129,7 +131,8 @@ public class GlyphView extends JPanel
         this.model = value;
 
         if (model != null) {
-            if (listen) model.getGlyph().addChangeListener(imageChangeListener);
+            if (listen)
+                model.getGlyph().addChangeListener(imageChangeListener);
             fireChangeEvent(this, ViewChangeEvent.MODEL_LOADED);
         }
 
@@ -150,7 +153,8 @@ public class GlyphView extends JPanel
     }
 
     private void drawLines(Graphics2D g) {
-        if (lines.isEmpty() | !showLines | model == null) return;
+        if (lines.isEmpty() | !showLines | model == null)
+            return;
 
         final var glyph = model.getGlyph();
         final var w = glyph.getWidth();
@@ -160,27 +164,26 @@ public class GlyphView extends JPanel
         for (var line : lines) {
             g.setColor(line.color());
             switch (line.orientation()) {
-                case HORIZONTAL -> {
-                    final var y = (int) Math.round(line.point() * dy);
-                    g.drawLine(0, y, getWidth(), y);
-                }
-                case VERTICAL -> {
-                    final var x = (int) Math.round(line.point() * dx);
-                    g.drawLine(x, 0, x, getHeight());
-                }
+            case HORIZONTAL -> {
+                final var y = (int) Math.round(line.point() * dy);
+                g.drawLine(0, y, getWidth(), y);
+            }
+            case VERTICAL -> {
+                final var x = (int) Math.round(line.point() * dx);
+                g.drawLine(x, 0, x, getHeight());
+            }
             }
         }
     }
 
     private void drawOverlay(Graphics2D g) {
-        if (overlay == null | !showOverlay) return;
+        if (overlay == null | !showOverlay)
+            return;
         g.drawImage(overlay, 0, 0, getWidth(), getHeight(), null);
     }
 
     public enum ViewChangeEvent {
-        MODEL_LOADED,
-        MODEL_UNLOADED,
-        GLYPH_MODIFIED;
+        MODEL_LOADED, MODEL_UNLOADED, GLYPH_MODIFIED;
     }
 
     public interface ViewChangeListener extends ChangeListener<GlyphView, ViewChangeEvent> {

@@ -9,13 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.awt.*;
 import java.util.function.Consumer;
 
-public class GlyphPainter
-        extends GlyphView
-        implements
-        Painter,
-        CanFlipImage,
-        CanRotateImage,
-        CanTranslateImage {
+public class GlyphPainter extends GlyphView implements Painter, CanFlipImage, CanRotateImage, CanTranslateImage {
 
     private final PaintAdapter paintAdapter;
     private Consumer<Snapshot> snapshotConsumer = snapshot -> {
@@ -34,7 +28,9 @@ public class GlyphPainter
 
     public void erase() {
         final var model = getModel();
-        if (model != null) model.getGlyph().fill(true);
+        if (model != null) {
+            model.getGlyph().fill(true);
+        }
     }
 
     public boolean isSymmetrical() {

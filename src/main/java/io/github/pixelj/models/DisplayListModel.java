@@ -12,8 +12,8 @@ import java.util.function.Predicate;
 /**
  * A list model that keeps its visible elements always filtered and sorted.
  * <p>
- * It's Intended to be used for CharacterModels and KerningPairModels, and uses a HashSet for backing collection
- * (so assumes no hash collisions).
+ * It's Intended to be used for CharacterModels and KerningPairModels, and uses
+ * a HashSet for backing collection (so assumes no hash collisions).
  */
 public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
     private final ArrayList<E> display = new ArrayList<>();
@@ -33,20 +33,26 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
     public void add(@NotNull E element) {
         source.add(element);
         final var index = insertOrdered(element);
-        if (index >= 0) fireIntervalAddedEvent(index, index);
+        if (index >= 0) {
+            fireIntervalAddedEvent(index, index);
+        }
     }
 
     public void addAll(@NotNull Collection<E> collection) {
         var index0 = -1;
         var index1 = -1;
         for (var element : collection) {
-            if (element == null || source.contains(element)) continue;
+            if (element == null || source.contains(element)) {
+                continue;
+            }
             source.add(element);
             final var index = insertOrdered(element);
             index0 = index == -1 ? index0 : (index0 == -1 ? index : Math.min(index0, index));
             index1 = index == -1 ? index1 : (index1 == -1 ? index : Math.max(index1, index));
         }
-        if (index0 >= 0) fireIntervalAddedEvent(index0, index1);
+        if (index0 >= 0) {
+            fireIntervalAddedEvent(index0, index1);
+        }
     }
 
     @Override
@@ -128,13 +134,15 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
         var index1 = -1;
         source.removeAll(collection);
         for (var element : collection) {
-            if (element == null) continue;
+            if (element == null)
+                continue;
             final var index = display.indexOf(element);
             index0 = index == -1 ? index0 : (index0 == -1 ? index : Math.min(index0, index));
             index1 = index == -1 ? index1 : (index1 == -1 ? index : Math.max(index1, index));
         }
         display.removeAll(collection);
-        if (index0 >= 0) fireIntervalRemovedEvent(index0, index1);
+        if (index0 >= 0)
+            fireIntervalRemovedEvent(index0, index1);
     }
 
     /**
@@ -148,7 +156,7 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
     }
 
     /**
-     * @param from Index to visible list, inclusive
+     * @param from  Index to visible list, inclusive
      * @param until Index to visible list, exclusive
      */
     public void removeInterval(int from, int until) {
@@ -175,7 +183,8 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
             fireIntervalRemovedEvent(0, index1);
         }
         display.addAll(source.stream().filter(filter).sorted().toList());
-        if (!display.isEmpty()) fireIntervalAddedEvent(0, display.size() - 1);
+        if (!display.isEmpty())
+            fireIntervalAddedEvent(0, display.size() - 1);
     }
 
     public boolean sourceContains(E element) {
@@ -187,7 +196,8 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
     }
 
     private int insertOrdered(@NotNull E element) {
-        if (!filter.test(element)) return -1;
+        if (!filter.test(element))
+            return -1;
         final var index = findPlace(element);
         display.add(index, element);
         return index;

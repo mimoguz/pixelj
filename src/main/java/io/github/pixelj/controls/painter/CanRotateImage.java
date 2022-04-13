@@ -35,20 +35,26 @@ public interface CanRotateImage extends Painter {
     }
 
     /**
-     * Rotates the top-left square of the image 90 degrees left, and fills the rest with 1.
+     * Rotates the top-left square of the image 90 degrees left, and fills the rest
+     * with 1.
      */
     default void rotateLeft() {
         final var model = getModel();
-        if (model == null) return;
+        if (model == null) {
+            return;
+        }
         addSnapshot(rotate(model, (size, y) -> y, (size, x) -> size - x - 1));
     }
 
     /**
-     * Rotates the top-left square of the 90 degrees right, and fills the rest with 1.
+     * Rotates the top-left square of the 90 degrees right, and fills the rest with
+     * 1.
      */
     default void rotateRight() {
         final var model = getModel();
-        if (model == null) return;
+        if (model == null) {
+            return;
+        }
         addSnapshot(rotate(getModel(), (size, y) -> size - y - 1, (size, x) -> x));
     }
 }

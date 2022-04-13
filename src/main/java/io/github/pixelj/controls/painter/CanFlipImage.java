@@ -7,7 +7,9 @@ public interface CanFlipImage extends Painter {
      */
     default void flipHorizontally() {
         final var model = getModel();
-        if (model == null) return;
+        if (model == null) {
+            return;
+        }
 
         addSnapshot(model.getGlyph().getSnapshot(model.getCodePoint()));
 
@@ -32,7 +34,9 @@ public interface CanFlipImage extends Painter {
      */
     default void flipVertically() {
         final var model = getModel();
-        if (model == null) return;
+        if (model == null) {
+            return;
+        }
 
         addSnapshot(model.getGlyph().getSnapshot(model.getCodePoint()));
 

@@ -11,13 +11,13 @@ import java.util.function.Predicate;
 /**
  * A list model that keeps its visible elements always filtered and sorted.
  * <p>
- * It's Intended to be used for CharacterModels and KerningPairModels, and uses a HashSet for backing collection
- * (so assumes no hash collisions).
+ * It's Intended to be used for CharacterModels and KerningPairModels, and uses
+ * a HashSet for backing collection (so assumes no hash collisions).
  */
 public class SortedFilteredListModel<T extends Comparable<T>> extends DefaultListModel<T> {
     protected final HashSet<T> source = new HashSet<>();
     private final @NotNull Class<T> classT;
-    private @NotNull Predicate<T> filter = t -> true;
+    private transient @NotNull Predicate<T> filter = t -> true;
 
     public SortedFilteredListModel(@NotNull Class<T> classT) {
         this.classT = classT;
@@ -87,14 +87,16 @@ public class SortedFilteredListModel<T extends Comparable<T>> extends DefaultLis
     }
 
     /**
-     * Fires a fake content change event. Use this to force connected JList to refresh.
+     * Fires a fake content change event. Use this to force connected JList to
+     * refresh.
      */
     public void fireRefresh(int modelIndex) {
         fireContentsChanged(this, modelIndex, modelIndex);
     }
 
     /**
-     * Fires a fake content change event. Use this to force connected JList to refresh.
+     * Fires a fake content change event. Use this to force connected JList to
+     * refresh.
      */
     public void fireRefresh() {
         fireContentsChanged(this, 0, super.size());
@@ -217,7 +219,9 @@ public class SortedFilteredListModel<T extends Comparable<T>> extends DefaultLis
      */
     private int firstBigger(T element) {
         for (var index = 0; index < super.size(); index++) {
-            if (super.get(index).compareTo(element) > 0) return index;
+            if (super.get(index).compareTo(element) > 0) {
+                return index;
+            }
         }
         return -1;
     }
@@ -226,9 +230,11 @@ public class SortedFilteredListModel<T extends Comparable<T>> extends DefaultLis
      * Insert element to the model while keeping sorting and filtering.
      */
     private void insertOrdered(@NotNull T element) {
-        if (!filter.test(element)) return;
+        if (!filter.test(element))
+            return;
         final var index = firstBigger(element);
-        if (index < 0) return;
+        if (index < 0)
+            return;
         super.add(index, element);
     }
 

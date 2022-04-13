@@ -25,7 +25,9 @@ public class KerningPairModel extends MutableIntValueModel implements Comparable
 
     @Override
     public boolean equals(Object that) {
-        if (this == that) return true;
+        if (this == that) {
+            return true;
+        }
         if (that instanceof KerningPairModel other) {
             return left.equals(other.left) && right.equals(other.right);
         }
@@ -46,13 +48,15 @@ public class KerningPairModel extends MutableIntValueModel implements Comparable
 
     @Override
     public int hashCode() {
-        // >In the Unicode Standard, the codespace consists of the integers from 0 to 10FFFF<
+        // >In the Unicode Standard, the codespace consists of the integers from 0 to
+        // 10FFFF<
         // 10FFFF occupies 21 bits, there shouldn't be any collisions here.
         return (left.getCodePoint() << 24) | right.getCodePoint();
     }
 
     public void setWidth(int value) {
-        if (value == kerningValue) return;
+        if (value == kerningValue)
+            return;
         final var event = new IntValueChangeEvent(kerningValue, value);
         kerningValue = value;
         fireChangeEvent(this, event);

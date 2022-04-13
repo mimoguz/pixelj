@@ -23,14 +23,16 @@ public class PaintAdapter implements MouseListener, MouseMotionListener {
     }
 
     /**
-     * The last column of the main drawing area. It's used to calculate the vertical symmetry axis.
+     * The last column of the main drawing area. It's used to calculate the vertical
+     * symmetry axis.
      */
     public int getExtent() {
         return extent;
     }
 
     /**
-     * The last column of the main drawing area. It's used to calculate vertical symmetry axis.
+     * The last column of the main drawing area. It's used to calculate vertical
+     * symmetry axis.
      */
     public void setExtent(int value) {
         extent = value;
@@ -57,7 +59,9 @@ public class PaintAdapter implements MouseListener, MouseMotionListener {
     @Override
     public void mouseDragged(MouseEvent e) {
         final var model = painter.getModel();
-        if (model == null || isOutside()) return;
+        if (model == null || isOutside()) {
+            return;
+        }
 
         final var image = model.getGlyph();
         final var pt = getPixelCoordinates(image, e);
@@ -83,13 +87,15 @@ public class PaintAdapter implements MouseListener, MouseMotionListener {
     @Override
     public void mousePressed(MouseEvent e) {
         final var model = painter.getModel();
-        if (model == null) return;
+        if (model == null)
+            return;
 
         final var image = model.getGlyph();
         painter.addSnapshot(image.getSnapshot(model.getCodePoint()));
 
         lastPixel.setLocation(getPixelCoordinates(image, e));
-        // The button1 -or any other button while control pressed- clears, any other button besides the button1 paints.
+        // The button1 -or any other button while control pressed- clears, any other
+        // button besides the button1 paints.
         fill = !(e.getButton() == MouseEvent.BUTTON1 && (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == 0);
         setPixel(image);
     }

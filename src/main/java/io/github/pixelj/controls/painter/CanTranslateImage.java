@@ -12,8 +12,9 @@ public interface CanTranslateImage extends Painter {
      * Moves the image one pixel left or right
      *
      * @param model   Character model. Skips the null check.
-     * @param sourceX First column of the source region. If it's 0, the region will be moved to the right.
-     *                If it's 1, the region will be moved to the left.
+     * @param sourceX First column of the source region. If it's 0, the region will
+     *                be moved to the right. If it's 1, the region will be moved to
+     *                the left.
      * @return Snapshot before the change
      */
     private static Snapshot moveHorizontally(@NotNull CharacterModel model, int sourceX) {
@@ -41,7 +42,9 @@ public interface CanTranslateImage extends Painter {
      */
     default void moveOnePixelDown() {
         final var model = getModel();
-        if (model == null) return;
+        if (model == null) {
+            return;
+        }
 
         final var image = model.getGlyph();
         addSnapshot(image.getSnapshot(model.getCodePoint()));
@@ -67,7 +70,9 @@ public interface CanTranslateImage extends Painter {
      */
     default void moveOnePixelLeft() {
         final var model = getModel();
-        if (model == null) return;
+        if (model == null) {
+            return;
+        }
         addSnapshot(moveHorizontally(model, 1));
     }
 
@@ -76,7 +81,9 @@ public interface CanTranslateImage extends Painter {
      */
     default void moveOnePixelRight() {
         final var model = getModel();
-        if (model == null) return;
+        if (model == null) {
+            return;
+        }
         addSnapshot(moveHorizontally(model, 0));
     }
 
@@ -85,7 +92,9 @@ public interface CanTranslateImage extends Painter {
      */
     default void moveOnePixelUp() {
         final var model = getModel();
-        if (model == null) return;
+        if (model == null) {
+            return;
+        }
 
         final var image = model.getGlyph();
         addSnapshot(image.getSnapshot(model.getCodePoint()));

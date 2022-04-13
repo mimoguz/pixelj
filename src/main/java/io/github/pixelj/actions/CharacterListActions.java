@@ -14,26 +14,12 @@ import java.util.Collection;
 import java.util.List;
 
 public class CharacterListActions {
-    public final ApplicationAction showAddDialogAction = new ApplicationAction(
-            "showAddDialog",
-            (e, action) -> System.out.println("Show add dialog action"),
-            "showAddDialogAction",
-            null,
-            Icons.FILE_NEW,
-            null,
-            null,
-            KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK)
-    );
-    public final ApplicationAction showRemoveDialogAction = new ApplicationAction(
-            "showRemoveDialog",
-            (e, action) -> System.out.println("Show remove dialog action"),
-            "showRemoveDialogAction",
-            null,
-            Icons.FILE_NEW,
-            null,
-            null,
-            KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK)
-    );
+    public final ApplicationAction showAddDialogAction = new ApplicationAction("showAddDialog",
+            (e, action) -> System.out.println("Show add dialog action"), "showAddDialogAction", null, Icons.FILE_NEW,
+            null, null, KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
+    public final ApplicationAction showRemoveDialogAction = new ApplicationAction("showRemoveDialog",
+            (e, action) -> System.out.println("Show remove dialog action"), "showRemoveDialogAction", null,
+            Icons.FILE_NEW, null, null, KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
     public final Collection<ApplicationAction> all = List.of(showAddDialogAction, showRemoveDialogAction);
     private boolean active = true;
     private @Nullable DisplayListModel<CharacterModel> listModel;
@@ -42,10 +28,8 @@ public class CharacterListActions {
         showRemoveDialogAction.setEnabled(selectionModel.getMinSelectionIndex() >= 0);
     };
 
-    public CharacterListActions(
-            @NotNull DisplayListModel<CharacterModel> listModel,
-            @NotNull ListSelectionModel selectionModel
-    ) {
+    public CharacterListActions(@NotNull DisplayListModel<CharacterModel> listModel,
+            @NotNull ListSelectionModel selectionModel) {
         this.listModel = listModel;
         this.selectionModel = selectionModel;
         selectionModel.addListSelectionListener(selectionListener);
@@ -68,8 +52,12 @@ public class CharacterListActions {
     }
 
     public void setSelectionModel(@Nullable ListSelectionModel value) {
-        if (selectionModel != null) selectionModel.removeListSelectionListener(selectionListener);
+        if (selectionModel != null) {
+            selectionModel.removeListSelectionListener(selectionListener);
+        }
         selectionModel = value;
-        if (selectionModel != null) selectionModel.addListSelectionListener(selectionListener);
+        if (selectionModel != null) {
+            selectionModel.addListSelectionListener(selectionListener);
+        }
     }
 }
