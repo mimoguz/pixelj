@@ -16,7 +16,7 @@ public class Actions {
         }
     }
 
-    public static void setEnabled(@NotNull Collection<Action> actions, boolean isEnabled) {
+    public static void setEnabled(@NotNull Collection<? extends Action> actions, boolean isEnabled) {
         for (var action : actions) action.setEnabled(isEnabled);
     }
 }

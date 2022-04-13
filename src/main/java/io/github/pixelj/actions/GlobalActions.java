@@ -10,7 +10,7 @@ import java.util.List;
 
 public class GlobalActions {
     final ApplicationAction exportAction = new ApplicationAction(
-            "export",
+            "exportAction",
             (e) -> System.out.println("Export action"),
             "exportAction",
             null,
@@ -20,7 +20,7 @@ public class GlobalActions {
             KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK)
     );
     final ApplicationAction newProjectAction = new ApplicationAction(
-            "newProject",
+            "newProjectAction",
             (e) -> System.out.println("New project action"),
             "newProjectAction",
             null,
@@ -30,7 +30,7 @@ public class GlobalActions {
             KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK)
     );
     final ApplicationAction openProjectAction = new ApplicationAction(
-            "openProject",
+            "openProjectAction",
             (e) -> System.out.println("Open project action"),
             "openProjectAction",
             null,
@@ -40,7 +40,7 @@ public class GlobalActions {
             KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK)
     );
     final ApplicationAction quitAction = new ApplicationAction(
-            "quit",
+            "quitAction",
             (e) -> System.exit(0),
             "quitAction",
             null,
@@ -50,7 +50,7 @@ public class GlobalActions {
             KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_DOWN_MASK)
     );
     final ApplicationAction saveAction = new ApplicationAction(
-            "saveProject",
+            "saveProjectAction",
             (e) -> System.out.println("Save action"),
             "saveAction",
             null,
@@ -60,7 +60,7 @@ public class GlobalActions {
             KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK)
     );
     final ApplicationAction saveAsAction = new ApplicationAction(
-            "saveAs",
+            "saveAsAction",
             (e) -> System.out.println("Save as action"),
             "saveAsAction",
             null,
@@ -70,7 +70,7 @@ public class GlobalActions {
             KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK)
     );
     final ApplicationAction showHelpAction = new ApplicationAction(
-            "showHelp",
+            "showHelpAction",
             (e) -> System.out.println("Show help action"),
             "showHelpAction",
             null,
@@ -80,7 +80,7 @@ public class GlobalActions {
             KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0)
     );
     final ApplicationAction showMetricsAction = new ApplicationAction(
-            "showMetrics",
+            "showMetricsAction",
             (e) -> System.out.println("Show metrics action"),
             "showMetricsAction",
             null,
@@ -90,7 +90,7 @@ public class GlobalActions {
             KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_DOWN_MASK)
     );
     final ApplicationAction showSettingsAction = new ApplicationAction(
-            "showSettings",
+            "showSettingsAction",
             (e) -> System.out.println("Show settings action"),
             "showSettingsAction",
             null,

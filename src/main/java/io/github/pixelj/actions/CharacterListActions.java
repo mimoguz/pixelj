@@ -3,6 +3,7 @@ package io.github.pixelj.actions;
 import io.github.pixelj.models.CharacterModel;
 import io.github.pixelj.models.DisplayListModel;
 import io.github.pixelj.resources.Icons;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -34,6 +35,7 @@ public class CharacterListActions {
             KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK)
     );
     public final Collection<ApplicationAction> all = List.of(showAddDialogAction, showRemoveDialogAction);
+    private boolean active = true;
     private @Nullable DisplayListModel<CharacterModel> listModel;
     private @Nullable ListSelectionModel selectionModel;
     private final ListSelectionListener selectionListener = e -> {
@@ -41,17 +43,26 @@ public class CharacterListActions {
     };
 
     public CharacterListActions(
-            @Nullable DisplayListModel<CharacterModel> listModel,
-            @Nullable ListSelectionModel selectionModel
+            @NotNull DisplayListModel<CharacterModel> listModel,
+            @NotNull ListSelectionModel selectionModel
     ) {
         this.listModel = listModel;
         this.selectionModel = selectionModel;
-        if (selectionModel != null) selectionModel.addListSelectionListener(selectionListener);
+        selectionModel.addListSelectionListener(selectionListener);
     }
 
     public CharacterListActions() {
     }
-    
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean value) {
+        active = value;
+        Actions.setEnabled(all, active);
+    }
+
     public void setListModel(@Nullable DisplayListModel<CharacterModel> value) {
         listModel = value;
     }
