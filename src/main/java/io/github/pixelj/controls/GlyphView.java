@@ -25,6 +25,7 @@ public class GlyphView extends JPanel
     private @Nullable Image overlay;
     private boolean showLines = false;
     private boolean showOverlay = false;
+    private int zoom = 1;
 
     public GlyphView(@NotNull Color backgroundColor) {
         this.backgroundColor = backgroundColor;
@@ -69,7 +70,7 @@ public class GlyphView extends JPanel
             fireChangeEvent(this, ViewChangeEvent.MODEL_LOADED);
         }
 
-        repaint();
+        autoSize();
     }
 
     public @Nullable Image getOverlay() {
@@ -80,6 +81,15 @@ public class GlyphView extends JPanel
         if (overlay == value) return;
         overlay = value;
         repaint();
+    }
+
+    public int getZoom() {
+        return zoom;
+    }
+
+    public void setZoom(int value) {
+        zoom = value;
+        autoSize();
     }
 
     public boolean isLinesVisible() {
@@ -130,6 +140,19 @@ public class GlyphView extends JPanel
 
     public void removeLines(Line... lines) {
         this.lines.removeAll(Arrays.stream(lines).toList());
+    }
+
+    private void autoSize() {
+        if (zoom > 0) {
+            final var dimension = model != null
+                    ? new Dimension(model.getGlyph().getWidth() * zoom, model.getGlyph().getHeight() * zoom)
+                    : new Dimension(zoom, zoom);
+            setMinimumSize(dimension);
+            setMaximumSize(dimension);
+            setSize(dimension);
+        }
+        revalidate();
+        repaint();
     }
 
     private void drawLines(Graphics2D g) {
