@@ -16,7 +16,7 @@ import java.util.List;
 public class CharacterListActions {
     public final ApplicationAction showAddDialogAction = new ApplicationAction(
             "showAddDialog",
-            (e) -> System.out.println("Show add dialog action"),
+            (e, action) -> System.out.println("Show add dialog action"),
             "showAddDialogAction",
             null,
             Icons.FILE_NEW,
@@ -26,7 +26,7 @@ public class CharacterListActions {
     );
     public final ApplicationAction showRemoveDialogAction = new ApplicationAction(
             "showRemoveDialog",
-            (e) -> System.out.println("Show remove dialog action"),
+            (e, action) -> System.out.println("Show remove dialog action"),
             "showRemoveDialogAction",
             null,
             Icons.FILE_NEW,

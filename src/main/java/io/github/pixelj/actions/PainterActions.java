@@ -1,5 +1,6 @@
 package io.github.pixelj.actions;
 
+import io.github.pixelj.controls.GlyphPainter;
 import io.github.pixelj.controls.painter.Painter;
 import io.github.pixelj.resources.Icons;
 import org.jetbrains.annotations.NotNull;
@@ -13,10 +14,28 @@ import java.util.List;
 
 public class PainterActions {
     private boolean active = true;
-    private @Nullable Painter painter;
+    private @Nullable GlyphPainter painter;
+    public final ApplicationAction symmetryToggleAction = new ApplicationAction(
+            "symmetryToggleAction",
+            (e, action) -> {
+                if (painter != null) {
+                    painter.setSymmetrical(!painter.isSymmetrical());
+                }
+                // Fix selected state if the action performed not because of a button press but its shortcut:
+                if (e.getSource() instanceof JToggleButton) return;
+                action.putValue(Action.SELECTED_KEY, painter.isSymmetrical());
+            },
+            null,
+            "symmetryToggleActionTooltip",
+            Icons.HISTORY_UNDO,
+            null,
+            null,
+            KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.ALT_DOWN_MASK)
+    );
+
     public final ApplicationAction historyUndoAction = new ApplicationAction(
             "painterHistoryUndoAction",
-            (e) -> {
+            (e, action) -> {
                 if (painter != null) System.out.println("Painter undo");
             },
             null,
@@ -28,7 +47,7 @@ public class PainterActions {
     );
     public final ApplicationAction historyRedoAction = new ApplicationAction(
             "painterHistoryRedoAction",
-            (e) -> {
+            (e, action) -> {
                 if (painter != null) System.out.println("Painter redo");
             },
             null,
@@ -40,7 +59,7 @@ public class PainterActions {
     );
     public final ApplicationAction clipboardCutAction = new ApplicationAction(
             "painterClipboardCutAction",
-            (e) -> {
+            (e, action) -> {
                 if (painter != null) System.out.println("Painter cut");
             },
             null,
@@ -52,7 +71,7 @@ public class PainterActions {
     );
     public final ApplicationAction clipboardCopyAction = new ApplicationAction(
             "painterClipboardCopyAction",
-            (e) -> {
+            (e, action) -> {
                 if (painter != null) System.out.println("Painter copy");
             },
             null,
@@ -64,7 +83,7 @@ public class PainterActions {
     );
     public final ApplicationAction clipboardPasteAction = new ApplicationAction(
             "painterClipboardPasteAction",
-            (e) -> {
+            (e, action) -> {
                 if (painter != null) System.out.println("Painter paste");
             },
             null,
@@ -76,7 +95,7 @@ public class PainterActions {
     );
     public final ApplicationAction clipboardImportAction = new ApplicationAction(
             "painterClipboardImportAction",
-            (e) -> {
+            (e, action) -> {
                 if (painter != null) System.out.println("Painter import clip");
             },
             null,
@@ -88,8 +107,8 @@ public class PainterActions {
     );
     public final ApplicationAction flipVerticallyAction = new ApplicationAction(
             "flipVerticallyAction",
-            (e) -> {
-                if (painter != null) System.out.println("Painter flip vertically");
+            (e, action) -> {
+                if (painter != null) painter.flipVertically();
             },
             null,
             "flipVerticallyActionTooltip",
@@ -100,8 +119,8 @@ public class PainterActions {
     );
     public final ApplicationAction flipHorizontallyAction = new ApplicationAction(
             "flipHorizontallyAction",
-            (e) -> {
-                if (painter != null) System.out.println("Painter flip horizontally");
+            (e, action) -> {
+                if (painter != null) painter.flipHorizontally();
             },
             null,
             "flipHorizontallyActionTooltip",
@@ -112,8 +131,8 @@ public class PainterActions {
     );
     public final ApplicationAction rotateLeftAction = new ApplicationAction(
             "rotateLeftAction",
-            (e) -> {
-                if (painter != null) System.out.println("Painter rotate left");
+            (e, action) -> {
+                if (painter != null) painter.rotateLeft();
             },
             null,
             "rotateLeftActionTooltip",
@@ -124,8 +143,8 @@ public class PainterActions {
     );
     public final ApplicationAction rotateRightAction = new ApplicationAction(
             "rotateRightAction",
-            (e) -> {
-                if (painter != null) System.out.println("Painter rotate right");
+            (e, action) -> {
+                if (painter != null) painter.rotateRight();
             },
             null,
             "rotateRightActionTooltip",
@@ -136,8 +155,8 @@ public class PainterActions {
     );
     public final ApplicationAction moveLeftAction = new ApplicationAction(
             "moveLeftAction",
-            (e) -> {
-                if (painter != null) System.out.println("Painter move left");
+            (e, action) -> {
+                if (painter != null) painter.moveOnePixelLeft();
             },
             null,
             "moveLeftActionTooltip",
@@ -148,8 +167,8 @@ public class PainterActions {
     );
     public final ApplicationAction moveRightAction = new ApplicationAction(
             "moveRightAction",
-            (e) -> {
-                if (painter != null) System.out.println("Painter right left");
+            (e, action) -> {
+                if (painter != null) painter.moveOnePixelRight();
             },
             null,
             "moveRightActionTooltip",
@@ -160,8 +179,8 @@ public class PainterActions {
     );
     public final ApplicationAction moveUpAction = new ApplicationAction(
             "moveUpAction",
-            (e) -> {
-                if (painter != null) System.out.println("Painter right up");
+            (e, action) -> {
+                if (painter != null) painter.moveOnePixelUp();
             },
             null,
             "moveUpActionTooltip",
@@ -172,8 +191,8 @@ public class PainterActions {
     );
     public final ApplicationAction moveDownAction = new ApplicationAction(
             "moveDownAction",
-            (e) -> {
-                if (painter != null) System.out.println("Painter right down");
+            (e, action) -> {
+                if (painter != null) painter.moveOnePixelDown();
             },
             null,
             "moveDownActionTooltip",
@@ -184,8 +203,8 @@ public class PainterActions {
     );
     public final ApplicationAction eraseAction = new ApplicationAction(
             "eraseAction",
-            (e) -> {
-                if (painter != null) System.out.println("Painter erase");
+            (e, action) -> {
+                if (painter != null) painter.erase();
             },
             null,
             "eraseActionTooltip",
@@ -193,18 +212,6 @@ public class PainterActions {
             null,
             null,
             KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.ALT_DOWN_MASK)
-    );
-    public final ApplicationAction symmetryToggleAction = new ApplicationAction(
-            "symmetryToggleAction",
-            (e) -> {
-                if (painter != null) System.out.println("Painter toggle symmetry");
-            },
-            null,
-            "symmetryToggleActionTooltip",
-            Icons.HISTORY_UNDO,
-            null,
-            null,
-            KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.ALT_DOWN_MASK)
     );
     public final Collection<ApplicationAction> all = List.of(
             historyUndoAction,
@@ -225,7 +232,7 @@ public class PainterActions {
             symmetryToggleAction
     );
 
-    public PainterActions(@NotNull Painter painter) {
+    public PainterActions(@NotNull GlyphPainter painter) {
         this.painter = painter;
         symmetryToggleAction.putValue(Action.SELECTED_KEY, false);
     }
@@ -237,7 +244,7 @@ public class PainterActions {
         return painter;
     }
 
-    public void setPainter(@Nullable Painter value) {
+    public void setPainter(@Nullable GlyphPainter value) {
         painter = value;
     }
 

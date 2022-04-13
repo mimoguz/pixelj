@@ -17,10 +17,9 @@ public class GlyphPainter
         CanRotateImage,
         CanTranslateImage {
 
+    private final PaintAdapter paintAdapter;
     private Consumer<Snapshot> snapshotConsumer = snapshot -> {
     };
-
-    private final PaintAdapter paintAdapter;
 
     public GlyphPainter(@NotNull Color backgroundColor) {
         super(backgroundColor);
@@ -29,16 +28,29 @@ public class GlyphPainter
         addMouseMotionListener(paintAdapter);
     }
 
+    public void addSnapshot(Snapshot snapshot) {
+        snapshotConsumer.accept(snapshot);
+    }
+
+    public void erase() {
+        final var model = getModel();
+        if (model != null) model.getGlyph().fill(true);
+    }
+
+    public boolean isSymmetrical() {
+        return paintAdapter.isSymmetrical();
+    }
+
+    public void setSymmetrical(boolean value) {
+        paintAdapter.setSymmetrical(value);
+    }
+
     @Override
     public void setModel(@Nullable CharacterModel value) {
         if (value != null) {
             paintAdapter.setExtent(value.getWidth());
         }
         super.setModel(value);
-    }
-
-    public void addSnapshot(Snapshot snapshot) {
-        snapshotConsumer.accept(snapshot);
     }
 
     public void setSnapshotConsumer(@NotNull Consumer<Snapshot> value) {

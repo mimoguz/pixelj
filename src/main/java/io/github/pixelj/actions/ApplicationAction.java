@@ -8,15 +8,15 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 public class ApplicationAction extends AbstractAction {
-    private final @NotNull Consumer<ActionEvent> consumer;
+    private final @NotNull BiConsumer<ActionEvent, Action> consumer;
     private final @NotNull String key;
 
     public ApplicationAction(
             @NotNull String key,
-            @NotNull Consumer<ActionEvent> consumer,
+            @NotNull BiConsumer<ActionEvent, Action> consumer,
             @Nullable String textKey,
             @Nullable String tooltipKey,
             @Nullable Icons iconVariant,
@@ -44,7 +44,7 @@ public class ApplicationAction extends AbstractAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        consumer.accept(e);
+        consumer.accept(e, this);
     }
 
     public @NotNull String getKey() {

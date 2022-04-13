@@ -11,7 +11,7 @@ import java.util.List;
 public class GlobalActions {
     final ApplicationAction exportAction = new ApplicationAction(
             "exportAction",
-            (e) -> System.out.println("Export action"),
+            (e, action) -> System.out.println("Export action"),
             "exportAction",
             null,
             Icons.FILE_EXPORT,
@@ -21,7 +21,7 @@ public class GlobalActions {
     );
     final ApplicationAction newProjectAction = new ApplicationAction(
             "newProjectAction",
-            (e) -> System.out.println("New project action"),
+            (e, action) -> System.out.println("New project action"),
             "newProjectAction",
             null,
             Icons.FILE_NEW,
@@ -31,7 +31,7 @@ public class GlobalActions {
     );
     final ApplicationAction openProjectAction = new ApplicationAction(
             "openProjectAction",
-            (e) -> System.out.println("Open project action"),
+            (e, action) -> System.out.println("Open project action"),
             "openProjectAction",
             null,
             Icons.FILE_OPEN,
@@ -41,7 +41,7 @@ public class GlobalActions {
     );
     final ApplicationAction quitAction = new ApplicationAction(
             "quitAction",
-            (e) -> System.exit(0),
+            (e, action) -> System.exit(0),
             "quitAction",
             null,
             Icons.EXIT,
@@ -51,7 +51,7 @@ public class GlobalActions {
     );
     final ApplicationAction saveAction = new ApplicationAction(
             "saveProjectAction",
-            (e) -> System.out.println("Save action"),
+            (e, action) -> System.out.println("Save action"),
             "saveAction",
             null,
             Icons.FILE_SAVE,
@@ -61,7 +61,7 @@ public class GlobalActions {
     );
     final ApplicationAction saveAsAction = new ApplicationAction(
             "saveAsAction",
-            (e) -> System.out.println("Save as action"),
+            (e, action) -> System.out.println("Save as action"),
             "saveAsAction",
             null,
             Icons.FILE_SAVE_AS,
@@ -71,7 +71,7 @@ public class GlobalActions {
     );
     final ApplicationAction showHelpAction = new ApplicationAction(
             "showHelpAction",
-            (e) -> System.out.println("Show help action"),
+            (e, action) -> System.out.println("Show help action"),
             "showHelpAction",
             null,
             Icons.HELP,
@@ -81,7 +81,7 @@ public class GlobalActions {
     );
     final ApplicationAction showMetricsAction = new ApplicationAction(
             "showMetricsAction",
-            (e) -> System.out.println("Show metrics action"),
+            (e, action) -> System.out.println("Show metrics action"),
             "showMetricsAction",
             null,
             Icons.METRICS,
@@ -91,7 +91,7 @@ public class GlobalActions {
     );
     final ApplicationAction showSettingsAction = new ApplicationAction(
             "showSettingsAction",
-            (e) -> System.out.println("Show settings action"),
+            (e, action) -> System.out.println("Show settings action"),
             "showSettingsAction",
             null,
             Icons.SETTINGS,
