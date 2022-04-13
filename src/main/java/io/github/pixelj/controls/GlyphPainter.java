@@ -9,7 +9,9 @@ import org.jetbrains.annotations.Nullable;
 import java.awt.*;
 import java.util.function.Consumer;
 
-public class GlyphPainter extends GlyphView implements Painter, CanFlipImage, CanRotateImage, CanTranslateImage {
+public class GlyphPainter
+        extends GlyphView
+        implements Painter, CanFlipImage, CanRotateImage, CanTranslateImage {
 
     private final PaintAdapter paintAdapter;
     private Consumer<Snapshot> snapshotConsumer = snapshot -> {

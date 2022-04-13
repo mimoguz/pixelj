@@ -10,7 +10,9 @@ import java.awt.*;
 import java.awt.image.*;
 import java.util.Arrays;
 
-public class BinaryImage extends Image implements Changeable<BinaryImage, BinaryImage.ImageChangeEvent, BinaryImage.ImageChangeListener> {
+public class BinaryImage
+        extends Image
+        implements Changeable<BinaryImage, BinaryImage.ImageChangeEvent, BinaryImage.ImageChangeListener> {
     private static final byte b0 = 0;
     private static final byte b1 = 1;
     protected final BufferedImage image;
