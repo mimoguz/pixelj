@@ -11,6 +11,7 @@ import io.github.pixelj.views.shared.Borders;
 import io.github.pixelj.views.shared.Components;
 import io.github.pixelj.views.shared.Dimensions;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -59,14 +60,16 @@ public class CharacterListPanel extends JPanel {
         filterBox.setMaximumSize(Dimensions.maximumComboBoxSize);
         filterBox.setMinimumSize(Dimensions.minimumComboBoxSize);
         filterBox.addActionListener(event -> {
-            final var item = filterBox.getSelectedItem();
-            final var split = Objects.toString(item).split("-");
-            try {
-                final var min = Integer.parseInt(split[0]);
-                final var max = Integer.parseInt(split[1]);
-                listModel.setRange(min, max);
-            } catch (Exception e) {
-                listModel.setRange(0, Integer.MAX_VALUE);
+            if (list.getModel() instanceof CharacterListModel lm) {
+                final var item = filterBox.getSelectedItem();
+                final var split = Objects.toString(item).split("-");
+                try {
+                    final var min = Integer.parseInt(split[0]);
+                    final var max = Integer.parseInt(split[1]);
+                    lm.setRange(min, max);
+                } catch (Exception e) {
+                    lm.setRange(0, Integer.MAX_VALUE);
+                }
             }
         });
 
@@ -76,16 +79,25 @@ public class CharacterListPanel extends JPanel {
         setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, res.colors.divider()));
 
         final var buttonPanel = new JPanel();
-        buttonPanel.setBorder(Borders.empty4);
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        buttonPanel.setBorder(Borders.smallEmpty);
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
         buttonPanel.add(Box.createHorizontalGlue());
         buttonPanel.add(addButton);
-        buttonPanel.add(Box.createRigidArea(Dimensions.square8));
+        buttonPanel.add(Box.createRigidArea(Dimensions.mediumSquare));
         buttonPanel.add(removeButton);
         buttonPanel.add(Box.createHorizontalGlue());
         add(buttonPanel);
 
-        // TODO: finish me!
+        final var filterPanel = new JPanel();
+        filterPanel.setBorder(Borders.smallEmptyCup);
+        filterPanel.setLayout(new BoxLayout(filterPanel, BoxLayout.X_AXIS));
+        filterPanel.add(filterBox);
+        add(filterPanel);
+
+        final var scrollPanel = new JScrollPane(list);
+        scrollPanel.setMaximumSize(Dimensions.maximum);
+        scrollPanel.setBorder(Borders.empty);
+        add(scrollPanel);
     }
 
     public JButton getAddButton() {
@@ -110,8 +122,9 @@ public class CharacterListPanel extends JPanel {
         Actions.setEnabled(actions.all, value);
     }
 
-    public void setListModel(CharacterListModel listModel) {
+    public void setListModel(final @Nullable CharacterListModel listModel) {
         selectionModel.clearSelection();
         list.setModel(listModel);
+        actions.setListModel(listModel);
     }
 }

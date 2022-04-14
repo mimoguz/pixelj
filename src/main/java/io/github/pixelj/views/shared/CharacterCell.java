@@ -32,7 +32,7 @@ public class CharacterCell extends JPanel {
         titleBox.add(Box.createVerticalGlue());
 
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-        setBorder(Borders.empty8);
+        setBorder(Borders.mediumEmpty);
         add(picture);
         add(Box.createHorizontalStrut(8));
         add(letter);
