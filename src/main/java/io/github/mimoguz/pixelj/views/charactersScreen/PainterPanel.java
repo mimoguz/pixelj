@@ -7,6 +7,7 @@ import io.github.mimoguz.pixelj.graphics.Snapshot;
 import io.github.mimoguz.pixelj.models.CharacterModel;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.views.shared.Borders;
+import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +15,8 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class PainterPanel extends JPanel {
@@ -53,6 +56,10 @@ public class PainterPanel extends JPanel {
             }
         });
 
+        setLayout(new BorderLayout());
+
+        //  *************** WEST ***************
+
         final var toolBar = new JToolBar();
         toolBar.add(actions.historyUndoAction);
         toolBar.add(actions.historyRedoAction);
@@ -77,10 +84,9 @@ public class PainterPanel extends JPanel {
         toolBar.add(actions.eraseAction);
         toolBar.setOrientation(SwingConstants.VERTICAL);
         toolBar.setBorder(Borders.smallEmpty);
-
-        setLayout(new BorderLayout());
-
         add(toolBar, BorderLayout.WEST);
+
+        //  *************** CENTER ***************
 
         final var bottomPanel = new JPanel();
         bottomPanel.setBorder(Borders.smallEmpty);
@@ -96,6 +102,56 @@ public class PainterPanel extends JPanel {
         titlePanel.add(title);
         titlePanel.add(Box.createHorizontalGlue());
 
+        final var painterPanel = new JPanel();
+        painterPanel.setLayout(new GridBagLayout());
+        painterPanel.setMaximumSize(Dimensions.maximum);
+        painterPanel.add(painter);
+
+        final var scrollPanel = new JScrollPane(painterPanel);
+        scrollPanel.setBorder(Borders.empty);
+        scrollPanel.setFocusable(true);
+        scrollPanel.setMaximumSize(Dimensions.maximum);
+
+        final var moveFocus = new MouseListener() {
+            @Override
+            public void mouseClicked(final MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(final MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(final MouseEvent e) {
+            }
+
+            @Override
+            public void mousePressed(final MouseEvent e) {
+                scrollPanel.requestFocus();
+            }
+
+            @Override
+            public void mouseReleased(final MouseEvent e) {
+            }
+        };
+
+        scrollPanel.addMouseListener(moveFocus);
+        painter.addMouseListener(moveFocus);
+
+        final var centerPanel = new JPanel();
+        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+        centerPanel.add(titlePanel);
+        centerPanel.add(scrollPanel);
+        centerPanel.add(bottomPanel);
+        add(centerPanel, BorderLayout.CENTER);
+
+        //  *************** EAST ***************
+
+        final var eastPanel = new JPanel();
+        eastPanel.setMinimumSize(new Dimension(200, 1));
+        eastPanel.setMaximumSize(new Dimension(200, Integer.MAX_VALUE));
+        eastPanel.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Resources.get().colors.divider()));
+        add(eastPanel, BorderLayout.EAST);
     }
 
     public void setModel(final @Nullable CharacterModel model) {
