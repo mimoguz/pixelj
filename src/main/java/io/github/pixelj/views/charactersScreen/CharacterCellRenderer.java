@@ -1,4 +1,4 @@
-package io.github.pixelj.views.shared.charactersScreen;
+package io.github.pixelj.views.charactersScreen;
 
 import io.github.pixelj.models.CharacterModel;
 import io.github.pixelj.resources.Resources;
