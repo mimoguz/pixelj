@@ -1,4 +1,4 @@
 # Default ignored files
 *.xml
-libraries/
-!codeStyles/
+/shelf/
+!/codeStyles/
