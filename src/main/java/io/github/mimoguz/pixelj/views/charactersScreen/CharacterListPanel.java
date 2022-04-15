@@ -1,7 +1,5 @@
 package io.github.mimoguz.pixelj.views.charactersScreen;
 
-import com.formdev.flatlaf.FlatClientProperties;
-
 import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.CharacterListActions;
 import io.github.mimoguz.pixelj.controls.SearchableComboBox;
@@ -12,6 +10,7 @@ import io.github.mimoguz.pixelj.views.shared.Borders;
 import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
+import com.formdev.flatlaf.FlatClientProperties;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -120,8 +119,8 @@ public class CharacterListPanel extends JPanel {
 
     @Override
     public void setEnabled(boolean value) {
-        super.setEnabled(value);
         Actions.setEnabled(actions.all, value);
+        super.setEnabled(value);
     }
 
     public void setListModel(final @Nullable CharacterListModel listModel) {

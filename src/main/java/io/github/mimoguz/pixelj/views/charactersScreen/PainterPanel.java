@@ -58,7 +58,7 @@ public class PainterPanel extends JPanel {
 
         setLayout(new BorderLayout());
 
-        //  *************** WEST ***************
+        //  ****************************** WEST ******************************
 
         final var toolBar = new JToolBar();
         toolBar.add(actions.historyUndoAction);
@@ -86,7 +86,7 @@ public class PainterPanel extends JPanel {
         toolBar.setBorder(Borders.smallEmpty);
         add(toolBar, BorderLayout.WEST);
 
-        //  *************** CENTER ***************
+        //  ****************************** CENTER ******************************
 
         final var bottomPanel = new JPanel();
         bottomPanel.setBorder(Borders.smallEmpty);
@@ -145,13 +145,17 @@ public class PainterPanel extends JPanel {
         centerPanel.add(bottomPanel);
         add(centerPanel, BorderLayout.CENTER);
 
-        //  *************** EAST ***************
+        //  ****************************** EAST ******************************
 
         final var eastPanel = new JPanel();
         eastPanel.setMinimumSize(new Dimension(200, 1));
         eastPanel.setMaximumSize(new Dimension(200, Integer.MAX_VALUE));
         eastPanel.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Resources.get().colors.divider()));
         add(eastPanel, BorderLayout.EAST);
+    }
+
+    public @Nullable CharacterModel getModel() {
+        return painter.getModel();
     }
 
     public void setModel(final @Nullable CharacterModel model) {
@@ -165,5 +169,15 @@ public class PainterPanel extends JPanel {
             title.setText(" ");
             zoomSlider.setEnabled(false);
         }
+    }
+
+    public GlyphPainter getPainter() {
+        return painter;
+    }
+
+    @Override
+    public void setEnabled(final boolean value) {
+        Actions.setEnabled(actions.all, value);
+        super.setEnabled(value);
     }
 }
