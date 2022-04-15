@@ -121,6 +121,12 @@ public class GlyphView extends JPanel
 
     public void removeLines(Line... lines) {
         this.lines.removeAll(Arrays.stream(lines).toList());
+        repaint();
+    }
+
+    public void removeLines() {
+        lines.clear();
+        repaint();
     }
 
     public void setModel(CharacterModel value, boolean listen) {

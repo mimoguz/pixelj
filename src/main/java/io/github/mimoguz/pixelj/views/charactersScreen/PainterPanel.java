@@ -3,8 +3,11 @@ package io.github.mimoguz.pixelj.views.charactersScreen;
 import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.PainterActions;
 import io.github.mimoguz.pixelj.controls.GlyphPainter;
+import io.github.mimoguz.pixelj.controls.Line;
+import io.github.mimoguz.pixelj.controls.Orientation;
 import io.github.mimoguz.pixelj.graphics.Snapshot;
 import io.github.mimoguz.pixelj.models.CharacterModel;
+import io.github.mimoguz.pixelj.models.Metrics;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.views.shared.Borders;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
@@ -158,12 +161,27 @@ public class PainterPanel extends JPanel {
         return painter.getModel();
     }
 
-    public void setModel(final @Nullable CharacterModel model) {
-        painter.setModel(model);
-        if (model != null) {
+    public void setModel(final @Nullable CharacterModel value) {
+        final var currentModel = painter.getModel();
+        if (currentModel != null) {
+            painter.removeLines(new Line(
+                    Orientation.VERTICAL,
+                    currentModel.getWidth(),
+                    Resources.get().colors.accent()
+            ));
+        }
+
+        painter.setModel(value);
+
+        if (value != null) {
             Actions.setEnabled(actions.all, true);
-            title.setText(Integer.toString(model.getCodePoint()));
+            title.setText(Integer.toString(value.getCodePoint()));
             zoomSlider.setEnabled(true);
+            painter.addLines(new Line(
+                    Orientation.VERTICAL,
+                    value.getWidth(),
+                    Resources.get().colors.accent()
+            ));
         } else {
             Actions.setEnabled(actions.all, false);
             title.setText(" ");
@@ -179,5 +197,20 @@ public class PainterPanel extends JPanel {
     public void setEnabled(final boolean value) {
         Actions.setEnabled(actions.all, value);
         super.setEnabled(value);
+    }
+
+    public void setMetrics(@NotNull Metrics metrics) {
+        painter.removeLines();
+        final var colors = Resources.get().colors;
+        painter.addLines(
+                new Line(Orientation.HORIZONTAL, metrics.descender(), colors.accent()),
+                new Line(Orientation.HORIZONTAL, metrics.descender() + metrics.xHeight(), colors.accent()),
+                new Line(Orientation.HORIZONTAL, metrics.descender() + metrics.ascender(), colors.accent())
+        );
+
+        final var currentModel = painter.getModel();
+        if (currentModel != null) {
+            painter.addLines(new Line(Orientation.VERTICAL, currentModel.getWidth(), colors.accent()));
+        }
     }
 }
