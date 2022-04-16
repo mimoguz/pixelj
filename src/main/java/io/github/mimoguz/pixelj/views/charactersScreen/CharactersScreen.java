@@ -2,11 +2,14 @@ package io.github.mimoguz.pixelj.views.charactersScreen;
 
 import io.github.mimoguz.pixelj.controls.GlyphView;
 import io.github.mimoguz.pixelj.models.CharacterListModel;
+import io.github.mimoguz.pixelj.models.Metrics;
+import io.github.mimoguz.pixelj.models.ProjectModel;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class CharactersScreen extends JSplitPane {
     private final CharacterListPanel listPanel;
@@ -23,21 +26,21 @@ public class CharactersScreen extends JSplitPane {
 
         // Connect the listModel to the painter
         selectionModel.addListSelectionListener(e -> {
-            painterPanel.setModel(
-                    (selectionModel.getMinSelectionIndex() == selectionModel.getMaxSelectionIndex()
-                            && selectionModel.getMinSelectionIndex() >= 0
-                            && listModel != null
-                    )
-                            ? listModel.getElementAt(selectionModel.getMinSelectionIndex())
-                            : null
-            );
+            if (selectionModel.getMinSelectionIndex() == selectionModel.getMaxSelectionIndex()
+                    && selectionModel.getMinSelectionIndex() >= 0
+                    && this.listModel != null) {
+                painterPanel.setModel(listModel.getElementAt(selectionModel.getMinSelectionIndex()));
+            } else {
+                painterPanel.setModel(null);
+            }
         });
 
         // Connect the painter to the listModel
         painterPanel.getPainter().addListener((sender, event) -> {
             if (event == GlyphView.ViewChangeEvent.GLYPH_MODIFIED) {
                 final var index = selectionModel.getMinSelectionIndex();
-                if (index >= 0 && listModel != null && painterPanel.getModel() == listModel.getElementAt(index)) {
+                if (index >= 0 && listModel != null
+                        && painterPanel.getModel() == this.listModel.getElementAt(index)) {
                     listModel.requestEvent(index);
                 }
             }
@@ -56,7 +59,27 @@ public class CharactersScreen extends JSplitPane {
         super.setEnabled(value);
     }
 
-    public void setListModel(final @Nullable CharacterListModel listModel) {
-        this.listModel = listModel;
+    public void setProject(final @Nullable ProjectModel project) {
+        painterPanel.setModel(null);
+        if (project != null) {
+            listModel = project.getCharacters();
+            listPanel.setListModel(project.getCharacters());
+            updateMetrics(project.getMetrics());
+        } else {
+            listModel = null;
+            listPanel.setListModel(null);
+            updateMetrics(null);
+        }
+    }
+
+    public void updateMetrics(@Nullable Metrics metrics) {
+        painterPanel.setMetrics(metrics);
+        if (metrics != null) {
+            listPanel.getActions().setCanvasSize(new Dimension(metrics.canvasWidth(), metrics.canvasHeight()));
+            listPanel.getActions().setDefaultCharacterWidth(metrics.defaultCharacterWidth());
+        } else {
+            listPanel.getActions().setCanvasSize(null);
+            listPanel.getActions().setDefaultCharacterWidth(0);
+        }
     }
 }

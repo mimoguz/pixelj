@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
+import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
@@ -29,6 +30,8 @@ public class CharacterListActions {
             .setAccelerator(KeyEvent.VK_MINUS, InputEvent.ALT_DOWN_MASK);
 
     public final Collection<ApplicationAction> all = List.of(showAddDialogAction, showRemoveDialogAction);
+    private @Nullable Dimension canvasSize;
+    private int defaultCharacterWidth;
     private boolean enabled = true;
     private @Nullable DisplayListModel<CharacterModel> listModel;
     private @Nullable ListSelectionModel selectionModel;
@@ -46,6 +49,22 @@ public class CharacterListActions {
     }
 
     public CharacterListActions() {
+    }
+
+    public @Nullable Dimension getCanvasSize() {
+        return canvasSize;
+    }
+
+    public void setCanvasSize(final @Nullable Dimension canvasSize) {
+        this.canvasSize = canvasSize;
+    }
+
+    public int getDefaultCharacterWidth() {
+        return defaultCharacterWidth;
+    }
+
+    public void setDefaultCharacterWidth(final int defaultCharacterWidth) {
+        this.defaultCharacterWidth = defaultCharacterWidth;
     }
 
     public boolean isEnabled() {

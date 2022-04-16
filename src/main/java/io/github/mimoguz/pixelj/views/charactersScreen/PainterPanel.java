@@ -199,8 +199,13 @@ public class PainterPanel extends JPanel {
         super.setEnabled(value);
     }
 
-    public void setMetrics(@NotNull Metrics metrics) {
+    public void setMetrics(@Nullable Metrics metrics) {
         painter.removeLines();
+        
+        if (metrics == null) {
+            return;
+        }
+
         final var colors = Resources.get().colors;
         painter.addLines(
                 new Line(Orientation.HORIZONTAL, metrics.descender(), colors.accent()),

@@ -26,7 +26,6 @@ public class CharacterListPanel extends JPanel {
     private final JList<CharacterModel> list;
     private final JButton removeButton;
     private final ListSelectionModel selectionModel;
-
     public CharacterListPanel(
             @NotNull CharacterListModel listModel,
             @NotNull ListSelectionModel selectionModel,
@@ -99,6 +98,10 @@ public class CharacterListPanel extends JPanel {
         scrollPanel.setMaximumSize(Dimensions.maximum);
         scrollPanel.setBorder(Borders.empty);
         add(scrollPanel);
+    }
+
+    public CharacterListActions getActions() {
+        return actions;
     }
 
     public JButton getAddButton() {
