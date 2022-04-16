@@ -9,6 +9,7 @@ import io.github.mimoguz.pixelj.graphics.Snapshot;
 import io.github.mimoguz.pixelj.models.CharacterModel;
 import io.github.mimoguz.pixelj.models.Metrics;
 import io.github.mimoguz.pixelj.resources.Resources;
+import io.github.mimoguz.pixelj.util.Detachable;
 import io.github.mimoguz.pixelj.views.shared.Borders;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
@@ -22,7 +23,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-public class PainterPanel extends JPanel {
+public class PainterPanel extends JPanel implements Detachable {
     private static final int INITIAL_ZOOM = 12;
     private static final int MAX_UNDO = 64;
     private final PainterActions actions;
@@ -157,31 +158,22 @@ public class PainterPanel extends JPanel {
         add(eastPanel, BorderLayout.EAST);
     }
 
+    @Override
+    public void detach() {
+        painter.detach();
+    }
+
     public @Nullable CharacterModel getModel() {
         return painter.getModel();
     }
 
     public void setModel(final @Nullable CharacterModel value) {
-        final var currentModel = painter.getModel();
-        if (currentModel != null) {
-            painter.removeLines(new Line(
-                    Orientation.VERTICAL,
-                    currentModel.getWidth(),
-                    Resources.get().colors.accent()
-            ));
-        }
-
         painter.setModel(value);
 
         if (value != null) {
             Actions.setEnabled(actions.all, true);
             title.setText(Integer.toString(value.getCodePoint()));
             zoomSlider.setEnabled(true);
-            painter.addLines(new Line(
-                    Orientation.VERTICAL,
-                    value.getWidth(),
-                    Resources.get().colors.accent()
-            ));
         } else {
             Actions.setEnabled(actions.all, false);
             title.setText(" ");
@@ -201,7 +193,7 @@ public class PainterPanel extends JPanel {
 
     public void setMetrics(@Nullable Metrics metrics) {
         painter.removeLines();
-        
+
         if (metrics == null) {
             return;
         }
@@ -212,10 +204,5 @@ public class PainterPanel extends JPanel {
                 new Line(Orientation.HORIZONTAL, metrics.descender() + metrics.xHeight(), colors.accent()),
                 new Line(Orientation.HORIZONTAL, metrics.descender() + metrics.ascender(), colors.accent())
         );
-
-        final var currentModel = painter.getModel();
-        if (currentModel != null) {
-            painter.addLines(new Line(Orientation.VERTICAL, currentModel.getWidth(), colors.accent()));
-        }
     }
 }

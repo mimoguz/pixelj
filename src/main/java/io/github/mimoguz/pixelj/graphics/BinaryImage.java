@@ -50,10 +50,6 @@ public class BinaryImage
         return new BinaryImage(width, height, img);
     }
 
-    public void addChangeListener(@NotNull BinaryImage.ImageChangeListener listener) {
-        listeners.add(ImageChangeListener.class, listener);
-    }
-
     public void draw(@NotNull Graphics2D graphics, int x, int y, int width, int height) {
         graphics.drawImage(image, x, y, width, height, null);
     }
@@ -92,6 +88,11 @@ public class BinaryImage
     @Override
     public void setAccelerationPriority(float priority) {
         image.setAccelerationPriority(priority);
+    }
+
+    public byte getByteValue(int x, int y) {
+        raster.getDataElements(x, y, pixelBuffer);
+        return pixelBuffer[0];
     }
 
     @Override
@@ -177,8 +178,8 @@ public class BinaryImage
         invert(x, y, true);
     }
 
-    public void removeChangeListener(@NotNull BinaryImage.ImageChangeListener listener) {
-        listeners.remove(ImageChangeListener.class, listener);
+    public void requestUpdate() {
+        fireChangeEvent(this, ImageChangeEvent.IMAGE_MODIFIED);
     }
 
     public void set(int x, int y, boolean value, boolean notify) {
@@ -193,10 +194,6 @@ public class BinaryImage
         set(x, y, value, true);
     }
 
-    public void requestUpdate() {
-        fireChangeEvent(this, ImageChangeEvent.IMAGE_MODIFIED);
-    }
-
     public void setDataElements(int x, int y, int width, int height, byte[] source, boolean notify) {
         raster.setDataElements(x, y, width, height, source);
         if (notify) {
@@ -206,11 +203,6 @@ public class BinaryImage
 
     public void setDataElements(int x, int y, int width, int height, byte[] source) {
         setDataElements(x, y, width, height, source, true);
-    }
-
-    public byte getByteValue(int x, int y) {
-        raster.getDataElements(x, y, pixelBuffer);
-        return pixelBuffer[0];
     }
 
     private void setByteValue(int x, int y, byte value) {

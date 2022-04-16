@@ -4,6 +4,7 @@ import io.github.mimoguz.pixelj.graphics.BinaryImage;
 import io.github.mimoguz.pixelj.models.CharacterModel;
 import io.github.mimoguz.pixelj.util.ChangeListener;
 import io.github.mimoguz.pixelj.util.Changeable;
+import io.github.mimoguz.pixelj.util.Detachable;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,7 +16,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class GlyphView extends JPanel
-        implements Changeable<GlyphView, GlyphView.ViewChangeEvent, GlyphView.ViewChangeListener> {
+        implements
+        Changeable<GlyphView, GlyphView.ViewChangeEvent, GlyphView.ViewChangeListener>,
+        Detachable {
+    private static final Color SHADE = new Color(20, 0, 0, 0);
     private final Color backgroundColor;
     private final ArrayList<Line> lines = new ArrayList<>();
     private final EventListenerList listeners = new EventListenerList();
@@ -39,6 +43,13 @@ public class GlyphView extends JPanel
 
     public void addLines(Line... lines) {
         this.lines.addAll(Arrays.stream(lines).toList());
+    }
+
+    @Override
+    public void detach() {
+        if (model != null) {
+            model.getGlyph().removeChangeListener(imageChangeListener);
+        }
     }
 
     @Override
@@ -110,6 +121,7 @@ public class GlyphView extends JPanel
         if (model != null) {
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
             model.getGlyph().draw(g, 0, 0, getWidth(), getHeight());
+            drawShade(g);
             drawOverlay(g);
             drawLines(g);
         } else {
@@ -194,6 +206,15 @@ public class GlyphView extends JPanel
             return;
         }
         g.drawImage(overlay, 0, 0, getWidth(), getHeight(), null);
+    }
+
+    private void drawShade(Graphics2D g) {
+        if (model == null || model.getWidth() >= model.getGlyph().getWidth()) {
+            return;
+        }
+        final var x = (int) Math.round((((double) getWidth()) / model.getGlyph().getWidth()) * model.getWidth());
+        g.setColor(SHADE);
+        g.fillRect(x, 0, x, getHeight());
     }
 
     public enum ViewChangeEvent {

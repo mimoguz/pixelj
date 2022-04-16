@@ -4,31 +4,31 @@ import io.github.mimoguz.pixelj.controls.GlyphView;
 import io.github.mimoguz.pixelj.models.CharacterListModel;
 import io.github.mimoguz.pixelj.models.Metrics;
 import io.github.mimoguz.pixelj.models.ProjectModel;
+import io.github.mimoguz.pixelj.util.Detachable;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class CharactersScreen extends JSplitPane {
+public class CharactersScreen extends JSplitPane implements Detachable {
+    private final CharacterListModel listModel;
     private final CharacterListPanel listPanel;
     private final PainterPanel painterPanel;
     private final ListSelectionModel selectionModel;
-    private @Nullable CharacterListModel listModel;
 
-    public CharactersScreen(JComponent root) {
+    public CharactersScreen(@NotNull ProjectModel project, @NotNull JComponent root) {
         selectionModel = new DefaultListSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-
+        listModel = project.getCharacters();
         listPanel = new CharacterListPanel(listModel, selectionModel, root);
         painterPanel = new PainterPanel(root);
 
         // Connect the listModel to the painter
         selectionModel.addListSelectionListener(e -> {
             if (selectionModel.getMinSelectionIndex() == selectionModel.getMaxSelectionIndex()
-                    && selectionModel.getMinSelectionIndex() >= 0
-                    && this.listModel != null) {
+                    && selectionModel.getMinSelectionIndex() >= 0) {
                 painterPanel.setModel(listModel.getElementAt(selectionModel.getMinSelectionIndex()));
             } else {
                 painterPanel.setModel(null);
@@ -36,11 +36,10 @@ public class CharactersScreen extends JSplitPane {
         });
 
         // Connect the painter to the listModel
-        painterPanel.getPainter().addListener((sender, event) -> {
+        painterPanel.getPainter().addChangeListener((sender, event) -> {
             if (event == GlyphView.ViewChangeEvent.GLYPH_MODIFIED) {
                 final var index = selectionModel.getMinSelectionIndex();
-                if (index >= 0 && listModel != null
-                        && painterPanel.getModel() == this.listModel.getElementAt(index)) {
+                if (index >= 0 && painterPanel.getModel() == this.listModel.getElementAt(index)) {
                     listModel.requestEvent(index);
                 }
             }
@@ -53,33 +52,21 @@ public class CharactersScreen extends JSplitPane {
     }
 
     @Override
+    public void detach() {
+        painterPanel.detach();
+        listPanel.detach();
+    }
+
+    @Override
     public void setEnabled(final boolean value) {
         listPanel.setEnabled(value);
         painterPanel.setEnabled(value);
         super.setEnabled(value);
     }
 
-    public void setProject(final @Nullable ProjectModel project) {
-        painterPanel.setModel(null);
-        if (project != null) {
-            listModel = project.getCharacters();
-            listPanel.setListModel(project.getCharacters());
-            updateMetrics(project.getMetrics());
-        } else {
-            listModel = null;
-            listPanel.setListModel(null);
-            updateMetrics(null);
-        }
-    }
-
-    public void updateMetrics(@Nullable Metrics metrics) {
+    public void updateMetrics(@NotNull Metrics metrics) {
         painterPanel.setMetrics(metrics);
-        if (metrics != null) {
-            listPanel.getActions().setCanvasSize(new Dimension(metrics.canvasWidth(), metrics.canvasHeight()));
-            listPanel.getActions().setDefaultCharacterWidth(metrics.defaultCharacterWidth());
-        } else {
-            listPanel.getActions().setCanvasSize(null);
-            listPanel.getActions().setDefaultCharacterWidth(0);
-        }
+        listPanel.getActions().setCanvasSize(new Dimension(metrics.canvasWidth(), metrics.canvasHeight()));
+        listPanel.getActions().setDefaultCharacterWidth(metrics.defaultCharacterWidth());
     }
 }

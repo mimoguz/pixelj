@@ -6,33 +6,31 @@ import io.github.mimoguz.pixelj.controls.SearchableComboBox;
 import io.github.mimoguz.pixelj.models.CharacterListModel;
 import io.github.mimoguz.pixelj.models.CharacterModel;
 import io.github.mimoguz.pixelj.resources.Resources;
+import io.github.mimoguz.pixelj.util.Detachable;
 import io.github.mimoguz.pixelj.views.shared.Borders;
 import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.util.Objects;
 
-public class CharacterListPanel extends JPanel {
+public class CharacterListPanel extends JPanel implements Detachable {
     private final CharacterListActions actions;
     private final JButton addButton;
     private final SearchableComboBox<String> filterBox;
     private final JList<CharacterModel> list;
     private final JButton removeButton;
-    private final ListSelectionModel selectionModel;
+
     public CharacterListPanel(
             @NotNull CharacterListModel listModel,
             @NotNull ListSelectionModel selectionModel,
             @NotNull JComponent root
     ) {
-        this.selectionModel = selectionModel;
-
         final var res = Resources.get();
 
         actions = new CharacterListActions(listModel, selectionModel);
@@ -100,6 +98,11 @@ public class CharacterListPanel extends JPanel {
         add(scrollPanel);
     }
 
+    @Override
+    public void detach() {
+        list.setModel(null);
+    }
+
     public CharacterListActions getActions() {
         return actions;
     }
@@ -124,11 +127,5 @@ public class CharacterListPanel extends JPanel {
     public void setEnabled(boolean value) {
         Actions.setEnabled(actions.all, value);
         super.setEnabled(value);
-    }
-
-    public void setListModel(final @Nullable CharacterListModel listModel) {
-        selectionModel.clearSelection();
-        list.setModel(listModel);
-        actions.setListModel(listModel);
     }
 }
