@@ -2,19 +2,23 @@ package io.github.mimoguz.pixelj.graphics;
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+@ParametersAreNonnullByDefault
 public class FontIcon implements Icon {
     private final Font font;
     private final int height;
     private final String symbol;
     private final int width;
+    @NotNull
     private Color disabledForeground;
+    @NotNull
     private Color foreground;
 
-    public FontIcon(int codePoint, @NotNull Color foreground, @NotNull Color disabledForeground, @NotNull Font font) {
+    public FontIcon(final int codePoint, final Color foreground, final Color disabledForeground, final Font font) {
         this.foreground = foreground;
         this.disabledForeground = disabledForeground;
         this.font = font;
@@ -31,10 +35,11 @@ public class FontIcon implements Icon {
         width = metrics.charWidth(codePoint);
     }
 
-    public FontIcon(int codePoint, @NotNull Color foreground, @NotNull Font font) {
+    public FontIcon(final int codePoint, final Color foreground, final Font font) {
         this(codePoint, foreground, foreground, font);
     }
 
+    @NotNull
     public Color getDisabledForeground() {
         return disabledForeground;
     }
@@ -48,7 +53,7 @@ public class FontIcon implements Icon {
         return foreground;
     }
 
-    public void setForeground(@NotNull Color value) {
+    public void setForeground(Color value) {
         foreground = value;
     }
 
@@ -63,7 +68,7 @@ public class FontIcon implements Icon {
     }
 
     @Override
-    public void paintIcon(Component component, Graphics graphics, int x, int y) {
+    public void paintIcon(final Component component, final Graphics graphics, final int x, final int y) {
         final var g = (Graphics2D) graphics.create();
         g.setFont(font);
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

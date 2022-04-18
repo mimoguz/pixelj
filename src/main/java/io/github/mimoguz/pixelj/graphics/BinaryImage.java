@@ -6,11 +6,13 @@ import io.github.mimoguz.pixelj.util.Changeable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.event.EventListenerList;
 import java.awt.*;
 import java.awt.image.*;
 import java.util.Arrays;
 
+@ParametersAreNonnullByDefault
 public class BinaryImage
         extends Image
         implements Changeable<BinaryImage, BinaryImage.ImageChangeEvent, BinaryImage.ImageChangeListener> {
@@ -21,12 +23,12 @@ public class BinaryImage
     private final byte[] pixelBuffer = new byte[1];
     private final WritableRaster raster;
 
-    private BinaryImage(final int width, final int height, final @NotNull BufferedImage image) {
+    private BinaryImage(final int width, final int height, final BufferedImage image) {
         this.image = image;
         raster = image.getRaster();
     }
 
-    public static BinaryImage from(final @NotNull BufferedImage image) {
+    public static BinaryImage from(final BufferedImage image) {
         if (image.getType() != BufferedImage.TYPE_BYTE_BINARY) {
             throw new IllegalArgumentException("Image is not binary indexed");
         }
@@ -50,7 +52,7 @@ public class BinaryImage
         return new BinaryImage(width, height, img);
     }
 
-    public void draw(final @NotNull Graphics2D graphics, final int x, final int y, final int width, final int height) {
+    public void draw(final Graphics2D graphics, final int x, final int y, final int width, final int height) {
         graphics.drawImage(image, x, y, width, height, null);
     }
 
@@ -110,7 +112,7 @@ public class BinaryImage
     }
 
     @Override
-    public Graphics getGraphics() {
+    public @NotNull Graphics getGraphics() {
         return image.getGraphics();
     }
 
@@ -134,7 +136,7 @@ public class BinaryImage
     }
 
     @Override
-    public Object getProperty(final String name, final @Nullable ImageObserver observer) {
+    public @Nullable Object getProperty(final String name, final @Nullable ImageObserver observer) {
         return image.getProperty(name, observer);
     }
 
@@ -143,11 +145,11 @@ public class BinaryImage
     }
 
     @Override
-    public Image getScaledInstance(final int width, final int height, final int hints) {
+    public @NotNull Image getScaledInstance(final int width, final int height, final int hints) {
         return image.getScaledInstance(width, height, hints);
     }
 
-    public Snapshot getSnapshot(final int id) {
+    public @NotNull Snapshot getSnapshot(final int id) {
         var buffer = new byte[getWidth() * getHeight()];
         raster.getDataElements(0, 0, getWidth(), getHeight(), buffer);
         return new Snapshot(id, getWidth(), getHeight(), buffer);

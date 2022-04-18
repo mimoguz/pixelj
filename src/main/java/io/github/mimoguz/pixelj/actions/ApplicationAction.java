@@ -54,20 +54,24 @@ public class ApplicationAction extends AbstractAction {
         consumer.accept(e, this);
     }
 
-    public @NotNull String getKey() {
+    @NotNull
+    public String getKey() {
         return key;
     }
 
-    public @NotNull ApplicationAction setAccelerator(KeyStroke value) {
+    @NotNull
+    public ApplicationAction setAccelerator(KeyStroke value) {
         putValue(Action.ACCELERATOR_KEY, value);
         return this;
     }
 
-    public @NotNull ApplicationAction setAccelerator(int key, int mask) {
+    @NotNull
+    public ApplicationAction setAccelerator(int key, int mask) {
         return setAccelerator(KeyStroke.getKeyStroke(key, mask));
     }
 
-    public @NotNull ApplicationAction setIcon(Icons iconVariant, @Nullable Color color, @Nullable Color disabledColor) {
+    @NotNull
+    public ApplicationAction setIcon(Icons iconVariant, @Nullable Color color, @Nullable Color disabledColor) {
         final var res = Resources.get();
 
         final var icon = res.getIcon(
@@ -80,12 +84,14 @@ public class ApplicationAction extends AbstractAction {
         return this;
     }
 
-    public @NotNull ApplicationAction setTextKey(String value) {
+    @NotNull
+    public ApplicationAction setTextKey(String value) {
         putValue(Action.NAME, value);
         return this;
     }
 
-    public @NotNull ApplicationAction setTooltipKey(String value) {
+    @NotNull
+    public ApplicationAction setTooltipKey(String value) {
         putValue(Action.SHORT_DESCRIPTION, value);
         return this;
     }

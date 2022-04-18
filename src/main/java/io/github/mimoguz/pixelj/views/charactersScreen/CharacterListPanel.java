@@ -31,11 +31,12 @@ public class CharacterListPanel extends JPanel implements Detachable {
     public CharacterListPanel(
             final CharacterListModel listModel,
             final ListSelectionModel selectionModel,
+            final Dimension canvasSize,
             final JComponent root
     ) {
         final var res = Resources.get();
 
-        actions = new CharacterListActions(listModel, selectionModel);
+        actions = new CharacterListActions(listModel, selectionModel, canvasSize);
         actions.showRemoveDialogAction.setEnabled(false);
         Actions.registerShortcuts(actions.all, root);
 

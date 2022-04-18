@@ -22,7 +22,12 @@ public class CharactersScreen extends JSplitPane implements Detachable {
         selectionModel = new DefaultListSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         listModel = project.getCharacters();
-        listPanel = new CharacterListPanel(listModel, selectionModel, root);
+        listPanel = new CharacterListPanel(
+                listModel,
+                selectionModel,
+                new Dimension(project.getMetrics().canvasWidth(), project.getMetrics().canvasHeight()),
+                root
+        );
         painterPanel = new PainterPanel(root);
 
         // Connect the listModel to the painter
