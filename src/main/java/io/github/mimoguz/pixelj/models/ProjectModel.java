@@ -7,7 +7,8 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.event.EventListenerList;
 
-public class ProjectModel implements Changeable<ProjectModel, ProjectModel.ProjectChangeEvent, ProjectModel.ProjectChangeListener> {
+public class ProjectModel
+        implements Changeable<ProjectModel, ProjectModel.ProjectChangeEvent, ProjectModel.ProjectChangeListener> {
     private final CharacterListModel characters;
     private final KerningPairListModel kerningPairs;
     private final EventListenerList listeners = new EventListenerList();
@@ -27,11 +28,11 @@ public class ProjectModel implements Changeable<ProjectModel, ProjectModel.Proje
         characters.pair(kerningPairs);
     }
 
-    public CharacterListModel getCharacters() {
+    public @NotNull CharacterListModel getCharacters() {
         return characters;
     }
 
-    public KerningPairListModel getKerningPairs() {
+    public @NotNull KerningPairListModel getKerningPairs() {
         return kerningPairs;
     }
 
@@ -45,7 +46,7 @@ public class ProjectModel implements Changeable<ProjectModel, ProjectModel.Proje
         return listeners;
     }
 
-    public Metrics getMetrics() {
+    public @NotNull Metrics getMetrics() {
         return metrics;
     }
 
@@ -54,20 +55,20 @@ public class ProjectModel implements Changeable<ProjectModel, ProjectModel.Proje
         fireChangeEvent(this, new ProjectChangeEvent.MetricsChanged(value));
     }
 
-    public String getTitle() {
+    public @NotNull String getTitle() {
         return title;
     }
 
-    public void setTitle(final String value) {
+    public void setTitle(final @NotNull String value) {
         title = value;
         fireChangeEvent(this, new ProjectChangeEvent.TitleChanged(value));
     }
 
     public sealed interface ProjectChangeEvent permits ProjectChangeEvent.MetricsChanged, ProjectChangeEvent.TitleChanged {
-        record MetricsChanged(Metrics metrics) implements ProjectChangeEvent {
+        record MetricsChanged(@NotNull Metrics metrics) implements ProjectChangeEvent {
         }
 
-        record TitleChanged(String title) implements ProjectChangeEvent {
+        record TitleChanged(@NotNull String title) implements ProjectChangeEvent {
         }
     }
 
