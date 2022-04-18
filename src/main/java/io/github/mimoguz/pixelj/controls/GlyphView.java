@@ -23,7 +23,8 @@ public class GlyphView extends JPanel
     private final Color backgroundColor;
     private final ArrayList<Line> lines = new ArrayList<>();
     private final EventListenerList listeners = new EventListenerList();
-    private @Nullable CharacterModel model;
+    @Nullable
+    private CharacterModel model;
     private final BinaryImage.ImageChangeListener imageChangeListener = (source, event) -> {
         if (model == null || source != model.getGlyph()) {
             return;
@@ -32,7 +33,8 @@ public class GlyphView extends JPanel
         repaint();
         fireChangeEvent(this, ViewChangeEvent.GLYPH_MODIFIED);
     };
-    private @Nullable Image overlay;
+    @Nullable
+    private Image overlay;
     private boolean showLines = false;
     private boolean showOverlay = false;
     private int zoom = 1;
@@ -53,16 +55,19 @@ public class GlyphView extends JPanel
     }
 
     @Override
-    public @NotNull Class<ViewChangeListener> getListenerClass() {
+    @NotNull
+    public Class<ViewChangeListener> getListenerClass() {
         return ViewChangeListener.class;
     }
 
     @Override
-    public @NotNull EventListenerList getListenerList() {
+    @NotNull
+    public EventListenerList getListenerList() {
         return listeners;
     }
 
-    public @Nullable CharacterModel getModel() {
+    @Nullable
+    public CharacterModel getModel() {
         return model;
     }
 
@@ -70,7 +75,8 @@ public class GlyphView extends JPanel
         setModel(value, true);
     }
 
-    public @Nullable Image getOverlay() {
+    @Nullable
+    public Image getOverlay() {
         return overlay;
     }
 

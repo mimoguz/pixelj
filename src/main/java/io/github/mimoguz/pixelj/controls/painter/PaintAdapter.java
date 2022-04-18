@@ -2,6 +2,7 @@ package io.github.mimoguz.pixelj.controls.painter;
 
 import io.github.mimoguz.pixelj.graphics.BinaryImage;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
@@ -11,6 +12,7 @@ import java.awt.event.MouseMotionListener;
 /**
  * Adds mouse drawing support to a Painter.
  */
+@ParametersAreNonnullByDefault
 public class PaintAdapter implements MouseListener, MouseMotionListener {
     private final Point lastPixel = new Point(-1, -1);
     private final Painter painter;
