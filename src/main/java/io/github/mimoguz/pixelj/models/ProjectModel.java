@@ -12,8 +12,8 @@ public class ProjectModel
     private final CharacterListModel characters;
     private final KerningPairListModel kerningPairs;
     private final EventListenerList listeners = new EventListenerList();
-    private Metrics metrics;
-    private String title;
+    private @NotNull Metrics metrics;
+    private @NotNull String title;
 
     public ProjectModel(
             final @NotNull String title,
