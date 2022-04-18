@@ -1,9 +1,9 @@
 package io.github.mimoguz.pixelj.controls;
 
 import com.formdev.flatlaf.FlatClientProperties;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.*;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -20,6 +20,7 @@ import java.util.Objects;
  * An implementation of Thomas Bierhance's auto-complete combo-box:<br />
  * <a href="http://www.orbital-computer.de/JComboBox/">http://www.orbital-computer.de/JComboBox/</a>
  */
+@ParametersAreNonnullByDefault
 class SearchableDocument<E> extends PlainDocument {
     private final JComboBox<E> comboBox;
     private final JTextComponent editor;
@@ -27,7 +28,7 @@ class SearchableDocument<E> extends PlainDocument {
     private BackspaceState backspaceState = BackspaceState.NO_HIT;
     private boolean selecting = false;
 
-    SearchableDocument(final @NotNull JComboBox<E> comboBox) {
+    SearchableDocument(final JComboBox<E> comboBox) {
         this.comboBox = comboBox;
         model = comboBox.getModel();
         editor = (JTextComponent) comboBox.getEditor().getEditorComponent();

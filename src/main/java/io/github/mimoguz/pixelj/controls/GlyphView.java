@@ -9,12 +9,14 @@ import io.github.mimoguz.pixelj.util.Detachable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.*;
 import javax.swing.event.EventListenerList;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+@ParametersAreNonnullByDefault
 public class GlyphView extends JPanel
         implements
         Changeable<GlyphView, GlyphView.ViewChangeEvent, GlyphView.ViewChangeListener>,
@@ -39,7 +41,7 @@ public class GlyphView extends JPanel
     private boolean showOverlay = false;
     private int zoom = 1;
 
-    public GlyphView(@NotNull Color backgroundColor) {
+    public GlyphView(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
     }
 
@@ -71,7 +73,7 @@ public class GlyphView extends JPanel
         return model;
     }
 
-    public void setModel(CharacterModel value) {
+    public void setModel(@Nullable CharacterModel value) {
         setModel(value, true);
     }
 
@@ -80,7 +82,7 @@ public class GlyphView extends JPanel
         return overlay;
     }
 
-    public void setOverlay(Image value) {
+    public void setOverlay(@Nullable Image value) {
         if (overlay == value) {
             return;
         }
@@ -147,7 +149,7 @@ public class GlyphView extends JPanel
         repaint();
     }
 
-    public void setModel(CharacterModel value, boolean listen) {
+    public void setModel(@Nullable CharacterModel value, boolean listen) {
         if (model == value) {
             return;
         }

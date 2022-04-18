@@ -23,14 +23,16 @@ public class CharacterCellRenderer implements ListCellRenderer<CharacterModel> {
             final boolean cellHasFocus
     ) {
         cell.set(value);
-        cell.setForeground(isSelected
-                ? (cellHasFocus ? Resources.get().colors.focusForeground() : list.getSelectionForeground())
-                : list.getForeground()
-        );
-        cell.setBackground(isSelected
-                ? (cellHasFocus ? Resources.get().colors.focusBackground() : list.getSelectionBackground())
-                : list.getBackground()
-        );
+        if (cellHasFocus && isSelected) {
+            cell.setBackground(Resources.get().colors.focusBackground());
+            cell.setForeground(Resources.get().colors.focusForeground());
+        } else if (isSelected) {
+            cell.setBackground(list.getSelectionBackground());
+            cell.setForeground(list.getSelectionForeground());
+        } else {
+            cell.setBackground(list.getBackground());
+            cell.setForeground(list.getForeground());
+        }
         return cell;
     }
 }

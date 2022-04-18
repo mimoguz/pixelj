@@ -7,18 +7,21 @@ import io.github.mimoguz.pixelj.models.CharacterModel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.awt.*;
 import java.util.function.Consumer;
 
+@ParametersAreNonnullByDefault
 public class GlyphPainter
         extends GlyphView
         implements Painter, CanFlipImage, CanRotateImage, CanTranslateImage {
 
     private final PaintAdapter paintAdapter;
-    private @NotNull Consumer<Snapshot> snapshotConsumer = snapshot -> {
+    @NotNull
+    private Consumer<Snapshot> snapshotConsumer = snapshot -> {
     };
 
-    public GlyphPainter(final @NotNull Color backgroundColor) {
+    public GlyphPainter(final Color backgroundColor) {
         super(backgroundColor);
         paintAdapter = new PaintAdapter(this);
         addMouseListener(paintAdapter);
@@ -41,14 +44,14 @@ public class GlyphPainter
     }
 
     @Override
-    public void setModel(@Nullable CharacterModel value) {
+    public void setModel(@Nullable final CharacterModel value) {
         if (value != null) {
             paintAdapter.setExtent(value.getWidth());
         }
         super.setModel(value);
     }
 
-    public void setSnapshotConsumer(final @NotNull Consumer<Snapshot> value) {
+    public void setSnapshotConsumer(final Consumer<Snapshot> value) {
         snapshotConsumer = value;
     }
 

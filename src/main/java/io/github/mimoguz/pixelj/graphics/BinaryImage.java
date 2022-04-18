@@ -112,7 +112,8 @@ public class BinaryImage
     }
 
     @Override
-    public @NotNull Graphics getGraphics() {
+    @NotNull
+    public Graphics getGraphics() {
         return image.getGraphics();
     }
 
@@ -121,22 +122,25 @@ public class BinaryImage
     }
 
     @Override
-    public int getHeight(final @Nullable ImageObserver observer) {
+    public int getHeight(@Nullable final ImageObserver observer) {
         return image.getHeight(observer);
     }
 
     @Override
-    public @NotNull Class<ImageChangeListener> getListenerClass() {
+    @NotNull
+    public Class<ImageChangeListener> getListenerClass() {
         return ImageChangeListener.class;
     }
 
     @Override
-    public @NotNull EventListenerList getListenerList() {
+    @NotNull
+    public EventListenerList getListenerList() {
         return listeners;
     }
 
     @Override
-    public @Nullable Object getProperty(final String name, final @Nullable ImageObserver observer) {
+    @Nullable
+    public Object getProperty(final String name, @Nullable final ImageObserver observer) {
         return image.getProperty(name, observer);
     }
 
@@ -145,11 +149,13 @@ public class BinaryImage
     }
 
     @Override
-    public @NotNull Image getScaledInstance(final int width, final int height, final int hints) {
+    @NotNull
+    public Image getScaledInstance(final int width, final int height, final int hints) {
         return image.getScaledInstance(width, height, hints);
     }
 
-    public @NotNull Snapshot getSnapshot(final int id) {
+    @NotNull
+    public Snapshot getSnapshot(final int id) {
         var buffer = new byte[getWidth() * getHeight()];
         raster.getDataElements(0, 0, getWidth(), getHeight(), buffer);
         return new Snapshot(id, getWidth(), getHeight(), buffer);
@@ -160,12 +166,17 @@ public class BinaryImage
         return image.getSource();
     }
 
+    @NotNull
+    public Image getSubImage(final int x, final int y, final int width, final int height) {
+        return image.getSubimage(x, y, width, height);
+    }
+
     public int getWidth() {
         return getWidth(null);
     }
 
     @Override
-    public int getWidth(final @Nullable ImageObserver observer) {
+    public int getWidth(@Nullable final ImageObserver observer) {
         return image.getWidth(observer);
     }
 
