@@ -5,12 +5,14 @@ import io.github.mimoguz.pixelj.graphics.FontIcon;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.awt.*;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+@ParametersAreNonnullByDefault
 public class Resources {
     private static final String base = "io/github/mimoguz/pixelj/resources/";
     @Nullable
@@ -25,8 +27,7 @@ public class Resources {
         this.colors = colors;
     }
 
-    @NotNull
-    public static Resources get() {
+    public static @NotNull Resources get() {
         if (instance == null) {
             initialize(new OneDarkColors());
         }
@@ -37,8 +38,7 @@ public class Resources {
         instance = new Resources(colors);
     }
 
-    @NotNull
-    public String formatString(@NotNull String key, Object... arguments) {
+    public @NotNull String formatString(@NotNull String key, Object... arguments) {
         return strings.format(key, arguments);
     }
 
@@ -47,23 +47,19 @@ public class Resources {
         return new FontIcon(icon.codePoint, color, iconFont);
     }
 
-    @NotNull
-    public FontIcon getIcon(@NotNull Icons icon, @NotNull Color color, @NotNull Color disabledColor) {
+    public @NotNull FontIcon getIcon(@NotNull Icons icon, @NotNull Color color, @NotNull Color disabledColor) {
         return new FontIcon(icon.codePoint, color, disabledColor, iconFont);
     }
 
-    @NotNull
-    public Locale getLocale() {
+    public @NotNull Locale getLocale() {
         return strings.getLocale();
     }
 
-    @NotNull
-    public String getString(@NotNull String key) {
+    public @NotNull String getString(@NotNull String key) {
         return strings.get(key);
     }
 
-    @NotNull
-    private Font loadFont() {
+    private @NotNull Font loadFont() {
         try (var stream = getClass().getResourceAsStream(base + "pxf16.otf")) {
             if (stream == null) {
                 throw new IOException("The resource " + base + "pxf16.otf is not found.");
@@ -80,8 +76,7 @@ public class Resources {
         }
     }
 
-    @NotNull
-    private ResourceBundle loadResourceBundle() {
+    private @NotNull ResourceBundle loadResourceBundle() {
         final var bundleBase = "strings/strings";
         ResourceBundle bundle;
         try {

@@ -4,24 +4,27 @@ import io.github.mimoguz.pixelj.graphics.BinaryImage;
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class CharacterModel extends MutableIntValueModel implements Comparable<CharacterModel> {
     private final int codePoint;
-    private final @NotNull BinaryImage glyph;
+    private final BinaryImage glyph;
     private int width;
 
-    public CharacterModel(int codePoint, int width, @NotNull BinaryImage glyph) {
+    public CharacterModel(final int codePoint, final int width, final BinaryImage glyph) {
         this.codePoint = codePoint;
         this.width = width;
         this.glyph = glyph;
     }
 
     @Override
-    public int compareTo(@NotNull CharacterModel that) {
+    public int compareTo(final CharacterModel that) {
         return Integer.compare(codePoint, that.codePoint);
     }
 
     @Override
-    public boolean equals(Object that) {
+    public boolean equals(final Object that) {
         if (this == that) {
             return true;
         }
@@ -43,7 +46,7 @@ public class CharacterModel extends MutableIntValueModel implements Comparable<C
         return width;
     }
 
-    public void setWidth(int value) {
+    public void setWidth(final int value) {
         if (value == width) {
             return;
         }

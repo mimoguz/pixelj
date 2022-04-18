@@ -4,11 +4,11 @@ import io.github.mimoguz.pixelj.controls.GlyphView;
 import io.github.mimoguz.pixelj.models.CharacterModel;
 import io.github.mimoguz.pixelj.resources.Resources;
 
-import org.jetbrains.annotations.NotNull;
-
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.*;
 import java.awt.*;
 
+@ParametersAreNonnullByDefault
 public class CharacterCell extends JPanel {
     private final JLabel letter = new JLabel(" ");
     private final int maxPictureSize;
@@ -42,7 +42,7 @@ public class CharacterCell extends JPanel {
         add(Box.createHorizontalGlue());
     }
 
-    public void set(@NotNull CharacterModel model) {
+    public void set(CharacterModel model) {
         picture.setModel(model, false);
 
         final var pictureSize = Math.max(model.getGlyph().getWidth(), model.getGlyph().getHeight());

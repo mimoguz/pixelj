@@ -5,8 +5,10 @@ import io.github.mimoguz.pixelj.util.Changeable;
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.event.EventListenerList;
 
+@ParametersAreNonnullByDefault
 public class ProjectModel
         implements Changeable<ProjectModel, ProjectModel.ProjectChangeEvent, ProjectModel.ProjectChangeListener> {
     private final CharacterListModel characters;
@@ -16,10 +18,10 @@ public class ProjectModel
     private @NotNull String title;
 
     public ProjectModel(
-            final @NotNull String title,
-            final @NotNull CharacterListModel characters,
-            final @NotNull KerningPairListModel kerningPairs,
-            final @NotNull Metrics metrics
+            final String title,
+            final CharacterListModel characters,
+            final KerningPairListModel kerningPairs,
+            final Metrics metrics
     ) {
         this.title = title;
         this.characters = characters;
@@ -50,7 +52,7 @@ public class ProjectModel
         return metrics;
     }
 
-    public void setMetrics(final @NotNull Metrics value) {
+    public void setMetrics(Metrics value) {
         metrics = value;
         fireChangeEvent(this, new ProjectChangeEvent.MetricsChanged(value));
     }
@@ -59,16 +61,16 @@ public class ProjectModel
         return title;
     }
 
-    public void setTitle(final @NotNull String value) {
+    public void setTitle(String value) {
         title = value;
         fireChangeEvent(this, new ProjectChangeEvent.TitleChanged(value));
     }
 
     public sealed interface ProjectChangeEvent permits ProjectChangeEvent.MetricsChanged, ProjectChangeEvent.TitleChanged {
-        record MetricsChanged(@NotNull Metrics metrics) implements ProjectChangeEvent {
+        record MetricsChanged(Metrics metrics) implements ProjectChangeEvent {
         }
 
-        record TitleChanged(@NotNull String title) implements ProjectChangeEvent {
+        record TitleChanged(String title) implements ProjectChangeEvent {
         }
     }
 

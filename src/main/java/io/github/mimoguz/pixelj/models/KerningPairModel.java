@@ -2,19 +2,22 @@ package io.github.mimoguz.pixelj.models;
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class KerningPairModel extends MutableIntValueModel implements Comparable<KerningPairModel> {
-    private final @NotNull CharacterModel left;
-    private final @NotNull CharacterModel right;
+    private final CharacterModel left;
+    private final CharacterModel right;
     private int kerningValue;
 
-    public KerningPairModel(@NotNull CharacterModel left, @NotNull CharacterModel right, int kerningValue) {
+    public KerningPairModel(CharacterModel left, CharacterModel right, int kerningValue) {
         this.left = left;
         this.right = right;
         this.kerningValue = kerningValue;
     }
 
     @Override
-    public int compareTo(@NotNull KerningPairModel that) {
+    public int compareTo(KerningPairModel that) {
         final var leftOrder = Integer.compare(left.getCodePoint(), that.right.getCodePoint());
         if (leftOrder == 0) {
             return Integer.compare(right.getCodePoint(), that.right.getCodePoint());

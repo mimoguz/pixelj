@@ -1,5 +1,7 @@
 package io.github.mimoguz.pixelj.resources;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.awt.*;
 
 public class OneLightColors implements Colors {
@@ -13,40 +15,40 @@ public class OneLightColors implements Colors {
     final Color icon = new Color(72, 72, 74);
     final Color text = new Color(35, 35, 36);
 
-    public Color accent() {
+    public @NotNull Color accent() {
         return accent;
     }
 
-    public Color active() {
+    public @NotNull Color active() {
         return active;
     }
 
-    public Color disabledIcon() {
+    public @NotNull Color disabledIcon() {
         return disabledIcon;
     }
 
-    public Color divider() {
+    public @NotNull Color divider() {
         return divider;
     }
 
-    public Color faintIcon() {
+    public @NotNull Color faintIcon() {
         return faintIcon;
     }
 
-    public Color focusBackground() {
+    public @NotNull Color focusBackground() {
         return focusBackground;
     }
 
-    public Color focusForeground() {
+    public @NotNull Color focusForeground() {
         return focusForeground;
     }
 
-    public Color icon() {
+    public @NotNull Color icon() {
 
         return icon;
     }
 
-    public Color text() {
+    public @NotNull Color text() {
         return text;
     }
 }

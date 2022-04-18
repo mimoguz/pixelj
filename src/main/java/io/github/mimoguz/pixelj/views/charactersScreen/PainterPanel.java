@@ -14,15 +14,16 @@ import io.github.mimoguz.pixelj.views.shared.Borders;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 import com.formdev.flatlaf.FlatClientProperties;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+@ParametersAreNonnullByDefault
 public class PainterPanel extends JPanel implements Detachable {
     private static final int INITIAL_ZOOM = 12;
     private static final int MAX_UNDO = 64;
@@ -32,7 +33,7 @@ public class PainterPanel extends JPanel implements Detachable {
     private final ArrayList<Snapshot> undoBuffer = new ArrayList<>();
     private final JSlider zoomSlider;
 
-    public PainterPanel(final @NotNull JComponent root) {
+    public PainterPanel(final JComponent root) {
         painter = new GlyphPainter(Resources.get().colors.disabledIcon());
         painter.setZoom(INITIAL_ZOOM);
         painter.setSnapshotConsumer(snapshot -> {

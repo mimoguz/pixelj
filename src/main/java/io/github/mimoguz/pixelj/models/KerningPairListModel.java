@@ -2,17 +2,19 @@ package io.github.mimoguz.pixelj.models;
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
 import java.util.function.Predicate;
 
+@ParametersAreNonnullByDefault
 public class KerningPairListModel extends DisplayListModel<KerningPairModel> {
-    private Predicate<KerningPairModel> leftFilter = model -> true;
-    private Predicate<KerningPairModel> rightFilter = model -> true;
+    private @NotNull Predicate<KerningPairModel> leftFilter = model -> true;
+    private @NotNull Predicate<KerningPairModel> rightFilter = model -> true;
 
     public KerningPairListModel() {
     }
 
-    public KerningPairListModel(@NotNull Collection<KerningPairModel> elements) {
+    public KerningPairListModel(Collection<KerningPairModel> elements) {
         super(elements);
     }
 

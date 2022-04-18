@@ -2,6 +2,7 @@ package io.github.mimoguz.pixelj.models;
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.*;
 import javax.swing.event.EventListenerList;
 import javax.swing.event.ListDataEvent;
@@ -15,6 +16,7 @@ import java.util.function.Predicate;
  * It's Intended to be used for CharacterModels and KerningPairModels, and uses
  * a HashSet for backing collection (so assumes no hash collisions).
  */
+@ParametersAreNonnullByDefault
 public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
     private final ArrayList<E> display = new ArrayList<>();
     private final EventListenerList listeners = new EventListenerList();
@@ -24,13 +26,13 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
     public DisplayListModel() {
     }
 
-    public DisplayListModel(final @NotNull Collection<E> elements) {
+    public DisplayListModel(final Collection<E> elements) {
         final var collection = elements.stream().filter(Objects::nonNull).toList();
         source.addAll(collection);
         display.addAll(source.stream().filter(filter).sorted().toList());
     }
 
-    public void add(final @NotNull E element) {
+    public void add(final E element) {
         source.add(element);
         final var index = insertOrdered(element);
         if (index >= 0) {
@@ -38,7 +40,7 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
         }
     }
 
-    public void addAll(final @NotNull Collection<E> collection) {
+    public void addAll(final Collection<E> collection) {
         var index0 = -1;
         var index1 = -1;
         for (var element : collection) {
@@ -56,7 +58,7 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
     }
 
     @Override
-    public void addListDataListener(final @NotNull ListDataListener l) {
+    public void addListDataListener(final ListDataListener l) {
         listeners.add(ListDataListener.class, l);
     }
 
@@ -69,11 +71,11 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
         }
     }
 
-    public int countWhere(final @NotNull Predicate<E> predicate) {
+    public int countWhere(final Predicate<E> predicate) {
         return (int) source.stream().filter(predicate).count();
     }
 
-    public List<E> find(final @NotNull Predicate<E> predicate) {
+    public List<E> find(final Predicate<E> predicate) {
         return source.stream().filter(predicate).toList();
     }
 
@@ -121,7 +123,7 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
         return source.size();
     }
 
-    public void remove(final @NotNull E element) {
+    public void remove(final E element) {
         source.remove(element);
         final var index = display.indexOf(element);
         if (display.remove(element)) {
@@ -129,7 +131,7 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
         }
     }
 
-    public void removeAll(final @NotNull Collection<E> collection) {
+    public void removeAll(final Collection<E> collection) {
         var index0 = -1;
         var index1 = -1;
         source.removeAll(collection);
@@ -169,7 +171,7 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
     }
 
     @Override
-    public void removeListDataListener(final @NotNull ListDataListener l) {
+    public void removeListDataListener(final ListDataListener l) {
         listeners.remove(ListDataListener.class, l);
     }
 

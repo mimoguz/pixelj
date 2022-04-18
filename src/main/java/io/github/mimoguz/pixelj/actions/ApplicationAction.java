@@ -6,18 +6,20 @@ import io.github.mimoguz.pixelj.resources.Resources;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.function.BiConsumer;
 
+@ParametersAreNonnullByDefault
 public class ApplicationAction extends AbstractAction {
-    private final @NotNull BiConsumer<ActionEvent, Action> consumer;
-    private final @NotNull String key;
+    private final BiConsumer<ActionEvent, Action> consumer;
+    private final String key;
 
     public ApplicationAction(
-            @NotNull String key,
-            @NotNull BiConsumer<ActionEvent, Action> consumer,
+            String key,
+            BiConsumer<ActionEvent, Action> consumer,
             @Nullable String textKey,
             @Nullable String tooltipKey,
             @Nullable Icons iconVariant,
@@ -43,18 +45,8 @@ public class ApplicationAction extends AbstractAction {
         }
     }
 
-    public ApplicationAction(@NotNull String key, @NotNull BiConsumer<ActionEvent, Action> consumer) {
+    public ApplicationAction(String key, BiConsumer<ActionEvent, Action> consumer) {
         this(key, consumer, null, null, null, null, null, null);
-    }
-
-    public @NotNull ApplicationAction setTextKey(@NotNull String value) {
-        putValue(Action.NAME, value);
-        return this;
-    }
-
-    public @NotNull ApplicationAction setTooltipKey(@NotNull String value) {
-        putValue(Action.SHORT_DESCRIPTION, value);
-        return this;
     }
 
     @Override
@@ -66,11 +58,16 @@ public class ApplicationAction extends AbstractAction {
         return key;
     }
 
-    public @NotNull ApplicationAction setIcon(
-            @NotNull Icons iconVariant,
-            @Nullable Color color,
-            @Nullable Color disabledColor
-    ) {
+    public @NotNull ApplicationAction setAccelerator(KeyStroke value) {
+        putValue(Action.ACCELERATOR_KEY, value);
+        return this;
+    }
+
+    public @NotNull ApplicationAction setAccelerator(int key, int mask) {
+        return setAccelerator(KeyStroke.getKeyStroke(key, mask));
+    }
+
+    public @NotNull ApplicationAction setIcon(Icons iconVariant, @Nullable Color color, @Nullable Color disabledColor) {
         final var res = Resources.get();
 
         final var icon = res.getIcon(
@@ -83,12 +80,13 @@ public class ApplicationAction extends AbstractAction {
         return this;
     }
 
-    public @NotNull ApplicationAction setAccelerator(@NotNull KeyStroke value) {
-        putValue(Action.ACCELERATOR_KEY, value);
+    public @NotNull ApplicationAction setTextKey(String value) {
+        putValue(Action.NAME, value);
         return this;
     }
 
-    public @NotNull ApplicationAction setAccelerator(int key, int mask) {
-        return setAccelerator(KeyStroke.getKeyStroke(key, mask));
+    public @NotNull ApplicationAction setTooltipKey(String value) {
+        putValue(Action.SHORT_DESCRIPTION, value);
+        return this;
     }
 }

@@ -7,18 +7,18 @@ import io.github.mimoguz.pixelj.models.ProjectModel;
 import io.github.mimoguz.pixelj.util.Detachable;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
-import org.jetbrains.annotations.NotNull;
-
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.*;
 import java.awt.*;
 
+@ParametersAreNonnullByDefault
 public class CharactersScreen extends JSplitPane implements Detachable {
     private final CharacterListModel listModel;
     private final CharacterListPanel listPanel;
     private final PainterPanel painterPanel;
     private final ListSelectionModel selectionModel;
 
-    public CharactersScreen(@NotNull ProjectModel project, @NotNull JComponent root) {
+    public CharactersScreen(final ProjectModel project, final JComponent root) {
         selectionModel = new DefaultListSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         listModel = project.getCharacters();
@@ -64,7 +64,7 @@ public class CharactersScreen extends JSplitPane implements Detachable {
         super.setEnabled(value);
     }
 
-    public void updateMetrics(@NotNull Metrics metrics) {
+    public void updateMetrics(final Metrics metrics) {
         painterPanel.setMetrics(metrics);
         listPanel.getActions().setCanvasSize(new Dimension(metrics.canvasWidth(), metrics.canvasHeight()));
         listPanel.getActions().setDefaultCharacterWidth(metrics.defaultCharacterWidth());

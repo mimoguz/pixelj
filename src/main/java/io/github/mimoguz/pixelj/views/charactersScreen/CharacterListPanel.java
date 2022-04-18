@@ -14,11 +14,13 @@ import io.github.mimoguz.pixelj.views.shared.Dimensions;
 import com.formdev.flatlaf.FlatClientProperties;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.util.Objects;
 
+@ParametersAreNonnullByDefault
 public class CharacterListPanel extends JPanel implements Detachable {
     private final CharacterListActions actions;
     private final JButton addButton;
@@ -27,9 +29,9 @@ public class CharacterListPanel extends JPanel implements Detachable {
     private final JButton removeButton;
 
     public CharacterListPanel(
-            @NotNull CharacterListModel listModel,
-            @NotNull ListSelectionModel selectionModel,
-            @NotNull JComponent root
+            final CharacterListModel listModel,
+            final ListSelectionModel selectionModel,
+            final JComponent root
     ) {
         final var res = Resources.get();
 
@@ -103,23 +105,23 @@ public class CharacterListPanel extends JPanel implements Detachable {
         list.setModel(null);
     }
 
-    public CharacterListActions getActions() {
+    public @NotNull CharacterListActions getActions() {
         return actions;
     }
 
-    public JButton getAddButton() {
+    public @NotNull JButton getAddButton() {
         return addButton;
     }
 
-    public SearchableComboBox<String> getFilterBox() {
+    public @NotNull SearchableComboBox<String> getFilterBox() {
         return filterBox;
     }
 
-    public JList<CharacterModel> getList() {
+    public @NotNull JList<CharacterModel> getList() {
         return list;
     }
 
-    public JButton getRemoveButton() {
+    public @NotNull JButton getRemoveButton() {
         return removeButton;
     }
 
