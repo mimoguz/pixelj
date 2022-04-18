@@ -24,13 +24,13 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
     public DisplayListModel() {
     }
 
-    public DisplayListModel(@NotNull Collection<E> elements) {
+    public DisplayListModel(final @NotNull Collection<E> elements) {
         final var collection = elements.stream().filter(Objects::nonNull).toList();
         source.addAll(collection);
         display.addAll(source.stream().filter(filter).sorted().toList());
     }
 
-    public void add(@NotNull E element) {
+    public void add(final @NotNull E element) {
         source.add(element);
         final var index = insertOrdered(element);
         if (index >= 0) {
@@ -38,7 +38,7 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
         }
     }
 
-    public void addAll(@NotNull Collection<E> collection) {
+    public void addAll(final @NotNull Collection<E> collection) {
         var index0 = -1;
         var index1 = -1;
         for (var element : collection) {
@@ -56,7 +56,7 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
     }
 
     @Override
-    public void addListDataListener(@NotNull ListDataListener l) {
+    public void addListDataListener(final @NotNull ListDataListener l) {
         listeners.add(ListDataListener.class, l);
     }
 
@@ -69,29 +69,29 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
         }
     }
 
-    public int countWhere(@NotNull Predicate<E> predicate) {
+    public int countWhere(final @NotNull Predicate<E> predicate) {
         return (int) source.stream().filter(predicate).count();
     }
 
-    public List<E> find(@NotNull Predicate<E> predicate) {
+    public List<E> find(final @NotNull Predicate<E> predicate) {
         return source.stream().filter(predicate).toList();
     }
 
-    protected void fireContentsChangedEvent(int index0, int index1) {
+    protected void fireContentsChangedEvent(final int index0, final int index1) {
         final var lst = listeners.getListeners(ListDataListener.class).clone();
         for (var index = lst.length - 1; index >= 0; index--) {
             lst[index].contentsChanged(new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, index0, index1));
         }
     }
 
-    protected void fireIntervalAddedEvent(int index0, int index1) {
+    protected void fireIntervalAddedEvent(final int index0, final int index1) {
         final var lst = listeners.getListeners(ListDataListener.class);
         for (var index = lst.length - 1; index >= 0; index--) {
             lst[index].intervalAdded(new ListDataEvent(this, ListDataEvent.INTERVAL_ADDED, index0, index1));
         }
     }
 
-    protected void fireIntervalRemovedEvent(int index0, int index1) {
+    protected void fireIntervalRemovedEvent(final int index0, final int index1) {
         final var lst = listeners.getListeners(ListDataListener.class).clone();
         for (var index = lst.length - 1; index >= 0; index--) {
             lst[index].intervalRemoved(new ListDataEvent(this, ListDataEvent.INTERVAL_REMOVED, index0, index1));
@@ -102,7 +102,7 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
      * @param index Index to visible list
      */
     @Override
-    public E getElementAt(int index) {
+    public E getElementAt(final int index) {
         return null;
     }
 
@@ -121,7 +121,7 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
         return source.size();
     }
 
-    public void remove(@NotNull E element) {
+    public void remove(final @NotNull E element) {
         source.remove(element);
         final var index = display.indexOf(element);
         if (display.remove(element)) {
@@ -129,7 +129,7 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
         }
     }
 
-    public void removeAll(@NotNull Collection<E> collection) {
+    public void removeAll(final @NotNull Collection<E> collection) {
         var index0 = -1;
         var index1 = -1;
         source.removeAll(collection);
@@ -150,7 +150,7 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
     /**
      * @param index Index to visible list
      */
-    public void removeElementAt(int index) {
+    public void removeElementAt(final int index) {
         final var element = display.get(index);
         source.remove(element);
         display.remove(index);
@@ -161,7 +161,7 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
      * @param from  Index to visible list, inclusive
      * @param until Index to visible list, exclusive
      */
-    public void removeInterval(int from, int until) {
+    public void removeInterval(final int from, final int until) {
         final var elements = display.subList(from, until);
         elements.forEach(source::remove);
         display.removeAll(elements);
@@ -169,15 +169,15 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
     }
 
     @Override
-    public void removeListDataListener(@NotNull ListDataListener l) {
+    public void removeListDataListener(final @NotNull ListDataListener l) {
         listeners.remove(ListDataListener.class, l);
     }
 
-    public void requestEvent(int index) {
+    public void requestEvent(final int index) {
         fireContentsChangedEvent(index, index);
     }
 
-    public void setFilter(@NotNull Predicate<E> value) {
+    public void setFilter(final @NotNull Predicate<E> value) {
         filter = value;
         if (!display.isEmpty()) {
             final var index1 = display.size() - 1;
@@ -190,15 +190,15 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
         }
     }
 
-    public boolean sourceContains(E element) {
+    public boolean sourceContains(final E element) {
         return source.contains(element);
     }
 
-    private int findPlace(@NotNull E element) {
+    private int findPlace(final @NotNull E element) {
         return (int) display.stream().takeWhile(item -> item.compareTo(element) > 0).count();
     }
 
-    private int insertOrdered(@NotNull E element) {
+    private int insertOrdered(final @NotNull E element) {
         if (!filter.test(element)) {
             return -1;
         }
