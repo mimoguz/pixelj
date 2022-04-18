@@ -36,12 +36,12 @@ public class ProjectModel implements Changeable<ProjectModel, ProjectModel.Proje
     }
 
     @Override
-    public Class<ProjectChangeListener> getListenerClass() {
+    public @NotNull Class<ProjectChangeListener> getListenerClass() {
         return ProjectChangeListener.class;
     }
 
     @Override
-    public EventListenerList getListenerList() {
+    public @NotNull EventListenerList getListenerList() {
         return listeners;
     }
 

@@ -17,7 +17,7 @@ public class CharacterCell extends JPanel {
     private final JLabel title = new JLabel(" ");
     private final JPanel titleBox = new JPanel();
 
-    public CharacterCell(int maxPictureSize) {
+    public CharacterCell(final int maxPictureSize) {
         this.maxPictureSize = maxPictureSize;
 
         final var letterSize = new Dimension(30, 30);

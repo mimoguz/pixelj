@@ -2,6 +2,8 @@ package io.github.mimoguz.pixelj.models;
 
 import io.github.mimoguz.pixelj.util.Changeable;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.swing.event.EventListenerList;
 
 /**
@@ -12,12 +14,12 @@ public class MutableIntValueModel implements Changeable<MutableIntValueModel, In
     private final EventListenerList listeners = new EventListenerList();
 
     @Override
-    public EventListenerList getListenerList() {
-        return listeners;
+    public @NotNull Class<IntValueChangeListener> getListenerClass() {
+        return IntValueChangeListener.class;
     }
 
     @Override
-    public Class<IntValueChangeListener> getListenerClass() {
-        return IntValueChangeListener.class;
+    public @NotNull EventListenerList getListenerList() {
+        return listeners;
     }
 }

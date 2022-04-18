@@ -21,12 +21,12 @@ public class BinaryImage
     private final byte[] pixelBuffer = new byte[1];
     private final WritableRaster raster;
 
-    private BinaryImage(int width, int height, @NotNull BufferedImage image) {
+    private BinaryImage(final int width, final int height, final @NotNull BufferedImage image) {
         this.image = image;
         raster = image.getRaster();
     }
 
-    public static BinaryImage from(@NotNull BufferedImage image) {
+    public static BinaryImage from(final @NotNull BufferedImage image) {
         if (image.getType() != BufferedImage.TYPE_BYTE_BINARY) {
             throw new IllegalArgumentException("Image is not binary indexed");
         }
@@ -38,23 +38,23 @@ public class BinaryImage
         return new BinaryImage(image.getWidth(), image.getHeight(), image);
     }
 
-    public static BinaryImage of(int width, int height, boolean fill) {
+    public static BinaryImage of(final int width, final int height, final boolean fill) {
         var img = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_BINARY);
         var binaryImage = new BinaryImage(width, height, img);
         binaryImage.fill(fill, false);
         return binaryImage;
     }
 
-    public static BinaryImage of(int width, int height) {
+    public static BinaryImage of(final int width, final int height) {
         var img = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_BINARY);
         return new BinaryImage(width, height, img);
     }
 
-    public void draw(@NotNull Graphics2D graphics, int x, int y, int width, int height) {
+    public void draw(final @NotNull Graphics2D graphics, final int x, final int y, final int width, final int height) {
         graphics.drawImage(image, x, y, width, height, null);
     }
 
-    public void fill(boolean value, boolean notify) {
+    public void fill(final boolean value, final boolean notify) {
         var lineBuffer = new byte[image.getWidth()];
         Arrays.fill(lineBuffer, (value ? b1 : b0));
         for (var y = 0; y < image.getHeight(); y++) {
@@ -65,7 +65,7 @@ public class BinaryImage
         }
     }
 
-    public void fill(boolean value) {
+    public void fill(final boolean value) {
         fill(value, true);
     }
 
@@ -75,7 +75,7 @@ public class BinaryImage
         super.flush();
     }
 
-    public boolean get(int x, int y) {
+    public boolean get(final int x, final int y) {
         raster.getDataElements(x, y, pixelBuffer);
         return pixelBuffer[0] == b1;
     }
@@ -86,11 +86,11 @@ public class BinaryImage
     }
 
     @Override
-    public void setAccelerationPriority(float priority) {
+    public void setAccelerationPriority(final float priority) {
         image.setAccelerationPriority(priority);
     }
 
-    public byte getByteValue(int x, int y) {
+    public byte getByteValue(final int x, final int y) {
         raster.getDataElements(x, y, pixelBuffer);
         return pixelBuffer[0];
     }
@@ -104,7 +104,7 @@ public class BinaryImage
         return image.getColorModel();
     }
 
-    public byte[] getDataElements(int x, int y, int width, int height, byte[] target) {
+    public byte[] getDataElements(final int x, final int y, final int width, final int height, final byte[] target) {
         raster.getDataElements(x, y, width, height, target);
         return target;
     }
@@ -119,22 +119,22 @@ public class BinaryImage
     }
 
     @Override
-    public int getHeight(@Nullable ImageObserver observer) {
+    public int getHeight(final @Nullable ImageObserver observer) {
         return image.getHeight(observer);
     }
 
     @Override
-    public Class<ImageChangeListener> getListenerClass() {
+    public @NotNull Class<ImageChangeListener> getListenerClass() {
         return ImageChangeListener.class;
     }
 
     @Override
-    public EventListenerList getListenerList() {
+    public @NotNull EventListenerList getListenerList() {
         return listeners;
     }
 
     @Override
-    public Object getProperty(String name, @Nullable ImageObserver observer) {
+    public Object getProperty(final String name, final @Nullable ImageObserver observer) {
         return image.getProperty(name, observer);
     }
 
@@ -143,11 +143,11 @@ public class BinaryImage
     }
 
     @Override
-    public Image getScaledInstance(int width, int height, int hints) {
+    public Image getScaledInstance(final int width, final int height, final int hints) {
         return image.getScaledInstance(width, height, hints);
     }
 
-    public Snapshot getSnapshot(int id) {
+    public Snapshot getSnapshot(final int id) {
         var buffer = new byte[getWidth() * getHeight()];
         raster.getDataElements(0, 0, getWidth(), getHeight(), buffer);
         return new Snapshot(id, getWidth(), getHeight(), buffer);
@@ -163,18 +163,18 @@ public class BinaryImage
     }
 
     @Override
-    public int getWidth(@Nullable ImageObserver observer) {
+    public int getWidth(final @Nullable ImageObserver observer) {
         return image.getWidth(observer);
     }
 
-    public void invert(int x, int y, boolean notify) {
+    public void invert(final int x, final int y, final boolean notify) {
         set(x, y, !get(x, y));
         if (notify) {
             fireChangeEvent(this, ImageChangeEvent.IMAGE_MODIFIED);
         }
     }
 
-    public void invert(int x, int y) {
+    public void invert(final int x, final int y) {
         invert(x, y, true);
     }
 
@@ -182,7 +182,7 @@ public class BinaryImage
         fireChangeEvent(this, ImageChangeEvent.IMAGE_MODIFIED);
     }
 
-    public void set(int x, int y, boolean value, boolean notify) {
+    public void set(final int x, final int y, final boolean value, final boolean notify) {
         pixelBuffer[0] = value ? b1 : b0;
         raster.setDataElements(x, y, pixelBuffer);
         if (notify) {
@@ -190,22 +190,29 @@ public class BinaryImage
         }
     }
 
-    public void set(int x, int y, boolean value) {
+    public void set(final int x, final int y, final boolean value) {
         set(x, y, value, true);
     }
 
-    public void setDataElements(int x, int y, int width, int height, byte[] source, boolean notify) {
+    public void setDataElements(
+            final int x,
+            final int y,
+            final int width,
+            final int height,
+            final byte[] source,
+            final boolean notify
+    ) {
         raster.setDataElements(x, y, width, height, source);
         if (notify) {
             fireChangeEvent(this, ImageChangeEvent.IMAGE_MODIFIED);
         }
     }
 
-    public void setDataElements(int x, int y, int width, int height, byte[] source) {
+    public void setDataElements(final int x, final int y, final int width, final int height, final byte[] source) {
         setDataElements(x, y, width, height, source, true);
     }
 
-    private void setByteValue(int x, int y, byte value) {
+    private void setByteValue(final int x, final int y, final byte value) {
         pixelBuffer[0] = value;
         raster.setDataElements(x, y, pixelBuffer);
     }

@@ -53,12 +53,12 @@ public class GlyphView extends JPanel
     }
 
     @Override
-    public Class<ViewChangeListener> getListenerClass() {
+    public @NotNull Class<ViewChangeListener> getListenerClass() {
         return ViewChangeListener.class;
     }
 
     @Override
-    public EventListenerList getListenerList() {
+    public @NotNull EventListenerList getListenerList() {
         return listeners;
     }
 
