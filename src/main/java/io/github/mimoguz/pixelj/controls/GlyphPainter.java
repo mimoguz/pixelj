@@ -15,7 +15,7 @@ public class GlyphPainter
         implements Painter, CanFlipImage, CanRotateImage, CanTranslateImage {
 
     private final PaintAdapter paintAdapter;
-    private Consumer<Snapshot> snapshotConsumer = snapshot -> {
+    private @NotNull Consumer<Snapshot> snapshotConsumer = snapshot -> {
     };
 
     public GlyphPainter(final @NotNull Color backgroundColor) {
@@ -36,7 +36,7 @@ public class GlyphPainter
         return paintAdapter.isSymmetrical();
     }
 
-    public void setSymmetrical(boolean value) {
+    public void setSymmetrical(final boolean value) {
         paintAdapter.setSymmetrical(value);
     }
 
@@ -48,7 +48,7 @@ public class GlyphPainter
         super.setModel(value);
     }
 
-    public void setSnapshotConsumer(@NotNull Consumer<Snapshot> value) {
+    public void setSnapshotConsumer(final @NotNull Consumer<Snapshot> value) {
         snapshotConsumer = value;
     }
 
