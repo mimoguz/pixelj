@@ -1,7 +1,10 @@
 package io.github.mimoguz.pixelj.actions;
 
+import io.github.mimoguz.pixelj.graphics.BinaryImage;
 import io.github.mimoguz.pixelj.models.CharacterListModel;
+import io.github.mimoguz.pixelj.models.CharacterModel;
 import io.github.mimoguz.pixelj.models.KerningPairModel;
+import io.github.mimoguz.pixelj.models.Metrics;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -22,7 +25,7 @@ public class CharacterListActions {
     )
             .setTextKey("showAddDialogAction")
             .setAccelerator(KeyEvent.VK_PLUS, InputEvent.ALT_DOWN_MASK);
-    
+
     private final CharacterListModel listModel;
     private final ListSelectionModel selectionModel;
     public final ApplicationAction showRemoveDialogAction = new ApplicationAction(
@@ -41,26 +44,16 @@ public class CharacterListActions {
     public CharacterListActions(
             final CharacterListModel listModel,
             final ListSelectionModel selectionModel,
-            final Dimension canvasSize
+            final Metrics metrics
     ) {
         this.listModel = listModel;
         this.selectionModel = selectionModel;
-        this.canvasSize = canvasSize;
-
+        canvasSize = new Dimension(metrics.canvasWidth(), metrics.canvasHeight());
+        defaultCharacterWidth = metrics.defaultCharacterWidth();
 
         selectionModel.addListSelectionListener(e -> {
             showRemoveDialogAction.setEnabled(selectionModel.getMinSelectionIndex() >= 0);
         });
-
-
-    }
-
-    public @NotNull Dimension getCanvasSize() {
-        return canvasSize;
-    }
-
-    public void setCanvasSize(final @NotNull Dimension canvasSize) {
-        this.canvasSize = canvasSize;
     }
 
     public int getDefaultCharacterWidth() {
@@ -78,6 +71,21 @@ public class CharacterListActions {
     public void setEnabled(final boolean value) {
         enabled = value;
         Actions.setEnabled(all, enabled);
+    }
+
+    public void updateMetrics(final Metrics metrics) {
+        canvasSize = new Dimension(metrics.canvasWidth(), metrics.canvasHeight());
+        defaultCharacterWidth = metrics.defaultCharacterWidth();
+    }
+
+    private void addCharacters(int... codePoints) {
+        for (var codePoint : codePoints) {
+            listModel.add(new CharacterModel(
+                    codePoint,
+                    defaultCharacterWidth,
+                    BinaryImage.of(canvasSize.width, canvasSize.height)
+            ));
+        }
     }
 
     private void removeSelected() {

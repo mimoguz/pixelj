@@ -5,6 +5,7 @@ import io.github.mimoguz.pixelj.actions.CharacterListActions;
 import io.github.mimoguz.pixelj.controls.SearchableComboBox;
 import io.github.mimoguz.pixelj.models.CharacterListModel;
 import io.github.mimoguz.pixelj.models.CharacterModel;
+import io.github.mimoguz.pixelj.models.Metrics;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.util.Detachable;
 import io.github.mimoguz.pixelj.views.shared.Borders;
@@ -31,12 +32,12 @@ public class CharacterListPanel extends JPanel implements Detachable {
     public CharacterListPanel(
             final CharacterListModel listModel,
             final ListSelectionModel selectionModel,
-            final Dimension canvasSize,
+            final Metrics metrics,
             final JComponent root
     ) {
         final var res = Resources.get();
 
-        actions = new CharacterListActions(listModel, selectionModel, canvasSize);
+        actions = new CharacterListActions(listModel, selectionModel, metrics);
         actions.showRemoveDialogAction.setEnabled(false);
         Actions.registerShortcuts(actions.all, root);
 

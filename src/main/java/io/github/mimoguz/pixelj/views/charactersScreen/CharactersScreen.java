@@ -9,7 +9,6 @@ import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.*;
-import java.awt.*;
 
 @ParametersAreNonnullByDefault
 public class CharactersScreen extends JSplitPane implements Detachable {
@@ -21,14 +20,17 @@ public class CharactersScreen extends JSplitPane implements Detachable {
     public CharactersScreen(final ProjectModel project, final JComponent root) {
         selectionModel = new DefaultListSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+
         listModel = project.getCharacters();
         listPanel = new CharacterListPanel(
                 listModel,
                 selectionModel,
-                new Dimension(project.getMetrics().canvasWidth(), project.getMetrics().canvasHeight()),
+                project.getMetrics(),
                 root
         );
+
         painterPanel = new PainterPanel(root);
+        painterPanel.setMetrics(project.getMetrics());
 
         // Connect the listModel to the painter
         selectionModel.addListSelectionListener(e -> {
@@ -71,7 +73,6 @@ public class CharactersScreen extends JSplitPane implements Detachable {
 
     public void updateMetrics(final Metrics metrics) {
         painterPanel.setMetrics(metrics);
-        listPanel.getActions().setCanvasSize(new Dimension(metrics.canvasWidth(), metrics.canvasHeight()));
-        listPanel.getActions().setDefaultCharacterWidth(metrics.defaultCharacterWidth());
+        listPanel.getActions().updateMetrics(metrics);
     }
 }
