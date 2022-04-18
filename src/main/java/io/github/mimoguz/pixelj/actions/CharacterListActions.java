@@ -103,10 +103,10 @@ public class CharacterListActions {
         if (kerningPairs.size() > 0) {
             System.out.println(
                     "Caution! "
-                            + Integer.toString(kerningPairs.size())
+                            + kerningPairs.size()
                             + " kerning pairs will also be removed."
             );
         }
-        System.out.println("Removing " + Integer.toString(index1 - index0 + 1) + " characters.");
+        System.out.println("Removing " + (index1 - index0 + 1) + " characters.");
     }
 }

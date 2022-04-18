@@ -218,7 +218,7 @@ public class GlyphView extends JPanel
     }
 
     public enum ViewChangeEvent {
-        MODEL_LOADED, MODEL_UNLOADED, GLYPH_MODIFIED;
+        MODEL_LOADED, MODEL_UNLOADED, GLYPH_MODIFIED
     }
 
     public interface ViewChangeListener extends ChangeListener<GlyphView, ViewChangeEvent> {

@@ -95,7 +95,7 @@ public class PaintAdapter implements MouseListener, MouseMotionListener {
 
         final var image = model.getGlyph();
         lastPixel.setLocation(getPixelCoordinates(image, e));
-        // The button1 -or any other button while control pressed- clears, any other
+        // The button1 (or any other button while control pressed) clears, any other
         // button besides the button1 paints.
         fill = !(e.getButton() == MouseEvent.BUTTON1 && (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == 0);
         setPixel(image);
