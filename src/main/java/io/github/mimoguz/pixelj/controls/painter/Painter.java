@@ -1,14 +1,13 @@
 package io.github.mimoguz.pixelj.controls.painter;
 
-import io.github.mimoguz.pixelj.graphics.Snapshot;
 import io.github.mimoguz.pixelj.models.CharacterModel;
 
 public interface Painter {
-    CharacterModel getModel();
+    int getHeight();
 
-    void addSnapshot(Snapshot snapshot);
+    CharacterModel getModel();
 
     int getWidth();
 
-    int getHeight();
+    void takeSnapshot();
 }

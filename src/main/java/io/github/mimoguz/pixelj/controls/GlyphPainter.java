@@ -18,15 +18,11 @@ public class GlyphPainter
     private Consumer<Snapshot> snapshotConsumer = snapshot -> {
     };
 
-    public GlyphPainter(@NotNull Color backgroundColor) {
+    public GlyphPainter(final @NotNull Color backgroundColor) {
         super(backgroundColor);
         paintAdapter = new PaintAdapter(this);
         addMouseListener(paintAdapter);
         addMouseMotionListener(paintAdapter);
-    }
-
-    public void addSnapshot(Snapshot snapshot) {
-        snapshotConsumer.accept(snapshot);
     }
 
     public void erase() {
@@ -54,5 +50,12 @@ public class GlyphPainter
 
     public void setSnapshotConsumer(@NotNull Consumer<Snapshot> value) {
         snapshotConsumer = value;
+    }
+
+    public void takeSnapshot() {
+        final var model = getModel();
+        if (model != null) {
+            snapshotConsumer.accept(model.getGlyph().getSnapshot(model.getCodePoint()));
+        }
     }
 }

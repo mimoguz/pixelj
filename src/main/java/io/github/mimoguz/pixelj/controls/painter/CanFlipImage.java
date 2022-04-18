@@ -3,6 +3,19 @@ package io.github.mimoguz.pixelj.controls.painter;
 public interface CanFlipImage extends Painter {
 
     /**
+     * Reverses the byte array in-place
+     */
+    private static void reverseArray(byte[] array) {
+        final var half = array.length / 2;
+        for (var left = 0; left < half; left++) {
+            final var temp = array[left];
+            final var right = array.length - left - 1;
+            array[left] = array[right];
+            array[right] = temp;
+        }
+    }
+
+    /**
      * Flips the image along the x-axis.
      */
     default void flipHorizontally() {
@@ -11,7 +24,7 @@ public interface CanFlipImage extends Painter {
             return;
         }
 
-        addSnapshot(model.getGlyph().getSnapshot(model.getCodePoint()));
+        takeSnapshot();
 
         final var image = model.getGlyph();
         final var width = image.getWidth();
@@ -38,7 +51,7 @@ public interface CanFlipImage extends Painter {
             return;
         }
 
-        addSnapshot(model.getGlyph().getSnapshot(model.getCodePoint()));
+        takeSnapshot();
 
         final var image = model.getGlyph();
         final var width = image.getWidth();
@@ -58,18 +71,5 @@ public interface CanFlipImage extends Painter {
 
         // Trigger change notification
         image.requestUpdate();
-    }
-
-    /**
-     * Reverses the byte array in-place
-     */
-    private static void reverseArray(byte[] array) {
-        final var half = array.length / 2;
-        for (var left = 0; left < half; left++) {
-            final var temp = array[left];
-            final var right = array.length - left - 1;
-            array[left] = array[right];
-            array[right] = temp;
-        }
     }
 }
