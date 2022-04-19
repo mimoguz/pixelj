@@ -18,4 +18,10 @@ public class SearchableComboBox<E> extends JComboBox<E> {
         final var editor = (JTextComponent) getEditor().getEditorComponent();
         editor.setDocument(new SearchableDocument<>(this));
     }
+
+    public SearchableComboBox() {
+        super();
+        final var editor = (JTextComponent) getEditor().getEditorComponent();
+        editor.setDocument(new SearchableDocument<>(this));
+    }
 }

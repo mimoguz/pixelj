@@ -20,10 +20,11 @@ public class StringView extends JPanel {
     @NotNull
     private Dimension minimumSize = new Dimension(16, 16);
     private int padding = 8;
-    private int zoom = 1;
+    private int zoom;
 
     public StringView(final Color backgroundColor) {
         this.backgroundColor = backgroundColor;
+        setZoom(1);
     }
 
     public int getPadding() {
