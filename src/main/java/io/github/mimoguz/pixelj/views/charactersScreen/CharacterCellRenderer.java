@@ -8,10 +8,10 @@ import javax.swing.*;
 import java.awt.*;
 
 public class CharacterCellRenderer implements ListCellRenderer<CharacterModel> {
-    private final CharacterCell cell;
+    private final CharacterCell component;
 
     public CharacterCellRenderer(final int maxPictureSize) {
-        cell = new CharacterCell(maxPictureSize);
+        component = new CharacterCell(maxPictureSize);
     }
 
     @Override
@@ -22,17 +22,17 @@ public class CharacterCellRenderer implements ListCellRenderer<CharacterModel> {
             final boolean isSelected,
             final boolean cellHasFocus
     ) {
-        cell.set(value);
+        component.set(value);
         if (cellHasFocus && isSelected) {
-            cell.setBackground(Resources.get().colors.focusBackground());
-            cell.setForeground(Resources.get().colors.focusForeground());
+            component.setBackground(Resources.get().colors.focusBackground());
+            component.setForeground(Resources.get().colors.focusForeground());
         } else if (isSelected) {
-            cell.setBackground(list.getSelectionBackground());
-            cell.setForeground(list.getSelectionForeground());
+            component.setBackground(list.getSelectionBackground());
+            component.setForeground(list.getSelectionForeground());
         } else {
-            cell.setBackground(list.getBackground());
-            cell.setForeground(list.getForeground());
+            component.setBackground(list.getBackground());
+            component.setForeground(list.getForeground());
         }
-        return cell;
+        return component;
     }
 }

@@ -39,7 +39,7 @@ public class KerningPairListPanel extends JPanel implements Detachable {
     ) {
         final var res = Resources.get();
 
-        actions = new KerningPairListActions(listModel, selectionModel, metrics);
+        actions = new KerningPairListActions(listModel, selectionModel);
         actions.showRemoveDialogAction.setEnabled(false);
         Actions.registerShortcuts(actions.all, root);
 
@@ -81,12 +81,18 @@ public class KerningPairListPanel extends JPanel implements Detachable {
         buttonPanel.add(Box.createHorizontalGlue());
         add(buttonPanel);
 
-        // TODO: Continue
         final var filterPanel = new JPanel();
         filterPanel.setBorder(Borders.smallEmptyCup);
-        filterPanel.setLayout(new BoxLayout(filterPanel, BoxLayout.X_AXIS));
+        filterPanel.setLayout(new GridLayout(2, 2));
+        final var leftTitle = new JLabel(res.getString("leftTitle"));
+        leftTitle.putClientProperty(FlatClientProperties.STYLE_CLASS, "h4");
+        leftTitle.setHorizontalAlignment(SwingConstants.CENTER);
+        filterPanel.add(leftTitle);
+        final var rightTitle = new JLabel(res.getString("rightTitle"));
+        rightTitle.putClientProperty(FlatClientProperties.STYLE_CLASS, "h4");
+        rightTitle.setHorizontalAlignment(SwingConstants.CENTER);
+        filterPanel.add(rightTitle);
         filterPanel.add(leftFilterBox);
-        filterPanel.add(Box.createRigidArea(Dimensions.mediumSquare));
         filterPanel.add(rightFilterBox);
         add(filterPanel);
 
