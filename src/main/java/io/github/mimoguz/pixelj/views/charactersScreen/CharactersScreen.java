@@ -52,12 +52,6 @@ public class CharactersScreen extends JSplitPane implements Detachable {
             }
         });
 
-        project.addChangeListener(((sender, event) -> {
-            if (event instanceof ProjectModel.ProjectChangeEvent.MetricsChanged metricsChanged) {
-                listPanel.getActions().setDefaultCharacterWidth(metricsChanged.metrics().defaultCharacterWidth());
-            }
-        }));
-
         setMaximumSize(Dimensions.maximum);
         setLeftComponent(painterPanel);
         setRightComponent(listPanel);

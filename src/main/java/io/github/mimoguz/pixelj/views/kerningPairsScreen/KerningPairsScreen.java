@@ -1,6 +1,7 @@
 package io.github.mimoguz.pixelj.views.kerningPairsScreen;
 
 import io.github.mimoguz.pixelj.models.KerningPairListModel;
+import io.github.mimoguz.pixelj.models.Metrics;
 import io.github.mimoguz.pixelj.models.ProjectModel;
 import io.github.mimoguz.pixelj.util.Detachable;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
@@ -23,7 +24,6 @@ public class KerningPairsScreen extends JSplitPane implements Detachable {
         listPanel = new ListPanel(listModel, selectionModel, project.getMetrics(), root);
 
         editorPanel = new EditorPanel();
-        editorPanel.setSpacing(project.getMetrics().spacing());
 
         // Connect the listModel to the editor
         selectionModel.addListSelectionListener(e -> {
@@ -35,12 +35,8 @@ public class KerningPairsScreen extends JSplitPane implements Detachable {
             }
         });
 
-        project.addChangeListener(((sender, event) -> {
-            if (event instanceof ProjectModel.ProjectChangeEvent.MetricsChanged metricsChanged) {
-                editorPanel.setSpacing(metricsChanged.metrics().spacing());
-            }
-        }));
-
+        updateMetrics(project.getMetrics());
+        
         setMaximumSize(Dimensions.maximum);
         setLeftComponent(editorPanel);
         setRightComponent(listPanel);
@@ -51,5 +47,9 @@ public class KerningPairsScreen extends JSplitPane implements Detachable {
     public void detach() {
         listPanel.detach();
         editorPanel.detach();
+    }
+
+    public void updateMetrics(final Metrics metrics) {
+        editorPanel.setSpacing(metrics.spacing());
     }
 }

@@ -1,8 +1,8 @@
 <component name="ProjectCodeStyleConfiguration">
   <code_scheme name="Project" version="173">
-    <ClojureCodeStyleSettings>{
-  :cursive.formatting/align-maps false
-}</ClojureCodeStyleSettings>
+    <ClojureCodeStyleSettings>
+      <option name="alignMapValues" value="false" />
+    </ClojureCodeStyleSettings>
     <JavaCodeStyleSettings>
       <option name="GENERATE_FINAL_LOCALS" value="true" />
       <option name="GENERATE_FINAL_PARAMETERS" value="true" />
