@@ -13,7 +13,7 @@ import javax.swing.*;
 @ParametersAreNonnullByDefault
 public class CharactersScreen extends JSplitPane implements Detachable {
     private final CharacterListModel listModel;
-    private final CharacterListPanel listPanel;
+    private final ListPanel listPanel;
     private final PainterPanel painterPanel;
     private final ListSelectionModel selectionModel;
 
@@ -22,7 +22,7 @@ public class CharactersScreen extends JSplitPane implements Detachable {
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         listModel = project.getCharacters();
-        listPanel = new CharacterListPanel(
+        listPanel = new ListPanel(
                 listModel,
                 selectionModel,
                 project.getMetrics(),

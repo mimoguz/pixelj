@@ -41,6 +41,15 @@ public class KerningPairModel extends MutableIntValueModel implements Comparable
         return kerningValue;
     }
 
+    public void setKerningValue(int value) {
+        if (value == kerningValue) {
+            return;
+        }
+        final var event = new IntValueChangeEvent(kerningValue, value);
+        kerningValue = value;
+        fireChangeEvent(this, event);
+    }
+
     public @NotNull CharacterModel getLeft() {
         return left;
     }
@@ -55,14 +64,5 @@ public class KerningPairModel extends MutableIntValueModel implements Comparable
         // 10FFFF<
         // 10FFFF occupies 21 bits, there shouldn't be any collisions here.
         return (left.getCodePoint() << 24) | right.getCodePoint();
-    }
-
-    public void setWidth(int value) {
-        if (value == kerningValue) {
-            return;
-        }
-        final var event = new IntValueChangeEvent(kerningValue, value);
-        kerningValue = value;
-        fireChangeEvent(this, event);
     }
 }
