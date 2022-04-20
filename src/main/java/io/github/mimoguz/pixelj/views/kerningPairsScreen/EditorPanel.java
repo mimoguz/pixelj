@@ -18,9 +18,10 @@ import java.util.ArrayList;
 
 public class EditorPanel extends JPanel {
     private static final int INITIAL_ZOOM = 4;
-
     private final StringView preview;
+    private final JLabel pxLabel;
     private final ArrayList<Integer> spaces = new ArrayList<>(java.util.List.of(0));
+    private final JLabel spinnerLabel;
     private final JLabel title;
     private final JSpinner valueSpinner;
     private final JSlider zoomSlider;
@@ -63,11 +64,11 @@ public class EditorPanel extends JPanel {
             }
         });
 
-        final var spinnerLabel = new JLabel(res.getString("kerningValue"));
+        spinnerLabel = new JLabel(res.getString("kerningValue"));
         spinnerLabel.setEnabled(false);
         spinnerLabel.setAlignmentY(0.5f);
 
-        final var pxLabel = new JLabel(res.getString("pixels"));
+        pxLabel = new JLabel(res.getString("pixels"));
         pxLabel.setEnabled(false);
         pxLabel.setAlignmentY(0.5f);
 
@@ -114,14 +115,73 @@ public class EditorPanel extends JPanel {
         final var spinnerPanel = new JPanel();
         spinnerPanel.setLayout(new BoxLayout(spinnerPanel, BoxLayout.X_AXIS));
         spinnerPanel.setBorder(BorderFactory.createEmptyBorder(20, 4, 20, 0));
-        
+        spinnerPanel.add(Box.createHorizontalGlue());
+        spinnerPanel.add(spinnerLabel);
+        spinnerPanel.add(Box.createRigidArea(Dimensions.smallSquare));
+        spinnerPanel.add(valueSpinner);
+        spinnerPanel.add(Box.createRigidArea(Dimensions.smallSquare));
+        spinnerPanel.add(pxLabel);
+        spinnerPanel.add(Box.createHorizontalGlue());
+        add(spinnerPanel);
+
+        final var zoomPanel = new JPanel(new GridLayout());
+        zoomPanel.setBorder(Borders.smallEmpty);
+        zoomPanel.add(zoomSlider);
+        add(zoomPanel);
+    }
+
+    @Nullable
+    public KerningPairModel getModel() {
+        return model;
+    }
+
+    public void setModel(@Nullable final KerningPairModel value) {
+        if (model == value) {
+            return;
+        }
+        model = value;
+        if (model == null) {
+            preview.set(java.util.Collections.emptyList(), spaces);
+            zoomSlider.setEnabled(false);
+            spinnerLabel.setEnabled(false);
+            pxLabel.setEnabled(false);
+            title.setText(" ");
+        } else {
+            spaces.set(0, spacing + model.getKerningValue());
+            preview.set(java.util.List.of(model.getLeft(), model.getRight()), spaces);
+            zoomSlider.setEnabled(true);
+            spinnerLabel.setEnabled(true);
+            pxLabel.setEnabled(true);
+            title.setText(
+                    Character.toString(model.getLeft().getCodePoint())
+                            + " + "
+                            + Character.toString(model.getRight().getCodePoint())
+            );
+            valueSpinner.setModel(new SpinnerNumberModel(
+                    model.getKerningValue(),
+                    -model.getLeft().getWidth() - spacing,
+                    model.getRight().getWidth(),
+                    1
+            ));
+        }
     }
 
     public int getSpacing() {
         return spacing;
     }
 
-    public void setSpacing(final int spacing) {
-        this.spacing = spacing;
+    public void setSpacing(final int value) {
+        spacing = value;
+        if (model == null) {
+            return;
+        }
+        valueSpinner.setModel(new SpinnerNumberModel(
+                model.getKerningValue(),
+                -model.getLeft().getWidth() - spacing,
+                model.getRight().getWidth(),
+                1
+        ));
+        spaces.set(0, model.getKerningValue() + spacing);
+        preview.setSpaces(spaces);
     }
 }
