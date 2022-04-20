@@ -3,6 +3,7 @@ package io.github.mimoguz.pixelj.views.kerningPairsScreen;
 import io.github.mimoguz.pixelj.controls.StringView;
 import io.github.mimoguz.pixelj.models.KerningPairModel;
 import io.github.mimoguz.pixelj.resources.Resources;
+import io.github.mimoguz.pixelj.views.shared.Borders;
 import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
@@ -11,6 +12,8 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class EditorPanel extends JPanel {
@@ -60,13 +63,58 @@ public class EditorPanel extends JPanel {
             }
         });
 
-        final var spinnerLabel = new JLabel(res.getString("kerningPairSpinnerLabel"));
+        final var spinnerLabel = new JLabel(res.getString("kerningValue"));
         spinnerLabel.setEnabled(false);
         spinnerLabel.setAlignmentY(0.5f);
 
         final var pxLabel = new JLabel(res.getString("pixels"));
         pxLabel.setEnabled(false);
         pxLabel.setAlignmentY(0.5f);
+
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        final var titlePanel = new JPanel(new GridLayout());
+        titlePanel.setBorder(Borders.title);
+        titlePanel.add(title);
+        add(titlePanel);
+
+        final var previewPanel = new JPanel(new GridLayout());
+        previewPanel.add(preview);
+        final var scrollPanel = new JScrollPane(previewPanel);
+        // To balance the split pane divider
+        scrollPanel.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 0));
+        scrollPanel.setFocusable(true);
+        final var moveFocus = new MouseListener() {
+            @Override
+            public void mouseClicked(final MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(final MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(final MouseEvent e) {
+            }
+
+            @Override
+            public void mousePressed(final MouseEvent e) {
+                scrollPanel.requestFocus();
+            }
+
+            @Override
+            public void mouseReleased(final MouseEvent e) {
+            }
+        };
+        scrollPanel.addMouseListener(moveFocus);
+        preview.addMouseListener(moveFocus);
+        previewPanel.addMouseListener(moveFocus);
+        add(scrollPanel);
+
+        final var spinnerPanel = new JPanel();
+        spinnerPanel.setLayout(new BoxLayout(spinnerPanel, BoxLayout.X_AXIS));
+        spinnerPanel.setBorder(BorderFactory.createEmptyBorder(20, 4, 20, 0));
+        
     }
 
     public int getSpacing() {
