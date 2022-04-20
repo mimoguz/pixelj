@@ -3,6 +3,7 @@ package io.github.mimoguz.pixelj.views.kerningPairsScreen;
 import io.github.mimoguz.pixelj.controls.StringView;
 import io.github.mimoguz.pixelj.models.KerningPairModel;
 import io.github.mimoguz.pixelj.resources.Resources;
+import io.github.mimoguz.pixelj.util.Detachable;
 import io.github.mimoguz.pixelj.views.shared.Borders;
 import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
@@ -16,7 +17,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-public class EditorPanel extends JPanel {
+public class EditorPanel extends JPanel implements Detachable {
     private static final int INITIAL_ZOOM = 4;
     private final StringView preview;
     private final JLabel pxLabel;
@@ -128,6 +129,11 @@ public class EditorPanel extends JPanel {
         zoomPanel.setBorder(Borders.smallEmpty);
         zoomPanel.add(zoomSlider);
         add(zoomPanel);
+    }
+
+    @Override
+    public void detach() {
+        setModel(null);
     }
 
     @Nullable
