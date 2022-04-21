@@ -1,6 +1,7 @@
 package io.github.mimoguz.pixelj.models;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.*;
@@ -75,8 +76,14 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
         return (int) source.stream().filter(predicate).count();
     }
 
+    @NotNull
     public List<E> find(final Predicate<E> predicate) {
         return source.stream().filter(predicate).toList();
+    }
+
+    @Nullable
+    public E findFirst(final Predicate<E> predicate) {
+        return source.stream().filter(predicate).findFirst().orElse(null);
     }
 
     protected void fireContentsChangedEvent(final int index0, final int index1) {
