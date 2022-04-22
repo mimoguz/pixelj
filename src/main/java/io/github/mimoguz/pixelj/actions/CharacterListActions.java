@@ -20,7 +20,7 @@ import java.util.List;
 @ParametersAreNonnullByDefault
 public class CharacterListActions {
     public final ApplicationAction showAddDialogAction = new ApplicationAction(
-            "showAddDialog",
+            "showAddDialogAction",
             (e, action) -> System.out.println("Show add dialog action")
     )
             .setTextKey("showAddDialogAction")
@@ -29,7 +29,7 @@ public class CharacterListActions {
     private final CharacterListModel listModel;
     private final ListSelectionModel selectionModel;
     public final ApplicationAction showRemoveDialogAction = new ApplicationAction(
-            "showRemoveDialog",
+            "showRemoveDialogAction",
             (e, action) -> removeSelected()
     )
             .setTextKey("showRemoveDialogAction")

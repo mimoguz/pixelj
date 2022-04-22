@@ -1,59 +1,69 @@
 package io.github.mimoguz.pixelj.views.previewScreen;
 
-import io.github.mimoguz.pixelj.controls.StringView;
-import io.github.mimoguz.pixelj.models.CharacterModel;
+import io.github.mimoguz.pixelj.actions.Actions;
+import io.github.mimoguz.pixelj.actions.PreviewScreenActions;
 import io.github.mimoguz.pixelj.models.ProjectModel;
 import io.github.mimoguz.pixelj.util.Detachable;
+import io.github.mimoguz.pixelj.views.shared.Components;
+import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.awt.event.ActionEvent;
 
 @ParametersAreNonnullByDefault
 public class PreviewScreen extends JPanel implements Detachable {
-    private final List<StringView> lines = new ArrayList<>(1);
+    private final PreviewScreenActions actions;
+    private final JButton clearButton;
     private final ProjectModel project;
+    private final ProjectModel.ProjectChangeListener projectChangeListener;
+    private final JButton refreshButton;
     private final JTextArea textInput;
 
-    public PreviewScreen(final ProjectModel project) {
+    public PreviewScreen(final ProjectModel project, final JComponent root) {
         this.project = project;
 
         textInput = new JTextArea();
+        JPanel container = new JPanel();
+        actions = new PreviewScreenActions(project, textInput, container);
+
+        refreshButton = new JButton();
+        refreshButton.setAction(actions.refreshAction);
+        Components.setFixedSize(refreshButton, Dimensions.textButtonSize);
+
+        clearButton = new JButton();
+        clearButton.setAction(actions.clearAction);
+        Components.setFixedSize(clearButton, Dimensions.textButtonSize);
+
+        Actions.registerShortcuts(actions.all, root);
+
+        projectChangeListener = (sender, event) -> {
+            if (event instanceof ProjectModel.ProjectChangeEvent.MetricsChanged metricsChanged) {
+                actions.refreshAction.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, ""));
+            }
+        };
     }
 
     @Override
     public void detach() {
-
+        project.removeChangeListener(projectChangeListener);
     }
 
-    private List<CharacterModel> getCharactersOfLine(String line) {
-        final var characters = project.getCharacters();
-
-        return line.codePoints()
-                .mapToObj(cp -> characters.findFirst(chr -> chr.getCodePoint() == cp))
-                .filter(Objects::nonNull)
-                .toList();
+    public JButton getClearButton() {
+        return clearButton;
     }
 
-    private List<Integer> getSpaces(List<CharacterModel> characters) {
-        final var spacing = project.getMetrics().spacing();
-        final var kerningPairs = project.getKerningPairs();
-        final var pairs = characters.size() - 1;
-        final var spaces = new ArrayList<Integer>(pairs);
-        for (var index = 0; index < pairs; index++) {
-            final var left = characters.get(index);
-            final var right = characters.get(index + 1);
-            final var pair = kerningPairs.findFirst(p -> p.getLeft().equals(left) && p.getRight().equals(right));
-            spaces.add(pair == null ? spacing : spacing + pair.getKerningValue());
-        }
-        return spaces;
+    public JButton getRefreshButton() {
+        return refreshButton;
     }
 
-    private void setView(String line, StringView view) {
-        final var characters = getCharactersOfLine(line);
-        final var spaces = getSpaces(characters);
-        view.set(characters, spaces);
+    public JTextArea getTextInput() {
+        return textInput;
+    }
+
+    @Override
+    public void setEnabled(final boolean value) {
+        super.setEnabled(value);
+        Actions.setEnabled(actions.all, value);
     }
 }
