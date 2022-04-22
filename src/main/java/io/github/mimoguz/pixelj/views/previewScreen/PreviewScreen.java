@@ -9,6 +9,7 @@ import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 
 @ParametersAreNonnullByDefault
@@ -42,6 +43,38 @@ public class PreviewScreen extends JPanel implements Detachable {
                 actions.refreshAction.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, ""));
             }
         };
+
+        final var layout = new GridBagLayout();
+        setLayout(layout);
+
+        final var constraints = new GridBagConstraints();
+
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.gridheight = 2;
+        constraints.weightx = 1.0;
+        constraints.weighty = 0.0;
+        constraints.ipadx = 8;
+        constraints.ipady = 8;
+        add(textInput, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 0;
+        constraints.gridheight = 1;
+        constraints.weightx = 0.0;
+        add(refreshButton, constraints);
+
+        constraints.gridy = 1;
+        add(clearButton, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        constraints.gridwidth = 2;
+        constraints.weighty = 1.0;
+        constraints.ipadx = 0;
+        constraints.ipady = 0;
+        final var scrollPanel = new JScrollPane(container);
+        add(scrollPanel, constraints);
     }
 
     @Override
