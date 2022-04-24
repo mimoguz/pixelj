@@ -133,7 +133,7 @@ public class ListPanel extends JPanel implements Detachable {
     }
 
     @Override
-    public void setEnabled(boolean value) {
+    public void setEnabled(final boolean value) {
         super.setEnabled(value);
         Actions.setEnabled(actions.all, value);
     }
