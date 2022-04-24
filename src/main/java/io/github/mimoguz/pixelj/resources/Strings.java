@@ -13,29 +13,32 @@ import java.util.ResourceBundle;
 public class Strings {
     final ResourceBundle resourceBundle;
 
-    public Strings(ResourceBundle bundle) {
-        this.resourceBundle = bundle;
+    public Strings(final ResourceBundle bundle) {
+        resourceBundle = bundle;
     }
 
 
-    public @NotNull String format(String key, Object... arguments) {
+    @NotNull
+    public String format(final String key, final Object... arguments) {
         try {
             final var str = resourceBundle.getString(key);
             return MessageFormat.format(str, arguments);
-        } catch (MissingResourceException e) {
+        } catch (final MissingResourceException e) {
             return key + " -> " + Arrays.toString(arguments);
         }
     }
 
-    public @NotNull String get(String key) {
+    @NotNull
+    public String get(final String key) {
         try {
             return resourceBundle.getString(key);
-        } catch (MissingResourceException e) {
+        } catch (final MissingResourceException e) {
             return key;
         }
     }
 
-    public @NotNull Locale getLocale() {
+    @NotNull
+    public Locale getLocale() {
         return resourceBundle.getLocale();
     }
 }

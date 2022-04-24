@@ -9,6 +9,7 @@ import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -136,9 +137,48 @@ public class EditorPanel extends JPanel implements Detachable {
         setModel(null);
     }
 
-    @Nullable
-    public KerningPairModel getModel() {
-        return model;
+    @NotNull
+    public StringView getPreview() {
+        return preview;
+    }
+
+    @NotNull
+    public JLabel getPxLabel() {
+        return pxLabel;
+    }
+
+    public int getSpacing() {
+        return spacing;
+    }
+
+    public void setSpacing(final int value) {
+        spacing = value;
+        if (model == null) {
+            return;
+        }
+        valueSpinner.setModel(new SpinnerNumberModel(
+                model.getKerningValue(),
+                -model.getLeft().getWidth() - spacing,
+                model.getRight().getWidth(),
+                1
+        ));
+        spaces.set(0, model.getKerningValue() + spacing);
+        preview.setSpaces(spaces);
+    }
+
+    @NotNull
+    public JLabel getTitle() {
+        return title;
+    }
+
+    @NotNull
+    public JSpinner getValueSpinner() {
+        return valueSpinner;
+    }
+
+    @NotNull
+    public JSlider getZoomSlider() {
+        return zoomSlider;
     }
 
     public void setModel(@Nullable final KerningPairModel value) {
@@ -170,24 +210,5 @@ public class EditorPanel extends JPanel implements Detachable {
                     1
             ));
         }
-    }
-
-    public int getSpacing() {
-        return spacing;
-    }
-
-    public void setSpacing(final int value) {
-        spacing = value;
-        if (model == null) {
-            return;
-        }
-        valueSpinner.setModel(new SpinnerNumberModel(
-                model.getKerningValue(),
-                -model.getLeft().getWidth() - spacing,
-                model.getRight().getWidth(),
-                1
-        ));
-        spaces.set(0, model.getKerningValue() + spacing);
-        preview.setSpaces(spaces);
     }
 }

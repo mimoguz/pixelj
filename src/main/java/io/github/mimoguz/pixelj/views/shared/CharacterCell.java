@@ -42,16 +42,19 @@ public class CharacterCell extends JPanel {
         add(Box.createHorizontalGlue());
     }
 
-    public void set(CharacterModel model) {
+    public void set(final CharacterModel model) {
         picture.setModel(model, false);
 
-        final var pictureSize = Math.max(model.getGlyph().getWidth(), model.getGlyph().getHeight());
+        final int pictureWidth = model.getGlyph().getWidth();
+        final int pictureHeight = model.getGlyph().getHeight();
+        final var pictureSize = Math.max(pictureWidth, pictureHeight);
         if (pictureSize > maxPictureSize) {
             picture.setZoom(0);
             final var scale = ((double) maxPictureSize) / pictureSize;
-            final var w = (int) Math.round(model.getGlyph().getWidth() * scale);
-            final var h = (int) Math.round(model.getGlyph().getHeight() * scale);
-            picture.setSize(new Dimension(w, h));
+            picture.setSize(new Dimension(
+                    (int) Math.round(pictureWidth * scale),
+                    (int) Math.round(pictureHeight * scale)
+            ));
         } else {
             picture.setZoom(1);
         }
@@ -62,13 +65,13 @@ public class CharacterCell extends JPanel {
     }
 
     @Override
-    public void setBackground(Color color) {
+    public void setBackground(final Color color) {
         titleBox.setBackground(color);
         super.setBackground(color);
     }
 
     @Override
-    public void setForeground(Color color) {
+    public void setForeground(final Color color) {
         title.setForeground(color);
         subtitle.setForeground(color);
         letter.setForeground(color);

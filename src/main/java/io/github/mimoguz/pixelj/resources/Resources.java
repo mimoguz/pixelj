@@ -21,46 +21,52 @@ public class Resources {
     private final Font iconFont;
     private final Strings strings;
 
-    private Resources(Colors colors) {
+    private Resources(final Colors colors) {
         iconFont = loadFont();
         strings = new Strings(loadResourceBundle());
         this.colors = colors;
     }
 
-    public static @NotNull Resources get() {
+    @NotNull
+    public static Resources get() {
         if (instance == null) {
             initialize(new OneDarkColors());
         }
         return instance;
     }
 
-    private static void initialize(Colors colors) {
+    private static void initialize(final Colors colors) {
         instance = new Resources(colors);
     }
 
-    public @NotNull String formatString(@NotNull String key, Object... arguments) {
+    @NotNull
+    public String formatString(final String key, final Object... arguments) {
         return strings.format(key, arguments);
     }
 
     @NotNull
-    public FontIcon getIcon(@NotNull Icons icon, @NotNull Color color) {
+    public FontIcon getIcon(final Icons icon, final Color color) {
         return new FontIcon(icon.codePoint, color, iconFont);
     }
 
-    public @NotNull FontIcon getIcon(@NotNull Icons icon, @NotNull Color color, @NotNull Color disabledColor) {
+    @NotNull
+    public FontIcon getIcon(final Icons icon, final Color color, final Color disabledColor) {
         return new FontIcon(icon.codePoint, color, disabledColor, iconFont);
     }
 
-    public @NotNull Locale getLocale() {
+    @NotNull
+    public Locale getLocale() {
         return strings.getLocale();
     }
 
-    public @NotNull String getString(@NotNull String key) {
+    @NotNull
+    public String getString(final String key) {
         return strings.get(key);
     }
 
-    private @NotNull Font loadFont() {
-        try (var stream = getClass().getResourceAsStream(base + "pxf16.otf")) {
+    @NotNull
+    private Font loadFont() {
+        try (final var stream = getClass().getResourceAsStream(base + "pxf16.otf")) {
             if (stream == null) {
                 throw new IOException("The resource " + base + "pxf16.otf is not found.");
             }
@@ -68,23 +74,24 @@ public class Resources {
                 final var font = Font.createFont(Font.TRUETYPE_FONT, stream);
                 GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
                 return font;
-            } catch (IOException | FontFormatException e) {
+            } catch (final IOException | FontFormatException e) {
                 throw new ResourceInitializationException("Can't read font file: \n" + e.getMessage());
             }
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new ResourceInitializationException("Can't read font file:\n" + e.getMessage());
         }
     }
 
-    private @NotNull ResourceBundle loadResourceBundle() {
+    @NotNull
+    private ResourceBundle loadResourceBundle() {
         final var bundleBase = "strings/strings";
         ResourceBundle bundle;
         try {
             bundle = ResourceBundle.getBundle(base + bundleBase, Locale.getDefault(), getClass().getClassLoader());
-        } catch (MissingResourceException e1) {
+        } catch (final MissingResourceException e1) {
             try {
                 bundle = ResourceBundle.getBundle(base + bundleBase, Locale.US, getClass().getClassLoader());
-            } catch (MissingResourceException e2) {
+            } catch (final MissingResourceException e2) {
                 throw new ResourceInitializationException(
                         "Can't find strings:\n"
                                 + e1.getMessage()
@@ -97,7 +104,7 @@ public class Resources {
     }
 
     public static class ResourceInitializationException extends RuntimeException {
-        public ResourceInitializationException(String message) {
+        public ResourceInitializationException(final String message) {
             super(message);
         }
     }

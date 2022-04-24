@@ -107,23 +107,28 @@ public class ListPanel extends JPanel implements Detachable {
         list.setModel(null);
     }
 
-    public @NotNull CharacterListActions getActions() {
+    @NotNull
+    public CharacterListActions getActions() {
         return actions;
     }
 
-    public @NotNull JButton getAddButton() {
+    @NotNull
+    public JButton getAddButton() {
         return addButton;
     }
 
-    public @NotNull SearchableComboBox<String> getFilterBox() {
+    @NotNull
+    public SearchableComboBox<String> getFilterBox() {
         return filterBox;
     }
 
-    public @NotNull JList<CharacterModel> getList() {
+    @NotNull
+    public JList<CharacterModel> getList() {
         return list;
     }
 
-    public @NotNull JButton getRemoveButton() {
+    @NotNull
+    public JButton getRemoveButton() {
         return removeButton;
     }
 

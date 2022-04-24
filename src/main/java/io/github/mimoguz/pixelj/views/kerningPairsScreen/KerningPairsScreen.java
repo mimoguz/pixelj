@@ -6,6 +6,8 @@ import io.github.mimoguz.pixelj.models.ProjectModel;
 import io.github.mimoguz.pixelj.util.Detachable;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.*;
 
@@ -47,6 +49,16 @@ public class KerningPairsScreen extends JSplitPane implements Detachable {
     public void detach() {
         listPanel.detach();
         editorPanel.detach();
+    }
+
+    @NotNull
+    public EditorPanel getEditorPanel() {
+        return editorPanel;
+    }
+
+    @NotNull
+    public ListPanel getListPanel() {
+        return listPanel;
     }
 
     @Override

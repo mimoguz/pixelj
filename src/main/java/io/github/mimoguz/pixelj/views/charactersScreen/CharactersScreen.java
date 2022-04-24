@@ -7,6 +7,8 @@ import io.github.mimoguz.pixelj.models.ProjectModel;
 import io.github.mimoguz.pixelj.util.Detachable;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.*;
 
@@ -62,6 +64,16 @@ public class CharactersScreen extends JSplitPane implements Detachable {
     public void detach() {
         painterPanel.detach();
         listPanel.detach();
+    }
+
+    @NotNull
+    public ListPanel getListPanel() {
+        return listPanel;
+    }
+
+    @NotNull
+    public PainterPanel getPainterPanel() {
+        return painterPanel;
     }
 
     @Override

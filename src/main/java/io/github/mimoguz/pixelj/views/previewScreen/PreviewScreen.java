@@ -7,6 +7,8 @@ import io.github.mimoguz.pixelj.util.Detachable;
 import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +27,7 @@ public class PreviewScreen extends JPanel implements Detachable {
         this.project = project;
 
         textInput = new JTextArea();
-        JPanel container = new JPanel();
+        final var container = new JPanel();
         actions = new PreviewScreenActions(project, textInput, container);
 
         refreshButton = new JButton();
@@ -82,14 +84,17 @@ public class PreviewScreen extends JPanel implements Detachable {
         project.removeChangeListener(projectChangeListener);
     }
 
+    @NotNull
     public JButton getClearButton() {
         return clearButton;
     }
 
+    @NotNull
     public JButton getRefreshButton() {
         return refreshButton;
     }
 
+    @NotNull
     public JTextArea getTextInput() {
         return textInput;
     }

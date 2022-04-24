@@ -15,39 +15,57 @@ public class OneDarkColors implements Colors {
     final Color icon = new Color(151, 159, 173);
     final Color text = Color.WHITE;
 
-    public @NotNull Color accent() {
+    @Override
+    @NotNull
+    public Color accent() {
         return accent;
     }
 
-    public @NotNull Color active() {
+    @Override
+    @NotNull
+    public Color active() {
         return active;
     }
 
-    public @NotNull Color disabledIcon() {
+    @Override
+    @NotNull
+    public Color disabledIcon() {
         return disabledIcon;
     }
 
-    public @NotNull Color divider() {
+    @Override
+    @NotNull
+    public Color divider() {
         return divider;
     }
 
-    public @NotNull Color faintIcon() {
+    @Override
+    @NotNull
+    public Color faintIcon() {
         return faintIcon;
     }
 
-    public @NotNull Color focusBackground() {
+    @Override
+    @NotNull
+    public Color focusBackground() {
         return focusBackground;
     }
 
-    public @NotNull Color focusForeground() {
+    @Override
+    @NotNull
+    public Color focusForeground() {
         return focusForeground;
     }
 
-    public @NotNull Color icon() {
+    @Override
+    @NotNull
+    public Color icon() {
         return icon;
     }
 
-    public @NotNull Color text() {
+    @Override
+    @NotNull
+    public Color text() {
         return text;
     }
 }

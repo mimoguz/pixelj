@@ -14,6 +14,7 @@ import io.github.mimoguz.pixelj.views.shared.Borders;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -164,11 +165,12 @@ public class PainterPanel extends JPanel implements Detachable {
         painter.detach();
     }
 
-    public @Nullable CharacterModel getModel() {
+    @Nullable
+    public CharacterModel getModel() {
         return painter.getModel();
     }
 
-    public void setModel(final @Nullable CharacterModel value) {
+    public void setModel(@Nullable final CharacterModel value) {
         painter.setModel(value);
 
         if (value != null) {
@@ -182,8 +184,19 @@ public class PainterPanel extends JPanel implements Detachable {
         }
     }
 
+    @NotNull
     public GlyphPainter getPainter() {
         return painter;
+    }
+
+    @NotNull
+    public JLabel getTitle() {
+        return title;
+    }
+
+    @NotNull
+    public JSlider getZoomSlider() {
+        return zoomSlider;
     }
 
     @Override
@@ -192,7 +205,7 @@ public class PainterPanel extends JPanel implements Detachable {
         super.setEnabled(value);
     }
 
-    public void setMetrics(@Nullable Metrics metrics) {
+    public void setMetrics(@Nullable final Metrics metrics) {
         painter.removeLines();
 
         if (metrics == null) {
