@@ -6,12 +6,13 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 import javax.swing.Action;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.text.BadLocationException;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import io.github.mimoguz.pixelj.controls.StringView;
 import io.github.mimoguz.pixelj.models.CharacterModel;
@@ -54,10 +55,18 @@ public class PreviewScreenActions {
 
     private List<CharacterModel> getCharactersOfLine(String line) {
         final var characters = project.getCharacters();
-        return line.codePoints()
-                .mapToObj(codePoint -> characters.findFirst(chr -> chr.getCodePoint() == codePoint))
-                .filter(Objects::nonNull)
-                .toList();
+        final var chars = line.codePoints()
+                .mapToObj(codePoint -> characters.findFirst(chr -> chr.getCodePoint() == codePoint));
+        // I'm doing this instead of just using filter(Objects::nonNull).toList(),
+        // because I need to conform @NonNull CharacterModel constraint.
+        final var result = new ArrayList<@NonNull CharacterModel>();
+        chars.forEach(chr -> {
+            if (chr != null) {
+                result.add(chr);
+            }
+        });
+
+        return result;
     }
 
     private List<Integer> getSpaces(List<CharacterModel> characters) {
