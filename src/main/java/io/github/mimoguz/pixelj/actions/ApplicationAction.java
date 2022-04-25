@@ -1,21 +1,25 @@
 package io.github.mimoguz.pixelj.actions;
 
-import io.github.mimoguz.pixelj.resources.Icons;
-import io.github.mimoguz.pixelj.resources.Resources;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.util.function.BiConsumer;
 
-@ParametersAreNonnullByDefault
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.KeyStroke;
+
+import org.eclipse.jdt.annotation.Nullable;
+
+import io.github.mimoguz.pixelj.resources.Icons;
+import io.github.mimoguz.pixelj.resources.Resources;
+
 public class ApplicationAction extends AbstractAction {
     private final BiConsumer<ActionEvent, Action> consumer;
     private final String key;
+
+    public ApplicationAction(String key, BiConsumer<ActionEvent, Action> consumer) {
+        this(key, consumer, null, null, null, null, null, null);
+    }
 
     public ApplicationAction(
             String key,
@@ -26,7 +30,8 @@ public class ApplicationAction extends AbstractAction {
             @Nullable Color iconColor,
             @Nullable Color disabledIconColor,
             @Nullable KeyStroke accelerator
-    ) {
+    )
+    {
         this.consumer = consumer;
         this.key = key;
 
@@ -45,52 +50,42 @@ public class ApplicationAction extends AbstractAction {
         }
     }
 
-    public ApplicationAction(String key, BiConsumer<ActionEvent, Action> consumer) {
-        this(key, consumer, null, null, null, null, null, null);
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         consumer.accept(e, this);
     }
 
-    @NotNull
     public String getKey() {
         return key;
     }
 
-    @NotNull
+    public ApplicationAction setAccelerator(int key, int mask) {
+        return setAccelerator(KeyStroke.getKeyStroke(key, mask));
+    }
+
     public ApplicationAction setAccelerator(KeyStroke value) {
         putValue(Action.ACCELERATOR_KEY, value);
         return this;
     }
 
-    @NotNull
-    public ApplicationAction setAccelerator(int key, int mask) {
-        return setAccelerator(KeyStroke.getKeyStroke(key, mask));
-    }
-
-    @NotNull
     public ApplicationAction setIcon(Icons iconVariant, @Nullable Color color, @Nullable Color disabledColor) {
         final var res = Resources.get();
-
-        final var icon = res.getIcon(
-                iconVariant,
-                color != null ? color : res.colors.icon(),
-                disabledColor != null ? disabledColor : res.colors.disabledIcon()
-        );
+        final var icon = res
+                .getIcon(
+                        iconVariant,
+                        color != null ? color : res.colors.icon(),
+                        disabledColor != null ? disabledColor : res.colors.disabledIcon()
+                );
         putValue(Action.SMALL_ICON, icon);
         putValue(Action.LARGE_ICON_KEY, icon);
         return this;
     }
 
-    @NotNull
     public ApplicationAction setTextKey(String value) {
         putValue(Action.NAME, value);
         return this;
     }
 
-    @NotNull
     public ApplicationAction setTooltipKey(String value) {
         putValue(Action.SHORT_DESCRIPTION, value);
         return this;

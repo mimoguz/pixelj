@@ -1,11 +1,9 @@
 package io.github.mimoguz.pixelj.actions;
 
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.*;
 import java.util.Collection;
 
-@ParametersAreNonnullByDefault
 public class Actions {
     public static void registerShortcuts(Collection<ApplicationAction> actions, JComponent root) {
         for (var action : actions) {
