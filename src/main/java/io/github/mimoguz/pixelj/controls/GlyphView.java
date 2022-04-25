@@ -52,7 +52,10 @@ public class GlyphView extends JPanel
         this.backgroundColor = backgroundColor;
 
         imageChangeListener = (source, event) -> {
-            if (model == null || source != model.getGlyph()) {
+            if (model == null) {
+                return;
+            }
+            if (source != model.getGlyph()) {
                 return;
             }
             // TODO: Repaint only changed region
@@ -105,7 +108,7 @@ public class GlyphView extends JPanel
     }
 
     @Override
-    public void paintComponent(Graphics graphics) {
+    public void paintComponent(@Nullable Graphics graphics) {
         final var g = (Graphics2D) graphics.create();
         if (model != null) {
             g.setRenderingHint(
@@ -218,7 +221,7 @@ public class GlyphView extends JPanel
                     final var y = (int) Math.round(line.point() * dy);
                     g.drawLine(0, y, getWidth(), y);
                 }
-                case VERTICAL -> {
+                default -> {
                     final var x = (int) Math.round(line.point() * dx);
                     g.drawLine(x, 0, x, getHeight());
                 }
