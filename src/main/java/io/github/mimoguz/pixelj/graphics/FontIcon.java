@@ -1,34 +1,40 @@
 package io.github.mimoguz.pixelj.graphics;
 
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
-@ParametersAreNonnullByDefault
+import javax.swing.Icon;
+
 public class FontIcon implements Icon {
+    private Color disabledForeground;
     private final Font font;
+    private Color foreground;
     private final int height;
     private final String symbol;
     private final int width;
-    @NotNull
-    private Color disabledForeground;
-    @NotNull
-    private Color foreground;
 
-    public FontIcon(final int codePoint, final Color foreground, final Color disabledForeground, final Font font) {
+    public FontIcon(
+            final int codePoint,
+            final Color foreground,
+            final Color disabledForeground,
+            final Font font
+    ) {
         this.foreground = foreground;
         this.disabledForeground = disabledForeground;
         this.font = font;
-        symbol = new String(new int[]{codePoint}, 0, 1);
+        symbol = new String(new int[] { codePoint }, 0, 1);
 
         // Get symbol metrics:
-        final var graphics =
-                GraphicsEnvironment
-                        .getLocalGraphicsEnvironment()
-                        .createGraphics(new BufferedImage(font.getSize(), font.getSize(), BufferedImage.TYPE_INT_ARGB));
+        final var graphics = GraphicsEnvironment.getLocalGraphicsEnvironment()
+                .createGraphics(
+                        new BufferedImage(font.getSize(), font.getSize(), BufferedImage.TYPE_INT_ARGB)
+                );
         graphics.setFont(font);
         final var metrics = graphics.getFontMetrics();
         height = metrics.getHeight();
@@ -39,22 +45,12 @@ public class FontIcon implements Icon {
         this(codePoint, foreground, foreground, font);
     }
 
-    @NotNull
     public Color getDisabledForeground() {
         return disabledForeground;
     }
 
-    public void setDisabledForeground(Color value) {
-        disabledForeground = value;
-    }
-
-    @NotNull
     public Color getForeground() {
         return foreground;
-    }
-
-    public void setForeground(Color value) {
-        foreground = value;
     }
 
     @Override
@@ -75,5 +71,13 @@ public class FontIcon implements Icon {
         g.setColor(component.isEnabled() ? foreground : disabledForeground);
         g.drawString(symbol, x, y + g.getFontMetrics().getAscent());
         g.dispose();
+    }
+
+    public void setDisabledForeground(Color value) {
+        disabledForeground = value;
+    }
+
+    public void setForeground(Color value) {
+        foreground = value;
     }
 }

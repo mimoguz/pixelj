@@ -1,14 +1,9 @@
 package io.github.mimoguz.pixelj.models;
 
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
 public class KerningPairModel extends MutableIntValueModel implements Comparable<KerningPairModel> {
+    private int kerningValue;
     private final CharacterModel left;
     private final CharacterModel right;
-    private int kerningValue;
 
     public KerningPairModel(CharacterModel left, CharacterModel right, int kerningValue) {
         this.left = left;
@@ -41,20 +36,11 @@ public class KerningPairModel extends MutableIntValueModel implements Comparable
         return kerningValue;
     }
 
-    public void setKerningValue(int value) {
-        if (value == kerningValue) {
-            return;
-        }
-        final var event = new IntValueChangeEvent(kerningValue, value);
-        kerningValue = value;
-        fireChangeEvent(this, event);
-    }
-
-    public @NotNull CharacterModel getLeft() {
+    public CharacterModel getLeft() {
         return left;
     }
 
-    public @NotNull CharacterModel getRight() {
+    public CharacterModel getRight() {
         return right;
     }
 
@@ -64,5 +50,14 @@ public class KerningPairModel extends MutableIntValueModel implements Comparable
         // 10FFFF<
         // 10FFFF occupies 21 bits, there shouldn't be any collisions here.
         return (left.getCodePoint() << 24) | right.getCodePoint();
+    }
+
+    public void setKerningValue(int value) {
+        if (value == kerningValue) {
+            return;
+        }
+        final var event = new IntValueChangeEvent(kerningValue, value);
+        kerningValue = value;
+        fireChangeEvent(this, event);
     }
 }

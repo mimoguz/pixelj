@@ -2,11 +2,6 @@ package io.github.mimoguz.pixelj.models;
 
 import io.github.mimoguz.pixelj.graphics.BinaryImage;
 
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
 public class CharacterModel extends MutableIntValueModel implements Comparable<CharacterModel> {
     private final int codePoint;
     private final BinaryImage glyph;
@@ -38,12 +33,17 @@ public class CharacterModel extends MutableIntValueModel implements Comparable<C
         return codePoint;
     }
 
-    public @NotNull BinaryImage getGlyph() {
+    public BinaryImage getGlyph() {
         return glyph;
     }
 
     public int getWidth() {
         return width;
+    }
+
+    @Override
+    public int hashCode() {
+        return codePoint;
     }
 
     public void setWidth(final int value) {
@@ -53,10 +53,5 @@ public class CharacterModel extends MutableIntValueModel implements Comparable<C
         final var event = new IntValueChangeEvent(width, value);
         width = value;
         fireChangeEvent(this, event);
-    }
-
-    @Override
-    public int hashCode() {
-        return codePoint;
     }
 }

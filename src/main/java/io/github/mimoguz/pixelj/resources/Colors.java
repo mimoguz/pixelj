@@ -1,25 +1,23 @@
 package io.github.mimoguz.pixelj.resources;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.awt.*;
+import java.awt.Color;
 
 public interface Colors {
-    @NotNull Color accent();
+    Color accent();
 
-    @NotNull Color active();
+    Color active();
 
-    @NotNull Color disabledIcon();
+    Color disabledIcon();
 
-    @NotNull Color divider();
+    Color divider();
 
-    @NotNull Color faintIcon();
+    Color faintIcon();
 
-    @NotNull Color focusBackground();
+    Color focusBackground();
 
-    @NotNull Color focusForeground();
+    Color focusForeground();
 
-    @NotNull Color icon();
+    Color icon();
 
-    @NotNull Color text();
+    Color text();
 }

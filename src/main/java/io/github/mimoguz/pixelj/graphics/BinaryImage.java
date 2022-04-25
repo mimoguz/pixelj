@@ -1,32 +1,38 @@
 package io.github.mimoguz.pixelj.graphics;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.Image;
+import java.awt.ImageCapabilities;
+import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.ImageObserver;
+import java.awt.image.ImageProducer;
+import java.awt.image.IndexColorModel;
+import java.awt.image.Raster;
+import java.awt.image.WritableRaster;
+import java.util.Arrays;
+
+import javax.swing.event.EventListenerList;
+
+import org.eclipse.jdt.annotation.Nullable;
+
 import io.github.mimoguz.pixelj.util.ChangeListener;
 import io.github.mimoguz.pixelj.util.Changeable;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+public class BinaryImage extends Image
+        implements
+        Changeable<BinaryImage, BinaryImage.ImageChangeEvent, BinaryImage.ImageChangeListener> {
+    public enum ImageChangeEvent {
+        IMAGE_MODIFIED
+    }
 
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.event.EventListenerList;
-import java.awt.*;
-import java.awt.image.*;
-import java.util.Arrays;
+    public interface ImageChangeListener extends ChangeListener<BinaryImage, ImageChangeEvent> {
+    }
 
-@ParametersAreNonnullByDefault
-public class BinaryImage
-        extends Image
-        implements Changeable<BinaryImage, BinaryImage.ImageChangeEvent, BinaryImage.ImageChangeListener> {
     private static final byte b0 = 0;
     private static final byte b1 = 1;
-    protected final BufferedImage image;
-    private final EventListenerList listeners = new EventListenerList();
-    private final byte[] pixelBuffer = new byte[1];
-    private final WritableRaster raster;
-
-    private BinaryImage(final int width, final int height, final BufferedImage image) {
-        this.image = image;
-        raster = image.getRaster();
-    }
 
     public static BinaryImage from(final BufferedImage image) {
         if (image.getType() != BufferedImage.TYPE_BYTE_BINARY) {
@@ -40,6 +46,11 @@ public class BinaryImage
         return new BinaryImage(image.getWidth(), image.getHeight(), image);
     }
 
+    public static BinaryImage of(final int width, final int height) {
+        var img = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_BINARY);
+        return new BinaryImage(width, height, img);
+    }
+
     public static BinaryImage of(final int width, final int height, final boolean fill) {
         var img = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_BINARY);
         var binaryImage = new BinaryImage(width, height, img);
@@ -47,13 +58,25 @@ public class BinaryImage
         return binaryImage;
     }
 
-    public static BinaryImage of(final int width, final int height) {
-        var img = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_BINARY);
-        return new BinaryImage(width, height, img);
+    private final EventListenerList listeners = new EventListenerList();
+
+    private final byte[] pixelBuffer = new byte[1];
+
+    private final WritableRaster raster;
+
+    protected final BufferedImage image;
+
+    private BinaryImage(final int width, final int height, final BufferedImage image) {
+        this.image = image;
+        raster = image.getRaster();
     }
 
     public void draw(final Graphics2D graphics, final int x, final int y, final int width, final int height) {
         graphics.drawImage(image, x, y, width, height, null);
+    }
+
+    public void fill(final boolean value) {
+        fill(value, true);
     }
 
     public void fill(final boolean value, final boolean notify) {
@@ -65,10 +88,6 @@ public class BinaryImage
         if (notify) {
             fireChangeEvent(this, ImageChangeEvent.IMAGE_MODIFIED);
         }
-    }
-
-    public void fill(final boolean value) {
-        fill(value, true);
     }
 
     @Override
@@ -87,11 +106,6 @@ public class BinaryImage
         return image.getAccelerationPriority();
     }
 
-    @Override
-    public void setAccelerationPriority(final float priority) {
-        image.setAccelerationPriority(priority);
-    }
-
     public byte getByteValue(final int x, final int y) {
         raster.getDataElements(x, y, pixelBuffer);
         return pixelBuffer[0];
@@ -106,13 +120,18 @@ public class BinaryImage
         return image.getColorModel();
     }
 
-    public byte[] getDataElements(final int x, final int y, final int width, final int height, final byte[] target) {
+    public byte[] getDataElements(
+            final int x,
+            final int y,
+            final int width,
+            final int height,
+            final byte[] target
+    ) {
         raster.getDataElements(x, y, width, height, target);
         return target;
     }
 
     @Override
-    @NotNull
     public Graphics getGraphics() {
         return image.getGraphics();
     }
@@ -127,13 +146,11 @@ public class BinaryImage
     }
 
     @Override
-    @NotNull
     public Class<ImageChangeListener> getListenerClass() {
         return ImageChangeListener.class;
     }
 
     @Override
-    @NotNull
     public EventListenerList getListenerList() {
         return listeners;
     }
@@ -149,12 +166,10 @@ public class BinaryImage
     }
 
     @Override
-    @NotNull
     public Image getScaledInstance(final int width, final int height, final int hints) {
         return image.getScaledInstance(width, height, hints);
     }
 
-    @NotNull
     public Snapshot getSnapshot(final int id) {
         var buffer = new byte[getWidth() * getHeight()];
         raster.getDataElements(0, 0, getWidth(), getHeight(), buffer);
@@ -166,7 +181,6 @@ public class BinaryImage
         return image.getSource();
     }
 
-    @NotNull
     public Image getSubImage(final int x, final int y, final int width, final int height) {
         return image.getSubimage(x, y, width, height);
     }
@@ -180,6 +194,10 @@ public class BinaryImage
         return image.getWidth(observer);
     }
 
+    public void invert(final int x, final int y) {
+        invert(x, y, true);
+    }
+
     public void invert(final int x, final int y, final boolean notify) {
         set(x, y, !get(x, y));
         if (notify) {
@@ -187,12 +205,12 @@ public class BinaryImage
         }
     }
 
-    public void invert(final int x, final int y) {
-        invert(x, y, true);
-    }
-
     public void requestUpdate() {
         fireChangeEvent(this, ImageChangeEvent.IMAGE_MODIFIED);
+    }
+
+    public void set(final int x, final int y, final boolean value) {
+        set(x, y, value, true);
     }
 
     public void set(final int x, final int y, final boolean value, final boolean notify) {
@@ -203,8 +221,19 @@ public class BinaryImage
         }
     }
 
-    public void set(final int x, final int y, final boolean value) {
-        set(x, y, value, true);
+    @Override
+    public void setAccelerationPriority(final float priority) {
+        image.setAccelerationPriority(priority);
+    }
+
+    public void setDataElements(
+            final int x,
+            final int y,
+            final int width,
+            final int height,
+            final byte[] source
+    ) {
+        setDataElements(x, y, width, height, source, true);
     }
 
     public void setDataElements(
@@ -221,19 +250,8 @@ public class BinaryImage
         }
     }
 
-    public void setDataElements(final int x, final int y, final int width, final int height, final byte[] source) {
-        setDataElements(x, y, width, height, source, true);
-    }
-
     private void setByteValue(final int x, final int y, final byte value) {
         pixelBuffer[0] = value;
         raster.setDataElements(x, y, pixelBuffer);
-    }
-
-    public enum ImageChangeEvent {
-        IMAGE_MODIFIED
-    }
-
-    public interface ImageChangeListener extends ChangeListener<BinaryImage, ImageChangeEvent> {
     }
 }

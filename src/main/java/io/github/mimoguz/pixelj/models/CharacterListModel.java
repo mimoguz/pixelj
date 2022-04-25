@@ -1,19 +1,16 @@
 package io.github.mimoguz.pixelj.models;
 
-import org.jetbrains.annotations.Nullable;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-@ParametersAreNonnullByDefault
-public class CharacterListModel extends DisplayListModel<CharacterModel> {
-    private @Nullable KerningPairListModel pairedKerningPairListModel;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 
+import org.eclipse.jdt.annotation.Nullable;
+
+public class CharacterListModel extends DisplayListModel<CharacterModel> {
     // Removes the kerning pairs which depend on the deleted characters.
     private final ListDataListener kerningPairRemover = new ListDataListener() {
         @Override
@@ -48,6 +45,9 @@ public class CharacterListModel extends DisplayListModel<CharacterModel> {
         }
     };
 
+    @Nullable
+    private KerningPairListModel pairedKerningPairListModel;
+
     public CharacterListModel() {
         super();
         addListDataListener(kerningPairRemover);
@@ -62,7 +62,8 @@ public class CharacterListModel extends DisplayListModel<CharacterModel> {
         if (pairedKerningPairListModel == null) {
             return 0;
         }
-        return pairedKerningPairListModel.countWhere(p -> p.getLeft().equals(model) || p.getRight().equals(model));
+        return pairedKerningPairListModel
+                .countWhere(p -> p.getLeft().equals(model) || p.getRight().equals(model));
     }
 
     public List<KerningPairModel> findDependent(final CharacterModel model) {
@@ -72,7 +73,7 @@ public class CharacterListModel extends DisplayListModel<CharacterModel> {
         return pairedKerningPairListModel.find(p -> p.getLeft().equals(model) || p.getRight().equals(model));
     }
 
-    public void pair(final @Nullable KerningPairListModel kerningPairListModel) {
+    public void pair(@Nullable final KerningPairListModel kerningPairListModel) {
         pairedKerningPairListModel = kerningPairListModel;
     }
 

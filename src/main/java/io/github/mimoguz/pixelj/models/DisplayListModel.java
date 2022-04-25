@@ -1,15 +1,18 @@
 package io.github.mimoguz.pixelj.models;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.*;
+import javax.swing.ListModel;
 import javax.swing.event.EventListenerList;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
-import java.util.*;
-import java.util.function.Predicate;
+
+import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * A list model that keeps its visible elements always filtered and sorted.
@@ -17,12 +20,11 @@ import java.util.function.Predicate;
  * It's Intended to be used for CharacterModels and KerningPairModels, and uses
  * a HashSet for backing collection (so assumes no hash collisions).
  */
-@ParametersAreNonnullByDefault
 public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
     private final ArrayList<E> display = new ArrayList<>();
+    private Predicate<E> filter = t -> true;
     private final EventListenerList listeners = new EventListenerList();
     private final HashSet<E> source = new HashSet<>();
-    private @NotNull Predicate<E> filter = t -> true;
 
     public DisplayListModel() {
     }
@@ -76,7 +78,6 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
         return (int) source.stream().filter(predicate).count();
     }
 
-    @NotNull
     public List<E> find(final Predicate<E> predicate) {
         return source.stream().filter(predicate).toList();
     }
@@ -84,27 +85,6 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
     @Nullable
     public E findFirst(final Predicate<E> predicate) {
         return source.stream().filter(predicate).findFirst().orElse(null);
-    }
-
-    protected void fireContentsChangedEvent(final int index0, final int index1) {
-        final var lst = listeners.getListeners(ListDataListener.class).clone();
-        for (var index = lst.length - 1; index >= 0; index--) {
-            lst[index].contentsChanged(new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, index0, index1));
-        }
-    }
-
-    protected void fireIntervalAddedEvent(final int index0, final int index1) {
-        final var lst = listeners.getListeners(ListDataListener.class);
-        for (var index = lst.length - 1; index >= 0; index--) {
-            lst[index].intervalAdded(new ListDataEvent(this, ListDataEvent.INTERVAL_ADDED, index0, index1));
-        }
-    }
-
-    protected void fireIntervalRemovedEvent(final int index0, final int index1) {
-        final var lst = listeners.getListeners(ListDataListener.class).clone();
-        for (var index = lst.length - 1; index >= 0; index--) {
-            lst[index].intervalRemoved(new ListDataEvent(this, ListDataEvent.INTERVAL_REMOVED, index0, index1));
-        }
     }
 
     /**
@@ -186,7 +166,7 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
         fireContentsChangedEvent(index, index);
     }
 
-    public void setFilter(final @NotNull Predicate<E> value) {
+    public void setFilter(final Predicate<E> value) {
         filter = value;
         if (!display.isEmpty()) {
             final var index1 = display.size() - 1;
@@ -203,16 +183,39 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
         return source.contains(element);
     }
 
-    private int findPlace(final @NotNull E element) {
+    private int findPlace(final E element) {
         return (int) display.stream().takeWhile(item -> item.compareTo(element) > 0).count();
     }
 
-    private int insertOrdered(final @NotNull E element) {
+    private int insertOrdered(final E element) {
         if (!filter.test(element)) {
             return -1;
         }
         final var index = findPlace(element);
         display.add(index, element);
         return index;
+    }
+
+    protected void fireContentsChangedEvent(final int index0, final int index1) {
+        final var lst = listeners.getListeners(ListDataListener.class).clone();
+        for (var index = lst.length - 1; index >= 0; index--) {
+            lst[index]
+                    .contentsChanged(new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, index0, index1));
+        }
+    }
+
+    protected void fireIntervalAddedEvent(final int index0, final int index1) {
+        final var lst = listeners.getListeners(ListDataListener.class);
+        for (var index = lst.length - 1; index >= 0; index--) {
+            lst[index].intervalAdded(new ListDataEvent(this, ListDataEvent.INTERVAL_ADDED, index0, index1));
+        }
+    }
+
+    protected void fireIntervalRemovedEvent(final int index0, final int index1) {
+        final var lst = listeners.getListeners(ListDataListener.class).clone();
+        for (var index = lst.length - 1; index >= 0; index--) {
+            lst[index]
+                    .intervalRemoved(new ListDataEvent(this, ListDataEvent.INTERVAL_REMOVED, index0, index1));
+        }
     }
 }
