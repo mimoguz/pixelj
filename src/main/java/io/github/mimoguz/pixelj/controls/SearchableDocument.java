@@ -1,14 +1,5 @@
 package io.github.mimoguz.pixelj.controls;
 
-import com.formdev.flatlaf.FlatClientProperties;
-import org.jetbrains.annotations.Nullable;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.*;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.JTextComponent;
-import javax.swing.text.PlainDocument;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
@@ -16,16 +7,34 @@ import java.awt.event.KeyEvent;
 import java.util.Locale;
 import java.util.Objects;
 
+import javax.swing.ComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.JTextComponent;
+import javax.swing.text.PlainDocument;
+
+import org.eclipse.jdt.annotation.Nullable;
+
+import com.formdev.flatlaf.FlatClientProperties;
+
 /**
  * An implementation of Thomas Bierhance's auto-complete combo-box:<br />
- * <a href="http://www.orbital-computer.de/JComboBox/">http://www.orbital-computer.de/JComboBox/</a>
+ * <a href=
+ * "http://www.orbital-computer.de/JComboBox/">http://www.orbital-computer.de/JComboBox/</a>
  */
-@ParametersAreNonnullByDefault
 class SearchableDocument<E> extends PlainDocument {
+    private enum BackspaceState {
+        ERROR, HIT, HIT_ON_SELECTION, NO_HIT
+    }
+
+    private static final long serialVersionUID = -7793331737675680882L;
+
+    private BackspaceState backspaceState = BackspaceState.NO_HIT;
     private final JComboBox<E> comboBox;
     private final JTextComponent editor;
     private final ComboBoxModel<E> model;
-    private BackspaceState backspaceState = BackspaceState.NO_HIT;
+
     private boolean selecting = false;
 
     SearchableDocument(final JComboBox<E> comboBox) {
@@ -41,7 +50,7 @@ class SearchableDocument<E> extends PlainDocument {
             }
         });
 
-        // Show popup on key event
+        // Show pop-up on key event
         // Handle backspace key
         editor.addKeyListener(new KeyAdapter() {
             @Override
@@ -91,11 +100,8 @@ class SearchableDocument<E> extends PlainDocument {
     }
 
     @Override
-    public void insertString(
-            final int offset,
-            final String string,
-            final AttributeSet attributes
-    ) throws BadLocationException {
+    public void insertString(final int offset, final String string, final AttributeSet attributes)
+            throws BadLocationException {
         if (selecting) {
             return;
         }
@@ -148,7 +154,8 @@ class SearchableDocument<E> extends PlainDocument {
         editor.moveCaretPosition(offset);
     }
 
-    private @Nullable Object lookupItem(final String pattern) {
+    @Nullable
+    private Object lookupItem(final String pattern) {
         final var pat = pattern.toLowerCase(Locale.US);
         for (var index = 0; index < model.getSize(); index++) {
             final var element = model.getElementAt(index);
@@ -177,12 +184,5 @@ class SearchableDocument<E> extends PlainDocument {
         } catch (BadLocationException e) {
             System.err.println(e.getMessage());
         }
-    }
-
-    private enum BackspaceState {
-        HIT,
-        HIT_ON_SELECTION,
-        NO_HIT,
-        ERROR
     }
 }

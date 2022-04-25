@@ -1,25 +1,27 @@
 package io.github.mimoguz.pixelj.controls;
 
-import io.github.mimoguz.pixelj.graphics.AndComposite;
-import io.github.mimoguz.pixelj.models.CharacterModel;
-
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Collection;
 
-@ParametersAreNonnullByDefault
+import javax.swing.JPanel;
+
+import org.eclipse.jdt.annotation.NonNull;
+
+import io.github.mimoguz.pixelj.graphics.AndComposite;
+import io.github.mimoguz.pixelj.models.CharacterModel;
+
 public class StringView extends JPanel {
     private final Color backgroundColor;
     private final ArrayList<CharacterModel> characters = new ArrayList<>();
     private final AndComposite composite = new AndComposite();
-    private final ArrayList<Integer> spaces = new ArrayList<>();
-    @NotNull
+    @NonNull
     private Dimension minimumSize = new Dimension(16, 16);
     private int padding = 8;
+    private final ArrayList<Integer> spaces = new ArrayList<>();
     private int zoom;
 
     public StringView(final Color backgroundColor) {
@@ -31,19 +33,60 @@ public class StringView extends JPanel {
         return padding;
     }
 
+    public int getZoom() {
+        return zoom;
+    }
+
+    public void set(Collection<CharacterModel> characters, Collection<Integer> spaces) {
+        this.characters.clear();
+        this.characters.addAll(characters);
+
+        this.spaces.clear();
+        this.spaces.addAll(spaces);
+
+        updateView();
+    }
+
     public void setPadding(final int value) {
         padding = value;
         minimumSize = new Dimension(value * 2, value * 2);
         updateView();
     }
 
-    public int getZoom() {
-        return zoom;
+    public void setSpaces(Collection<Integer> spaces) {
+        this.spaces.clear();
+        this.spaces.addAll(spaces);
+        updateView();
     }
 
     public void setZoom(final int value) {
         zoom = value;
         updateView();
+    }
+
+    private void resizeCanvas() {
+        var dimensions = minimumSize;
+
+        if (characters.size() > 0) {
+            final var w = characters.stream().mapToInt(CharacterModel::getWidth).sum()
+                    + spaces.stream().limit(characters.size()).reduce(0, Integer::sum);
+            final var h = characters.stream()
+                    .mapToInt(chr -> chr.getGlyph().getHeight())
+                    .max()
+                    .orElseGet(() -> 0);
+            dimensions = new Dimension(w + 2 * padding, h + 2 * padding);
+        }
+
+        setMinimumSize(dimensions);
+        setMinimumSize(dimensions);
+        setPreferredSize(dimensions);
+        setSize(dimensions);
+        revalidate();
+    }
+
+    private void updateView() {
+        resizeCanvas();
+        repaint();
     }
 
     @Override
@@ -71,43 +114,5 @@ public class StringView extends JPanel {
         }
 
         g2d.dispose();
-    }
-
-    public void set(Collection<CharacterModel> characters, Collection<Integer> spaces) {
-        this.characters.clear();
-        this.characters.addAll(characters);
-
-        this.spaces.clear();
-        this.spaces.addAll(spaces);
-
-        updateView();
-    }
-
-    public void setSpaces(Collection<Integer> spaces) {
-        this.spaces.clear();
-        this.spaces.addAll(spaces);
-        updateView();
-    }
-
-    private void resizeCanvas() {
-        var dimensions = minimumSize;
-
-        if (characters.size() > 0) {
-            final var w = characters.stream().mapToInt(CharacterModel::getWidth).sum()
-                    + spaces.stream().limit(characters.size()).reduce(0, Integer::sum);
-            final var h = characters.stream().mapToInt(chr -> chr.getGlyph().getHeight()).max().orElseGet(() -> 0);
-            dimensions = new Dimension(w + 2 * padding, h + 2 * padding);
-        }
-
-        setMinimumSize(dimensions);
-        setMinimumSize(dimensions);
-        setPreferredSize(dimensions);
-        setSize(dimensions);
-        revalidate();
-    }
-
-    private void updateView() {
-        resizeCanvas();
-        repaint();
     }
 }

@@ -1,13 +1,14 @@
 package io.github.mimoguz.pixelj.controls.painter;
 
-import io.github.mimoguz.pixelj.models.CharacterModel;
+import org.eclipse.jdt.annotation.Nullable;
 
-import org.jetbrains.annotations.Nullable;
+import io.github.mimoguz.pixelj.models.CharacterModel;
 
 public interface Painter {
     int getHeight();
 
-    @Nullable CharacterModel getModel();
+    @Nullable
+    CharacterModel getModel();
 
     int getWidth();
 

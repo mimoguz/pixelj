@@ -1,23 +1,29 @@
 package io.github.mimoguz.pixelj.controls;
 
-import io.github.mimoguz.pixelj.controls.painter.*;
+import java.awt.Color;
+import java.util.function.Consumer;
+
+import org.eclipse.jdt.annotation.Nullable;
+
+import io.github.mimoguz.pixelj.controls.painter.CanFlipImage;
+import io.github.mimoguz.pixelj.controls.painter.CanRotateImage;
+import io.github.mimoguz.pixelj.controls.painter.CanTranslateImage;
+import io.github.mimoguz.pixelj.controls.painter.PaintAdapter;
+import io.github.mimoguz.pixelj.controls.painter.Painter;
 import io.github.mimoguz.pixelj.graphics.Snapshot;
 import io.github.mimoguz.pixelj.models.CharacterModel;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+public class GlyphPainter extends GlyphView
+        implements
+        Painter,
+        CanFlipImage,
+        CanRotateImage,
+        CanTranslateImage {
 
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.awt.*;
-import java.util.function.Consumer;
-
-@ParametersAreNonnullByDefault
-public class GlyphPainter
-        extends GlyphView
-        implements Painter, CanFlipImage, CanRotateImage, CanTranslateImage {
+    private static final long serialVersionUID = 2382126540536314203L;
 
     private final PaintAdapter paintAdapter;
-    @NotNull
+
     private Consumer<Snapshot> snapshotConsumer = snapshot -> {
     };
 
@@ -39,10 +45,6 @@ public class GlyphPainter
         return paintAdapter.isSymmetrical();
     }
 
-    public void setSymmetrical(final boolean value) {
-        paintAdapter.setSymmetrical(value);
-    }
-
     @Override
     public void setModel(@Nullable final CharacterModel value) {
         if (value != null) {
@@ -55,6 +57,11 @@ public class GlyphPainter
         snapshotConsumer = value;
     }
 
+    public void setSymmetrical(final boolean value) {
+        paintAdapter.setSymmetrical(value);
+    }
+
+    @Override
     public void takeSnapshot() {
         final var model = getModel();
         if (model != null) {

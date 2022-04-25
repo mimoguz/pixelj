@@ -14,6 +14,8 @@ import io.github.mimoguz.pixelj.resources.Icons;
 import io.github.mimoguz.pixelj.resources.Resources;
 
 public class ApplicationAction extends AbstractAction {
+    private static final long serialVersionUID = 5365300941571995035L;
+
     private final BiConsumer<ActionEvent, Action> consumer;
     private final String key;
 
@@ -30,8 +32,7 @@ public class ApplicationAction extends AbstractAction {
             @Nullable Color iconColor,
             @Nullable Color disabledIconColor,
             @Nullable KeyStroke accelerator
-    )
-    {
+    ) {
         this.consumer = consumer;
         this.key = key;
 
@@ -68,7 +69,11 @@ public class ApplicationAction extends AbstractAction {
         return this;
     }
 
-    public ApplicationAction setIcon(Icons iconVariant, @Nullable Color color, @Nullable Color disabledColor) {
+    public ApplicationAction setIcon(
+            Icons iconVariant,
+            @Nullable Color color,
+            @Nullable Color disabledColor
+    ) {
         final var res = Resources.get();
         final var icon = res
                 .getIcon(

@@ -1,8 +1,10 @@
 package io.github.mimoguz.pixelj.actions;
 
-
-import javax.swing.*;
 import java.util.Collection;
+
+import javax.swing.Action;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 
 public class Actions {
     public static void registerShortcuts(Collection<ApplicationAction> actions, JComponent root) {
@@ -20,4 +22,3 @@ public class Actions {
         }
     }
 }
-

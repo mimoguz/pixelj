@@ -1,23 +1,21 @@
 package io.github.mimoguz.pixelj.controls.painter;
 
-import io.github.mimoguz.pixelj.graphics.BinaryImage;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.awt.*;
+import java.awt.Point;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import io.github.mimoguz.pixelj.graphics.BinaryImage;
+
 /**
  * Adds mouse drawing support to a Painter.
  */
-@ParametersAreNonnullByDefault
 public class PaintAdapter implements MouseListener, MouseMotionListener {
-    private final Point lastPixel = new Point(-1, -1);
-    private final Painter painter;
     private int extent = 0;
     private boolean fill = false;
+    private final Point lastPixel = new Point(-1, -1);
+    private final Painter painter;
     private boolean symmetrical = false;
 
     public PaintAdapter(Painter painter) {
@@ -33,25 +31,10 @@ public class PaintAdapter implements MouseListener, MouseMotionListener {
     }
 
     /**
-     * The last column of the main drawing area. It's used to calculate vertical
-     * symmetry axis.
-     */
-    public void setExtent(int value) {
-        extent = value;
-    }
-
-    /**
      * Is the vertical symmetry enabled?
      */
     public boolean isSymmetrical() {
         return symmetrical;
-    }
-
-    /**
-     * Enable/disable the vertical symmetry.
-     */
-    public void setSymmetrical(boolean value) {
-        symmetrical = value;
     }
 
     @Override
@@ -99,13 +82,29 @@ public class PaintAdapter implements MouseListener, MouseMotionListener {
         lastPixel.setLocation(getPixelCoordinates(image, e));
         // The button1 (or any other button while control pressed) clears, any other
         // button besides the button1 paints.
-        fill = !(e.getButton() == MouseEvent.BUTTON1 && (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == 0);
+        fill = !(e.getButton() == MouseEvent.BUTTON1
+                && (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == 0);
         setPixel(image);
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         setOutside();
+    }
+
+    /**
+     * The last column of the main drawing area. It's used to calculate vertical
+     * symmetry axis.
+     */
+    public void setExtent(int value) {
+        extent = value;
+    }
+
+    /**
+     * Enable/disable the vertical symmetry.
+     */
+    public void setSymmetrical(boolean value) {
+        symmetrical = value;
     }
 
     private Point getPixelCoordinates(BinaryImage image, MouseEvent e) {

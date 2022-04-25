@@ -1,48 +1,62 @@
 package io.github.mimoguz.pixelj.controls;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import javax.swing.JPanel;
+import javax.swing.event.EventListenerList;
+
+import org.eclipse.jdt.annotation.Nullable;
+
 import io.github.mimoguz.pixelj.graphics.BinaryImage;
 import io.github.mimoguz.pixelj.models.CharacterModel;
 import io.github.mimoguz.pixelj.util.ChangeListener;
 import io.github.mimoguz.pixelj.util.Changeable;
 import io.github.mimoguz.pixelj.util.Detachable;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.*;
-import javax.swing.event.EventListenerList;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-@ParametersAreNonnullByDefault
 public class GlyphView extends JPanel
         implements
         Changeable<GlyphView, GlyphView.ViewChangeEvent, GlyphView.ViewChangeListener>,
         Detachable {
+    public enum ViewChangeEvent {
+        GLYPH_MODIFIED, MODEL_LOADED, MODEL_UNLOADED
+    }
+
+    public interface ViewChangeListener extends ChangeListener<GlyphView, ViewChangeEvent> {
+    }
+
     private static final Color SHADE = new Color(20, 0, 0, 0);
     private final Color backgroundColor;
+    private final BinaryImage.ImageChangeListener imageChangeListener;
     private final ArrayList<Line> lines = new ArrayList<>();
     private final EventListenerList listeners = new EventListenerList();
     @Nullable
     private CharacterModel model;
-    private final BinaryImage.ImageChangeListener imageChangeListener = (source, event) -> {
-        if (model == null || source != model.getGlyph()) {
-            return;
-        }
-        // TODO: Repaint only changed region
-        repaint();
-        fireChangeEvent(this, ViewChangeEvent.GLYPH_MODIFIED);
-    };
     @Nullable
     private Image overlay;
     private boolean showLines = false;
+
     private boolean showOverlay = false;
+
     private int zoom = 1;
 
     public GlyphView(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
+
+        imageChangeListener = (source, event) -> {
+            if (model == null || source != model.getGlyph()) {
+                return;
+            }
+            // TODO: Repaint only changed region
+            repaint();
+            fireChangeEvent(this, ViewChangeEvent.GLYPH_MODIFIED);
+        };
     }
 
     public void addLines(Line... lines) {
@@ -57,13 +71,11 @@ public class GlyphView extends JPanel
     }
 
     @Override
-    @NotNull
     public Class<ViewChangeListener> getListenerClass() {
         return ViewChangeListener.class;
     }
 
     @Override
-    @NotNull
     public EventListenerList getListenerList() {
         return listeners;
     }
@@ -73,61 +85,31 @@ public class GlyphView extends JPanel
         return model;
     }
 
-    public void setModel(@Nullable CharacterModel value) {
-        setModel(value, true);
-    }
-
     @Nullable
     public Image getOverlay() {
         return overlay;
-    }
-
-    public void setOverlay(@Nullable Image value) {
-        if (overlay == value) {
-            return;
-        }
-        overlay = value;
-        repaint();
     }
 
     public int getZoom() {
         return zoom;
     }
 
-    public void setZoom(int value) {
-        zoom = value;
-        autoSize();
-    }
-
     public boolean isLinesVisible() {
         return showLines;
-    }
-
-    public void setLinesVisible(boolean value) {
-        if (value == showLines) {
-            return;
-        }
-        this.showLines = value;
-        repaint();
     }
 
     public boolean isOverlayVisible() {
         return showOverlay;
     }
 
-    public void setOverlayVisible(boolean value) {
-        if (value == showOverlay) {
-            return;
-        }
-        this.showOverlay = value;
-        repaint();
-    }
-
     @Override
     public void paintComponent(Graphics graphics) {
         final var g = (Graphics2D) graphics.create();
         if (model != null) {
-            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+            g.setRenderingHint(
+                    RenderingHints.KEY_INTERPOLATION,
+                    RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR
+            );
             model.getGlyph().draw(g, 0, 0, getWidth(), getHeight());
             drawShade(g);
             drawOverlay(g);
@@ -139,14 +121,26 @@ public class GlyphView extends JPanel
         g.dispose();
     }
 
+    public void removeLines() {
+        lines.clear();
+        repaint();
+    }
+
     public void removeLines(Line... lines) {
         this.lines.removeAll(Arrays.stream(lines).toList());
         repaint();
     }
 
-    public void removeLines() {
-        lines.clear();
+    public void setLinesVisible(boolean value) {
+        if (value == showLines) {
+            return;
+        }
+        this.showLines = value;
         repaint();
+    }
+
+    public void setModel(@Nullable CharacterModel value) {
+        setModel(value, true);
     }
 
     public void setModel(@Nullable CharacterModel value, boolean listen) {
@@ -168,6 +162,27 @@ public class GlyphView extends JPanel
             fireChangeEvent(this, ViewChangeEvent.MODEL_LOADED);
         }
 
+        autoSize();
+    }
+
+    public void setOverlay(@Nullable Image value) {
+        if (overlay == value) {
+            return;
+        }
+        overlay = value;
+        repaint();
+    }
+
+    public void setOverlayVisible(boolean value) {
+        if (value == showOverlay) {
+            return;
+        }
+        this.showOverlay = value;
+        repaint();
+    }
+
+    public void setZoom(int value) {
+        zoom = value;
         autoSize();
     }
 
@@ -220,15 +235,9 @@ public class GlyphView extends JPanel
         if (model == null || model.getWidth() >= model.getGlyph().getWidth()) {
             return;
         }
-        final var x = (int) Math.round((((double) getWidth()) / model.getGlyph().getWidth()) * model.getWidth());
+        final var x = (int) Math
+                .round((((double) getWidth()) / model.getGlyph().getWidth()) * model.getWidth());
         g.setColor(SHADE);
         g.fillRect(x, 0, x, getHeight());
-    }
-
-    public enum ViewChangeEvent {
-        MODEL_LOADED, MODEL_UNLOADED, GLYPH_MODIFIED
-    }
-
-    public interface ViewChangeListener extends ChangeListener<GlyphView, ViewChangeEvent> {
     }
 }

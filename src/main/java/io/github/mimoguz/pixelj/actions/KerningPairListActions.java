@@ -1,33 +1,23 @@
 package io.github.mimoguz.pixelj.actions;
 
-import io.github.mimoguz.pixelj.models.KerningPairListModel;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.List;
 
-@ParametersAreNonnullByDefault
-public class KerningPairListActions {
-    public final ApplicationAction showAddDialogAction = new ApplicationAction(
-            "showAddDialog",
-            (e, action) -> System.out.println("Show add dialog action")
-    )
-            .setTextKey("showAddDialogAction")
-            .setAccelerator(KeyEvent.VK_PLUS, InputEvent.ALT_DOWN_MASK);
-    ;
-    public final ApplicationAction showRemoveDialogAction = new ApplicationAction(
-            "showRemoveDialog",
-            (e, action) -> removeSelected()
-    )
-            .setTextKey("showRemoveDialogAction")
-            .setAccelerator(KeyEvent.VK_MINUS, InputEvent.ALT_DOWN_MASK);
+import javax.swing.Action;
+import javax.swing.ListSelectionModel;
 
-    public final Collection<ApplicationAction> all = List.of(showAddDialogAction, showRemoveDialogAction);
-    private KerningPairListModel listModel;
-    private ListSelectionModel selectionModel;
+import io.github.mimoguz.pixelj.models.KerningPairListModel;
+
+public class KerningPairListActions {
+    public final Collection<ApplicationAction> all;
+    public final ApplicationAction showAddDialogAction;
+    public final ApplicationAction showRemoveDialogAction;
+
+    private final KerningPairListModel listModel;
+    private final ListSelectionModel selectionModel;
 
     public KerningPairListActions(
             final KerningPairListModel listModel,
@@ -36,10 +26,23 @@ public class KerningPairListActions {
 
         this.listModel = listModel;
         this.selectionModel = selectionModel;
+
+        showAddDialogAction = new ApplicationAction("showAddDialog", this::showAddDialog)
+                .setTextKey("showAddDialogAction")
+                .setAccelerator(KeyEvent.VK_PLUS, InputEvent.ALT_DOWN_MASK);
+
+        showRemoveDialogAction = new ApplicationAction("showRemoveDialog", this::showRemoveDialog)
+                .setTextKey("showRemoveDialogAction")
+                .setAccelerator(KeyEvent.VK_MINUS, InputEvent.ALT_DOWN_MASK);
+
+        all = List.of(showAddDialogAction, showRemoveDialogAction);
     }
 
-    ;
+    private void showAddDialog(final ActionEvent event, final Action action) {
+        System.out.println(action.getValue(Action.NAME));
+    }
 
-    private void removeSelected() {
+    private void showRemoveDialog(final ActionEvent event, final Action action) {
+        System.out.println(action.getValue(Action.NAME));
     }
 }

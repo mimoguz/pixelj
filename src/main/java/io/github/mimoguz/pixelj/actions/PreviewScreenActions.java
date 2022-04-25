@@ -1,20 +1,22 @@
 package io.github.mimoguz.pixelj.actions;
 
-import io.github.mimoguz.pixelj.controls.StringView;
-import io.github.mimoguz.pixelj.models.CharacterModel;
-import io.github.mimoguz.pixelj.models.ProjectModel;
-import io.github.mimoguz.pixelj.resources.Resources;
-
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
-import javax.swing.text.BadLocationException;
+import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+
+import javax.swing.Action;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.text.BadLocationException;
+
+import io.github.mimoguz.pixelj.controls.StringView;
+import io.github.mimoguz.pixelj.models.CharacterModel;
+import io.github.mimoguz.pixelj.models.ProjectModel;
+import io.github.mimoguz.pixelj.resources.Resources;
 
 public class PreviewScreenActions {
     public final Collection<ApplicationAction> all;
@@ -29,13 +31,13 @@ public class PreviewScreenActions {
         this.input = input;
         this.container = container;
 
-        clearAction = new ApplicationAction("previewClearAction", (e, action) -> clearPreview())
+        clearAction = new ApplicationAction("previewClearAction", this::clearPreview)
                 .setTextKey("previewClearAction");
 
-        refreshAction = new ApplicationAction("previewRefreshAction", (e, action) -> refreshPreview())
+        refreshAction = new ApplicationAction("previewRefreshAction", this::refreshPreview)
                 .setTextKey("previewRefreshAction")
                 .setAccelerator(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK);
-        
+
         all = List.of(clearAction, refreshAction);
     }
 
@@ -46,7 +48,10 @@ public class PreviewScreenActions {
         }
     }
 
-    @NotNull
+    private void clearPreview(ActionEvent event, Action action) {
+        clearPreview();
+    }
+
     private List<CharacterModel> getCharactersOfLine(String line) {
         final var characters = project.getCharacters();
         return line.codePoints()
@@ -55,7 +60,6 @@ public class PreviewScreenActions {
                 .toList();
     }
 
-    @NotNull
     private List<Integer> getSpaces(List<CharacterModel> characters) {
         final var spacing = project.getMetrics().spacing();
         final var kerningPairs = project.getKerningPairs();
@@ -64,13 +68,13 @@ public class PreviewScreenActions {
         for (var index = 0; index < pairs; index++) {
             final var left = characters.get(index);
             final var right = characters.get(index + 1);
-            final var pair = kerningPairs.findFirst(p -> p.getLeft().equals(left) && p.getRight().equals(right));
+            final var pair = kerningPairs
+                    .findFirst(p -> p.getLeft().equals(left) && p.getRight().equals(right));
             spaces.add(pair == null ? spacing : spacing + pair.getKerningValue());
         }
         return spaces;
     }
 
-    @NotNull
     private StringView getView(String line) {
         final var view = new StringView(Resources.get().colors.disabledIcon());
         final var characters = getCharactersOfLine(line);
@@ -79,7 +83,7 @@ public class PreviewScreenActions {
         return view;
     }
 
-    private void refreshPreview() {
+    private void refreshPreview(ActionEvent event, Action action) {
         clearPreview();
 
         final var lines = input.getLineCount();
