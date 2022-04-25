@@ -52,8 +52,10 @@ public class ApplicationAction extends AbstractAction {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        consumer.accept(e, this);
+    public void actionPerformed(@Nullable final ActionEvent e) {
+        if (e != null) {
+            consumer.accept(e, this);
+        }
     }
 
     public String getKey() {
@@ -70,28 +72,27 @@ public class ApplicationAction extends AbstractAction {
     }
 
     public ApplicationAction setIcon(
-            Icons iconVariant,
-            @Nullable Color color,
-            @Nullable Color disabledColor
+            final Icons iconVariant,
+            @Nullable final Color color,
+            @Nullable final Color disabledColor
     ) {
         final var res = Resources.get();
-        final var icon = res
-                .getIcon(
-                        iconVariant,
-                        color != null ? color : res.colors.icon(),
-                        disabledColor != null ? disabledColor : res.colors.disabledIcon()
-                );
+        final var icon = res.getIcon(
+                iconVariant,
+                color != null ? color : res.colors.icon(),
+                disabledColor != null ? disabledColor : res.colors.disabledIcon()
+        );
         putValue(Action.SMALL_ICON, icon);
         putValue(Action.LARGE_ICON_KEY, icon);
         return this;
     }
 
-    public ApplicationAction setTextKey(String value) {
+    public ApplicationAction setTextKey(final String value) {
         putValue(Action.NAME, value);
         return this;
     }
 
-    public ApplicationAction setTooltipKey(String value) {
+    public ApplicationAction setTooltipKey(final String value) {
         putValue(Action.SHORT_DESCRIPTION, value);
         return this;
     }

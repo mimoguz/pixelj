@@ -1,5 +1,7 @@
 package io.github.mimoguz.pixelj.models;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 public class KerningPairModel extends MutableIntValueModel implements Comparable<KerningPairModel> {
     private int kerningValue;
     private final CharacterModel left;
@@ -22,7 +24,7 @@ public class KerningPairModel extends MutableIntValueModel implements Comparable
     }
 
     @Override
-    public boolean equals(Object that) {
+    public boolean equals(@Nullable Object that) {
         if (this == that) {
             return true;
         }

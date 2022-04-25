@@ -8,6 +8,7 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 import javax.swing.JPanel;
 import javax.swing.event.EventListenerList;
@@ -34,6 +35,7 @@ public class GlyphView extends JPanel
     private static final long serialVersionUID = 7841183984464270304L;
 
     private static final Color SHADE = new Color(20, 0, 0, 0);
+
     private final Color backgroundColor;
     private final BinaryImage.ImageChangeListener imageChangeListener;
     private final ArrayList<Line> lines = new ArrayList<>();
@@ -42,6 +44,7 @@ public class GlyphView extends JPanel
     private CharacterModel model;
     @Nullable
     private Image overlay;
+
     private boolean showLines = false;
 
     private boolean showOverlay = false;
@@ -52,10 +55,8 @@ public class GlyphView extends JPanel
         this.backgroundColor = backgroundColor;
 
         imageChangeListener = (source, event) -> {
-            if (model == null) {
-                return;
-            }
-            if (source != model.getGlyph()) {
+            final var model = this.model;
+            if (model == null || source != model.getGlyph()) {
                 return;
             }
             // TODO: Repaint only changed region
@@ -65,11 +66,12 @@ public class GlyphView extends JPanel
     }
 
     public void addLines(Line... lines) {
-        this.lines.addAll(Arrays.stream(lines).toList());
+        this.lines.addAll(Arrays.stream(lines).filter(Objects::nonNull).toList());
     }
 
     @Override
     public void detach() {
+        final var model = this.model;
         if (model != null) {
             model.getGlyph().removeChangeListener(imageChangeListener);
         }
@@ -108,22 +110,28 @@ public class GlyphView extends JPanel
     }
 
     @Override
-    public void paintComponent(@Nullable Graphics graphics) {
-        final var g = (Graphics2D) graphics.create();
+    public void paintComponent(@Nullable final Graphics graphics) {
+        final var model = this.model;
+
+        if (graphics == null) {
+            return;
+        }
+
+        final var g2d = (Graphics2D) graphics.create();
         if (model != null) {
-            g.setRenderingHint(
+            g2d.setRenderingHint(
                     RenderingHints.KEY_INTERPOLATION,
                     RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR
             );
-            model.getGlyph().draw(g, 0, 0, getWidth(), getHeight());
-            drawShade(g);
-            drawOverlay(g);
-            drawLines(g);
+            model.getGlyph().draw(g2d, 0, 0, getWidth(), getHeight());
+            drawShade(g2d);
+            drawOverlay(g2d);
+            drawLines(g2d);
         } else {
-            g.setColor(backgroundColor);
-            g.fillRect(0, 0, getWidth(), getHeight());
+            g2d.setColor(backgroundColor);
+            g2d.fillRect(0, 0, getWidth(), getHeight());
         }
-        g.dispose();
+        g2d.dispose();
     }
 
     public void removeLines() {
@@ -153,16 +161,18 @@ public class GlyphView extends JPanel
             return;
         }
 
-        if (model != null) {
-            model.getGlyph().removeChangeListener(imageChangeListener);
+        final var oldValue = model;
+
+        if (oldValue != null) {
+            oldValue.getGlyph().removeChangeListener(imageChangeListener);
             fireChangeEvent(this, ViewChangeEvent.MODEL_UNLOADED);
         }
 
         this.model = value;
 
-        if (model != null) {
+        if (value != null) {
             if (listen) {
-                model.getGlyph().addChangeListener(imageChangeListener);
+                value.getGlyph().addChangeListener(imageChangeListener);
             }
             fireChangeEvent(this, ViewChangeEvent.MODEL_LOADED);
         }
@@ -192,6 +202,7 @@ public class GlyphView extends JPanel
     }
 
     private void autoSize() {
+        final var model = this.model;
         if (zoom > 0) {
             final var dimension = model != null
                     ? new Dimension(model.getGlyph().getWidth() * zoom, model.getGlyph().getHeight() * zoom)
@@ -205,7 +216,9 @@ public class GlyphView extends JPanel
     }
 
     private void drawLines(Graphics2D g) {
-        if (lines.isEmpty() | !showLines | model == null) {
+        final var model = this.model;
+
+        if (lines.isEmpty() || !showLines || model == null) {
             return;
         }
 
@@ -237,9 +250,12 @@ public class GlyphView extends JPanel
     }
 
     private void drawShade(Graphics2D g) {
+        final var model = this.model;
+
         if (model == null || model.getWidth() >= model.getGlyph().getWidth()) {
             return;
         }
+
         final var x = (int) Math
                 .round((((double) getWidth()) / model.getGlyph().getWidth()) * model.getWidth());
         g.setColor(SHADE);

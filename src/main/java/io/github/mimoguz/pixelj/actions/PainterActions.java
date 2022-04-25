@@ -4,6 +4,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
 
 import javax.swing.Action;
 import javax.swing.JToggleButton;
@@ -39,15 +40,15 @@ public class PainterActions {
 
     public PainterActions() {
         symmetryToggleAction = new ApplicationAction("symmetryToggleAction", (e, action) -> {
-            if (painter != null) {
-                painter.setSymmetrical(!painter.isSymmetrical());
+            ifPainterNotNull(p -> {
+                p.setSymmetrical(!p.isSymmetrical());
                 // Fix selected state if the action performed not because of a button press but
                 // its shortcut:
                 if (e.getSource() instanceof JToggleButton) {
                     return;
                 }
-                action.putValue(Action.SELECTED_KEY, painter.isSymmetrical());
-            }
+                action.putValue(Action.SELECTED_KEY, p.isSymmetrical());
+            });
         }).setTooltipKey("symmetryToggleActionTooltip")
                 .setIcon(Icons.SYMMETRY, null, null)
                 .setAccelerator(KeyEvent.VK_S, InputEvent.ALT_DOWN_MASK);
@@ -101,73 +102,55 @@ public class PainterActions {
                 .setAccelerator(KeyEvent.VK_V, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK);
 
         flipVerticallyAction = new ApplicationAction("flipVerticallyAction", (e, action) -> {
-            if (painter != null) {
-                painter.flipVertically();
-            }
+            ifPainterNotNull(p -> p.flipVertically());
         }).setTooltipKey("flipVerticallyActionTooltip")
                 .setIcon(Icons.FLIP_VERTICAL, null, null)
                 .setAccelerator(KeyEvent.VK_V, InputEvent.ALT_DOWN_MASK);
 
         flipHorizontallyAction = new ApplicationAction("flipHorizontallyAction", (e, action) -> {
-            if (painter != null) {
-                painter.flipHorizontally();
-            }
+            ifPainterNotNull(p -> p.flipHorizontally());
         }).setTooltipKey("flipHorizontallyActionTooltip")
                 .setIcon(Icons.FLIP_HORIZONTAL, null, null)
                 .setAccelerator(KeyEvent.VK_H, InputEvent.ALT_DOWN_MASK);
 
         rotateLeftAction = new ApplicationAction("rotateLeftAction", (e, action) -> {
-            if (painter != null) {
-                painter.rotateLeft();
-            }
+            ifPainterNotNull(p -> p.rotateLeft());
         }).setTooltipKey("rotateLeftActionTooltip")
                 .setIcon(Icons.ROTATE_LEFT, null, null)
                 .setAccelerator(KeyEvent.VK_L, InputEvent.ALT_DOWN_MASK);
 
         rotateRightAction = new ApplicationAction("rotateRightAction", (e, action) -> {
-            if (painter != null) {
-                painter.rotateRight();
-            }
+            ifPainterNotNull(p -> p.rotateRight());
         }).setTooltipKey("rotateRightActionTooltip")
                 .setIcon(Icons.ROTATE_RIGHT, null, null)
                 .setAccelerator(KeyEvent.VK_R, InputEvent.ALT_DOWN_MASK);
 
         moveLeftAction = new ApplicationAction("moveLeftAction", (e, action) -> {
-            if (painter != null) {
-                painter.moveOnePixelLeft();
-            }
+            ifPainterNotNull(p -> p.moveOnePixelLeft());
         }).setTooltipKey("moveLeftActionTooltip")
                 .setIcon(Icons.MOVE_LEFT, null, null)
                 .setAccelerator(KeyEvent.VK_LEFT, InputEvent.ALT_DOWN_MASK);
 
         moveRightAction = new ApplicationAction("moveRightAction", (e, action) -> {
-            if (painter != null) {
-                painter.moveOnePixelRight();
-            }
+            ifPainterNotNull(p -> p.moveOnePixelRight());
         }).setTooltipKey("moveRightActionTooltip")
                 .setIcon(Icons.MOVE_RIGHT, null, null)
                 .setAccelerator(KeyEvent.VK_RIGHT, InputEvent.ALT_DOWN_MASK);
 
         moveUpAction = new ApplicationAction("moveUpAction", (e, action) -> {
-            if (painter != null) {
-                painter.moveOnePixelUp();
-            }
+            ifPainterNotNull(p -> p.moveOnePixelUp());
         }).setTooltipKey("moveUpActionTooltip")
                 .setIcon(Icons.MOVE_UP, null, null)
                 .setAccelerator(KeyEvent.VK_UP, InputEvent.ALT_DOWN_MASK);
 
         moveDownAction = new ApplicationAction("moveDownAction", (e, action) -> {
-            if (painter != null) {
-                painter.moveOnePixelDown();
-            }
+            ifPainterNotNull(p -> p.moveOnePixelDown());
         }).setTooltipKey("moveDownActionTooltip")
                 .setIcon(Icons.MOVE_DOWN, null, null)
                 .setAccelerator(KeyEvent.VK_DOWN, InputEvent.ALT_DOWN_MASK);
 
         eraseAction = new ApplicationAction("eraseAction", (e, action) -> {
-            if (painter != null) {
-                painter.erase();
-            }
+            ifPainterNotNull(p -> p.erase());
         }).setTooltipKey("eraseActionTooltip")
                 .setIcon(Icons.ERASE, null, null)
                 .setAccelerator(KeyEvent.VK_X, InputEvent.ALT_DOWN_MASK);
@@ -215,5 +198,12 @@ public class PainterActions {
 
     public void setPainter(@Nullable GlyphPainter value) {
         painter = value;
+    }
+
+    private void ifPainterNotNull(Consumer<GlyphPainter> consumer) {
+        final var painter = this.painter;
+        if (painter != null) {
+            consumer.accept(painter);
+        }
     }
 }
