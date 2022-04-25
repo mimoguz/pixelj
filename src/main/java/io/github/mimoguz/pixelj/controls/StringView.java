@@ -9,8 +9,6 @@ import java.util.Collection;
 
 import javax.swing.JPanel;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import io.github.mimoguz.pixelj.graphics.AndComposite;
 import io.github.mimoguz.pixelj.models.CharacterModel;
 
@@ -18,7 +16,6 @@ public class StringView extends JPanel {
     private final Color backgroundColor;
     private final ArrayList<CharacterModel> characters = new ArrayList<>();
     private final AndComposite composite = new AndComposite();
-    @NonNull
     private Dimension minimumSize = new Dimension(16, 16);
     private int padding = 8;
     private final ArrayList<Integer> spaces = new ArrayList<>();

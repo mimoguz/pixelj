@@ -31,6 +31,8 @@ public class GlyphView extends JPanel
     public interface ViewChangeListener extends ChangeListener<GlyphView, ViewChangeEvent> {
     }
 
+    private static final long serialVersionUID = 7841183984464270304L;
+
     private static final Color SHADE = new Color(20, 0, 0, 0);
     private final Color backgroundColor;
     private final BinaryImage.ImageChangeListener imageChangeListener;
