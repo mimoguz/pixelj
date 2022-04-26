@@ -1,4 +1,4 @@
-package io.github.mimoguz.pixelj.views.charactersScreen;
+package io.github.mimoguz.pixelj.views.characters_screen;
 
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JComponent;

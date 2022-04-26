@@ -1,4 +1,4 @@
-package io.github.mimoguz.pixelj.views.previewScreen;
+package io.github.mimoguz.pixelj.views.preview_screen;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -20,10 +20,10 @@ import io.github.mimoguz.pixelj.views.shared.Dimensions;
 public class PreviewScreen extends JPanel implements Detachable {
     private static final long serialVersionUID = -4480174487039009081L;
 
-    private final PreviewScreenActions actions;
+    private final transient PreviewScreenActions actions;
     private final JButton clearButton;
-    private final ProjectModel project;
-    private final ProjectModel.ProjectChangeListener projectChangeListener;
+    private final transient ProjectModel project;
+    private final transient ProjectModel.ProjectChangeListener projectChangeListener;
     private final JButton refreshButton;
     private final JTextArea textInput;
 

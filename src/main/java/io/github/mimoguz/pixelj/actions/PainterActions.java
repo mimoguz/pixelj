@@ -11,6 +11,9 @@ import javax.swing.Action;
 import javax.swing.JToggleButton;
 
 import io.github.mimoguz.pixelj.controls.GlyphPainter;
+import io.github.mimoguz.pixelj.controls.painter.CanFlipImage;
+import io.github.mimoguz.pixelj.controls.painter.CanRotateImage;
+import io.github.mimoguz.pixelj.controls.painter.CanTranslateImage;
 import io.github.mimoguz.pixelj.controls.painter.Painter;
 import io.github.mimoguz.pixelj.resources.Icons;
 
@@ -37,17 +40,18 @@ public class PainterActions {
     private GlyphPainter painter;
 
     public PainterActions() {
-        symmetryToggleAction = new ApplicationAction("symmetryToggleAction", (e, action) -> {
-            ifPainterNotNull(p -> {
-                p.setSymmetrical(!p.isSymmetrical());
-                // Fix selected state if the action performed not because of a button press but
-                // its shortcut:
-                if (e.getSource() instanceof JToggleButton) {
-                    return;
-                }
-                action.putValue(Action.SELECTED_KEY, p.isSymmetrical());
-            });
-        }).setTooltipKey("symmetryToggleActionTooltip")
+        symmetryToggleAction = new ApplicationAction(
+                "symmetryToggleAction",
+                (e, action) -> ifPainterNotNull(p -> {
+                    p.setSymmetrical(!p.isSymmetrical());
+                    // Fix selected state if the action performed not because of a button press but
+                    // its shortcut:
+                    if (e.getSource() instanceof JToggleButton) {
+                        return;
+                    }
+                    action.putValue(Action.SELECTED_KEY, p.isSymmetrical());
+                })
+        ).setTooltipKey("symmetryToggleActionTooltip")
                 .setIcon(Icons.SYMMETRY, null, null)
                 .setAccelerator(KeyEvent.VK_S, InputEvent.ALT_DOWN_MASK);
 
@@ -99,57 +103,66 @@ public class PainterActions {
                 .setIcon(Icons.CLIPBOARD_IMPORT, null, null)
                 .setAccelerator(KeyEvent.VK_V, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK);
 
-        flipVerticallyAction = new ApplicationAction("flipVerticallyAction", (e, action) -> {
-            ifPainterNotNull(p -> p.flipVertically());
-        }).setTooltipKey("flipVerticallyActionTooltip")
+        flipVerticallyAction = new ApplicationAction(
+                "flipVerticallyAction",
+                (e, action) -> ifPainterNotNull(CanFlipImage::flipVertically)
+        ).setTooltipKey("flipVerticallyActionTooltip")
                 .setIcon(Icons.FLIP_VERTICAL, null, null)
                 .setAccelerator(KeyEvent.VK_V, InputEvent.ALT_DOWN_MASK);
 
-        flipHorizontallyAction = new ApplicationAction("flipHorizontallyAction", (e, action) -> {
-            ifPainterNotNull(p -> p.flipHorizontally());
-        }).setTooltipKey("flipHorizontallyActionTooltip")
+        flipHorizontallyAction = new ApplicationAction(
+                "flipHorizontallyAction",
+                (e, action) -> ifPainterNotNull(CanFlipImage::flipHorizontally)
+        ).setTooltipKey("flipHorizontallyActionTooltip")
                 .setIcon(Icons.FLIP_HORIZONTAL, null, null)
                 .setAccelerator(KeyEvent.VK_H, InputEvent.ALT_DOWN_MASK);
 
-        rotateLeftAction = new ApplicationAction("rotateLeftAction", (e, action) -> {
-            ifPainterNotNull(p -> p.rotateLeft());
-        }).setTooltipKey("rotateLeftActionTooltip")
+        rotateLeftAction = new ApplicationAction(
+                "rotateLeftAction",
+                (e, action) -> ifPainterNotNull(CanRotateImage::rotateLeft)
+        ).setTooltipKey("rotateLeftActionTooltip")
                 .setIcon(Icons.ROTATE_LEFT, null, null)
                 .setAccelerator(KeyEvent.VK_L, InputEvent.ALT_DOWN_MASK);
 
-        rotateRightAction = new ApplicationAction("rotateRightAction", (e, action) -> {
-            ifPainterNotNull(p -> p.rotateRight());
-        }).setTooltipKey("rotateRightActionTooltip")
+        rotateRightAction = new ApplicationAction(
+                "rotateRightAction",
+                (e, action) -> ifPainterNotNull(CanRotateImage::rotateRight)
+        ).setTooltipKey("rotateRightActionTooltip")
                 .setIcon(Icons.ROTATE_RIGHT, null, null)
                 .setAccelerator(KeyEvent.VK_R, InputEvent.ALT_DOWN_MASK);
 
-        moveLeftAction = new ApplicationAction("moveLeftAction", (e, action) -> {
-            ifPainterNotNull(p -> p.moveOnePixelLeft());
-        }).setTooltipKey("moveLeftActionTooltip")
+        moveLeftAction = new ApplicationAction(
+                "moveLeftAction",
+                (e, action) -> ifPainterNotNull(CanTranslateImage::moveOnePixelLeft)
+        ).setTooltipKey("moveLeftActionTooltip")
                 .setIcon(Icons.MOVE_LEFT, null, null)
                 .setAccelerator(KeyEvent.VK_LEFT, InputEvent.ALT_DOWN_MASK);
 
-        moveRightAction = new ApplicationAction("moveRightAction", (e, action) -> {
-            ifPainterNotNull(p -> p.moveOnePixelRight());
-        }).setTooltipKey("moveRightActionTooltip")
+        moveRightAction = new ApplicationAction(
+                "moveRightAction",
+                (e, action) -> ifPainterNotNull(CanTranslateImage::moveOnePixelRight)
+        ).setTooltipKey("moveRightActionTooltip")
                 .setIcon(Icons.MOVE_RIGHT, null, null)
                 .setAccelerator(KeyEvent.VK_RIGHT, InputEvent.ALT_DOWN_MASK);
 
-        moveUpAction = new ApplicationAction("moveUpAction", (e, action) -> {
-            ifPainterNotNull(p -> p.moveOnePixelUp());
-        }).setTooltipKey("moveUpActionTooltip")
+        moveUpAction = new ApplicationAction(
+                "moveUpAction",
+                (e, action) -> ifPainterNotNull(CanTranslateImage::moveOnePixelUp)
+        ).setTooltipKey("moveUpActionTooltip")
                 .setIcon(Icons.MOVE_UP, null, null)
                 .setAccelerator(KeyEvent.VK_UP, InputEvent.ALT_DOWN_MASK);
 
-        moveDownAction = new ApplicationAction("moveDownAction", (e, action) -> {
-            ifPainterNotNull(p -> p.moveOnePixelDown());
-        }).setTooltipKey("moveDownActionTooltip")
+        moveDownAction = new ApplicationAction(
+                "moveDownAction",
+                (e, action) -> ifPainterNotNull(CanTranslateImage::moveOnePixelDown)
+        ).setTooltipKey("moveDownActionTooltip")
                 .setIcon(Icons.MOVE_DOWN, null, null)
                 .setAccelerator(KeyEvent.VK_DOWN, InputEvent.ALT_DOWN_MASK);
 
-        eraseAction = new ApplicationAction("eraseAction", (e, action) -> {
-            ifPainterNotNull(p -> p.erase());
-        }).setTooltipKey("eraseActionTooltip")
+        eraseAction = new ApplicationAction(
+                "eraseAction",
+                (e, action) -> ifPainterNotNull(GlyphPainter::erase)
+        ).setTooltipKey("eraseActionTooltip")
                 .setIcon(Icons.ERASE, null, null)
                 .setAccelerator(KeyEvent.VK_X, InputEvent.ALT_DOWN_MASK);
 
@@ -177,6 +190,9 @@ public class PainterActions {
         symmetryToggleAction.putValue(Action.SELECTED_KEY, false);
     }
 
+    /**
+     * @param painter May be null
+     */
     public PainterActions(GlyphPainter painter) {
         this();
         this.painter = painter;
@@ -200,7 +216,6 @@ public class PainterActions {
     }
 
     private void ifPainterNotNull(Consumer<GlyphPainter> consumer) {
-        final var painter = this.painter;
         if (painter != null) {
             consumer.accept(painter);
         }

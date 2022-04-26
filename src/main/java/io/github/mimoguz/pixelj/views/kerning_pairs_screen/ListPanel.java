@@ -1,4 +1,4 @@
-package io.github.mimoguz.pixelj.views.kerningPairsScreen;
+package io.github.mimoguz.pixelj.views.kerning_pairs_screen;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -36,7 +36,7 @@ import io.github.mimoguz.pixelj.views.shared.Dimensions;
 public class ListPanel extends JPanel implements Detachable {
     private static final long serialVersionUID = -3269592942325114705L;
 
-    private final KerningPairListActions actions;
+    private final transient KerningPairListActions actions;
     private final JButton addButton;
     private final SearchableComboBox<String> leftFilterBox;
     private final JList<KerningPairModel> list;
@@ -46,7 +46,6 @@ public class ListPanel extends JPanel implements Detachable {
     public ListPanel(
             final KerningPairListModel listModel,
             final ListSelectionModel selectionModel,
-            final Metrics metrics,
             final JComponent root
     ) {
         final var res = Resources.get();

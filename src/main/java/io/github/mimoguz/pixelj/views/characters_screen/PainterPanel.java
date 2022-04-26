@@ -1,4 +1,4 @@
-package io.github.mimoguz.pixelj.views.charactersScreen;
+package io.github.mimoguz.pixelj.views.characters_screen;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -35,10 +35,10 @@ import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 public class PainterPanel extends JPanel implements Detachable {
     private static final int INITIAL_ZOOM = 12;
-
     private static final int MAX_UNDO = 64;
     private static final long serialVersionUID = -2196271415900003483L;
-    private final PainterActions actions;
+
+    private final transient PainterActions actions;
     private final GlyphPainter painter;
     private final JLabel title;
     private final ArrayList<Snapshot> undoBuffer = new ArrayList<>();
@@ -131,14 +131,17 @@ public class PainterPanel extends JPanel implements Detachable {
         final var moveFocus = new MouseListener() {
             @Override
             public void mouseClicked(final MouseEvent e) {
+                // Ignored
             }
 
             @Override
             public void mouseEntered(final MouseEvent e) {
+                // Ignored
             }
 
             @Override
             public void mouseExited(final MouseEvent e) {
+                // Ignored
             }
 
             @Override
@@ -148,6 +151,7 @@ public class PainterPanel extends JPanel implements Detachable {
 
             @Override
             public void mouseReleased(final MouseEvent e) {
+                // Ignored
             }
         };
 

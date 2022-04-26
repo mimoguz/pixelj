@@ -1,4 +1,4 @@
-package io.github.mimoguz.pixelj.views.charactersScreen;
+package io.github.mimoguz.pixelj.views.characters_screen;
 
 import java.awt.Dimension;
 import java.util.List;

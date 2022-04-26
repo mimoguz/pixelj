@@ -15,7 +15,6 @@ public class ApplicationAction extends AbstractAction {
     private static final long serialVersionUID = 5365300941571995035L;
 
     private final transient BiConsumer<ActionEvent, Action> consumer;
-
     private final String key;
 
     /**

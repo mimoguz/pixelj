@@ -1,4 +1,4 @@
-package io.github.mimoguz.pixelj.views.kerningPairsScreen;
+package io.github.mimoguz.pixelj.views.kerning_pairs_screen;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -30,7 +30,7 @@ public class EditorPanel extends JPanel implements Detachable {
     private static final int INITIAL_ZOOM = 4;
     private static final long serialVersionUID = -7463105184228298933L;
 
-    private KerningPairModel model;
+    private transient KerningPairModel model;
     private final StringView preview;
     private final JLabel pxLabel;
     private final ArrayList<Integer> spaces = new ArrayList<>(java.util.List.of(0));
@@ -98,14 +98,17 @@ public class EditorPanel extends JPanel implements Detachable {
         final var moveFocus = new MouseListener() {
             @Override
             public void mouseClicked(final MouseEvent e) {
+                // Ignored
             }
 
             @Override
             public void mouseEntered(final MouseEvent e) {
+                // Ignored
             }
 
             @Override
             public void mouseExited(final MouseEvent e) {
+                // Ignored
             }
 
             @Override
@@ -115,6 +118,7 @@ public class EditorPanel extends JPanel implements Detachable {
 
             @Override
             public void mouseReleased(final MouseEvent e) {
+                // Ignored
             }
         };
         scrollPanel.addMouseListener(moveFocus);

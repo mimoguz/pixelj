@@ -1,4 +1,4 @@
-package io.github.mimoguz.pixelj.views.kerningPairsScreen;
+package io.github.mimoguz.pixelj.views.kerning_pairs_screen;
 
 import io.github.mimoguz.pixelj.models.KerningPairModel;
 import io.github.mimoguz.pixelj.resources.Resources;
