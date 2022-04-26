@@ -1,15 +1,20 @@
 package io.github.mimoguz.pixelj.views.shared;
 
+import java.awt.Color;
+import java.awt.Dimension;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
 import io.github.mimoguz.pixelj.controls.GlyphView;
 import io.github.mimoguz.pixelj.models.CharacterModel;
 import io.github.mimoguz.pixelj.resources.Resources;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.*;
-import java.awt.*;
-
-@ParametersAreNonnullByDefault
 public class CharacterCell extends JPanel {
+    private static final long serialVersionUID = 5319221937480404986L;
+
     private final JLabel letter = new JLabel(" ");
     private final int maxPictureSize;
     private final GlyphView picture = new GlyphView(Resources.get().colors.disabledIcon());
@@ -51,10 +56,12 @@ public class CharacterCell extends JPanel {
         if (pictureSize > maxPictureSize) {
             picture.setZoom(0);
             final var scale = ((double) maxPictureSize) / pictureSize;
-            picture.setSize(new Dimension(
-                    (int) Math.round(pictureWidth * scale),
-                    (int) Math.round(pictureHeight * scale)
-            ));
+            picture.setSize(
+                    new Dimension(
+                            (int) Math.round(pictureWidth * scale),
+                            (int) Math.round(pictureHeight * scale)
+                    )
+            );
         } else {
             picture.setZoom(1);
         }

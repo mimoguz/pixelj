@@ -1,5 +1,15 @@
 package io.github.mimoguz.pixelj.views.previewScreen;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+
 import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.PreviewScreenActions;
 import io.github.mimoguz.pixelj.models.ProjectModel;
@@ -7,15 +17,9 @@ import io.github.mimoguz.pixelj.util.Detachable;
 import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-
-@ParametersAreNonnullByDefault
 public class PreviewScreen extends JPanel implements Detachable {
+    private static final long serialVersionUID = -4480174487039009081L;
+
     private final PreviewScreenActions actions;
     private final JButton clearButton;
     private final ProjectModel project;
@@ -42,7 +46,8 @@ public class PreviewScreen extends JPanel implements Detachable {
 
         projectChangeListener = (sender, event) -> {
             if (event instanceof ProjectModel.ProjectChangeEvent.MetricsChanged metricsChanged) {
-                actions.refreshAction.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, ""));
+                actions.refreshAction
+                        .actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, ""));
             }
         };
 
@@ -84,17 +89,14 @@ public class PreviewScreen extends JPanel implements Detachable {
         project.removeChangeListener(projectChangeListener);
     }
 
-    @NotNull
     public JButton getClearButton() {
         return clearButton;
     }
 
-    @NotNull
     public JButton getRefreshButton() {
         return refreshButton;
     }
 
-    @NotNull
     public JTextArea getTextInput() {
         return textInput;
     }

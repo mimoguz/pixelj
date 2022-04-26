@@ -1,5 +1,26 @@
 package io.github.mimoguz.pixelj.views.kerningPairsScreen;
 
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.util.Objects;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+
+import com.formdev.flatlaf.FlatClientProperties;
+
 import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.KerningPairListActions;
 import io.github.mimoguz.pixelj.controls.SearchableComboBox;
@@ -12,18 +33,9 @@ import io.github.mimoguz.pixelj.views.shared.Borders;
 import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
-import com.formdev.flatlaf.FlatClientProperties;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.*;
-import java.awt.*;
-import java.util.Objects;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-
-@ParametersAreNonnullByDefault
 public class ListPanel extends JPanel implements Detachable {
+    private static final long serialVersionUID = -3269592942325114705L;
+
     private final KerningPairListActions actions;
     private final JButton addButton;
     private final SearchableComboBox<String> leftFilterBox;
@@ -107,23 +119,23 @@ public class ListPanel extends JPanel implements Detachable {
         list.setModel(null);
     }
 
-    public @NotNull KerningPairListActions getActions() {
+    public KerningPairListActions getActions() {
         return actions;
     }
 
-    public @NotNull JButton getAddButton() {
+    public JButton getAddButton() {
         return addButton;
     }
 
-    public @NotNull SearchableComboBox<String> getLeftFilterBox() {
+    public SearchableComboBox<String> getLeftFilterBox() {
         return leftFilterBox;
     }
 
-    public @NotNull JList<KerningPairModel> getList() {
+    public JList<KerningPairModel> getList() {
         return list;
     }
 
-    public @NotNull JButton getRemoveButton() {
+    public JButton getRemoveButton() {
         return removeButton;
     }
 
@@ -141,9 +153,11 @@ public class ListPanel extends JPanel implements Detachable {
             SearchableComboBox<String> box,
             Function<KerningPairListModel, BiConsumer<Integer, Integer>> setter
     ) {
-        box.setModel(new DefaultComboBoxModel<>(
-                new String[]{Resources.get().getString("showAll"), "60-70", "71-80", "81-90"}
-        ));
+        box.setModel(
+                new DefaultComboBoxModel<>(
+                        new String[] { Resources.get().getString("showAll"), "60-70", "71-80", "81-90" }
+                )
+        );
         box.setMaximumSize(Dimensions.maximumComboBoxSize);
         box.setMinimumSize(Dimensions.minimumComboBoxSize);
         box.addActionListener(event -> {

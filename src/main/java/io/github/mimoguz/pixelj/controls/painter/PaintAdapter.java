@@ -6,8 +6,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import io.github.mimoguz.pixelj.graphics.BinaryImage;
 
 /**
@@ -17,11 +15,11 @@ public class PaintAdapter implements MouseListener, MouseMotionListener {
     private int extent = 0;
     private boolean fill = false;
     private final Point lastPixel = new Point(-1, -1);
-    @NonNull
+
     private final Painter painter;
     private boolean symmetrical = false;
 
-    public PaintAdapter(@NonNull Painter painter) {
+    public PaintAdapter(Painter painter) {
         this.painter = painter;
     }
 
@@ -110,7 +108,7 @@ public class PaintAdapter implements MouseListener, MouseMotionListener {
         symmetrical = value;
     }
 
-    private Point getPixelCoordinates(@NonNull final BinaryImage image, @NonNull final MouseEvent e) {
+    private Point getPixelCoordinates(final BinaryImage image, final MouseEvent e) {
         final var cellWidth = painter.getWidth() / image.getWidth();
         final var cellHeight = painter.getHeight() / image.getHeight();
         final var x = e.getX() / cellWidth;
@@ -126,7 +124,7 @@ public class PaintAdapter implements MouseListener, MouseMotionListener {
         lastPixel.setLocation(-1, -1);
     }
 
-    private void setPixel(@NonNull BinaryImage image) {
+    private void setPixel(BinaryImage image) {
         image.set(lastPixel.x, lastPixel.y, fill);
         if (symmetrical && lastPixel.x < extent) {
             final var mirrorX = extent - lastPixel.x - 1;

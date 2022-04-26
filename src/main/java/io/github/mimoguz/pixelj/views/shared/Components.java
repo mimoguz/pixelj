@@ -1,11 +1,11 @@
 package io.github.mimoguz.pixelj.views.shared;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.*;
-import javax.swing.border.Border;
-import java.awt.*;
+import java.awt.Dimension;
 
-@ParametersAreNonnullByDefault
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.border.Border;
+
 public class Components {
     public static void addInnerBorder(final JComponent component, final Border border) {
         component.setBorder(BorderFactory.createCompoundBorder(component.getBorder(), border));

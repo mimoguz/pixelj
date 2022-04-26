@@ -16,8 +16,6 @@ import java.util.Arrays;
 
 import javax.swing.event.EventListenerList;
 
-import org.eclipse.jdt.annotation.Nullable;
-
 import io.github.mimoguz.pixelj.util.ChangeListener;
 import io.github.mimoguz.pixelj.util.Changeable;
 
@@ -66,7 +64,6 @@ public class BinaryImage extends Image
 
     protected final BufferedImage image;
 
-    @SuppressWarnings("null")
     private BinaryImage(final int width, final int height, final BufferedImage image) {
         this.image = image;
         raster = image.getRaster();
@@ -142,7 +139,7 @@ public class BinaryImage extends Image
     }
 
     @Override
-    public int getHeight(@Nullable final ImageObserver observer) {
+    public int getHeight(final ImageObserver observer) {
         return image.getHeight(observer);
     }
 
@@ -157,8 +154,8 @@ public class BinaryImage extends Image
     }
 
     @Override
-    @Nullable
-    public Object getProperty(final String name, @Nullable final ImageObserver observer) {
+
+    public Object getProperty(final String name, final ImageObserver observer) {
         return image.getProperty(name, observer);
     }
 
@@ -191,7 +188,7 @@ public class BinaryImage extends Image
     }
 
     @Override
-    public int getWidth(@Nullable final ImageObserver observer) {
+    public int getWidth(final ImageObserver observer) {
         return image.getWidth(observer);
     }
 

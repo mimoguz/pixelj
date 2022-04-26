@@ -1,18 +1,19 @@
 package io.github.mimoguz.pixelj.views.kerningPairsScreen;
 
+import javax.swing.DefaultListSelectionModel;
+import javax.swing.JComponent;
+import javax.swing.JSplitPane;
+import javax.swing.ListSelectionModel;
+
 import io.github.mimoguz.pixelj.models.KerningPairListModel;
 import io.github.mimoguz.pixelj.models.Metrics;
 import io.github.mimoguz.pixelj.models.ProjectModel;
 import io.github.mimoguz.pixelj.util.Detachable;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.*;
-
-@ParametersAreNonnullByDefault
 public class KerningPairsScreen extends JSplitPane implements Detachable {
+    private static final long serialVersionUID = -8264436768125439149L;
+
     private final EditorPanel editorPanel;
     private final KerningPairListModel listModel;
     private final ListPanel listPanel;
@@ -29,8 +30,10 @@ public class KerningPairsScreen extends JSplitPane implements Detachable {
 
         // Connect the listModel to the editor
         selectionModel.addListSelectionListener(e -> {
-            if (selectionModel.getMinSelectionIndex() == selectionModel.getMaxSelectionIndex()
-                    && selectionModel.getMinSelectionIndex() >= 0) {
+            if (
+                selectionModel.getMinSelectionIndex() == selectionModel.getMaxSelectionIndex()
+                        && selectionModel.getMinSelectionIndex() >= 0
+            ) {
                 editorPanel.setModel(listModel.getElementAt(selectionModel.getMinSelectionIndex()));
             } else {
                 editorPanel.setModel(null);
@@ -51,12 +54,10 @@ public class KerningPairsScreen extends JSplitPane implements Detachable {
         editorPanel.detach();
     }
 
-    @NotNull
     public EditorPanel getEditorPanel() {
         return editorPanel;
     }
 
-    @NotNull
     public ListPanel getListPanel() {
         return listPanel;
     }

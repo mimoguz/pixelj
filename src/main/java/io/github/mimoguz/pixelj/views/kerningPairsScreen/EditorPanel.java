@@ -1,5 +1,23 @@
 package io.github.mimoguz.pixelj.views.kerningPairsScreen;
 
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+
+import com.formdev.flatlaf.FlatClientProperties;
+
 import io.github.mimoguz.pixelj.controls.StringView;
 import io.github.mimoguz.pixelj.models.KerningPairModel;
 import io.github.mimoguz.pixelj.resources.Resources;
@@ -8,28 +26,19 @@ import io.github.mimoguz.pixelj.views.shared.Borders;
 import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
-import com.formdev.flatlaf.FlatClientProperties;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.ArrayList;
-
 public class EditorPanel extends JPanel implements Detachable {
     private static final int INITIAL_ZOOM = 4;
+    private static final long serialVersionUID = -7463105184228298933L;
+
+    private KerningPairModel model;
     private final StringView preview;
     private final JLabel pxLabel;
     private final ArrayList<Integer> spaces = new ArrayList<>(java.util.List.of(0));
+    private int spacing;
     private final JLabel spinnerLabel;
     private final JLabel title;
     private final JSpinner valueSpinner;
     private final JSlider zoomSlider;
-    @Nullable
-    private KerningPairModel model;
-    private int spacing;
 
     public EditorPanel() {
         final var res = Resources.get();
@@ -46,7 +55,6 @@ public class EditorPanel extends JPanel implements Detachable {
                 preview.setZoom(zoomSlider.getValue());
             }
         });
-
 
         title = new JLabel(" ");
         title.putClientProperty(FlatClientProperties.STYLE_CLASS, "h4");
@@ -137,12 +145,10 @@ public class EditorPanel extends JPanel implements Detachable {
         setModel(null);
     }
 
-    @NotNull
     public StringView getPreview() {
         return preview;
     }
 
-    @NotNull
     public JLabel getPxLabel() {
         return pxLabel;
     }
@@ -151,37 +157,22 @@ public class EditorPanel extends JPanel implements Detachable {
         return spacing;
     }
 
-    public void setSpacing(final int value) {
-        spacing = value;
-        if (model == null) {
-            return;
-        }
-        valueSpinner.setModel(new SpinnerNumberModel(
-                model.getKerningValue(),
-                -model.getLeft().getWidth() - spacing,
-                model.getRight().getWidth(),
-                1
-        ));
-        spaces.set(0, model.getKerningValue() + spacing);
-        preview.setSpaces(spaces);
-    }
-
-    @NotNull
     public JLabel getTitle() {
         return title;
     }
 
-    @NotNull
     public JSpinner getValueSpinner() {
         return valueSpinner;
     }
 
-    @NotNull
     public JSlider getZoomSlider() {
         return zoomSlider;
     }
 
-    public void setModel(@Nullable final KerningPairModel value) {
+    /**
+     * @param value May be null.
+     */
+    public void setModel(final KerningPairModel value) {
         if (model == value) {
             return;
         }
@@ -199,16 +190,34 @@ public class EditorPanel extends JPanel implements Detachable {
             spinnerLabel.setEnabled(true);
             pxLabel.setEnabled(true);
             title.setText(
-                    Character.toString(model.getLeft().getCodePoint())
-                            + " + "
+                    Character.toString(model.getLeft().getCodePoint()) + " + "
                             + Character.toString(model.getRight().getCodePoint())
             );
-            valueSpinner.setModel(new SpinnerNumberModel(
-                    model.getKerningValue(),
-                    -model.getLeft().getWidth() - spacing,
-                    model.getRight().getWidth(),
-                    1
-            ));
+            valueSpinner.setModel(
+                    new SpinnerNumberModel(
+                            model.getKerningValue(),
+                            -model.getLeft().getWidth() - spacing,
+                            model.getRight().getWidth(),
+                            1
+                    )
+            );
         }
+    }
+
+    public void setSpacing(final int value) {
+        spacing = value;
+        if (model == null) {
+            return;
+        }
+        valueSpinner.setModel(
+                new SpinnerNumberModel(
+                        model.getKerningValue(),
+                        -model.getLeft().getWidth() - spacing,
+                        model.getRight().getWidth(),
+                        1
+                )
+        );
+        spaces.set(0, model.getKerningValue() + spacing);
+        preview.setSpaces(spaces);
     }
 }
