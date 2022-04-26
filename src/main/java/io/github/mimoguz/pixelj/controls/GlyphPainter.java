@@ -3,9 +3,6 @@ package io.github.mimoguz.pixelj.controls;
 import java.awt.Color;
 import java.util.function.Consumer;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
-
 import io.github.mimoguz.pixelj.controls.painter.CanFlipImage;
 import io.github.mimoguz.pixelj.controls.painter.CanRotateImage;
 import io.github.mimoguz.pixelj.controls.painter.CanTranslateImage;
@@ -14,7 +11,6 @@ import io.github.mimoguz.pixelj.controls.painter.Painter;
 import io.github.mimoguz.pixelj.graphics.Snapshot;
 import io.github.mimoguz.pixelj.models.CharacterModel;
 
-@NonNullByDefault
 public class GlyphPainter extends GlyphView
         implements
         Painter,
@@ -25,7 +21,6 @@ public class GlyphPainter extends GlyphView
     private static final long serialVersionUID = 2382126540536314203L;
 
     private final PaintAdapter paintAdapter;
-
     private Consumer<Snapshot> snapshotConsumer = snapshot -> {
     };
 
@@ -48,7 +43,7 @@ public class GlyphPainter extends GlyphView
     }
 
     @Override
-    public void setModel(@Nullable final CharacterModel value) {
+    public void setModel(final CharacterModel value) {
         if (value != null) {
             paintAdapter.setExtent(value.getWidth());
         }

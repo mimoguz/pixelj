@@ -8,9 +8,6 @@ import java.util.List;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
-import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
-
 public class CharacterListModel extends DisplayListModel<CharacterModel> {
     // Removes the kerning pairs which depend on the deleted characters.
     private final ListDataListener kerningPairRemover = new ListDataListener() {
@@ -29,26 +26,24 @@ public class CharacterListModel extends DisplayListModel<CharacterModel> {
         }
 
         private void sync(final ListDataEvent e) {
-            final var paired = pairedKerningPairListModel;
 
-            if (paired == null) {
+            if (pairedKerningPairListModel == null) {
                 return;
             }
 
             // Kerning pairs which depend on non-existing characters
             final var marked = new ArrayList<KerningPairModel>();
-            for (var index = 0; index < paired.getSize(); index++) {
-                final var model = paired.getElementAt(index);
+            for (var index = 0; index < pairedKerningPairListModel.getSize(); index++) {
+                final var model = pairedKerningPairListModel.getElementAt(index);
                 if (!sourceContains(model.getLeft()) || !sourceContains(model.getRight())) {
                     marked.add(model);
                 }
             }
 
-            paired.removeAll(marked);
+            pairedKerningPairListModel.removeAll(marked);
         }
     };
 
-    @Nullable
     private KerningPairListModel pairedKerningPairListModel;
 
     public CharacterListModel() {
@@ -69,8 +64,7 @@ public class CharacterListModel extends DisplayListModel<CharacterModel> {
         return paired.countWhere(p -> p.getLeft().equals(model) || p.getRight().equals(model));
     }
 
-    @NonNull
-    public List<@NonNull KerningPairModel> findDependent(final CharacterModel model) {
+    public List<KerningPairModel> findDependent(final CharacterModel model) {
         final var paired = pairedKerningPairListModel;
         if (paired == null) {
             return Collections.emptyList();
@@ -78,7 +72,14 @@ public class CharacterListModel extends DisplayListModel<CharacterModel> {
         return paired.find(p -> p.getLeft().equals(model) || p.getRight().equals(model));
     }
 
-    public void pair(@Nullable final KerningPairListModel kerningPairListModel) {
+    /**
+     * To prevent orphan characters in the kerning pair list, the character list and
+     * the kerninig pair list can be paired. Any kerning pairs that contain a
+     * deleted character will be deleted from the kerning pair list as well.
+     *
+     * @param kerningPairListModel May be null
+     */
+    public void pair(final KerningPairListModel kerningPairListModel) {
         pairedKerningPairListModel = kerningPairListModel;
     }
 

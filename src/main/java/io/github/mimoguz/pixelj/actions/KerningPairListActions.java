@@ -3,19 +3,16 @@ package io.github.mimoguz.pixelj.actions;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.Action;
 import javax.swing.ListSelectionModel;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-
 import io.github.mimoguz.pixelj.models.KerningPairListModel;
 
-@NonNullByDefault
 public class KerningPairListActions {
-    public final Collection<ApplicationAction> all = new ArrayList<>();
+    public final Collection<ApplicationAction> all;
     public final ApplicationAction showAddDialogAction;
     public final ApplicationAction showRemoveDialogAction;
 
@@ -38,8 +35,8 @@ public class KerningPairListActions {
                 .setTextKey("showRemoveDialogAction")
                 .setAccelerator(KeyEvent.VK_MINUS, InputEvent.ALT_DOWN_MASK);
 
-        all.add(showAddDialogAction);
-        all.add(showRemoveDialogAction);
+        all = java.util.Collections
+                .unmodifiableCollection(List.of(showAddDialogAction, showRemoveDialogAction));
     }
 
     private void showAddDialog(final ActionEvent event, final Action action) {

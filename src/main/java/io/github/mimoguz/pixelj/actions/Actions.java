@@ -6,9 +6,6 @@ import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-
-@NonNullByDefault
 public class Actions {
     public static void registerShortcuts(Collection<ApplicationAction> actions, JComponent root) {
         for (var action : actions) {

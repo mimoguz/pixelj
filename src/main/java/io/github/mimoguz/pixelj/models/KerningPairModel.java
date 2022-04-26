@@ -1,7 +1,5 @@
 package io.github.mimoguz.pixelj.models;
 
-import org.eclipse.jdt.annotation.Nullable;
-
 public class KerningPairModel extends MutableIntValueModel implements Comparable<KerningPairModel> {
     private int kerningValue;
     private final CharacterModel left;
@@ -24,7 +22,7 @@ public class KerningPairModel extends MutableIntValueModel implements Comparable
     }
 
     @Override
-    public boolean equals(@Nullable Object that) {
+    public boolean equals(Object that) {
         if (this == that) {
             return true;
         }
@@ -49,7 +47,7 @@ public class KerningPairModel extends MutableIntValueModel implements Comparable
     @Override
     public int hashCode() {
         // >In the Unicode Standard, the codespace consists of the integers from 0 to
-        // 10FFFF<
+        // 10FFFF.
         // 10FFFF occupies 21 bits, there shouldn't be any collisions here.
         return (left.getCodePoint() << 24) | right.getCodePoint();
     }

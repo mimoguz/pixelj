@@ -14,8 +14,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.PlainDocument;
 
-import org.eclipse.jdt.annotation.Nullable;
-
 import com.formdev.flatlaf.FlatClientProperties;
 
 /**
@@ -155,7 +153,6 @@ class SearchableDocument<E> extends PlainDocument {
         editor.moveCaretPosition(offset);
     }
 
-    @Nullable
     private Object lookupItem(final String pattern) {
         final var pat = pattern.toLowerCase(Locale.US);
         for (var index = 0; index < model.getSize(); index++) {
@@ -178,7 +175,7 @@ class SearchableDocument<E> extends PlainDocument {
         selecting = false;
     }
 
-    private void setText(@Nullable final String text) {
+    private void setText(final String text) {
         try {
             super.remove(0, getLength());
             super.insertString(0, text, null);

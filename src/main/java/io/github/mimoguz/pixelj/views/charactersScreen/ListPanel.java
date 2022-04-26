@@ -1,5 +1,21 @@
 package io.github.mimoguz.pixelj.views.charactersScreen;
 
+import java.awt.Dimension;
+import java.util.List;
+import java.util.Objects;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+
+import com.formdev.flatlaf.FlatClientProperties;
+
 import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.CharacterListActions;
 import io.github.mimoguz.pixelj.controls.SearchableComboBox;
@@ -12,17 +28,9 @@ import io.github.mimoguz.pixelj.views.shared.Borders;
 import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
-import com.formdev.flatlaf.FlatClientProperties;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.*;
-import java.awt.*;
-import java.util.List;
-import java.util.Objects;
-
-@ParametersAreNonnullByDefault
 public class ListPanel extends JPanel implements Detachable {
+    private static final long serialVersionUID = 7598472980158047622L;
+
     private final CharacterListActions actions;
     private final JButton addButton;
     private final SearchableComboBox<String> filterBox;
@@ -107,27 +115,22 @@ public class ListPanel extends JPanel implements Detachable {
         list.setModel(null);
     }
 
-    @NotNull
     public CharacterListActions getActions() {
         return actions;
     }
 
-    @NotNull
     public JButton getAddButton() {
         return addButton;
     }
 
-    @NotNull
     public SearchableComboBox<String> getFilterBox() {
         return filterBox;
     }
 
-    @NotNull
     public JList<CharacterModel> getList() {
         return list;
     }
 
-    @NotNull
     public JButton getRemoveButton() {
         return removeButton;
     }

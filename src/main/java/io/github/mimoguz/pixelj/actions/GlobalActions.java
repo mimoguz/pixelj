@@ -3,19 +3,15 @@ package io.github.mimoguz.pixelj.actions;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import javax.swing.Action;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-
 import io.github.mimoguz.pixelj.resources.Icons;
 
-@NonNullByDefault
 public class GlobalActions {
-    public final Collection<ApplicationAction> all = new ArrayList<>();
+    public final Collection<ApplicationAction> all;
     public final ApplicationAction exportAction;
     public final ApplicationAction newProjectAction;
     public final ApplicationAction openProjectAction;
@@ -68,7 +64,7 @@ public class GlobalActions {
                 .setIcon(Icons.SETTINGS, null, null)
                 .setAccelerator(KeyEvent.VK_PERIOD, InputEvent.CTRL_DOWN_MASK);
 
-        all.addAll(
+        all = java.util.Collections.unmodifiableCollection(
                 List.of(
                         exportAction,
                         newProjectAction,

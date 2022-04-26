@@ -10,15 +10,10 @@ import java.util.function.Consumer;
 import javax.swing.Action;
 import javax.swing.JToggleButton;
 
-import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
-
 import io.github.mimoguz.pixelj.controls.GlyphPainter;
 import io.github.mimoguz.pixelj.controls.painter.Painter;
 import io.github.mimoguz.pixelj.resources.Icons;
 
-@NonNullByDefault
 public class PainterActions {
     public final Collection<ApplicationAction> all = new ArrayList<>();
     public final ApplicationAction clipboardCopyAction;
@@ -39,7 +34,6 @@ public class PainterActions {
     public final ApplicationAction symmetryToggleAction;
 
     private boolean enabled = true;
-    @Nullable
     private GlyphPainter painter;
 
     public PainterActions() {
@@ -188,7 +182,6 @@ public class PainterActions {
         this.painter = painter;
     }
 
-    @Nullable
     public Painter getPainter() {
         return painter;
     }
@@ -202,11 +195,11 @@ public class PainterActions {
         Actions.setEnabled(this.all, enabled);
     }
 
-    public void setPainter(@Nullable GlyphPainter value) {
+    public void setPainter(GlyphPainter value) {
         painter = value;
     }
 
-    private void ifPainterNotNull(Consumer<@NonNull GlyphPainter> consumer) {
+    private void ifPainterNotNull(Consumer<GlyphPainter> consumer) {
         final var painter = this.painter;
         if (painter != null) {
             consumer.accept(painter);

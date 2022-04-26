@@ -12,15 +12,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.text.BadLocationException;
 
-import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.NonNullByDefault;
-
 import io.github.mimoguz.pixelj.controls.StringView;
 import io.github.mimoguz.pixelj.models.CharacterModel;
 import io.github.mimoguz.pixelj.models.ProjectModel;
 import io.github.mimoguz.pixelj.resources.Resources;
 
-@NonNullByDefault
 public class PreviewScreenActions {
     public final Collection<ApplicationAction> all = new ArrayList<>();
     public final ApplicationAction clearAction;
@@ -62,7 +58,7 @@ public class PreviewScreenActions {
                 .mapToObj(codePoint -> characters.findFirst(chr -> chr.getCodePoint() == codePoint));
         // I'm doing this instead of just using filter(Objects::nonNull).toList(),
         // because I need to conform @NonNull CharacterModel constraint.
-        final var result = new ArrayList<@NonNull CharacterModel>();
+        final var result = new ArrayList<CharacterModel>();
         chars.forEach(chr -> {
             if (chr != null) {
                 result.add(chr);

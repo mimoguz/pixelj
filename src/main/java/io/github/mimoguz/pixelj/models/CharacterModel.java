@@ -1,7 +1,5 @@
 package io.github.mimoguz.pixelj.models;
 
-import org.eclipse.jdt.annotation.Nullable;
-
 import io.github.mimoguz.pixelj.graphics.BinaryImage;
 
 public class CharacterModel extends MutableIntValueModel implements Comparable<CharacterModel> {
@@ -21,7 +19,7 @@ public class CharacterModel extends MutableIntValueModel implements Comparable<C
     }
 
     @Override
-    public boolean equals(@Nullable final Object that) {
+    public boolean equals(final Object that) {
         if (this == that) {
             return true;
         }

@@ -12,16 +12,12 @@ import java.util.Arrays;
 import javax.swing.JPanel;
 import javax.swing.event.EventListenerList;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
-
 import io.github.mimoguz.pixelj.graphics.BinaryImage;
 import io.github.mimoguz.pixelj.models.CharacterModel;
 import io.github.mimoguz.pixelj.util.ChangeListener;
 import io.github.mimoguz.pixelj.util.Changeable;
 import io.github.mimoguz.pixelj.util.Detachable;
 
-@NonNullByDefault
 public class GlyphView extends JPanel
         implements
         Changeable<GlyphView, GlyphView.ViewChangeEvent, GlyphView.ViewChangeListener>,
@@ -41,15 +37,12 @@ public class GlyphView extends JPanel
     private final BinaryImage.ImageChangeListener imageChangeListener;
     private final ArrayList<Line> lines = new ArrayList<>();
     private final EventListenerList listeners = new EventListenerList();
-    @Nullable
+    /** May be null; */
     private CharacterModel model;
-    @Nullable
+    /** May be null; */
     private Image overlay;
-
     private boolean showLines = false;
-
     private boolean showOverlay = false;
-
     private int zoom = 1;
 
     public GlyphView(Color backgroundColor) {
@@ -92,12 +85,16 @@ public class GlyphView extends JPanel
         return listeners;
     }
 
-    @Nullable
+    /**
+     * @return Character model or null
+     */
     public CharacterModel getModel() {
         return model;
     }
 
-    @Nullable
+    /**
+     * @return Overlay image or null
+     */
     public Image getOverlay() {
         return overlay;
     }
@@ -115,13 +112,7 @@ public class GlyphView extends JPanel
     }
 
     @Override
-    public void paintComponent(@Nullable final Graphics graphics) {
-        final var model = this.model;
-
-        if (graphics == null) {
-            return;
-        }
-
+    public void paintComponent(final Graphics graphics) {
         final var g2d = (Graphics2D) graphics.create();
         if (model != null) {
             g2d.setRenderingHint(
@@ -157,19 +148,24 @@ public class GlyphView extends JPanel
         repaint();
     }
 
-    public void setModel(@Nullable CharacterModel value) {
+    /**
+     * @param value May be null.
+     */
+    public void setModel(final CharacterModel value) {
         setModel(value, true);
     }
 
-    public void setModel(@Nullable CharacterModel value, boolean listen) {
+    /**
+     * @param value  May be null.
+     * @param listen If true, the view will add an imageChangeListener to the glyph.
+     */
+    public void setModel(final CharacterModel value, final boolean listen) {
         if (model == value) {
             return;
         }
 
-        final var oldValue = model;
-
-        if (oldValue != null) {
-            oldValue.getGlyph().removeChangeListener(imageChangeListener);
+        if (model != null) {
+            model.getGlyph().removeChangeListener(imageChangeListener);
             fireChangeEvent(this, ViewChangeEvent.MODEL_UNLOADED);
         }
 
@@ -185,7 +181,10 @@ public class GlyphView extends JPanel
         autoSize();
     }
 
-    public void setOverlay(@Nullable Image value) {
+    /**
+     * @param value May be null
+     */
+    public void setOverlay(Image value) {
         if (overlay == value) {
             return;
         }
@@ -207,7 +206,6 @@ public class GlyphView extends JPanel
     }
 
     private void autoSize() {
-        final var model = this.model;
         if (zoom > 0) {
             final var dimension = model != null
                     ? new Dimension(model.getGlyph().getWidth() * zoom, model.getGlyph().getHeight() * zoom)
@@ -221,8 +219,6 @@ public class GlyphView extends JPanel
     }
 
     private void drawLines(Graphics2D g) {
-        final var model = this.model;
-
         if (lines.isEmpty() || !showLines || model == null) {
             return;
         }
@@ -255,8 +251,6 @@ public class GlyphView extends JPanel
     }
 
     private void drawShade(Graphics2D g) {
-        final var model = this.model;
-
         if (model == null || model.getWidth() >= model.getGlyph().getWidth()) {
             return;
         }

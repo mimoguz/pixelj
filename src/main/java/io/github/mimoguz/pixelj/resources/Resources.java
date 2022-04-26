@@ -9,8 +9,6 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import org.eclipse.jdt.annotation.Nullable;
-
 import io.github.mimoguz.pixelj.graphics.FontIcon;
 
 public class Resources {
@@ -23,7 +21,6 @@ public class Resources {
     }
 
     private static final String base = "io/github/mimoguz/pixelj/resources/";
-    @Nullable
     private static Resources instance = null;
 
     public static Resources get() {

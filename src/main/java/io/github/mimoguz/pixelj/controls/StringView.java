@@ -9,13 +9,9 @@ import java.util.Collection;
 
 import javax.swing.JPanel;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
-
 import io.github.mimoguz.pixelj.graphics.AndComposite;
 import io.github.mimoguz.pixelj.models.CharacterModel;
 
-@NonNullByDefault
 public class StringView extends JPanel {
     private static final long serialVersionUID = 5414891564267425303L;
 
@@ -93,11 +89,7 @@ public class StringView extends JPanel {
     }
 
     @Override
-    protected void paintComponent(@Nullable final Graphics graphics) {
-        if (graphics == null) {
-            return;
-        }
-
+    protected void paintComponent(final Graphics graphics) {
         final var g2d = (Graphics2D) graphics.create();
         g2d.setColor(backgroundColor);
         g2d.fillRect(0, 0, getWidth(), getHeight());

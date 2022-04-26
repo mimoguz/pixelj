@@ -1,5 +1,25 @@
 package io.github.mimoguz.pixelj.views.charactersScreen;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridBagLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.JToolBar;
+import javax.swing.SwingConstants;
+
+import com.formdev.flatlaf.FlatClientProperties;
+
 import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.PainterActions;
 import io.github.mimoguz.pixelj.controls.GlyphPainter;
@@ -13,21 +33,11 @@ import io.github.mimoguz.pixelj.util.Detachable;
 import io.github.mimoguz.pixelj.views.shared.Borders;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
-import com.formdev.flatlaf.FlatClientProperties;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.ArrayList;
-
-@ParametersAreNonnullByDefault
 public class PainterPanel extends JPanel implements Detachable {
     private static final int INITIAL_ZOOM = 12;
+
     private static final int MAX_UNDO = 64;
+    private static final long serialVersionUID = -2196271415900003483L;
     private final PainterActions actions;
     private final GlyphPainter painter;
     private final JLabel title;
@@ -64,7 +74,7 @@ public class PainterPanel extends JPanel implements Detachable {
 
         setLayout(new BorderLayout());
 
-        //  ****************************** WEST ******************************
+        // ****************************** WEST ******************************
 
         final var toolBar = new JToolBar();
         toolBar.add(actions.historyUndoAction);
@@ -92,7 +102,7 @@ public class PainterPanel extends JPanel implements Detachable {
         toolBar.setBorder(Borders.smallEmpty);
         add(toolBar, BorderLayout.WEST);
 
-        //  ****************************** CENTER ******************************
+        // ****************************** CENTER ******************************
 
         final var bottomPanel = new JPanel();
         bottomPanel.setBorder(Borders.smallEmpty);
@@ -151,7 +161,7 @@ public class PainterPanel extends JPanel implements Detachable {
         centerPanel.add(bottomPanel);
         add(centerPanel, BorderLayout.CENTER);
 
-        //  ****************************** EAST ******************************
+        // ****************************** EAST ******************************
 
         final var eastPanel = new JPanel();
         eastPanel.setMinimumSize(new Dimension(200, 1));
@@ -165,36 +175,18 @@ public class PainterPanel extends JPanel implements Detachable {
         painter.detach();
     }
 
-    @Nullable
     public CharacterModel getModel() {
         return painter.getModel();
     }
 
-    public void setModel(@Nullable final CharacterModel value) {
-        painter.setModel(value);
-
-        if (value != null) {
-            Actions.setEnabled(actions.all, true);
-            title.setText(Integer.toString(value.getCodePoint()));
-            zoomSlider.setEnabled(true);
-        } else {
-            Actions.setEnabled(actions.all, false);
-            title.setText(" ");
-            zoomSlider.setEnabled(false);
-        }
-    }
-
-    @NotNull
     public GlyphPainter getPainter() {
         return painter;
     }
 
-    @NotNull
     public JLabel getTitle() {
         return title;
     }
 
-    @NotNull
     public JSlider getZoomSlider() {
         return zoomSlider;
     }
@@ -205,7 +197,10 @@ public class PainterPanel extends JPanel implements Detachable {
         super.setEnabled(value);
     }
 
-    public void setMetrics(@Nullable final Metrics metrics) {
+    /**
+     * @param metrics May be null.
+     */
+    public void setMetrics(final Metrics metrics) {
         painter.removeLines();
 
         if (metrics == null) {
@@ -218,5 +213,22 @@ public class PainterPanel extends JPanel implements Detachable {
                 new Line(Orientation.HORIZONTAL, metrics.descender() + metrics.xHeight(), colors.accent()),
                 new Line(Orientation.HORIZONTAL, metrics.descender() + metrics.ascender(), colors.accent())
         );
+    }
+
+    /**
+     * @param value May be null
+     */
+    public void setModel(final CharacterModel value) {
+        painter.setModel(value);
+
+        if (value != null) {
+            Actions.setEnabled(actions.all, true);
+            title.setText(Integer.toString(value.getCodePoint()));
+            zoomSlider.setEnabled(true);
+        } else {
+            Actions.setEnabled(actions.all, false);
+            title.setText(" ");
+            zoomSlider.setEnabled(false);
+        }
     }
 }

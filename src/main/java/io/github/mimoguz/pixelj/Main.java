@@ -2,9 +2,6 @@ package io.github.mimoguz.pixelj;
 
 import java.util.function.Consumer;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-
-@NonNullByDefault
 public class Main {
     public static class Test {
         private final Consumer<Integer> consumer;
