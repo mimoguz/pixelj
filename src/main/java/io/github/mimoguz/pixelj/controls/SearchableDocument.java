@@ -75,8 +75,9 @@ class SearchableDocument<E> extends PlainDocument {
         });
 
         // Show the selected item on startup
-        if (comboBox.getSelectedItem() != null) {
-            setText(comboBox.getSelectedItem().toString());
+        final var selected = comboBox.getSelectedItem();
+        if (selected != null) {
+            setText(selected.toString());
         }
         highlightCompletedText(0);
 
@@ -159,7 +160,7 @@ class SearchableDocument<E> extends PlainDocument {
         final var pat = pattern.toLowerCase(Locale.US);
         for (var index = 0; index < model.getSize(); index++) {
             final var element = model.getElementAt(index);
-            if (element.toString().toLowerCase(Locale.US).startsWith(pat)) {
+            if (element != null && element.toString().toLowerCase(Locale.US).startsWith(pat)) {
                 return element;
             }
         }
@@ -177,7 +178,7 @@ class SearchableDocument<E> extends PlainDocument {
         selecting = false;
     }
 
-    private void setText(final String text) {
+    private void setText(@Nullable final String text) {
         try {
             super.remove(0, getLength());
             super.insertString(0, text, null);

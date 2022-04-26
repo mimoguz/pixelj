@@ -8,11 +8,13 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import io.github.mimoguz.pixelj.resources.Icons;
 import io.github.mimoguz.pixelj.resources.Resources;
 
+@NonNullByDefault
 public class ApplicationAction extends AbstractAction {
     private static final long serialVersionUID = 5365300941571995035L;
 

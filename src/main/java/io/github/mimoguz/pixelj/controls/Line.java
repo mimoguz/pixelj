@@ -1,6 +1,8 @@
 package io.github.mimoguz.pixelj.controls;
 
-import java.awt.*;
+import java.awt.Color;
 
-public record Line(Orientation orientation, int point, Color color) {
+import org.eclipse.jdt.annotation.NonNull;
+
+public record Line(Orientation orientation, int point, @NonNull Color color) {
 }

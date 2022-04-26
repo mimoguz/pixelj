@@ -13,6 +13,7 @@ import java.util.Objects;
 import javax.swing.JPanel;
 import javax.swing.event.EventListenerList;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import io.github.mimoguz.pixelj.graphics.BinaryImage;
@@ -21,6 +22,7 @@ import io.github.mimoguz.pixelj.util.ChangeListener;
 import io.github.mimoguz.pixelj.util.Changeable;
 import io.github.mimoguz.pixelj.util.Detachable;
 
+@NonNullByDefault
 public class GlyphView extends JPanel
         implements
         Changeable<GlyphView, GlyphView.ViewChangeEvent, GlyphView.ViewChangeListener>,

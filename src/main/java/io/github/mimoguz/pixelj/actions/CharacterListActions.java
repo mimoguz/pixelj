@@ -9,12 +9,15 @@ import java.util.List;
 
 import javax.swing.ListSelectionModel;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 import io.github.mimoguz.pixelj.graphics.BinaryImage;
 import io.github.mimoguz.pixelj.models.CharacterListModel;
 import io.github.mimoguz.pixelj.models.CharacterModel;
 import io.github.mimoguz.pixelj.models.KerningPairModel;
 import io.github.mimoguz.pixelj.models.Metrics;
 
+@NonNullByDefault
 public class CharacterListActions {
     public final Collection<ApplicationAction> all;
     public final ApplicationAction showAddDialogAction;
@@ -30,8 +33,7 @@ public class CharacterListActions {
             final CharacterListModel listModel,
             final ListSelectionModel selectionModel,
             final Metrics metrics
-    )
-    {
+    ) {
         this.listModel = listModel;
         this.selectionModel = selectionModel;
 
@@ -40,9 +42,10 @@ public class CharacterListActions {
                 (e, action) -> System.out.println("Show add dialog action")
         ).setTextKey("showAddDialogAction").setAccelerator(KeyEvent.VK_PLUS, InputEvent.ALT_DOWN_MASK);
 
-        showRemoveDialogAction = new ApplicationAction("showRemoveDialogAction", (e, action) -> removeSelected())
-                .setTextKey("showRemoveDialogAction")
-                .setAccelerator(KeyEvent.VK_MINUS, InputEvent.ALT_DOWN_MASK);
+        showRemoveDialogAction = new ApplicationAction(
+                "showRemoveDialogAction",
+                (e, action) -> removeSelected()
+        ).setTextKey("showRemoveDialogAction").setAccelerator(KeyEvent.VK_MINUS, InputEvent.ALT_DOWN_MASK);
 
         all = List.of(showAddDialogAction, showRemoveDialogAction);
 
@@ -78,14 +81,13 @@ public class CharacterListActions {
 
     private void addCharacters(int... codePoints) {
         for (var codePoint : codePoints) {
-            listModel
-                    .add(
-                            new CharacterModel(
-                                    codePoint,
-                                    defaultCharacterWidth,
-                                    BinaryImage.of(canvasSize.width, canvasSize.height)
-                            )
-                    );
+            listModel.add(
+                    new CharacterModel(
+                            codePoint,
+                            defaultCharacterWidth,
+                            BinaryImage.of(canvasSize.width, canvasSize.height)
+                    )
+            );
         }
     }
 

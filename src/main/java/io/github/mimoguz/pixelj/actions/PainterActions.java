@@ -9,12 +9,14 @@ import java.util.function.Consumer;
 import javax.swing.Action;
 import javax.swing.JToggleButton;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import io.github.mimoguz.pixelj.controls.GlyphPainter;
 import io.github.mimoguz.pixelj.controls.painter.Painter;
 import io.github.mimoguz.pixelj.resources.Icons;
 
+@NonNullByDefault
 public class PainterActions {
     public final Collection<ApplicationAction> all;
     public final ApplicationAction clipboardCopyAction;

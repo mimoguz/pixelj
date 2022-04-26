@@ -3,6 +3,7 @@ package io.github.mimoguz.pixelj.controls;
 import java.awt.Color;
 import java.util.function.Consumer;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import io.github.mimoguz.pixelj.controls.painter.CanFlipImage;
@@ -13,6 +14,7 @@ import io.github.mimoguz.pixelj.controls.painter.Painter;
 import io.github.mimoguz.pixelj.graphics.Snapshot;
 import io.github.mimoguz.pixelj.models.CharacterModel;
 
+@NonNullByDefault
 public class GlyphPainter extends GlyphView
         implements
         Painter,

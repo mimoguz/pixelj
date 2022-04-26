@@ -8,8 +8,11 @@ import java.util.List;
 
 import javax.swing.Action;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 import io.github.mimoguz.pixelj.resources.Icons;
 
+@NonNullByDefault
 public class GlobalActions {
     public final Collection<ApplicationAction> all;
     public final ApplicationAction exportAction;
@@ -25,8 +28,7 @@ public class GlobalActions {
     private boolean enabled = true;
 
     public GlobalActions() {
-        exportAction = new ApplicationAction("exportAction", this::export)
-                .setTextKey("exportAction")
+        exportAction = new ApplicationAction("exportAction", this::export).setTextKey("exportAction")
                 .setIcon(Icons.FILE_EXPORT, null, null)
                 .setAccelerator(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK);
 
@@ -44,18 +46,15 @@ public class GlobalActions {
                 .setIcon(Icons.EXIT, null, null)
                 .setAccelerator(KeyEvent.VK_Q, InputEvent.CTRL_DOWN_MASK);
 
-        saveAction = new ApplicationAction("saveProjectAction", this::save)
-                .setTextKey("saveAction")
+        saveAction = new ApplicationAction("saveProjectAction", this::save).setTextKey("saveAction")
                 .setIcon(Icons.FILE_SAVE, null, null)
                 .setAccelerator(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK);
 
-        saveAsAction = new ApplicationAction("saveAsAction", this::saveAs)
-                .setTextKey("saveAsAction")
+        saveAsAction = new ApplicationAction("saveAsAction", this::saveAs).setTextKey("saveAsAction")
                 .setIcon(Icons.FILE_SAVE_AS, null, null)
                 .setAccelerator(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK);
 
-        showHelpAction = new ApplicationAction("showHelpAction", this::showHelp)
-                .setTextKey("showHelpAction")
+        showHelpAction = new ApplicationAction("showHelpAction", this::showHelp).setTextKey("showHelpAction")
                 .setIcon(Icons.HELP, null, null)
                 .setAccelerator(KeyEvent.VK_F1, 0);
 

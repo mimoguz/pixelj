@@ -9,8 +9,11 @@ import java.util.List;
 import javax.swing.Action;
 import javax.swing.ListSelectionModel;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 import io.github.mimoguz.pixelj.models.KerningPairListModel;
 
+@NonNullByDefault
 public class KerningPairListActions {
     public final Collection<ApplicationAction> all;
     public final ApplicationAction showAddDialogAction;

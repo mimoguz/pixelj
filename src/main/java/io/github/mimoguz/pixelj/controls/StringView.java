@@ -9,10 +9,16 @@ import java.util.Collection;
 
 import javax.swing.JPanel;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+
 import io.github.mimoguz.pixelj.graphics.AndComposite;
 import io.github.mimoguz.pixelj.models.CharacterModel;
 
+@NonNullByDefault
 public class StringView extends JPanel {
+    private static final long serialVersionUID = 5414891564267425303L;
+
     private final Color backgroundColor;
     private final ArrayList<CharacterModel> characters = new ArrayList<>();
     private final AndComposite composite = new AndComposite();
@@ -66,7 +72,7 @@ public class StringView extends JPanel {
 
         if (characters.size() > 0) {
             final var w = characters.stream().mapToInt(CharacterModel::getWidth).sum()
-                    + spaces.stream().limit(characters.size()).reduce(0, Integer::sum);
+                    + spaces.stream().mapToInt(i -> i).limit(characters.size()).reduce(0, Integer::sum);
             final var h = characters.stream()
                     .mapToInt(chr -> chr.getGlyph().getHeight())
                     .max()
@@ -87,7 +93,11 @@ public class StringView extends JPanel {
     }
 
     @Override
-    protected void paintComponent(final Graphics graphics) {
+    protected void paintComponent(@Nullable final Graphics graphics) {
+        if (graphics == null) {
+            return;
+        }
+
         final var g2d = (Graphics2D) graphics.create();
         g2d.setColor(backgroundColor);
         g2d.fillRect(0, 0, getWidth(), getHeight());

@@ -13,12 +13,14 @@ import javax.swing.JTextArea;
 import javax.swing.text.BadLocationException;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import io.github.mimoguz.pixelj.controls.StringView;
 import io.github.mimoguz.pixelj.models.CharacterModel;
 import io.github.mimoguz.pixelj.models.ProjectModel;
 import io.github.mimoguz.pixelj.resources.Resources;
 
+@NonNullByDefault
 public class PreviewScreenActions {
     public final Collection<ApplicationAction> all;
     public final ApplicationAction clearAction;
