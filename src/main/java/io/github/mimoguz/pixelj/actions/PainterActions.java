@@ -2,6 +2,7 @@ package io.github.mimoguz.pixelj.actions;
 
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
@@ -9,6 +10,7 @@ import java.util.function.Consumer;
 import javax.swing.Action;
 import javax.swing.JToggleButton;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -18,7 +20,7 @@ import io.github.mimoguz.pixelj.resources.Icons;
 
 @NonNullByDefault
 public class PainterActions {
-    public final Collection<ApplicationAction> all;
+    public final Collection<ApplicationAction> all = new ArrayList<>();
     public final ApplicationAction clipboardCopyAction;
     public final ApplicationAction clipboardCutAction;
     public final ApplicationAction clipboardImportAction;
@@ -157,23 +159,25 @@ public class PainterActions {
                 .setIcon(Icons.ERASE, null, null)
                 .setAccelerator(KeyEvent.VK_X, InputEvent.ALT_DOWN_MASK);
 
-        all = List.of(
-                historyUndoAction,
-                historyRedoAction,
-                clipboardCutAction,
-                clipboardCopyAction,
-                clipboardPasteAction,
-                clipboardImportAction,
-                flipVerticallyAction,
-                flipHorizontallyAction,
-                rotateLeftAction,
-                rotateRightAction,
-                moveLeftAction,
-                moveRightAction,
-                moveUpAction,
-                moveDownAction,
-                eraseAction,
-                symmetryToggleAction
+        all.addAll(
+                List.of(
+                        historyUndoAction,
+                        historyRedoAction,
+                        clipboardCutAction,
+                        clipboardCopyAction,
+                        clipboardPasteAction,
+                        clipboardImportAction,
+                        flipVerticallyAction,
+                        flipHorizontallyAction,
+                        rotateLeftAction,
+                        rotateRightAction,
+                        moveLeftAction,
+                        moveRightAction,
+                        moveUpAction,
+                        moveDownAction,
+                        eraseAction,
+                        symmetryToggleAction
+                )
         );
 
         symmetryToggleAction.putValue(Action.SELECTED_KEY, false);
@@ -202,7 +206,7 @@ public class PainterActions {
         painter = value;
     }
 
-    private void ifPainterNotNull(Consumer<GlyphPainter> consumer) {
+    private void ifPainterNotNull(Consumer<@NonNull GlyphPainter> consumer) {
         final var painter = this.painter;
         if (painter != null) {
             consumer.accept(painter);

@@ -12,6 +12,7 @@ import javax.swing.event.EventListenerList;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 /**
@@ -29,13 +30,13 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
     public DisplayListModel() {
     }
 
-    public DisplayListModel(final Collection<E> elements) {
+    public DisplayListModel(final Collection<@NonNull E> elements) {
         final var collection = elements.stream().filter(Objects::nonNull).toList();
         source.addAll(collection);
         display.addAll(source.stream().filter(filter).sorted().toList());
     }
 
-    public void add(final E element) {
+    public void add(@NonNull final E element) {
         source.add(element);
         final var index = insertOrdered(element);
         if (index >= 0) {
@@ -61,8 +62,11 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
     }
 
     @Override
-    public void addListDataListener(final ListDataListener l) {
-        listeners.add(ListDataListener.class, l);
+    public void addListDataListener(@Nullable final ListDataListener listener) {
+        if (listener == null) {
+            return;
+        }
+        listeners.add(ListDataListener.class, listener);
     }
 
     public void clear() {
@@ -87,12 +91,22 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
         return source.stream().filter(predicate).findFirst().orElse(null);
     }
 
+    public List<@NonNull E> findNonNull(final Predicate<E> predicate) {
+        final List<@NonNull E> result = new ArrayList<>();
+        source.stream().filter(predicate).forEach(elem -> {
+            if (elem != null) {
+                result.add(elem);
+            }
+        });
+        return result;
+    }
+
     /**
      * @param index Index to visible list
      */
     @Override
     public E getElementAt(final int index) {
-        return null;
+        return display.get(index);
     }
 
     /**

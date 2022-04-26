@@ -22,7 +22,7 @@ import io.github.mimoguz.pixelj.resources.Resources;
 
 @NonNullByDefault
 public class PreviewScreenActions {
-    public final Collection<ApplicationAction> all;
+    public final Collection<ApplicationAction> all = new ArrayList<>();
     public final ApplicationAction clearAction;
     public final ApplicationAction refreshAction;
     private final JPanel container;
@@ -41,7 +41,8 @@ public class PreviewScreenActions {
                 .setTextKey("previewRefreshAction")
                 .setAccelerator(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK);
 
-        all = List.of(clearAction, refreshAction);
+        all.add(clearAction);
+        all.add(refreshAction);
     }
 
     private void clearPreview() {

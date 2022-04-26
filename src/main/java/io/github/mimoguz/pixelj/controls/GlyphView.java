@@ -8,7 +8,6 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
 
 import javax.swing.JPanel;
 import javax.swing.event.EventListenerList;
@@ -68,7 +67,11 @@ public class GlyphView extends JPanel
     }
 
     public void addLines(Line... lines) {
-        this.lines.addAll(Arrays.stream(lines).filter(Objects::nonNull).toList());
+        Arrays.stream(lines).forEach(line -> {
+            if (line != null) {
+                this.lines.add(line);
+            }
+        });
     }
 
     @Override

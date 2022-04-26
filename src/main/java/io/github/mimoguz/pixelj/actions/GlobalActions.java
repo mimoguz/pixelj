@@ -3,6 +3,7 @@ package io.github.mimoguz.pixelj.actions;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import io.github.mimoguz.pixelj.resources.Icons;
 
 @NonNullByDefault
 public class GlobalActions {
-    public final Collection<ApplicationAction> all;
+    public final Collection<ApplicationAction> all = new ArrayList<>();
     public final ApplicationAction exportAction;
     public final ApplicationAction newProjectAction;
     public final ApplicationAction openProjectAction;
@@ -24,7 +25,6 @@ public class GlobalActions {
     public final ApplicationAction showHelpAction;
     public final ApplicationAction showMetricsAction;
     public final ApplicationAction showSettingsAction;
-
     private boolean enabled = true;
 
     public GlobalActions() {
@@ -68,16 +68,18 @@ public class GlobalActions {
                 .setIcon(Icons.SETTINGS, null, null)
                 .setAccelerator(KeyEvent.VK_PERIOD, InputEvent.CTRL_DOWN_MASK);
 
-        all = List.of(
-                exportAction,
-                newProjectAction,
-                openProjectAction,
-                quitAction,
-                saveAction,
-                saveAsAction,
-                showHelpAction,
-                showMetricsAction,
-                showSettingsAction
+        all.addAll(
+                List.of(
+                        exportAction,
+                        newProjectAction,
+                        openProjectAction,
+                        quitAction,
+                        saveAction,
+                        saveAsAction,
+                        showHelpAction,
+                        showMetricsAction,
+                        showSettingsAction
+                )
         );
     }
 
@@ -90,35 +92,35 @@ public class GlobalActions {
         Actions.setEnabled(all, enabled);
     }
 
-    private void export(ActionEvent event, Action action) {
+    private void export(final ActionEvent event, final Action action) {
         System.out.println(action.getValue(Action.NAME));
     }
 
-    private void newProject(ActionEvent event, Action action) {
+    private void newProject(final ActionEvent event, final Action action) {
         System.out.println(action.getValue(Action.NAME));
     }
 
-    private void openProject(ActionEvent event, Action action) {
+    private void openProject(final ActionEvent event, final Action action) {
         System.out.println(action.getValue(Action.NAME));
     }
 
-    private void quit(ActionEvent event, Action action) {
+    private void quit(final ActionEvent event, final Action action) {
         System.out.println(action.getValue(Action.NAME));
     }
 
-    private void save(ActionEvent event, Action action) {
+    private void save(final ActionEvent event, final Action action) {
         System.out.println(action.getValue(Action.NAME));
     }
 
-    private void saveAs(ActionEvent event, Action action) {
+    private void saveAs(final ActionEvent event, final Action action) {
         System.out.println(action.getValue(Action.NAME));
     }
 
-    private void showHelp(ActionEvent event, Action action) {
+    private void showHelp(final ActionEvent event, final Action action) {
         System.out.println(action.getValue(Action.NAME));
     }
 
-    private void showMetrics(ActionEvent event, Action action) {
+    private void showMetrics(final ActionEvent event, final Action action) {
         System.out.println(action.getValue(Action.NAME));
     }
 

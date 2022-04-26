@@ -66,6 +66,7 @@ public class BinaryImage extends Image
 
     protected final BufferedImage image;
 
+    @SuppressWarnings("null")
     private BinaryImage(final int width, final int height, final BufferedImage image) {
         this.image = image;
         raster = image.getRaster();

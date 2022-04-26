@@ -1,11 +1,9 @@
 package io.github.mimoguz.pixelj.util;
 
-import org.jetbrains.annotations.Nullable;
-
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.EventListener;
 
-@ParametersAreNonnullByDefault
+import org.eclipse.jdt.annotation.NonNull;
+
 public interface ChangeListener<S, E> extends EventListener {
-    void onChange(@Nullable S sender, E event);
+    void onChange(S sender, @NonNull E event);
 }

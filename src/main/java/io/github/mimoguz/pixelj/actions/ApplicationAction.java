@@ -19,9 +19,10 @@ public class ApplicationAction extends AbstractAction {
     private static final long serialVersionUID = 5365300941571995035L;
 
     private final BiConsumer<ActionEvent, Action> consumer;
+
     private final String key;
 
-    public ApplicationAction(String key, BiConsumer<ActionEvent, Action> consumer) {
+    public ApplicationAction(final String key, final BiConsumer<ActionEvent, Action> consumer) {
         this(key, consumer, null, null, null, null, null, null);
     }
 
@@ -64,11 +65,12 @@ public class ApplicationAction extends AbstractAction {
         return key;
     }
 
+    @SuppressWarnings("null")
     public ApplicationAction setAccelerator(int key, int mask) {
         return setAccelerator(KeyStroke.getKeyStroke(key, mask));
     }
 
-    public ApplicationAction setAccelerator(KeyStroke value) {
+    public ApplicationAction setAccelerator(final KeyStroke value) {
         putValue(Action.ACCELERATOR_KEY, value);
         return this;
     }

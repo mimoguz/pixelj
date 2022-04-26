@@ -6,6 +6,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import io.github.mimoguz.pixelj.graphics.BinaryImage;
 
 /**
@@ -15,10 +17,11 @@ public class PaintAdapter implements MouseListener, MouseMotionListener {
     private int extent = 0;
     private boolean fill = false;
     private final Point lastPixel = new Point(-1, -1);
+    @NonNull
     private final Painter painter;
     private boolean symmetrical = false;
 
-    public PaintAdapter(Painter painter) {
+    public PaintAdapter(@NonNull Painter painter) {
         this.painter = painter;
     }
 
@@ -44,7 +47,7 @@ public class PaintAdapter implements MouseListener, MouseMotionListener {
     @Override
     public void mouseDragged(MouseEvent e) {
         final var model = painter.getModel();
-        if (model == null || isOutside()) {
+        if (model == null || e == null || isOutside()) {
             return;
         }
 
@@ -57,22 +60,22 @@ public class PaintAdapter implements MouseListener, MouseMotionListener {
     }
 
     @Override
-    public void mouseEntered(MouseEvent e) {
+    public void mouseEntered(final MouseEvent e) {
     }
 
     @Override
-    public void mouseExited(MouseEvent e) {
+    public void mouseExited(final MouseEvent e) {
         setOutside();
     }
 
     @Override
-    public void mouseMoved(MouseEvent e) {
+    public void mouseMoved(final MouseEvent e) {
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
+    public void mousePressed(final MouseEvent e) {
         final var model = painter.getModel();
-        if (model == null) {
+        if (model == null || e == null) {
             return;
         }
 
@@ -88,7 +91,7 @@ public class PaintAdapter implements MouseListener, MouseMotionListener {
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
+    public void mouseReleased(final MouseEvent e) {
         setOutside();
     }
 
@@ -96,18 +99,18 @@ public class PaintAdapter implements MouseListener, MouseMotionListener {
      * The last column of the main drawing area. It's used to calculate vertical
      * symmetry axis.
      */
-    public void setExtent(int value) {
+    public void setExtent(final int value) {
         extent = value;
     }
 
     /**
      * Enable/disable the vertical symmetry.
      */
-    public void setSymmetrical(boolean value) {
+    public void setSymmetrical(final boolean value) {
         symmetrical = value;
     }
 
-    private Point getPixelCoordinates(BinaryImage image, MouseEvent e) {
+    private Point getPixelCoordinates(@NonNull final BinaryImage image, @NonNull final MouseEvent e) {
         final var cellWidth = painter.getWidth() / image.getWidth();
         final var cellHeight = painter.getHeight() / image.getHeight();
         final var x = e.getX() / cellWidth;
@@ -123,7 +126,7 @@ public class PaintAdapter implements MouseListener, MouseMotionListener {
         lastPixel.setLocation(-1, -1);
     }
 
-    private void setPixel(BinaryImage image) {
+    private void setPixel(@NonNull BinaryImage image) {
         image.set(lastPixel.x, lastPixel.y, fill);
         if (symmetrical && lastPixel.x < extent) {
             final var mirrorX = extent - lastPixel.x - 1;

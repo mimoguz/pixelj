@@ -3,6 +3,7 @@ package io.github.mimoguz.pixelj.actions;
 import java.awt.Dimension;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -19,7 +20,7 @@ import io.github.mimoguz.pixelj.models.Metrics;
 
 @NonNullByDefault
 public class CharacterListActions {
-    public final Collection<ApplicationAction> all;
+    public final Collection<ApplicationAction> all = new ArrayList<>();
     public final ApplicationAction showAddDialogAction;
     public final ApplicationAction showRemoveDialogAction;
 
@@ -47,7 +48,7 @@ public class CharacterListActions {
                 (e, action) -> removeSelected()
         ).setTextKey("showRemoveDialogAction").setAccelerator(KeyEvent.VK_MINUS, InputEvent.ALT_DOWN_MASK);
 
-        all = List.of(showAddDialogAction, showRemoveDialogAction);
+        all.addAll(List.of(showAddDialogAction, showRemoveDialogAction));
 
         canvasSize = new Dimension(metrics.canvasWidth(), metrics.canvasHeight());
         defaultCharacterWidth = metrics.defaultCharacterWidth();

@@ -8,6 +8,7 @@ import java.util.List;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 public class CharacterListModel extends DisplayListModel<CharacterModel> {
@@ -28,20 +29,22 @@ public class CharacterListModel extends DisplayListModel<CharacterModel> {
         }
 
         private void sync(final ListDataEvent e) {
-            if (pairedKerningPairListModel == null) {
+            final var paired = pairedKerningPairListModel;
+
+            if (paired == null) {
                 return;
             }
 
             // Kerning pairs which depend on non-existing characters
             final var marked = new ArrayList<KerningPairModel>();
-            for (var index = 0; index < pairedKerningPairListModel.getSize(); index++) {
-                final var model = pairedKerningPairListModel.getElementAt(index);
+            for (var index = 0; index < paired.getSize(); index++) {
+                final var model = paired.getElementAt(index);
                 if (!sourceContains(model.getLeft()) || !sourceContains(model.getRight())) {
                     marked.add(model);
                 }
             }
 
-            pairedKerningPairListModel.removeAll(marked);
+            paired.removeAll(marked);
         }
     };
 
@@ -59,18 +62,20 @@ public class CharacterListModel extends DisplayListModel<CharacterModel> {
     }
 
     public int countDependent(final CharacterModel model) {
-        if (pairedKerningPairListModel == null) {
+        final var paired = pairedKerningPairListModel;
+        if (paired == null) {
             return 0;
         }
-        return pairedKerningPairListModel
-                .countWhere(p -> p.getLeft().equals(model) || p.getRight().equals(model));
+        return paired.countWhere(p -> p.getLeft().equals(model) || p.getRight().equals(model));
     }
 
-    public List<KerningPairModel> findDependent(final CharacterModel model) {
-        if (pairedKerningPairListModel == null) {
+    @NonNull
+    public List<@NonNull KerningPairModel> findDependent(final CharacterModel model) {
+        final var paired = pairedKerningPairListModel;
+        if (paired == null) {
             return Collections.emptyList();
         }
-        return pairedKerningPairListModel.find(p -> p.getLeft().equals(model) || p.getRight().equals(model));
+        return paired.find(p -> p.getLeft().equals(model) || p.getRight().equals(model));
     }
 
     public void pair(@Nullable final KerningPairListModel kerningPairListModel) {
