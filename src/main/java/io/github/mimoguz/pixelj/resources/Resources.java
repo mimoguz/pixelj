@@ -30,7 +30,7 @@ public class Resources {
         return instance;
     }
 
-    private static void initialize(final Colors colors) {
+    public static void initialize(final Colors colors) {
         instance = new Resources(colors);
     }
 
