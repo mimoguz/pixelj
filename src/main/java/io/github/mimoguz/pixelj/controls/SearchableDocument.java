@@ -125,20 +125,21 @@ class SearchableDocument<E> extends PlainDocument {
             return;
         }
         switch (backspaceState) {
-            case HIT_ON_SELECTION:
+            case HIT_ON_SELECTION -> {
                 if (offset > 0) {
                     highlightCompletedText(offset - 1);
                 }
-                break;
-            case HIT:
+            }
+            case HIT -> {
                 if (offset > 0) {
                     highlightCompletedText(offset);
                 }
-                break;
-            case ERROR:
-                break;
-            default:
+            }
+            case ERROR -> { // Ignore error state
+            }
+            default -> {
                 super.remove(offset, length);
+            }
         }
     }
 
