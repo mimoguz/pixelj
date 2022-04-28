@@ -7,11 +7,14 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.swing.Action;
+import javax.swing.JComponent;
 
+import io.github.mimoguz.pixelj.models.ProjectModel;
 import io.github.mimoguz.pixelj.resources.Icons;
 
 public class GlobalActions {
     public final Collection<ApplicationAction> all;
+    public final ApplicationAction closeProjectAction;
     public final ApplicationAction exportAction;
     public final ApplicationAction newProjectAction;
     public final ApplicationAction openProjectAction;
@@ -23,7 +26,11 @@ public class GlobalActions {
     public final ApplicationAction showSettingsAction;
     private boolean enabled = true;
 
-    public GlobalActions() {
+    public GlobalActions(ProjectModel project, JComponent root) {
+        closeProjectAction = new ApplicationAction("closeProjectAction", this::export)
+                .setTextKey("closeProjectAction")
+                .setIcon(Icons.FILE_EXPORT, null, null);
+
         exportAction = new ApplicationAction("exportAction", this::export).setTextKey("exportAction")
                 .setIcon(Icons.FILE_EXPORT, null, null)
                 .setAccelerator(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK);
@@ -66,6 +73,7 @@ public class GlobalActions {
 
         all = java.util.Collections.unmodifiableCollection(
                 List.of(
+                        closeProjectAction,
                         exportAction,
                         newProjectAction,
                         openProjectAction,
