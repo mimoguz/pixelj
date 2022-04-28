@@ -1,21 +1,17 @@
 package io.github.mimoguz.pixelj.views;
 
-import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
-import io.github.mimoguz.pixelj.actions.Actions;
-import io.github.mimoguz.pixelj.actions.GlobalActions;
-import io.github.mimoguz.pixelj.models.ProjectModel;
+import io.github.mimoguz.pixelj.actions.MainActions;
 
 public class MainMenu extends JPopupMenu {
     private static final long serialVersionUID = 1L;
 
-    public MainMenu(ProjectModel project, JComponent root) {
-        final var actions = new GlobalActions(project);
+    public MainMenu(MainActions actions) {
         add(actions.saveAction);
         add(actions.saveAsAction);
         add(actions.exportAction);
@@ -27,8 +23,6 @@ public class MainMenu extends JPopupMenu {
         add(separator());
         add(actions.closeProjectAction);
         add(actions.quitAction);
-
-        Actions.registerShortcuts(actions.all, root);
     }
 
     private static JSeparator separator() {

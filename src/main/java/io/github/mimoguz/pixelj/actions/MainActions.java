@@ -12,12 +12,10 @@ import javax.swing.JComponent;
 import io.github.mimoguz.pixelj.models.ProjectModel;
 import io.github.mimoguz.pixelj.resources.Icons;
 
-public class GlobalActions {
+public class MainActions {
     public final Collection<ApplicationAction> all;
     public final ApplicationAction closeProjectAction;
     public final ApplicationAction exportAction;
-    public final ApplicationAction newProjectAction;
-    public final ApplicationAction openProjectAction;
     public final ApplicationAction quitAction;
     public final ApplicationAction saveAction;
     public final ApplicationAction saveAsAction;
@@ -25,8 +23,11 @@ public class GlobalActions {
     public final ApplicationAction showMetricsAction;
     public final ApplicationAction showSettingsAction;
     private boolean enabled = true;
+    private final ProjectModel project;
 
-    public GlobalActions(ProjectModel project) {
+    public MainActions(final ProjectModel project) {
+        this.project = project;
+
         closeProjectAction = new ApplicationAction("closeProjectAction", this::export)
                 .setTextKey("closeProjectAction")
                 .setIcon(Icons.FILE_EXPORT, null, null);
@@ -34,16 +35,6 @@ public class GlobalActions {
         exportAction = new ApplicationAction("exportAction", this::export).setTextKey("exportAction")
                 .setIcon(Icons.FILE_EXPORT, null, null)
                 .setAccelerator(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK);
-
-        newProjectAction = new ApplicationAction("newProjectAction", this::newProject)
-                .setTextKey("newProjectAction")
-                .setIcon(Icons.FILE_NEW, null, null)
-                .setAccelerator(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK);
-
-        openProjectAction = new ApplicationAction("openProjectAction", this::openProject)
-                .setTextKey("openProjectAction")
-                .setIcon(Icons.FILE_OPEN, null, null)
-                .setAccelerator(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK);
 
         quitAction = new ApplicationAction("quitAction", this::quit).setTextKey("quitAction")
                 .setIcon(Icons.EXIT, null, null)
@@ -75,8 +66,6 @@ public class GlobalActions {
                 List.of(
                         closeProjectAction,
                         exportAction,
-                        newProjectAction,
-                        openProjectAction,
                         quitAction,
                         saveAction,
                         saveAsAction,
