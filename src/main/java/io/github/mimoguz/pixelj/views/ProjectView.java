@@ -2,6 +2,7 @@ package io.github.mimoguz.pixelj.views;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
+import javax.swing.ToolTipManager;
 
 import io.github.mimoguz.pixelj.graphics.FontIcon;
 import io.github.mimoguz.pixelj.models.ProjectModel;
@@ -77,6 +78,9 @@ public class ProjectView extends JFrame {
             }
         });
 
+        ToolTipManager.sharedInstance().setInitialDelay(100);
+        ToolTipManager.sharedInstance().setDismissDelay(3000);
         add(root);
+        pack();
     }
 }

@@ -26,7 +26,7 @@ public class GlobalActions {
     public final ApplicationAction showSettingsAction;
     private boolean enabled = true;
 
-    public GlobalActions(ProjectModel project, JComponent root) {
+    public GlobalActions(ProjectModel project) {
         closeProjectAction = new ApplicationAction("closeProjectAction", this::export)
                 .setTextKey("closeProjectAction")
                 .setIcon(Icons.FILE_EXPORT, null, null);
