@@ -4,10 +4,12 @@ import java.awt.Insets;
 import java.awt.Dimension;
 
 import javax.swing.UIManager;
+import javax.swing.WindowConstants;
 
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatAtomOneDarkContrastIJTheme;
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatAtomOneLightContrastIJTheme;
 
+import io.github.mimoguz.pixelj.models.ExampleData;
 import io.github.mimoguz.pixelj.resources.Colors;
 import io.github.mimoguz.pixelj.resources.OneDarkColors;
 import io.github.mimoguz.pixelj.resources.OneLightColors;
@@ -28,8 +30,8 @@ public class Main {
         Resources.initialize(colors);
         setTweaks(colors);
 
-        // TODO
-        final var view = new ProjectView(null);
+        final var view = new ProjectView(ExampleData.project);
+        view.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         view.setVisible(true);
     }
 

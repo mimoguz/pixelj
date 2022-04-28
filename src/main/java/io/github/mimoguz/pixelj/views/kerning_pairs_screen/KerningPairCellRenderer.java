@@ -42,11 +42,11 @@ public class KerningPairCellRenderer implements ListCellRenderer<KerningPairMode
             foreground = list.getSelectionForeground();
         }
 
-        left.setBackground(background);
-        left.setForeground(foreground);
+        left.setBackgroundColor(background);
+        left.setForegroundColor(foreground);
 
-        right.setBackground(background);
-        right.setForeground(foreground);
+        right.setBackgroundColor(background);
+        right.setForegroundColor(foreground);
 
         component.setBackground(background);
 

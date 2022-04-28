@@ -15,21 +15,31 @@ import io.github.mimoguz.pixelj.resources.Resources;
 public class CharacterCell extends JPanel {
     private static final long serialVersionUID = 5319221937480404986L;
 
-    private final JLabel letter = new JLabel(" ");
+    private final JLabel letter;
     private final int maxPictureSize;
-    private final GlyphView picture = new GlyphView(Resources.get().colors.disabledIcon());
-    private final JLabel subtitle = new JLabel(" ");
-    private final JLabel title = new JLabel(" ");
-    private final JPanel titleBox = new JPanel();
+    private final GlyphView picture;
+    private final JLabel subtitle;
+    private final JLabel title;
+    private final JPanel titleBox;
+
+    public CharacterCell() {
+        this(48);
+    }
 
     public CharacterCell(final int maxPictureSize) {
         this.maxPictureSize = maxPictureSize;
+
+        letter = new JLabel(" ");
+        picture = new GlyphView(Resources.get().colors.disabledIcon());
+        subtitle = new JLabel(" ");
+        title = new JLabel(" ");
+        titleBox = new JPanel();
 
         final var letterSize = new Dimension(30, 30);
         letter.setMinimumSize(letterSize);
         letter.setPreferredSize(letterSize);
 
-        titleBox.setLayout(new BoxLayout(title, BoxLayout.Y_AXIS));
+        titleBox.setLayout(new BoxLayout(titleBox, BoxLayout.Y_AXIS));
         titleBox.setOpaque(false);
         titleBox.setBackground(new Color(0, 0, 0, 0));
         titleBox.add(Box.createVerticalGlue());
@@ -71,17 +81,15 @@ public class CharacterCell extends JPanel {
         letter.setText(Character.toString((char) model.getCodePoint()));
     }
 
-    @Override
-    public void setBackground(final Color color) {
+    public void setBackgroundColor(final Color color) {
         titleBox.setBackground(color);
-        super.setBackground(color);
+        setBackground(color);
     }
 
-    @Override
-    public void setForeground(final Color color) {
+    public void setForegroundColor(final Color color) {
         title.setForeground(color);
         subtitle.setForeground(color);
         letter.setForeground(color);
-        super.setForeground(color);
+        setForeground(color);
     }
 }

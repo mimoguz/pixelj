@@ -24,14 +24,14 @@ public class CharacterCellRenderer implements ListCellRenderer<CharacterModel> {
     ) {
         component.set(value);
         if (cellHasFocus && isSelected) {
-            component.setBackground(Resources.get().colors.focusBackground());
-            component.setForeground(Resources.get().colors.focusForeground());
+            component.setBackgroundColor(Resources.get().colors.focusBackground());
+            component.setForegroundColor(Resources.get().colors.focusForeground());
         } else if (isSelected) {
-            component.setBackground(list.getSelectionBackground());
-            component.setForeground(list.getSelectionForeground());
+            component.setBackgroundColor(list.getSelectionBackground());
+            component.setForegroundColor(list.getSelectionForeground());
         } else {
-            component.setBackground(list.getBackground());
-            component.setForeground(list.getForeground());
+            component.setBackgroundColor(list.getBackground());
+            component.setForegroundColor(list.getForeground());
         }
         return component;
     }

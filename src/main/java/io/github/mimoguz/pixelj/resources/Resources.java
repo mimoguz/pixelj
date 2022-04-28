@@ -20,7 +20,7 @@ public class Resources {
         }
     }
 
-    private static final String base = "io/github/mimoguz/pixelj/resources/";
+    private static final String BASE = "io/github/mimoguz/pixelj/resources/";
     private static Resources instance = null;
 
     public static Resources get() {
@@ -67,9 +67,9 @@ public class Resources {
     }
 
     private Font loadFont() {
-        try (final var stream = getClass().getResourceAsStream(base + "pxf16.otf")) {
+        try (final var stream = getClass().getResourceAsStream("pxf16.otf")) {
             if (stream == null) {
-                throw new IOException("The resource " + base + "pxf16.otf is not found.");
+                throw new IOException("The resource pxf16.otf is not found.");
             }
             try {
                 final var font = Font.createFont(Font.TRUETYPE_FONT, stream);
@@ -88,10 +88,10 @@ public class Resources {
         ResourceBundle bundle;
         try {
             bundle = ResourceBundle
-                    .getBundle(base + bundleBase, Locale.getDefault(), getClass().getClassLoader());
+                    .getBundle(BASE + bundleBase, Locale.getDefault(), getClass().getClassLoader());
         } catch (final MissingResourceException e1) {
             try {
-                bundle = ResourceBundle.getBundle(base + bundleBase, Locale.US, getClass().getClassLoader());
+                bundle = ResourceBundle.getBundle(BASE + bundleBase, Locale.US, getClass().getClassLoader());
             } catch (final MissingResourceException e2) {
                 throw new ResourceInitializationException(
                         "Can't find strings:\n" + e1.getMessage() + "\n\n--------------------------\n\n"
