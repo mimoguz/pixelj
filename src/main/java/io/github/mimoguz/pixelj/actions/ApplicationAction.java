@@ -58,12 +58,12 @@ public class ApplicationAction extends AbstractAction {
     }
 
     public ApplicationAction setTextKey(final String value) {
-        putValue(Action.NAME, value);
+        putValue(Action.NAME, Resources.get().getString(value));
         return this;
     }
 
     public ApplicationAction setTooltipKey(final String value) {
-        putValue(Action.SHORT_DESCRIPTION, value);
+        putValue(Action.SHORT_DESCRIPTION, Resources.get().getString(value));
         return this;
     }
 }

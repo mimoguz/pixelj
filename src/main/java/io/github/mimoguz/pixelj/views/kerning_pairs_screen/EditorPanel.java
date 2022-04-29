@@ -48,7 +48,6 @@ public class EditorPanel extends JPanel implements Detachable {
         zoomSlider = new JSlider(1, 48, INITIAL_ZOOM);
         zoomSlider.setMinimumSize(new Dimension(96, 24));
         zoomSlider.setMaximumSize(new Dimension(256, 24));
-        zoomSlider.setEnabled(false);
         zoomSlider.addChangeListener(e -> {
             if (zoomSlider.getValueIsAdjusting()) {
                 preview.setZoom(zoomSlider.getValue());
@@ -60,7 +59,6 @@ public class EditorPanel extends JPanel implements Detachable {
 
         valueSpinner = new JSpinner();
         Components.setFixedSize(valueSpinner, Dimensions.textButtonSize);
-        valueSpinner.setEnabled(false);
         valueSpinner.setAlignmentY(0.5f);
         valueSpinner.addChangeListener(e -> {
             if (model == null) {
@@ -74,7 +72,6 @@ public class EditorPanel extends JPanel implements Detachable {
         });
 
         spinnerLabel = new JLabel(res.getString("kerningValue"));
-        spinnerLabel.setEnabled(false);
         spinnerLabel.setAlignmentY(0.5f);
 
         pxLabel = new JLabel(res.getString("pixels"));
@@ -93,6 +90,7 @@ public class EditorPanel extends JPanel implements Detachable {
         final var scrollPanel = new JScrollPane(previewPanel);
         // To balance the split pane divider
         scrollPanel.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 0));
+        scrollPanel.setMaximumSize(Dimensions.maximum);
         scrollPanel.setFocusable(true);
         final var moveFocus = new MouseListener() {
             @Override
@@ -141,6 +139,8 @@ public class EditorPanel extends JPanel implements Detachable {
         zoomPanel.setBorder(Borders.smallEmpty);
         zoomPanel.add(zoomSlider);
         add(zoomPanel);
+
+        setEnabled(false);
     }
 
     @Override
@@ -182,16 +182,11 @@ public class EditorPanel extends JPanel implements Detachable {
         model = value;
         if (model == null) {
             preview.set(java.util.Collections.emptyList(), spaces);
-            zoomSlider.setEnabled(false);
-            spinnerLabel.setEnabled(false);
-            pxLabel.setEnabled(false);
             title.setText(" ");
+            setEnabled(false);
         } else {
             spaces.set(0, spacing + model.getKerningValue());
             preview.set(java.util.List.of(model.getLeft(), model.getRight()), spaces);
-            zoomSlider.setEnabled(true);
-            spinnerLabel.setEnabled(true);
-            pxLabel.setEnabled(true);
             title.setText(
                     Character.toString(model.getLeft().getCodePoint()) + " + "
                             + Character.toString(model.getRight().getCodePoint())
@@ -204,7 +199,17 @@ public class EditorPanel extends JPanel implements Detachable {
                             1
                     )
             );
+            setEnabled(true);
         }
+    }
+
+    @Override
+    public void setEnabled(boolean value) {
+        super.setEnabled(value);
+        valueSpinner.setEnabled(value);
+        zoomSlider.setEnabled(value);
+        spinnerLabel.setEnabled(value);
+        pxLabel.setEnabled(value);
     }
 
     public void setSpacing(final int value) {

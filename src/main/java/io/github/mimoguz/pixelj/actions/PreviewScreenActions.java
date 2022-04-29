@@ -1,5 +1,6 @@
 package io.github.mimoguz.pixelj.actions;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -69,6 +70,10 @@ public class PreviewScreenActions {
     }
 
     private List<Integer> getSpaces(List<CharacterModel> characters) {
+        if (characters.isEmpty()) {
+            return java.util.Collections.emptyList();
+        }
+
         final var spacing = project.getMetrics().spacing();
         final var kerningPairs = project.getKerningPairs();
         final var pairs = characters.size() - 1;
@@ -84,7 +89,7 @@ public class PreviewScreenActions {
     }
 
     private StringView getView(String line) {
-        final var view = new StringView(Resources.get().colors.disabledIcon());
+        final var view = new StringView(Color.WHITE);
         final var characters = getCharactersOfLine(line);
         final var spaces = getSpaces(characters);
         view.set(characters, spaces);
@@ -99,7 +104,7 @@ public class PreviewScreenActions {
             try {
                 final var from = input.getLineStartOffset(lineIndex);
                 final var to = input.getLineEndOffset(lineIndex);
-                final var line = input.getText(from, to - from + 1);
+                final var line = input.getText(from, to - from);
                 container.add(getView(line));
             } catch (BadLocationException exception) {
                 break;

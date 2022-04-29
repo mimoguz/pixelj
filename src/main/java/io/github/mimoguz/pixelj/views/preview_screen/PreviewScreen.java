@@ -4,6 +4,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -32,6 +33,7 @@ public class PreviewScreen extends JPanel implements Detachable {
 
         textInput = new JTextArea();
         final var container = new JPanel();
+        container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
         actions = new PreviewScreenActions(project, textInput, container);
 
         refreshButton = new JButton();
@@ -45,7 +47,7 @@ public class PreviewScreen extends JPanel implements Detachable {
         Actions.registerShortcuts(actions.all, root);
 
         projectChangeListener = (sender, event) -> {
-            if (event instanceof ProjectModel.ProjectChangeEvent.MetricsChanged metricsChanged) {
+            if (event instanceof ProjectModel.ProjectChangeEvent.MetricsChanged) {
                 actions.refreshAction
                         .actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, ""));
             }

@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
+import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 
@@ -95,7 +96,7 @@ public class PainterPanel extends JPanel implements Detachable {
         toolBar.add(actions.moveUpAction);
         toolBar.add(actions.moveDownAction);
         toolBar.addSeparator();
-        toolBar.add(actions.symmetryToggleAction);
+        toolBar.add(new JToggleButton(actions.symmetryToggleAction));
         toolBar.addSeparator();
         toolBar.add(actions.eraseAction);
         toolBar.setOrientation(SwingConstants.VERTICAL);

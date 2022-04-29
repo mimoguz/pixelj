@@ -72,7 +72,7 @@ public class Resources {
                 throw new IOException("The resource pxf16.otf is not found.");
             }
             try {
-                final var font = Font.createFont(Font.TRUETYPE_FONT, stream);
+                final var font = Font.createFont(Font.TRUETYPE_FONT, stream).deriveFont(Font.PLAIN, 16);
                 GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
                 return font;
             } catch (final IOException | FontFormatException e) {
