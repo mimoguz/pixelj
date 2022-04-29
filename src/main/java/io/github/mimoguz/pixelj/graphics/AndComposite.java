@@ -6,6 +6,7 @@ import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 
 public class AndComposite implements Composite {
+    private static final int RGB_PIXEL_SIZE = 24;
 
     @Override
     public CompositeContext createContext(
@@ -13,8 +14,10 @@ public class AndComposite implements Composite {
             final ColorModel destinationColorModel,
             final RenderingHints hints
     ) {
-        if (destinationColorModel.getPixelSize() != Integer.SIZE) {
-            throw new IllegalArgumentException("This destination color model isn't supported by the AndComposite");
+        if (destinationColorModel.getPixelSize() < RGB_PIXEL_SIZE) {
+            throw new IllegalArgumentException(
+                    "This destination color model isn't supported by the AndComposite"
+            );
         }
         if (sourceColorModel.getPixelSize() <= 8) {
             return new ByteCompositeContext();
@@ -23,7 +26,7 @@ public class AndComposite implements Composite {
         }
     }
 
-    public static class ByteCompositeContext implements CompositeContext {
+    private static class ByteCompositeContext implements CompositeContext {
         @Override
         public void compose(final Raster source, final Raster in, final WritableRaster out) {
             final var height = Math.min(in.getHeight(), out.getHeight());
@@ -45,6 +48,7 @@ public class AndComposite implements Composite {
 
         @Override
         public void dispose() {
+            // Nothing to dispose
         }
     }
 
@@ -70,6 +74,7 @@ public class AndComposite implements Composite {
 
         @Override
         public void dispose() {
+            // Nothing to dispose
         }
     }
 }

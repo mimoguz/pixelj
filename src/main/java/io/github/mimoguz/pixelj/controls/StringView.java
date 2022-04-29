@@ -17,7 +17,7 @@ public class StringView extends JPanel {
 
     private final Color backgroundColor;
     private final ArrayList<CharacterModel> characters = new ArrayList<>();
-    private final AndComposite composite = new AndComposite();
+    private final transient AndComposite composite = new AndComposite();
     private Dimension minimumSize = new Dimension(16, 16);
     private int padding = 8;
     private final ArrayList<Integer> spaces = new ArrayList<>();
@@ -66,7 +66,7 @@ public class StringView extends JPanel {
     private void resizeCanvas() {
         var dimensions = minimumSize;
 
-        if (characters.size() > 0) {
+        if (!characters.isEmpty()) {
             final var w = characters.stream().mapToInt(CharacterModel::getWidth).sum()
                     + spaces.stream().mapToInt(i -> i).limit(characters.size()).reduce(0, Integer::sum);
             final var h = characters.stream()
@@ -109,7 +109,7 @@ public class StringView extends JPanel {
                     backgroundColor,
                     null
             );
-            x += (chr.getWidth() + spaces.size() > index ? spaces.get(index) : 0) * zoom;
+            x += (chr.getWidth() + (spaces.size() > index ? spaces.get(index) : 0)) * zoom;
         }
 
         g2d.dispose();

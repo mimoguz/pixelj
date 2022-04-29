@@ -70,7 +70,7 @@ public class Main {
         UIManager.put("Popup.dropShadowOpacity", 0.3);
         UIManager.put("Popup.dropShadowInsets", new Insets(0, 6, 12, 6));
         UIManager.put("[style]TabbedPane.divided", "contentAreaColor: " + divider + ";");
-        UIManager.put("[style]Separator.divider", "contentAreaColor: " + divider + ";");
+        UIManager.put("[style]Separator.divider", "foreground: " + divider + ";");
         UIManager.put("[style]Button.textButton", "foreground: " + buttonText + ";");
         UIManager.put(
                 "[style]List.focusList",
