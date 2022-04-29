@@ -80,9 +80,12 @@ public class EditorPanel extends JPanel implements Detachable {
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        final var titlePanel = new JPanel(new GridLayout());
+        final var titlePanel = new JPanel();
+        titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.X_AXIS));
         titlePanel.setBorder(Borders.title);
+        titlePanel.add(Box.createHorizontalGlue());
         titlePanel.add(title);
+        titlePanel.add(Box.createHorizontalGlue());
         add(titlePanel);
 
         final var previewPanel = new JPanel(new GridBagLayout());

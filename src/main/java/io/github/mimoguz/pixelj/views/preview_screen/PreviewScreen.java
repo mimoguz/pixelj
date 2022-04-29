@@ -1,20 +1,24 @@
 package io.github.mimoguz.pixelj.views.preview_screen;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.border.Border;
 
 import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.PreviewScreenActions;
 import io.github.mimoguz.pixelj.models.ProjectModel;
 import io.github.mimoguz.pixelj.util.Detachable;
+import io.github.mimoguz.pixelj.views.shared.Borders;
 import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
@@ -32,6 +36,10 @@ public class PreviewScreen extends JPanel implements Detachable {
         this.project = project;
 
         textInput = new JTextArea();
+        textInput.setMinimumSize(new Dimension(200, 120));
+        textInput.setPreferredSize(new Dimension(600, 120));
+        textInput.setMaximumSize(new Dimension(800, 120));
+        
         final var container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
         actions = new PreviewScreenActions(project, textInput, container);
@@ -53,37 +61,29 @@ public class PreviewScreen extends JPanel implements Detachable {
             }
         };
 
-        final var layout = new GridBagLayout();
-        setLayout(layout);
+        setLayout(new BoxLayout(this ,BoxLayout.Y_AXIS));
+        
+        final var topPanel = new JPanel();
+        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
+        topPanel.setBorder(Borders.smallEmptyCup);
+        topPanel.add(Box.createHorizontalGlue());
+        topPanel.add(textInput);
+        topPanel.add(Box.createRigidArea(Dimensions.smallSquare));
+        final var buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        buttonPanel.add(refreshButton);
+        buttonPanel.add(clearButton);
+        buttonPanel.add(Box.createVerticalGlue());
+        topPanel.add(buttonPanel);
+        topPanel.add(Box.createHorizontalGlue());
+        add(topPanel);
 
-        final var constraints = new GridBagConstraints();
-
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.gridheight = 2;
-        constraints.weightx = 1.0;
-        constraints.weighty = 0.0;
-        constraints.ipadx = 8;
-        constraints.ipady = 8;
-        add(textInput, constraints);
-
-        constraints.gridx = 1;
-        constraints.gridy = 0;
-        constraints.gridheight = 1;
-        constraints.weightx = 0.0;
-        add(refreshButton, constraints);
-
-        constraints.gridy = 1;
-        add(clearButton, constraints);
-
-        constraints.gridx = 0;
-        constraints.gridy = 2;
-        constraints.gridwidth = 2;
-        constraints.weighty = 1.0;
-        constraints.ipadx = 0;
-        constraints.ipady = 0;
-        final var scrollPanel = new JScrollPane(container);
-        add(scrollPanel, constraints);
+        final var previewPanel = new JPanel(new GridBagLayout());
+        previewPanel.add(container);
+        final var scrollPanel = new JScrollPane(previewPanel);
+        scrollPanel.setMaximumSize(Dimensions.maximum);
+        scrollPanel.setBorder(Borders.smallEmptyCup);
+        add(scrollPanel);
     }
 
     @Override
@@ -106,6 +106,7 @@ public class PreviewScreen extends JPanel implements Detachable {
     @Override
     public void setEnabled(final boolean value) {
         super.setEnabled(value);
+        textInput.setEnabled(value);
         Actions.setEnabled(actions.all, value);
     }
 }

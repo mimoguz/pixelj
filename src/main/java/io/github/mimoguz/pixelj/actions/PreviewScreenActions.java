@@ -42,7 +42,7 @@ public class PreviewScreenActions {
         all.add(refreshAction);
     }
 
-    private void clearPreview() {
+    private void clearContainer() {
         var currentViews = container.getComponents();
         for (var view : currentViews) {
             container.remove(view);
@@ -50,7 +50,9 @@ public class PreviewScreenActions {
     }
 
     private void clearPreview(ActionEvent event, Action action) {
-        clearPreview();
+        clearContainer();
+        container.revalidate();
+        container.repaint();
     }
 
     private List<CharacterModel> getCharactersOfLine(String line) {
@@ -97,7 +99,7 @@ public class PreviewScreenActions {
     }
 
     private void refreshPreview(ActionEvent event, Action action) {
-        clearPreview();
+        clearContainer();
 
         final var lines = input.getLineCount();
         for (var lineIndex = 0; lineIndex < lines; lineIndex++) {
@@ -110,5 +112,8 @@ public class PreviewScreenActions {
                 break;
             }
         }
+        
+        container.revalidate();
+        container.repaint();
     }
 }
