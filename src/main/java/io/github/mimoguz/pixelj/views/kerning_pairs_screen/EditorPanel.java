@@ -1,7 +1,6 @@
 package io.github.mimoguz.pixelj.views.kerning_pairs_screen;
 
-import java.awt.Dimension;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -43,7 +42,7 @@ public class EditorPanel extends JPanel implements Detachable {
     public EditorPanel() {
         final var res = Resources.get();
 
-        preview = new StringView(res.colors.disabledIcon());
+        preview = new StringView(Color.WHITE);
         preview.setZoom(INITIAL_ZOOM);
 
         zoomSlider = new JSlider(1, 48, INITIAL_ZOOM);

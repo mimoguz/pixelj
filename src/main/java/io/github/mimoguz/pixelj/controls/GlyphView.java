@@ -31,16 +31,16 @@ public class GlyphView extends JPanel
 
     private static final long serialVersionUID = 7841183984464270304L;
 
-    private static final Color SHADE = new Color(20, 0, 0, 0);
+    private static final Color SHADE = new Color(0, 0, 0, 20);
 
     private final Color backgroundColor;
-    private final BinaryImage.ImageChangeListener imageChangeListener;
+    private final transient BinaryImage.ImageChangeListener imageChangeListener;
     private final ArrayList<Line> lines = new ArrayList<>();
     private final EventListenerList listeners = new EventListenerList();
     /** May be null; */
-    private CharacterModel model;
+    private transient CharacterModel model;
     /** May be null; */
-    private Image overlay;
+    private transient Image overlay;
     private boolean showLines = false;
     private boolean showOverlay = false;
     private int zoom = 1;
@@ -69,7 +69,6 @@ public class GlyphView extends JPanel
 
     @Override
     public void detach() {
-        final var model = this.model;
         if (model != null) {
             model.getGlyph().removeChangeListener(imageChangeListener);
         }
@@ -212,6 +211,7 @@ public class GlyphView extends JPanel
                     : new Dimension(zoom, zoom);
             setMinimumSize(dimension);
             setMaximumSize(dimension);
+            setPreferredSize(dimension);
             setSize(dimension);
         }
         revalidate();

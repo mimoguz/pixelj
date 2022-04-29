@@ -20,8 +20,8 @@ public class GlyphPainter extends GlyphView
 
     private static final long serialVersionUID = 2382126540536314203L;
 
-    private final PaintAdapter paintAdapter;
-    private Consumer<Snapshot> snapshotConsumer = snapshot -> {
+    private final transient PaintAdapter paintAdapter;
+    private transient Consumer<Snapshot> snapshotConsumer = snapshot -> {
     };
 
     public GlyphPainter(final Color backgroundColor) {
