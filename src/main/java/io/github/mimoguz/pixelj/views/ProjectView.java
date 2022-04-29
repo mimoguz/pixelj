@@ -69,17 +69,17 @@ public class ProjectView extends JFrame {
                 case 0 -> {
                     charactersScreen.setEnabled(true);
                     kerningPairsScreen.setEnabled(false);
-                    kerningPairsScreen.setEnabled(false);
+                    previewScreen.setEnabled(false);
                 }
                 case 1 -> {
                     charactersScreen.setEnabled(false);
                     kerningPairsScreen.setEnabled(true);
-                    kerningPairsScreen.setEnabled(false);
+                    previewScreen.setEnabled(false);
                 }
                 default -> {
                     charactersScreen.setEnabled(false);
                     kerningPairsScreen.setEnabled(false);
-                    kerningPairsScreen.setEnabled(true);
+                    previewScreen.setEnabled(true);
                 }
             }
 

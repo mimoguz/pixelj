@@ -88,7 +88,7 @@ public class EditorPanel extends JPanel implements Detachable {
         titlePanel.add(title);
         add(titlePanel);
 
-        final var previewPanel = new JPanel(new GridLayout());
+        final var previewPanel = new JPanel(new GridBagLayout());
         previewPanel.add(preview);
         final var scrollPanel = new JScrollPane(previewPanel);
         // To balance the split pane divider

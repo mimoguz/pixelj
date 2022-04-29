@@ -73,7 +73,7 @@ public class StringView extends JPanel {
                     .mapToInt(chr -> chr.getGlyph().getHeight())
                     .max()
                     .orElseGet(() -> 0);
-            dimensions = new Dimension(w + 2 * padding, h + 2 * padding);
+            dimensions = new Dimension((w + 2 * padding) * zoom, (h + 2 * padding) * zoom);
         }
 
         setMinimumSize(dimensions);
@@ -102,8 +102,8 @@ public class StringView extends JPanel {
             final var image = chr.getGlyph();
             g2d.drawImage(
                     image.getSubImage(0, 0, chr.getWidth(), image.getHeight()),
-                    x,
-                    0,
+                    x + padding * zoom,
+                    padding * zoom,
                     chr.getWidth() * zoom,
                     image.getHeight() * zoom,
                     backgroundColor,
