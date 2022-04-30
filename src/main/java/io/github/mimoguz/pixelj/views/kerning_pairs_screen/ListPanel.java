@@ -6,18 +6,7 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
@@ -26,7 +15,6 @@ import io.github.mimoguz.pixelj.actions.KerningPairListActions;
 import io.github.mimoguz.pixelj.controls.SearchableComboBox;
 import io.github.mimoguz.pixelj.models.KerningPairListModel;
 import io.github.mimoguz.pixelj.models.KerningPairModel;
-import io.github.mimoguz.pixelj.models.Metrics;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.util.Detachable;
 import io.github.mimoguz.pixelj.views.shared.Borders;
@@ -47,7 +35,7 @@ public class ListPanel extends JPanel implements Detachable {
             final KerningPairListModel listModel,
             final ListSelectionModel selectionModel,
             final JComponent root
-    ) {
+            ) {
         final var res = Resources.get();
 
         actions = new KerningPairListActions(listModel, selectionModel);
@@ -151,12 +139,12 @@ public class ListPanel extends JPanel implements Detachable {
     private void setupFilterBox(
             SearchableComboBox<String> box,
             Function<KerningPairListModel, BiConsumer<Integer, Integer>> setter
-    ) {
+            ) {
         box.setModel(
                 new DefaultComboBoxModel<>(
                         new String[] { Resources.get().getString("showAll"), "60-70", "71-80", "81-90" }
-                )
-        );
+                        )
+                );
         box.setMaximumSize(Dimensions.maximumComboBoxSize);
         box.setMinimumSize(Dimensions.minimumComboBoxSize);
         box.addActionListener(event -> {

@@ -1,19 +1,13 @@
 package io.github.mimoguz.pixelj.views.kerning_pairs_screen;
 
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSlider;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
+import javax.swing.*;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
@@ -175,6 +169,15 @@ public class EditorPanel extends JPanel implements Detachable {
         return zoomSlider;
     }
 
+    @Override
+    public void setEnabled(boolean value) {
+        super.setEnabled(value);
+        valueSpinner.setEnabled(value);
+        zoomSlider.setEnabled(value);
+        spinnerLabel.setEnabled(value);
+        pxLabel.setEnabled(value);
+    }
+
     /**
      * @param value May be null.
      */
@@ -193,26 +196,17 @@ public class EditorPanel extends JPanel implements Detachable {
             title.setText(
                     Character.toString(model.getLeft().getCodePoint()) + " + "
                             + Character.toString(model.getRight().getCodePoint())
-            );
+                    );
             valueSpinner.setModel(
                     new SpinnerNumberModel(
                             model.getKerningValue(),
                             -model.getLeft().getWidth() - spacing,
                             model.getRight().getWidth(),
                             1
-                    )
-            );
+                            )
+                    );
             setEnabled(true);
         }
-    }
-
-    @Override
-    public void setEnabled(boolean value) {
-        super.setEnabled(value);
-        valueSpinner.setEnabled(value);
-        zoomSlider.setEnabled(value);
-        spinnerLabel.setEnabled(value);
-        pxLabel.setEnabled(value);
     }
 
     public void setSpacing(final int value) {
@@ -226,8 +220,8 @@ public class EditorPanel extends JPanel implements Detachable {
                         -model.getLeft().getWidth() - spacing,
                         model.getRight().getWidth(),
                         1
-                )
-        );
+                        )
+                );
         spaces.set(0, model.getKerningValue() + spacing);
         preview.setSpaces(spaces);
     }
