@@ -75,7 +75,7 @@ public class EditorPanel extends JPanel implements Detachable {
 
         final var titlePanel = new JPanel();
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.X_AXIS));
-        titlePanel.setBorder(Borders.title);
+        titlePanel.setBorder(Borders.titleCenter);
         titlePanel.add(Box.createHorizontalGlue());
         titlePanel.add(title);
         titlePanel.add(Box.createHorizontalGlue());
@@ -85,7 +85,7 @@ public class EditorPanel extends JPanel implements Detachable {
         previewPanel.add(preview);
         final var scrollPanel = new JScrollPane(previewPanel);
         // To balance the split pane divider
-        scrollPanel.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 0));
+        scrollPanel.setBorder(Borders.smallEmptyCupCenter);
         scrollPanel.setMaximumSize(Dimensions.maximum);
         scrollPanel.setFocusable(true);
         final var moveFocus = new MouseListener() {
@@ -121,7 +121,7 @@ public class EditorPanel extends JPanel implements Detachable {
 
         final var spinnerPanel = new JPanel();
         spinnerPanel.setLayout(new BoxLayout(spinnerPanel, BoxLayout.X_AXIS));
-        spinnerPanel.setBorder(BorderFactory.createEmptyBorder(20, 4, 20, 0));
+        spinnerPanel.setBorder(BorderFactory.createEmptyBorder(20, 4, 24, 0));
         spinnerPanel.add(Box.createHorizontalGlue());
         spinnerPanel.add(spinnerLabel);
         spinnerPanel.add(Box.createRigidArea(Dimensions.smallSquare));
@@ -132,7 +132,7 @@ public class EditorPanel extends JPanel implements Detachable {
         add(spinnerPanel);
 
         final var zoomPanel = new JPanel();
-        zoomPanel.setBorder(Borders.smallEmpty);
+        zoomPanel.setBorder(Borders.smallEmptyCupCenter);
         zoomPanel.setLayout(new BoxLayout(zoomPanel, BoxLayout.X_AXIS));
         zoomPanel.add(Box.createHorizontalGlue());
         zoomPanel.add(zoomSlider);
@@ -198,15 +198,15 @@ public class EditorPanel extends JPanel implements Detachable {
             title.setText(
                     Character.toString(model.getLeft().getCodePoint()) + " + "
                             + Character.toString(model.getRight().getCodePoint())
-                    );
+            );
             valueSpinner.setModel(
                     new SpinnerNumberModel(
                             model.getKerningValue(),
                             -model.getLeft().getWidth() - spacing,
                             model.getRight().getWidth(),
                             1
-                            )
-                    );
+                    )
+            );
             setEnabled(true);
         }
     }
@@ -222,8 +222,8 @@ public class EditorPanel extends JPanel implements Detachable {
                         -model.getLeft().getWidth() - spacing,
                         model.getRight().getWidth(),
                         1
-                        )
-                );
+                )
+        );
         spaces.set(0, model.getKerningValue() + spacing);
         preview.setSpaces(spaces);
     }

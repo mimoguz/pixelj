@@ -56,6 +56,13 @@ public class PreviewScreen extends JPanel implements Detachable {
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
+        final var previewPanel = new JPanel(new GridBagLayout());
+        previewPanel.add(container);
+        final var scrollPanel = new JScrollPane(previewPanel);
+        scrollPanel.setMaximumSize(Dimensions.maximum);
+        scrollPanel.setBorder(Borders.smallEmptyCenter);
+        add(scrollPanel);
+
         final var inputPanel = new JPanel();
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
         inputPanel.setMinimumSize(new Dimension(200, 144));
@@ -72,18 +79,11 @@ public class PreviewScreen extends JPanel implements Detachable {
         inputPanel.add(buttonPanel);
         final var topPanel = new JPanel();
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
-        topPanel.setBorder(Borders.smallEmpty);
+        topPanel.setBorder(Borders.smallEmptyCupCenter);
         topPanel.add(Box.createHorizontalGlue());
         topPanel.add(inputPanel);
         topPanel.add(Box.createHorizontalGlue());
         add(topPanel);
-
-        final var previewPanel = new JPanel(new GridBagLayout());
-        previewPanel.add(container);
-        final var scrollPanel = new JScrollPane(previewPanel);
-        scrollPanel.setMaximumSize(Dimensions.maximum);
-        scrollPanel.setBorder(Borders.smallEmptyCup);
-        add(scrollPanel);
     }
 
     @Override

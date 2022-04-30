@@ -96,14 +96,14 @@ public class PainterPanel extends JPanel implements Detachable {
         // ****************************** CENTER ******************************
 
         final var bottomPanel = new JPanel();
-        bottomPanel.setBorder(Borders.smallEmpty);
+        bottomPanel.setBorder(Borders.smallEmptyCupCenter);
         bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
         bottomPanel.add(Box.createHorizontalGlue());
         bottomPanel.add(zoomSlider);
         bottomPanel.add(Box.createHorizontalGlue());
 
         final var titlePanel = new JPanel();
-        titlePanel.setBorder(Borders.smallEmpty);
+        titlePanel.setBorder(Borders.titleCenter);
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.X_AXIS));
         titlePanel.add(Box.createHorizontalGlue());
         titlePanel.add(title);
@@ -115,7 +115,7 @@ public class PainterPanel extends JPanel implements Detachable {
         painterPanel.add(painter);
 
         final var scrollPanel = new JScrollPane(painterPanel);
-        scrollPanel.setBorder(Borders.empty);
+        scrollPanel.setBorder(Borders.smallEmptyCupCenter);
         scrollPanel.setFocusable(true);
         scrollPanel.setMaximumSize(Dimensions.maximum);
 
