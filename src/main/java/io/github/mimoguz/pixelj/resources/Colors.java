@@ -7,6 +7,8 @@ public interface Colors {
 
     Color active();
 
+    Color background();
+
     Color disabledIcon();
 
     Color divider();

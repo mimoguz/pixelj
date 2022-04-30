@@ -35,7 +35,7 @@ public class ListPanel extends JPanel implements Detachable {
             final KerningPairListModel listModel,
             final ListSelectionModel selectionModel,
             final JComponent root
-            ) {
+    ) {
         final var res = Resources.get();
 
         actions = new KerningPairListActions(listModel, selectionModel);
@@ -59,11 +59,9 @@ public class ListPanel extends JPanel implements Detachable {
         setBorder(Borders.empty);
         list.putClientProperty(FlatClientProperties.STYLE_CLASS, "focusList");
 
-        leftFilterBox = new SearchableComboBox<>();
-        setupFilterBox(leftFilterBox, lm -> (lm::setLeftRange));
+        leftFilterBox = filterBox(lm -> (lm::setLeftRange));
 
-        rightFilterBox = new SearchableComboBox<>();
-        setupFilterBox(rightFilterBox, lm -> (lm::setRightRange));
+        rightFilterBox = filterBox(lm -> (lm::setRightRange));
 
         setPreferredSize(new Dimension(400, 100));
         setMinimumSize(new Dimension(220, 100));
@@ -136,15 +134,12 @@ public class ListPanel extends JPanel implements Detachable {
         super.setEnabled(value);
     }
 
-    private void setupFilterBox(
-            SearchableComboBox<String> box,
+    private SearchableComboBox<String> filterBox(
             Function<KerningPairListModel, BiConsumer<Integer, Integer>> setter
-            ) {
-        box.setModel(
-                new DefaultComboBoxModel<>(
-                        new String[] { Resources.get().getString("showAll"), "60-70", "71-80", "81-90" }
-                        )
-                );
+    ) {
+        final var box = new SearchableComboBox<String>(
+                java.util.List.of(Resources.get().getString("showAll"), "60-70", "71-80", "81-90")
+        );
         box.setMaximumSize(Dimensions.maximumComboBoxSize);
         box.setMinimumSize(Dimensions.minimumComboBoxSize);
         box.addActionListener(event -> {
@@ -160,5 +155,6 @@ public class ListPanel extends JPanel implements Detachable {
                 }
             }
         });
+        return box;
     }
 }

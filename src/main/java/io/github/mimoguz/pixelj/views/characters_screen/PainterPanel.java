@@ -7,17 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSlider;
-import javax.swing.JToggleButton;
-import javax.swing.JToolBar;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
@@ -171,6 +161,7 @@ public class PainterPanel extends JPanel implements Detachable {
         final var eastPanel = new JPanel();
         eastPanel.setMinimumSize(new Dimension(200, 1));
         eastPanel.setMaximumSize(new Dimension(200, Integer.MAX_VALUE));
+        eastPanel.setPreferredSize(new Dimension(200, 300));
         eastPanel.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Resources.get().colors.divider()));
         add(eastPanel, BorderLayout.EAST);
     }

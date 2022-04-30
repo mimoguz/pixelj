@@ -18,6 +18,7 @@ public class Components {
     public static void setFixedSize(final JComponent component, final Dimension size) {
         component.setMinimumSize(size);
         component.setMaximumSize(size);
+        component.setPreferredSize(size);
         component.setSize(size);
         component.revalidate();
     }

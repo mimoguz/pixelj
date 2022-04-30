@@ -1,7 +1,7 @@
 package io.github.mimoguz.pixelj;
 
-import java.awt.Insets;
 import java.awt.Dimension;
+import java.awt.Insets;
 
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
@@ -36,6 +36,12 @@ public class Main {
     }
 
     private static void setTweaks(Colors colors) {
+        final var background = String.format(
+                HEX_FORMAT,
+                colors.divider().getRed(),
+                colors.divider().getGreen(),
+                colors.divider().getBlue()
+        );
         final var divider = String.format(
                 HEX_FORMAT,
                 colors.divider().getRed(),
@@ -70,8 +76,10 @@ public class Main {
         UIManager.put("Popup.dropShadowOpacity", 0.3);
         UIManager.put("Popup.dropShadowInsets", new Insets(0, 6, 12, 6));
         UIManager.put("[style]TabbedPane.divided", "contentAreaColor: " + divider + ";");
+        UIManager.put("ToolBar.separatorColor", colors.divider());
         UIManager.put("[style]Separator.divider", "foreground: " + divider + ";");
         UIManager.put("[style]Button.textButton", "foreground: " + buttonText + ";");
+        UIManager.put("ToolBar.background", background);
         UIManager.put(
                 "[style]List.focusList",
                 "selectionBackground: " + focusBackground + "; selectionForeground: " + focusForeground + ";"

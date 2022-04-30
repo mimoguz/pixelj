@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.*;
 
+import com.formdev.flatlaf.FlatClientProperties;
+
 import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.PreviewScreenActions;
 import io.github.mimoguz.pixelj.models.ProjectModel;
@@ -26,11 +28,8 @@ public class PreviewScreen extends JPanel implements Detachable {
 
     public PreviewScreen(final ProjectModel project, final JComponent root) {
         this.project = project;
-
         textInput = new JTextArea();
-        textInput.setMinimumSize(new Dimension(200, 120));
-        textInput.setPreferredSize(new Dimension(600, 120));
-        textInput.setMaximumSize(new Dimension(800, 120));
+        textInput.setMaximumSize(Dimensions.maximum);
 
         final var container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
@@ -39,34 +38,43 @@ public class PreviewScreen extends JPanel implements Detachable {
         refreshButton = new JButton();
         refreshButton.setAction(actions.refreshAction);
         Components.setFixedSize(refreshButton, Dimensions.textButtonSize);
+        refreshButton.putClientProperty(FlatClientProperties.STYLE_CLASS, "textButton");
 
         clearButton = new JButton();
         clearButton.setAction(actions.clearAction);
         Components.setFixedSize(clearButton, Dimensions.textButtonSize);
+        clearButton.putClientProperty(FlatClientProperties.STYLE_CLASS, "textButton");
 
         Actions.registerShortcuts(actions.all, root);
 
         projectChangeListener = (sender, event) -> {
             if (event instanceof ProjectModel.ProjectChangeEvent.MetricsChanged) {
                 actions.refreshAction
-                .actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, ""));
+                        .actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, ""));
             }
         };
 
-        setLayout(new BoxLayout(this ,BoxLayout.Y_AXIS));
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
+        final var inputPanel = new JPanel();
+        inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
+        inputPanel.setMinimumSize(new Dimension(200, 144));
+        inputPanel.setPreferredSize(new Dimension(600, 144));
+        inputPanel.setMaximumSize(new Dimension(800, 144));
+        inputPanel.add(textInput);
+        inputPanel.add(Box.createRigidArea(Dimensions.smallSquare));
+        final var buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+        buttonPanel.add(Box.createHorizontalGlue());
+        buttonPanel.add(refreshButton);
+        buttonPanel.add(Box.createRigidArea(Dimensions.smallSquare));
+        buttonPanel.add(clearButton);
+        inputPanel.add(buttonPanel);
         final var topPanel = new JPanel();
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
-        topPanel.setBorder(Borders.smallEmptyCup);
+        topPanel.setBorder(Borders.smallEmpty);
         topPanel.add(Box.createHorizontalGlue());
-        topPanel.add(textInput);
-        topPanel.add(Box.createRigidArea(Dimensions.smallSquare));
-        final var buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-        buttonPanel.add(refreshButton);
-        buttonPanel.add(clearButton);
-        buttonPanel.add(Box.createVerticalGlue());
-        topPanel.add(buttonPanel);
+        topPanel.add(inputPanel);
         topPanel.add(Box.createHorizontalGlue());
         add(topPanel);
 

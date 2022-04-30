@@ -2,7 +2,6 @@ package io.github.mimoguz.pixelj.views.kerning_pairs_screen;
 
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -132,9 +131,12 @@ public class EditorPanel extends JPanel implements Detachable {
         spinnerPanel.add(Box.createHorizontalGlue());
         add(spinnerPanel);
 
-        final var zoomPanel = new JPanel(new GridLayout());
+        final var zoomPanel = new JPanel();
         zoomPanel.setBorder(Borders.smallEmpty);
+        zoomPanel.setLayout(new BoxLayout(zoomPanel, BoxLayout.X_AXIS));
+        zoomPanel.add(Box.createHorizontalGlue());
         zoomPanel.add(zoomSlider);
+        zoomPanel.add(Box.createHorizontalGlue());
         add(zoomPanel);
 
         setEnabled(false);
