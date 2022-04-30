@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.swing.Action;
-import javax.swing.JComponent;
 
 import io.github.mimoguz.pixelj.models.ProjectModel;
 import io.github.mimoguz.pixelj.resources.Icons;
@@ -72,8 +71,8 @@ public class MainActions {
                         showHelpAction,
                         showMetricsAction,
                         showSettingsAction
-                )
-        );
+                        )
+                );
     }
 
     public boolean isEnabled() {
