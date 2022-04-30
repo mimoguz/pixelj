@@ -1,17 +1,7 @@
 package io.github.mimoguz.pixelj.graphics;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.Image;
-import java.awt.ImageCapabilities;
-import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
-import java.awt.image.ImageObserver;
-import java.awt.image.ImageProducer;
-import java.awt.image.IndexColorModel;
-import java.awt.image.Raster;
-import java.awt.image.WritableRaster;
+import java.awt.*;
+import java.awt.image.*;
 import java.util.Arrays;
 
 import javax.swing.event.EventListenerList;
@@ -20,8 +10,8 @@ import io.github.mimoguz.pixelj.util.ChangeListener;
 import io.github.mimoguz.pixelj.util.Changeable;
 
 public class BinaryImage extends Image
-        implements
-        Changeable<BinaryImage, BinaryImage.ImageChangeEvent, BinaryImage.ImageChangeListener> {
+implements
+Changeable<BinaryImage, BinaryImage.ImageChangeEvent, BinaryImage.ImageChangeListener> {
     public enum ImageChangeEvent {
         IMAGE_MODIFIED
     }
@@ -124,7 +114,7 @@ public class BinaryImage extends Image
             final int width,
             final int height,
             final byte[] target
-    ) {
+            ) {
         raster.getDataElements(x, y, width, height, target);
         return target;
     }
@@ -230,7 +220,7 @@ public class BinaryImage extends Image
             final int width,
             final int height,
             final byte[] source
-    ) {
+            ) {
         setDataElements(x, y, width, height, source, true);
     }
 
@@ -241,7 +231,7 @@ public class BinaryImage extends Image
             final int height,
             final byte[] source,
             final boolean notify
-    ) {
+            ) {
         raster.setDataElements(x, y, width, height, source);
         if (notify) {
             fireChangeEvent(this, ImageChangeEvent.IMAGE_MODIFIED);
