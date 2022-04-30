@@ -29,10 +29,10 @@ public class ExampleData {
 
     private static final List<KerningPairModel> kerningPairs = List.of(
             new KerningPairModel(characters.get(0), characters.get(1), 0),
-            new KerningPairModel(characters.get(1), characters.get(1), 0),
-            new KerningPairModel(characters.get(2), characters.get(2), 0),
-            new KerningPairModel(characters.get(3), characters.get(3), 0),
-            new KerningPairModel(characters.get(4), characters.get(4), 0),
+            new KerningPairModel(characters.get(1), characters.get(2), 0),
+            new KerningPairModel(characters.get(2), characters.get(3), 0),
+            new KerningPairModel(characters.get(3), characters.get(4), 0),
+            new KerningPairModel(characters.get(4), characters.get(5), 0),
             new KerningPairModel(characters.get(5), characters.get(6), 0)
     );
 

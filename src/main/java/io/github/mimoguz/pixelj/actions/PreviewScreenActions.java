@@ -16,7 +16,6 @@ import javax.swing.text.BadLocationException;
 import io.github.mimoguz.pixelj.controls.StringView;
 import io.github.mimoguz.pixelj.models.CharacterModel;
 import io.github.mimoguz.pixelj.models.ProjectModel;
-import io.github.mimoguz.pixelj.resources.Resources;
 
 public class PreviewScreenActions {
     public final Collection<ApplicationAction> all = new ArrayList<>();

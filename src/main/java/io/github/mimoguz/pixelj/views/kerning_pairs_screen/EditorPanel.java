@@ -42,7 +42,7 @@ public class EditorPanel extends JPanel implements Detachable {
     public EditorPanel() {
         final var res = Resources.get();
 
-        preview = new StringView(Color.WHITE);
+        preview = new StringView(res.colors.disabledIcon());
         preview.setZoom(INITIAL_ZOOM);
 
         zoomSlider = new JSlider(1, 48, INITIAL_ZOOM);
