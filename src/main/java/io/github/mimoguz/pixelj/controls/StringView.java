@@ -10,7 +10,6 @@ import java.util.Collection;
 
 import javax.swing.JPanel;
 
-import io.github.mimoguz.pixelj.graphics.AndComposite;
 import io.github.mimoguz.pixelj.models.CharacterModel;
 
 public class StringView extends JPanel {
@@ -74,8 +73,7 @@ public class StringView extends JPanel {
             final var h = characters.stream()
                     .mapToInt(chr -> chr.getGlyph().getHeight())
                     .max()
-                    .orElseGet(() -> 0)
-                    + 2 * padding;
+                    .orElseGet(() -> 0) + 2 * padding;
             renderTarget = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
             dimensions = new Dimension(w * zoom, h * zoom);
         }
