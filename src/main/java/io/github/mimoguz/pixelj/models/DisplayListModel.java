@@ -12,33 +12,43 @@ import javax.swing.event.EventListenerList;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
+import org.eclipse.collections.impl.map.mutable.primitive.IntObjectHashMap;
+
 /**
  * A list model that keeps its visible elements always filtered and sorted.
  * <p>
  * It's Intended to be used for CharacterModels and KerningPairModels, and uses
- * a HashSet for backing collection (so assumes no hash collisions).
+ * a IntObjectHashMap for backing collection (so assumes no hash collisions).
  */
 public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
     private final ArrayList<E> display = new ArrayList<>();
     private Predicate<E> filter = t -> true;
     private final EventListenerList listeners = new EventListenerList();
-    private final HashSet<E> source = new HashSet<>();
+    private final IntObjectHashMap<E> source = new IntObjectHashMap<>();
 
     public DisplayListModel() {
     }
 
     public DisplayListModel(final Collection<E> elements) {
-        final var collection = elements.stream().filter(Objects::nonNull).toList();
-        source.addAll(collection);
+        for (var elem : elements) {
+        	if (elem == null) {
+        		continue;
+        	}
+        	source.put(elem.hashCode(), elem);
+        }
         display.addAll(source.stream().filter(filter).sorted().toList());
     }
 
-    public void add(final E element) {
-        source.add(element);
+    public boolean add(final E element) {
+    	if (element == null || source.contains(element)) {
+    		return false;
+    	}
+        source.put(element.hashCode(), element);
         final var index = insertOrdered(element);
         if (index >= 0) {
             fireIntervalAddedEvent(index, index);
         }
+        return true;
     }
 
     public void addAll(final Collection<E> collection) {
@@ -48,7 +58,7 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
             if (element == null || source.contains(element)) {
                 continue;
             }
-            source.add(element);
+            source.put(element.hashCode(), element);
             final var index = insertOrdered(element);
             index0 = index == -1 ? index0 : (index0 == -1 ? index : Math.min(index0, index));
             index1 = index == -1 ? index1 : (index1 == -1 ? index : Math.max(index1, index));
@@ -86,6 +96,13 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
     public E findFirst(final Predicate<E> predicate) {
         return source.stream().filter(predicate).findFirst().orElse(null);
     }
+    
+    /**
+     * @return E or null
+     */
+    public E findHash(final int hashCode) {
+    	return source.get(hashCode);
+    }
 
     /**
      * @param index Index to visible list
@@ -110,23 +127,31 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
         return source.size();
     }
 
-    public void remove(final E element) {
-        source.remove(element);
-        final var index = display.indexOf(element);
-        if (display.remove(element)) {
+    /**
+     * @return If the source collection have had an element with same hash code
+     * with the parameter, returns that element. Otherwise returns null.
+     */
+    public E remove(final E element) {
+    	if (element == null) {
+    		return null;
+    	}
+        final var existing =  source.remove(element.hashCode());
+        final var index = display.indexOf(existing);
+        if (display.remove(existing)) {
             fireIntervalRemovedEvent(index, index);
         }
+        return existing;
     }
 
     public void removeAll(final Collection<E> collection) {
         var index0 = -1;
         var index1 = -1;
-        source.removeAll(collection);
         for (var element : collection) {
-            if (element == null) {
-                continue;
-            }
-            final var index = display.indexOf(element);
+        	if (element == null) {
+        		continue;
+        	}
+        	source.remove(element.hashCode());
+        	final var index = display.indexOf(element);
             index0 = index == -1 ? index0 : (index0 == -1 ? index : Math.min(index0, index));
             index1 = index == -1 ? index1 : (index1 == -1 ? index : Math.max(index1, index));
         }
@@ -141,7 +166,7 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
      */
     public void removeElementAt(final int index) {
         final var element = display.get(index);
-        source.remove(element);
+        source.remove(element.hashCode());
         display.remove(index);
         fireIntervalRemovedEvent(index, index);
     }
@@ -152,7 +177,7 @@ public class DisplayListModel<E extends Comparable<E>> implements ListModel<E> {
      */
     public void removeInterval(final int from, final int until) {
         final var elements = display.subList(from, until);
-        elements.forEach(source::remove);
+        elements.forEach(e -> source.remove(e.hashCode()));
         display.removeAll(elements);
         fireIntervalRemovedEvent(from, until);
     }

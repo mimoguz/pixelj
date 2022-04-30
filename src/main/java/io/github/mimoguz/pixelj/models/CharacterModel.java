@@ -2,6 +2,10 @@ package io.github.mimoguz.pixelj.models;
 
 import io.github.mimoguz.pixelj.graphics.BinaryImage;
 
+/**
+ * Two characters are equal if their code points are equal. 
+ * Hash code of a character is its code point.
+ */
 public class CharacterModel extends MutableIntValueModel implements Comparable<CharacterModel> {
     private final int codePoint;
     private final BinaryImage glyph;

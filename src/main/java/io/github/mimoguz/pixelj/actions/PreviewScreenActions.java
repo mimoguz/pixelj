@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import javax.swing.Action;
 import javax.swing.JPanel;
@@ -15,6 +16,7 @@ import javax.swing.text.BadLocationException;
 
 import io.github.mimoguz.pixelj.controls.StringView;
 import io.github.mimoguz.pixelj.models.CharacterModel;
+import io.github.mimoguz.pixelj.models.KerningPairModel;
 import io.github.mimoguz.pixelj.models.ProjectModel;
 
 public class PreviewScreenActions {
@@ -56,18 +58,9 @@ public class PreviewScreenActions {
 
     private List<CharacterModel> getCharactersOfLine(String line) {
         final var characters = project.getCharacters();
-        final var chars = line.codePoints()
-                .mapToObj(codePoint -> characters.findFirst(chr -> chr.getCodePoint() == codePoint));
-        // I'm doing this instead of just using filter(Objects::nonNull).toList(),
-        // because I need to conform @NonNull CharacterModel constraint.
-        final var result = new ArrayList<CharacterModel>();
-        chars.forEach(chr -> {
-            if (chr != null) {
-                result.add(chr);
-            }
-        });
-
-        return result;
+        return line.codePoints()
+                .mapToObj(characters::findHash)
+        		.filter(Objects::nonNull).toList();
     }
 
     private List<Integer> getSpaces(List<CharacterModel> characters) {
@@ -82,8 +75,7 @@ public class PreviewScreenActions {
         for (var index = 0; index < pairs; index++) {
             final var left = characters.get(index);
             final var right = characters.get(index + 1);
-            final var pair = kerningPairs
-                    .findFirst(p -> p.getLeft().equals(left) && p.getRight().equals(right));
+            final var pair = kerningPairs.findHash(KerningPairModel.getHash(left, right));
             spaces.add(pair == null ? spacing : spacing + pair.getKerningValue());
         }
         return spaces;
