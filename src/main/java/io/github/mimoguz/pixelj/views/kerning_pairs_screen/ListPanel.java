@@ -30,12 +30,15 @@ public class ListPanel extends JPanel implements Detachable {
     private final JList<KerningPairModel> list;
     private final JButton removeButton;
     private final SearchableComboBox<String> rightFilterBox;
+    private final transient ListSelectionModel selectionModel;
 
     public ListPanel(
             final KerningPairListModel listModel,
             final ListSelectionModel selectionModel,
             final JComponent root
     ) {
+        this.selectionModel = selectionModel;
+
         final var res = Resources.get();
 
         actions = new KerningPairListActions(listModel, selectionModel);
@@ -130,8 +133,9 @@ public class ListPanel extends JPanel implements Detachable {
 
     @Override
     public void setEnabled(boolean value) {
-        Actions.setEnabled(actions.all, value);
         super.setEnabled(value);
+        actions.showAddDialogAction.setEnabled(value);
+        actions.showRemoveDialogAction.setEnabled(value && (selectionModel.getMinSelectionIndex() >= 0));
     }
 
     private SearchableComboBox<String> filterBox(

@@ -20,12 +20,15 @@ import io.github.mimoguz.pixelj.models.KerningPairModel;
 import io.github.mimoguz.pixelj.models.ProjectModel;
 
 public class PreviewScreenActions {
+    private static final int SPACE = 32;
+
     public final Collection<ApplicationAction> all = new ArrayList<>();
     public final ApplicationAction clearAction;
     public final ApplicationAction refreshAction;
     private final JPanel container;
     private final JTextArea input;
     private final ProjectModel project;
+    private int zoom = 1;
 
     public PreviewScreenActions(final ProjectModel project, final JTextArea input, final JPanel container) {
         this.project = project;
@@ -59,8 +62,9 @@ public class PreviewScreenActions {
     private List<CharacterModel> getCharactersOfLine(String line) {
         final var characters = project.getCharacters();
         return line.codePoints()
-                .mapToObj(characters::findHash)
-        		.filter(Objects::nonNull).toList();
+                .mapToObj(cp -> cp == SPACE ? new CharacterModel(SPACE, 0, null) : characters.findHash(cp))
+                .filter(Objects::nonNull)
+                .toList();
     }
 
     private List<Integer> getSpaces(List<CharacterModel> characters) {
@@ -74,7 +78,17 @@ public class PreviewScreenActions {
         final var spaces = new ArrayList<Integer>(pairs);
         for (var index = 0; index < pairs; index++) {
             final var left = characters.get(index);
+            if (left.getCodePoint() == SPACE) {
+                spaces.add(project.getMetrics().spaceSize());
+                continue;
+            }
+
             final var right = characters.get(index + 1);
+            if (right.getCodePoint() == SPACE) {
+                spaces.add(0);
+                continue;
+            }
+
             final var pair = kerningPairs.findHash(KerningPairModel.getHash(left, right));
             spaces.add(pair == null ? spacing : spacing + pair.getKerningValue());
         }
@@ -98,13 +112,27 @@ public class PreviewScreenActions {
                 final var from = input.getLineStartOffset(lineIndex);
                 final var to = input.getLineEndOffset(lineIndex);
                 final var line = input.getText(from, to - from);
-                container.add(getView(line));
+                final var view = getView(line);
+                view.setZoom(zoom);
+                view.setPadding(0);
+                view.setAlignmentX(0f);
+                container.add(view);
             } catch (BadLocationException exception) {
                 break;
             }
         }
-        
+
         container.revalidate();
         container.repaint();
+    }
+
+    public void setZoom(int value) {
+        zoom = value;
+        for (var child : container.getComponents()) {
+            if (child instanceof StringView view) {
+                view.setZoom(value);
+            }
+        }
+        container.revalidate();
     }
 }

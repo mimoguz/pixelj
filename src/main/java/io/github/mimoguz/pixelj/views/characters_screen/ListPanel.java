@@ -31,11 +31,12 @@ import io.github.mimoguz.pixelj.views.shared.Dimensions;
 public class ListPanel extends JPanel implements Detachable {
     private static final long serialVersionUID = 7598472980158047622L;
 
-    private final CharacterListActions actions;
+    private final transient CharacterListActions actions;
     private final JButton addButton;
     private final SearchableComboBox<String> filterBox;
     private final JList<CharacterModel> list;
     private final JButton removeButton;
+    private final transient ListSelectionModel selectionModel;
 
     public ListPanel(
             final CharacterListModel listModel,
@@ -43,6 +44,8 @@ public class ListPanel extends JPanel implements Detachable {
             final Metrics metrics,
             final JComponent root
     ) {
+        this.selectionModel = selectionModel;
+
         final var res = Resources.get();
 
         actions = new CharacterListActions(listModel, selectionModel, metrics);
@@ -138,6 +141,7 @@ public class ListPanel extends JPanel implements Detachable {
     @Override
     public void setEnabled(final boolean value) {
         super.setEnabled(value);
-        Actions.setEnabled(actions.all, value);
+        actions.showAddDialogAction.setEnabled(value);
+        actions.showRemoveDialogAction.setEnabled(value && (selectionModel.getMinSelectionIndex() >= 0));
     }
 }

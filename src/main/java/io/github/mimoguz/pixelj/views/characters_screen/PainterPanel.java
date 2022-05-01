@@ -48,9 +48,8 @@ public class PainterPanel extends JPanel implements Detachable {
         actions = new PainterActions();
         actions.setPainter(painter);
         Actions.registerShortcuts(actions.all, root);
-        Actions.setEnabled(actions.all, false);
 
-        title = new JLabel(" ");
+        title = new JLabel(Resources.get().getString("painterTitle"));
         title.putClientProperty(FlatClientProperties.STYLE_CLASS, "h4");
 
         zoomSlider = new JSlider(1, 48, INITIAL_ZOOM);
@@ -95,12 +94,12 @@ public class PainterPanel extends JPanel implements Detachable {
 
         // ****************************** CENTER ******************************
 
-        final var bottomPanel = new JPanel();
-        bottomPanel.setBorder(Borders.smallEmptyCupCenter);
-        bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
-        bottomPanel.add(Box.createHorizontalGlue());
-        bottomPanel.add(zoomSlider);
-        bottomPanel.add(Box.createHorizontalGlue());
+        final var zoomPanel = new JPanel();
+        zoomPanel.setBorder(Borders.smallEmptyCupCenter);
+        zoomPanel.setLayout(new BoxLayout(zoomPanel, BoxLayout.X_AXIS));
+        zoomPanel.add(Box.createHorizontalGlue());
+        zoomPanel.add(zoomSlider);
+        zoomPanel.add(Box.createHorizontalGlue());
 
         final var titlePanel = new JPanel();
         titlePanel.setBorder(Borders.titleCenter);
@@ -153,7 +152,7 @@ public class PainterPanel extends JPanel implements Detachable {
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.add(titlePanel);
         centerPanel.add(scrollPanel);
-        centerPanel.add(bottomPanel);
+        centerPanel.add(zoomPanel);
         add(centerPanel, BorderLayout.CENTER);
 
         // ****************************** EAST ******************************
@@ -164,6 +163,8 @@ public class PainterPanel extends JPanel implements Detachable {
         eastPanel.setPreferredSize(new Dimension(200, 300));
         eastPanel.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Resources.get().colors.divider()));
         add(eastPanel, BorderLayout.EAST);
+
+        setEnabled(false);
     }
 
     @Override
@@ -189,8 +190,8 @@ public class PainterPanel extends JPanel implements Detachable {
 
     @Override
     public void setEnabled(final boolean value) {
-        Actions.setEnabled(actions.all, value);
         super.setEnabled(value);
+        Actions.setEnabled(actions.all, value && (painter.getModel() != null));
     }
 
     /**
@@ -223,7 +224,7 @@ public class PainterPanel extends JPanel implements Detachable {
             zoomSlider.setEnabled(true);
         } else {
             Actions.setEnabled(actions.all, false);
-            title.setText(" ");
+            title.setText(Resources.get().getString("painterTitle"));
             zoomSlider.setEnabled(false);
         }
     }

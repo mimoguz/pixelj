@@ -47,7 +47,7 @@ public class EditorPanel extends JPanel implements Detachable {
             }
         });
 
-        title = new JLabel(" ");
+        title = new JLabel(res.getString("kerningValueEditorTitle"));
         title.putClientProperty(FlatClientProperties.STYLE_CLASS, "h4");
 
         valueSpinner = new JSpinner();
@@ -68,7 +68,6 @@ public class EditorPanel extends JPanel implements Detachable {
         spinnerLabel.setAlignmentY(0.5f);
 
         pxLabel = new JLabel(res.getString("pixels"));
-        pxLabel.setEnabled(false);
         pxLabel.setAlignmentY(0.5f);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -121,7 +120,7 @@ public class EditorPanel extends JPanel implements Detachable {
 
         final var spinnerPanel = new JPanel();
         spinnerPanel.setLayout(new BoxLayout(spinnerPanel, BoxLayout.X_AXIS));
-        spinnerPanel.setBorder(BorderFactory.createEmptyBorder(20, 4, 24, 0));
+        spinnerPanel.setBorder(Borders.smallEmptyBottomCenterPanel);
         spinnerPanel.add(Box.createHorizontalGlue());
         spinnerPanel.add(spinnerLabel);
         spinnerPanel.add(Box.createRigidArea(Dimensions.smallSquare));
@@ -174,10 +173,11 @@ public class EditorPanel extends JPanel implements Detachable {
     @Override
     public void setEnabled(boolean value) {
         super.setEnabled(value);
-        valueSpinner.setEnabled(value);
-        zoomSlider.setEnabled(value);
-        spinnerLabel.setEnabled(value);
-        pxLabel.setEnabled(value);
+        final var valueIfNotNull = value && (model != null);
+        valueSpinner.setEnabled(valueIfNotNull);
+        zoomSlider.setEnabled(valueIfNotNull);
+        spinnerLabel.setEnabled(valueIfNotNull);
+        pxLabel.setEnabled(valueIfNotNull);
     }
 
     /**
@@ -190,7 +190,7 @@ public class EditorPanel extends JPanel implements Detachable {
         model = value;
         if (model == null) {
             preview.set(java.util.Collections.emptyList(), spaces);
-            title.setText(" ");
+            title.setText(Resources.get().getString("kerningValueEditorTitle"));
             setEnabled(false);
         } else {
             spaces.set(0, spacing + model.getKerningValue());

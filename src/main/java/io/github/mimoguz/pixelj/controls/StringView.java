@@ -21,7 +21,7 @@ public class StringView extends JPanel {
     private int padding = 8;
     private final ArrayList<Integer> spaces = new ArrayList<>();
     private int zoom;
-    private BufferedImage renderTarget = new BufferedImage(16, 16, BufferedImage.TYPE_INT_RGB);
+    private transient BufferedImage renderTarget = new BufferedImage(16, 16, BufferedImage.TYPE_INT_RGB);
 
     public StringView(final Color backgroundColor) {
         this.backgroundColor = backgroundColor;
@@ -71,7 +71,7 @@ public class StringView extends JPanel {
                     + spaces.stream().mapToInt(i -> i).limit(characters.size()).reduce(0, Integer::sum)
                     + 2 * padding;
             final var h = characters.stream()
-                    .mapToInt(chr -> chr.getGlyph().getHeight())
+                    .mapToInt(chr -> chr.getGlyph() == null ? 0 : chr.getGlyph().getHeight())
                     .max()
                     .orElseGet(() -> 0) + 2 * padding;
             renderTarget = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
@@ -79,7 +79,7 @@ public class StringView extends JPanel {
         }
 
         setMinimumSize(dimensions);
-        setMinimumSize(dimensions);
+        setMaximumSize(dimensions);
         setPreferredSize(dimensions);
         setSize(dimensions);
         revalidate();
@@ -93,7 +93,7 @@ public class StringView extends JPanel {
     @Override
     protected void paintComponent(final Graphics graphics) {
         final var g2d = (Graphics2D) graphics.create();
-        if (characters.size() == 0) {
+        if (characters.isEmpty()) {
             g2d.setColor(backgroundColor);
             g2d.fillRect(0, 0, getWidth(), getHeight());
         } else {
@@ -103,7 +103,14 @@ public class StringView extends JPanel {
             renderTarget.getGraphics().fillRect(0, 0, renderTarget.getWidth(), renderTarget.getHeight());
             var x = padding;
             for (var index = 0; index < characters.size(); index++) {
-                drawCharacter(renderTarget, characters.get(index), x, padding);
+                final var character = characters.get(index);
+                if (character.getGlyph() == null) {
+                    // Non-printable character. Spaces should handle that.
+                    x += spaces.size() > index ? spaces.get(index) : 0;
+                    continue;
+                }
+
+                drawCharacter(renderTarget, character, x, padding);
                 x += characters.get(index).getWidth() + (spaces.size() > index ? spaces.get(index) : 0);
             }
             g2d.drawImage(renderTarget, 0, 0, getWidth(), getHeight(), backgroundColor, null);
