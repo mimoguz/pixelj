@@ -10,8 +10,8 @@ import io.github.mimoguz.pixelj.util.ChangeListener;
 import io.github.mimoguz.pixelj.util.Changeable;
 
 public class BinaryImage extends Image
-implements
-Changeable<BinaryImage, BinaryImage.ImageChangeEvent, BinaryImage.ImageChangeListener> {
+        implements
+        Changeable<BinaryImage, BinaryImage.ImageChangeEvent, BinaryImage.ImageChangeListener> {
     public enum ImageChangeEvent {
         IMAGE_MODIFIED
     }
@@ -114,7 +114,7 @@ Changeable<BinaryImage, BinaryImage.ImageChangeEvent, BinaryImage.ImageChangeLis
             final int width,
             final int height,
             final byte[] target
-            ) {
+    ) {
         raster.getDataElements(x, y, width, height, target);
         return target;
     }
@@ -161,7 +161,7 @@ Changeable<BinaryImage, BinaryImage.ImageChangeEvent, BinaryImage.ImageChangeLis
     public Snapshot getSnapshot(final int id) {
         var buffer = new byte[getWidth() * getHeight()];
         raster.getDataElements(0, 0, getWidth(), getHeight(), buffer);
-        return new Snapshot(id, getWidth(), getHeight(), buffer);
+        return new Snapshot(id, 0, 0, getWidth(), getHeight(), buffer);
     }
 
     @Override
@@ -220,7 +220,7 @@ Changeable<BinaryImage, BinaryImage.ImageChangeEvent, BinaryImage.ImageChangeLis
             final int width,
             final int height,
             final byte[] source
-            ) {
+    ) {
         setDataElements(x, y, width, height, source, true);
     }
 
@@ -231,7 +231,7 @@ Changeable<BinaryImage, BinaryImage.ImageChangeEvent, BinaryImage.ImageChangeLis
             final int height,
             final byte[] source,
             final boolean notify
-            ) {
+    ) {
         raster.setDataElements(x, y, width, height, source);
         if (notify) {
             fireChangeEvent(this, ImageChangeEvent.IMAGE_MODIFIED);

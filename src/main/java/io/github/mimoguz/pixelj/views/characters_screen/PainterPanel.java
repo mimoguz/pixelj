@@ -47,6 +47,7 @@ public class PainterPanel extends JPanel implements Detachable {
 
         actions = new PainterActions();
         actions.setPainter(painter);
+        painter.setSnapshotConsumer(actions.snapshotConsumer);
         Actions.registerShortcuts(actions.all, root);
 
         title = new JLabel(Resources.get().getString("painterTitle"));
