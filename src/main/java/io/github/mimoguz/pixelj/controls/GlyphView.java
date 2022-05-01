@@ -31,7 +31,7 @@ public class GlyphView extends JPanel
 
     private static final long serialVersionUID = 7841183984464270304L;
 
-    private static final Color SHADE = new Color(0, 0, 0, 20);
+    private static final Color SHADE = new Color(0, 0, 0, 30);
 
     private final Color backgroundColor;
     private final transient BinaryImage.ImageChangeListener imageChangeListener;
