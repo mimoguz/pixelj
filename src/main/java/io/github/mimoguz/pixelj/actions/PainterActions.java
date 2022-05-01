@@ -239,7 +239,6 @@ public class PainterActions {
                         undoBuffer.remove(0);
                 }
                 undoBuffer.add(snapshot);
-                return;
         }
 
         private void undo(ActionEvent event, Action action) {
@@ -247,7 +246,6 @@ public class PainterActions {
         }
 
         private void redo(ActionEvent event, Action action) {
-                // TODO: Doesn't work???
                 timeTravel(redoBuffer, undoBuffer);
         }
 
@@ -259,9 +257,14 @@ public class PainterActions {
                 if (model == null) {
                         return;
                 }
-                for (var i = from.size() - 1; i >= 0; i--) {
-                        final var snapshot = from.get(i);
+                for (var index = from.size() - 1; index >= 0; index--) {
+                        final var snapshot = from.get(index);
                         if (snapshot.id() == model.getCodePoint()) {
+                                if (to.size() >= MAX_UNDO) {
+                                        to.remove(0);
+                                }
+                                from.remove(index);
+                                to.add(model.getGlyph().getSnapshot(model.getCodePoint()));
                                 model.getGlyph()
                                                 .setDataElements(
                                                                 snapshot.x(),
@@ -270,11 +273,6 @@ public class PainterActions {
                                                                 snapshot.height(),
                                                                 snapshot.data()
                                                 );
-
-                                if (to.size() >= MAX_UNDO) {
-                                        to.remove(0);
-                                }
-                                to.add(from.remove(i));
                                 return;
                         }
                 }
