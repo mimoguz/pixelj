@@ -9,7 +9,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <flatlaf.version>2.1</flatlaf.version>
+        <flatlaf.version>2.2</flatlaf.version>
     </properties>
 
     <build>
