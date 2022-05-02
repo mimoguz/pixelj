@@ -15,10 +15,10 @@ import io.github.mimoguz.pixelj.views.shared.Dimensions;
 public class CharactersScreen extends JSplitPane implements Detachable {
     private static final long serialVersionUID = -7882245338313749432L;
 
-    private final CharacterListModel listModel;
+    private final transient CharacterListModel listModel;
     private final ListPanel listPanel;
     private final PainterPanel painterPanel;
-    private final ListSelectionModel selectionModel;
+    private final transient ListSelectionModel selectionModel;
 
     public CharactersScreen(final ProjectModel project, final JComponent root) {
         selectionModel = new DefaultListSelectionModel();
@@ -52,7 +52,7 @@ public class CharactersScreen extends JSplitPane implements Detachable {
             }
         });
 
-        setMaximumSize(Dimensions.maximum);
+        setMaximumSize(Dimensions.MAXIMUM);
         setLeftComponent(painterPanel);
         setRightComponent(listPanel);
         setResizeWeight(1.0);

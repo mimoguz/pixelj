@@ -42,7 +42,7 @@ public class KerningPairsScreen extends JSplitPane implements Detachable {
 
         updateMetrics(project.getMetrics());
 
-        setMaximumSize(Dimensions.maximum);
+        setMaximumSize(Dimensions.MAXIMUM);
         setLeftComponent(editorPanel);
         setRightComponent(listPanel);
         setResizeWeight(1.0);

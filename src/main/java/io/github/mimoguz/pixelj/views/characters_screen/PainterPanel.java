@@ -111,13 +111,13 @@ public class PainterPanel extends JPanel implements Detachable {
 
         final var painterPanel = new JPanel();
         painterPanel.setLayout(new GridBagLayout());
-        painterPanel.setMaximumSize(Dimensions.maximum);
+        painterPanel.setMaximumSize(Dimensions.MAXIMUM);
         painterPanel.add(painter);
 
         final var scrollPanel = new JScrollPane(painterPanel);
         scrollPanel.setBorder(Borders.smallEmptyCupCenter);
         scrollPanel.setFocusable(true);
-        scrollPanel.setMaximumSize(Dimensions.maximum);
+        scrollPanel.setMaximumSize(Dimensions.MAXIMUM);
 
         final var moveFocus = new MouseListener() {
             @Override

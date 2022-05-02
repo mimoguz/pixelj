@@ -36,22 +36,30 @@ public class PreviewScreen extends JPanel implements Detachable {
         final var res = Resources.get();
 
         textInput = new JTextArea();
-        textInput.setMaximumSize(Dimensions.maximum);
+        textInput.setMaximumSize(Dimensions.MAXIMUM);
 
         container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-        container.setBorder(BorderFactory.createMatteBorder(12, 12, 12, 12, Color.WHITE));
+        container.setBorder(
+                BorderFactory.createMatteBorder(
+                        Dimensions.PADDING,
+                        Dimensions.PADDING,
+                        Dimensions.PADDING,
+                        Dimensions.PADDING,
+                        Color.WHITE
+                )
+        );
         container.setBackground(Color.WHITE);
         actions = new PreviewScreenActions(project, textInput, container);
 
         refreshButton = new JButton();
         refreshButton.setAction(actions.refreshAction);
-        Components.setFixedSize(refreshButton, Dimensions.textButtonSize);
+        Components.setFixedSize(refreshButton, Dimensions.TEXT_BUTTON_SIZE);
         refreshButton.putClientProperty(FlatClientProperties.STYLE_CLASS, "textButton");
 
         clearButton = new JButton();
         clearButton.setAction(actions.clearAction);
-        Components.setFixedSize(clearButton, Dimensions.textButtonSize);
+        Components.setFixedSize(clearButton, Dimensions.TEXT_BUTTON_SIZE);
         clearButton.putClientProperty(FlatClientProperties.STYLE_CLASS, "textButton");
 
         Actions.registerShortcuts(actions.all, root);
@@ -78,7 +86,7 @@ public class PreviewScreen extends JPanel implements Detachable {
         final var previewPanel = new JPanel(new GridBagLayout());
         previewPanel.add(container);
         final var scrollPanel = new JScrollPane(previewPanel);
-        scrollPanel.setMaximumSize(Dimensions.maximum);
+        scrollPanel.setMaximumSize(Dimensions.MAXIMUM);
         scrollPanel.setBorder(Borders.smallEmptyCenter);
         add(scrollPanel);
 
@@ -88,12 +96,12 @@ public class PreviewScreen extends JPanel implements Detachable {
         inputPanel.setPreferredSize(new Dimension(600, 144));
         inputPanel.setMaximumSize(new Dimension(800, 144));
         inputPanel.add(textInput);
-        inputPanel.add(Box.createRigidArea(Dimensions.smallSquare));
+        inputPanel.add(Box.createRigidArea(Dimensions.SMALL_SQUARE));
         final var buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
         buttonPanel.add(Box.createHorizontalGlue());
         buttonPanel.add(refreshButton);
-        buttonPanel.add(Box.createRigidArea(Dimensions.smallSquare));
+        buttonPanel.add(Box.createRigidArea(Dimensions.SMALL_SQUARE));
         buttonPanel.add(clearButton);
         inputPanel.add(buttonPanel);
         final var bottomPanel = new JPanel();

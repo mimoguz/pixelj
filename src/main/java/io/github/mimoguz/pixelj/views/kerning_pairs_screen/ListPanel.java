@@ -47,18 +47,18 @@ public class ListPanel extends JPanel implements Detachable {
 
         addButton = new JButton();
         addButton.setAction(actions.showAddDialogAction);
-        Components.setFixedSize(addButton, Dimensions.textButtonSize);
+        Components.setFixedSize(addButton, Dimensions.TEXT_BUTTON_SIZE);
         addButton.putClientProperty(FlatClientProperties.STYLE_CLASS, "textButton");
 
         removeButton = new JButton();
         removeButton.setAction(actions.showRemoveDialogAction);
-        Components.setFixedSize(removeButton, Dimensions.textButtonSize);
+        Components.setFixedSize(removeButton, Dimensions.TEXT_BUTTON_SIZE);
         removeButton.putClientProperty(FlatClientProperties.STYLE_CLASS, "textButton");
 
         list = new JList<>(listModel);
         list.setSelectionModel(selectionModel);
         list.setCellRenderer(new KerningPairCellRenderer(48));
-        list.setMaximumSize(Dimensions.maximum);
+        list.setMaximumSize(Dimensions.MAXIMUM);
         setBorder(Borders.empty);
         list.putClientProperty(FlatClientProperties.STYLE_CLASS, "focusList");
 
@@ -76,7 +76,7 @@ public class ListPanel extends JPanel implements Detachable {
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
         buttonPanel.add(Box.createHorizontalGlue());
         buttonPanel.add(addButton);
-        buttonPanel.add(Box.createRigidArea(Dimensions.mediumSquare));
+        buttonPanel.add(Box.createRigidArea(Dimensions.MEDIUM_SQUARE));
         buttonPanel.add(removeButton);
         buttonPanel.add(Box.createHorizontalGlue());
         add(buttonPanel);
@@ -97,7 +97,7 @@ public class ListPanel extends JPanel implements Detachable {
         add(filterPanel);
 
         final var scrollPanel = new JScrollPane(list);
-        scrollPanel.setMaximumSize(Dimensions.maximum);
+        scrollPanel.setMaximumSize(Dimensions.MAXIMUM);
         scrollPanel.setBorder(Borders.empty);
         add(scrollPanel);
     }
@@ -144,8 +144,8 @@ public class ListPanel extends JPanel implements Detachable {
         final var box = new SearchableComboBox<String>(
                 java.util.List.of(Resources.get().getString("showAll"), "60-70", "71-80", "81-90")
         );
-        box.setMaximumSize(Dimensions.maximumComboBoxSize);
-        box.setMinimumSize(Dimensions.minimumComboBoxSize);
+        box.setMaximumSize(Dimensions.MAXIMUM_COMBO_BOX_SIZE);
+        box.setMinimumSize(Dimensions.MINIMUM_COMBO_BOX_SIZE);
         box.addActionListener(event -> {
             if (list.getModel() instanceof KerningPairListModel lm) {
                 final var item = box.getSelectedItem();

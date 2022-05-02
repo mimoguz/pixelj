@@ -11,14 +11,14 @@ import java.util.Collection;
 import javax.swing.JPanel;
 
 import io.github.mimoguz.pixelj.models.CharacterModel;
+import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 public class StringView extends JPanel {
     private static final long serialVersionUID = 5414891564267425303L;
 
     private final Color backgroundColor;
     private final ArrayList<CharacterModel> characters = new ArrayList<>();
-    private Dimension minimumSize = new Dimension(16, 16);
-    private int padding = 8;
+    private int padding;
     private final ArrayList<Integer> spaces = new ArrayList<>();
     private int zoom;
     private transient BufferedImage renderTarget = new BufferedImage(16, 16, BufferedImage.TYPE_INT_RGB);
@@ -48,7 +48,6 @@ public class StringView extends JPanel {
 
     public void setPadding(final int value) {
         padding = value;
-        minimumSize = new Dimension(value * 2, value * 2);
         updateView();
     }
 
@@ -64,18 +63,17 @@ public class StringView extends JPanel {
     }
 
     private void resizeCanvas() {
-        var dimensions = minimumSize;
+        var dimensions = Dimensions.LARGE_SQUARE;
 
         if (!characters.isEmpty()) {
             final var w = characters.stream().mapToInt(CharacterModel::getWidth).sum()
-                    + spaces.stream().mapToInt(i -> i).limit(characters.size()).reduce(0, Integer::sum)
-                    + 2 * padding;
+                    + spaces.stream().mapToInt(i -> i).limit(characters.size()).reduce(0, Integer::sum);
             final var h = characters.stream()
                     .mapToInt(chr -> chr.getGlyph() == null ? 0 : chr.getGlyph().getHeight())
                     .max()
-                    .orElseGet(() -> 0) + 2 * padding;
+                    .orElseGet(() -> 0);
             renderTarget = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-            dimensions = new Dimension(w * zoom, h * zoom);
+            dimensions = new Dimension(w * zoom + 2 * padding, h * zoom + 2 * padding);
         }
 
         setMinimumSize(dimensions);
@@ -101,7 +99,7 @@ public class StringView extends JPanel {
             // This method is more naive, but at least works.
             g2d.setColor(Color.WHITE);
             renderTarget.getGraphics().fillRect(0, 0, renderTarget.getWidth(), renderTarget.getHeight());
-            var x = padding;
+            var x = 0;
             for (var index = 0; index < characters.size(); index++) {
                 final var character = characters.get(index);
                 if (character.getGlyph() == null) {
@@ -110,10 +108,20 @@ public class StringView extends JPanel {
                     continue;
                 }
 
-                drawCharacter(renderTarget, character, x, padding);
+                drawCharacter(renderTarget, character, x, 0);
                 x += characters.get(index).getWidth() + (spaces.size() > index ? spaces.get(index) : 0);
             }
-            g2d.drawImage(renderTarget, 0, 0, getWidth(), getHeight(), backgroundColor, null);
+            g2d.setColor(Color.WHITE);
+            g2d.fillRect(0, 0, getWidth(), getHeight());
+            g2d.drawImage(
+                    renderTarget,
+                    padding,
+                    padding,
+                    getWidth() - 2 * padding,
+                    getHeight() - 2 * padding,
+                    backgroundColor,
+                    null
+            );
         }
         g2d.dispose();
     }

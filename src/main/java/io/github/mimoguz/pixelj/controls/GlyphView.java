@@ -17,6 +17,7 @@ import io.github.mimoguz.pixelj.models.CharacterModel;
 import io.github.mimoguz.pixelj.util.ChangeListener;
 import io.github.mimoguz.pixelj.util.Changeable;
 import io.github.mimoguz.pixelj.util.Detachable;
+import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 public class GlyphView extends JPanel
         implements
@@ -208,7 +209,7 @@ public class GlyphView extends JPanel
         if (zoom > 0) {
             final var dimension = model != null
                     ? new Dimension(model.getGlyph().getWidth() * zoom, model.getGlyph().getHeight() * zoom)
-                    : new Dimension(zoom, zoom);
+                    : Dimensions.LARGE_SQUARE;
             setMinimumSize(dimension);
             setMaximumSize(dimension);
             setPreferredSize(dimension);

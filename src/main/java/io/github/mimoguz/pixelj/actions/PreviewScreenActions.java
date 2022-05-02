@@ -2,7 +2,6 @@ package io.github.mimoguz.pixelj.actions;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,7 +39,7 @@ public class PreviewScreenActions {
 
         refreshAction = new ApplicationAction("previewRefreshAction", this::refreshPreview)
                 .setTextKey("previewRefreshAction")
-                .setAccelerator(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK);
+                .setAccelerator(KeyEvent.VK_F5, 0);
 
         all.add(clearAction);
         all.add(refreshAction);

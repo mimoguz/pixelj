@@ -36,6 +36,7 @@ public class EditorPanel extends JPanel implements Detachable {
         final var res = Resources.get();
 
         preview = new StringView(res.colors.disabledIcon());
+        preview.setPadding(Dimensions.PADDING);
         preview.setZoom(INITIAL_ZOOM);
 
         zoomSlider = new JSlider(1, 48, INITIAL_ZOOM);
@@ -51,7 +52,7 @@ public class EditorPanel extends JPanel implements Detachable {
         title.putClientProperty(FlatClientProperties.STYLE_CLASS, "h4");
 
         valueSpinner = new JSpinner();
-        Components.setFixedSize(valueSpinner, Dimensions.textButtonSize);
+        Components.setFixedSize(valueSpinner, Dimensions.TEXT_BUTTON_SIZE);
         valueSpinner.setAlignmentY(0.5f);
         valueSpinner.addChangeListener(e -> {
             if (model == null) {
@@ -85,7 +86,7 @@ public class EditorPanel extends JPanel implements Detachable {
         final var scrollPanel = new JScrollPane(previewPanel);
         // To balance the split pane divider
         scrollPanel.setBorder(Borders.smallEmptyCupCenter);
-        scrollPanel.setMaximumSize(Dimensions.maximum);
+        scrollPanel.setMaximumSize(Dimensions.MAXIMUM);
         scrollPanel.setFocusable(true);
         final var moveFocus = new MouseListener() {
             @Override
@@ -123,9 +124,9 @@ public class EditorPanel extends JPanel implements Detachable {
         spinnerPanel.setBorder(Borders.smallEmptyBottomCenterPanel);
         spinnerPanel.add(Box.createHorizontalGlue());
         spinnerPanel.add(spinnerLabel);
-        spinnerPanel.add(Box.createRigidArea(Dimensions.smallSquare));
+        spinnerPanel.add(Box.createRigidArea(Dimensions.SMALL_SQUARE));
         spinnerPanel.add(valueSpinner);
-        spinnerPanel.add(Box.createRigidArea(Dimensions.smallSquare));
+        spinnerPanel.add(Box.createRigidArea(Dimensions.SMALL_SQUARE));
         spinnerPanel.add(pxLabel);
         spinnerPanel.add(Box.createHorizontalGlue());
         add(spinnerPanel);
