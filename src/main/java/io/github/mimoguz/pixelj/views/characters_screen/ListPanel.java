@@ -55,19 +55,16 @@ public class ListPanel extends JPanel implements Detachable {
         addButton = new JButton();
         addButton.setAction(actions.showAddDialogAction);
         Components.setFixedSize(addButton, Dimensions.TEXT_BUTTON_SIZE);
-        addButton.putClientProperty(FlatClientProperties.STYLE_CLASS, "textButton");
 
         removeButton = new JButton();
         removeButton.setAction(actions.showRemoveDialogAction);
         Components.setFixedSize(removeButton, Dimensions.TEXT_BUTTON_SIZE);
-        removeButton.putClientProperty(FlatClientProperties.STYLE_CLASS, "textButton");
 
         list = new JList<>(listModel);
         list.setSelectionModel(selectionModel);
         list.setCellRenderer(new CharacterCellRenderer(48));
         list.setMaximumSize(Dimensions.MAXIMUM);
         setBorder(Borders.empty);
-        list.putClientProperty(FlatClientProperties.STYLE_CLASS, "focusList");
 
         filterBox = new SearchableComboBox<>(List.of(res.getString("showAll"), "60-70", "71-80", "81-90"));
         filterBox.setMaximumSize(Dimensions.MAXIMUM_COMBO_BOX_SIZE);

@@ -18,6 +18,7 @@ import io.github.mimoguz.pixelj.controls.painter.CanTranslateImage;
 import io.github.mimoguz.pixelj.controls.painter.Painter;
 import io.github.mimoguz.pixelj.graphics.Snapshot;
 import io.github.mimoguz.pixelj.resources.Icons;
+import io.github.mimoguz.pixelj.resources.Resources;
 
 public class PainterActions {
         private static final int MAX_UNDO = 64;
@@ -50,6 +51,8 @@ public class PainterActions {
         public PainterActions() {
                 snapshotConsumer = this::consumeSnapshot;
 
+                final var res = Resources.get();
+
                 symmetryToggleAction = new ApplicationAction(
                                 "symmetryToggleAction",
                                 (e, action) -> ifPainterNotNull(p -> {
@@ -63,17 +66,17 @@ public class PainterActions {
                                         action.putValue(Action.SELECTED_KEY, p.isSymmetrical());
                                 })
                 ).setTooltipKey("symmetryToggleActionTooltip")
-                                .setIcon(Icons.SYMMETRY, null, null)
+                                .setIcon(Icons.SYMMETRY, res.colors.icon(), res.colors.disabledIcon())
                                 .setAccelerator(KeyEvent.VK_S, InputEvent.ALT_DOWN_MASK);
 
                 historyUndoAction = new ApplicationAction("painterHistoryUndoAction", this::undo)
                                 .setTooltipKey("painterHistoryUndoActionTooltip")
-                                .setIcon(Icons.HISTORY_UNDO, null, null)
+                                .setIcon(Icons.HISTORY_UNDO, res.colors.icon(), res.colors.disabledIcon())
                                 .setAccelerator(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK);
 
                 historyRedoAction = new ApplicationAction("painterHistoryRedoAction", this::redo)
                                 .setTooltipKey("painterHistoryRedoActionTooltip")
-                                .setIcon(Icons.HISTORY_REDO, null, null)
+                                .setIcon(Icons.HISTORY_REDO, res.colors.icon(), res.colors.disabledIcon())
                                 .setAccelerator(KeyEvent.VK_Y, InputEvent.CTRL_DOWN_MASK);
 
                 clipboardCutAction = new ApplicationAction("painterClipboardCutAction", (e, action) -> {
@@ -81,7 +84,7 @@ public class PainterActions {
                                 System.out.println("Painter cut");
                         }
                 }).setTooltipKey("painterClipboardCutActionTooltip")
-                                .setIcon(Icons.CLIPBOARD_CUT, null, null)
+                                .setIcon(Icons.CLIPBOARD_CUT, res.colors.icon(), res.colors.disabledIcon())
                                 .setAccelerator(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK);
 
                 clipboardCopyAction = new ApplicationAction("painterClipboardCopyAction", (e, action) -> {
@@ -89,7 +92,7 @@ public class PainterActions {
                                 System.out.println("Painter copy");
                         }
                 }).setTooltipKey("painterClipboardCopyActionTooltip")
-                                .setIcon(Icons.CLIPBOARD_COPY, null, null)
+                                .setIcon(Icons.CLIPBOARD_COPY, res.colors.icon(), res.colors.disabledIcon())
                                 .setAccelerator(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK);
 
                 clipboardPasteAction = new ApplicationAction("painterClipboardPasteAction", (e, action) -> {
@@ -97,7 +100,7 @@ public class PainterActions {
                                 System.out.println("Painter paste");
                         }
                 }).setTooltipKey("painterClipboardPasteActionTooltip")
-                                .setIcon(Icons.CLIPBOARD_PASTE, null, null)
+                                .setIcon(Icons.CLIPBOARD_PASTE, res.colors.icon(), res.colors.disabledIcon())
                                 .setAccelerator(KeyEvent.VK_V, InputEvent.CTRL_DOWN_MASK);
 
                 clipboardImportAction = new ApplicationAction("painterClipboardImportAction", (e, action) -> {
@@ -105,7 +108,7 @@ public class PainterActions {
                                 System.out.println("Painter import clip");
                         }
                 }).setTooltipKey("painterClipboardImportActionTooltip")
-                                .setIcon(Icons.CLIPBOARD_IMPORT, null, null)
+                                .setIcon(Icons.CLIPBOARD_IMPORT, res.colors.icon(), res.colors.disabledIcon())
                                 .setAccelerator(
                                                 KeyEvent.VK_V,
                                                 InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK
@@ -115,63 +118,63 @@ public class PainterActions {
                                 "flipVerticallyAction",
                                 (e, action) -> ifPainterNotNull(CanFlipImage::flipVertically)
                 ).setTooltipKey("flipVerticallyActionTooltip")
-                                .setIcon(Icons.FLIP_VERTICAL, null, null)
+                                .setIcon(Icons.FLIP_VERTICAL, res.colors.icon(), res.colors.disabledIcon())
                                 .setAccelerator(KeyEvent.VK_V, InputEvent.ALT_DOWN_MASK);
 
                 flipHorizontallyAction = new ApplicationAction(
                                 "flipHorizontallyAction",
                                 (e, action) -> ifPainterNotNull(CanFlipImage::flipHorizontally)
                 ).setTooltipKey("flipHorizontallyActionTooltip")
-                                .setIcon(Icons.FLIP_HORIZONTAL, null, null)
+                                .setIcon(Icons.FLIP_HORIZONTAL, res.colors.icon(), res.colors.disabledIcon())
                                 .setAccelerator(KeyEvent.VK_H, InputEvent.ALT_DOWN_MASK);
 
                 rotateLeftAction = new ApplicationAction(
                                 "rotateLeftAction",
                                 (e, action) -> ifPainterNotNull(CanRotateImage::rotateLeft)
                 ).setTooltipKey("rotateLeftActionTooltip")
-                                .setIcon(Icons.ROTATE_LEFT, null, null)
+                                .setIcon(Icons.ROTATE_LEFT, res.colors.icon(), res.colors.disabledIcon())
                                 .setAccelerator(KeyEvent.VK_L, InputEvent.ALT_DOWN_MASK);
 
                 rotateRightAction = new ApplicationAction(
                                 "rotateRightAction",
                                 (e, action) -> ifPainterNotNull(CanRotateImage::rotateRight)
                 ).setTooltipKey("rotateRightActionTooltip")
-                                .setIcon(Icons.ROTATE_RIGHT, null, null)
+                                .setIcon(Icons.ROTATE_RIGHT, res.colors.icon(), res.colors.disabledIcon())
                                 .setAccelerator(KeyEvent.VK_R, InputEvent.ALT_DOWN_MASK);
 
                 moveLeftAction = new ApplicationAction(
                                 "moveLeftAction",
                                 (e, action) -> ifPainterNotNull(CanTranslateImage::moveOnePixelLeft)
                 ).setTooltipKey("moveLeftActionTooltip")
-                                .setIcon(Icons.MOVE_LEFT, null, null)
+                                .setIcon(Icons.MOVE_LEFT, res.colors.icon(), res.colors.disabledIcon())
                                 .setAccelerator(KeyEvent.VK_LEFT, InputEvent.ALT_DOWN_MASK);
 
                 moveRightAction = new ApplicationAction(
                                 "moveRightAction",
                                 (e, action) -> ifPainterNotNull(CanTranslateImage::moveOnePixelRight)
                 ).setTooltipKey("moveRightActionTooltip")
-                                .setIcon(Icons.MOVE_RIGHT, null, null)
+                                .setIcon(Icons.MOVE_RIGHT, res.colors.icon(), res.colors.disabledIcon())
                                 .setAccelerator(KeyEvent.VK_RIGHT, InputEvent.ALT_DOWN_MASK);
 
                 moveUpAction = new ApplicationAction(
                                 "moveUpAction",
                                 (e, action) -> ifPainterNotNull(CanTranslateImage::moveOnePixelUp)
                 ).setTooltipKey("moveUpActionTooltip")
-                                .setIcon(Icons.MOVE_UP, null, null)
+                                .setIcon(Icons.MOVE_UP, res.colors.icon(), res.colors.disabledIcon())
                                 .setAccelerator(KeyEvent.VK_UP, InputEvent.ALT_DOWN_MASK);
 
                 moveDownAction = new ApplicationAction(
                                 "moveDownAction",
                                 (e, action) -> ifPainterNotNull(CanTranslateImage::moveOnePixelDown)
                 ).setTooltipKey("moveDownActionTooltip")
-                                .setIcon(Icons.MOVE_DOWN, null, null)
+                                .setIcon(Icons.MOVE_DOWN, res.colors.icon(), res.colors.disabledIcon())
                                 .setAccelerator(KeyEvent.VK_DOWN, InputEvent.ALT_DOWN_MASK);
 
                 eraseAction = new ApplicationAction(
                                 "eraseAction",
                                 (e, action) -> ifPainterNotNull(GlyphPainter::erase)
                 ).setTooltipKey("eraseActionTooltip")
-                                .setIcon(Icons.ERASE, null, null)
+                                .setIcon(Icons.ERASE, res.colors.icon(), res.colors.disabledIcon())
                                 .setAccelerator(KeyEvent.VK_X, InputEvent.ALT_DOWN_MASK);
 
                 all.addAll(

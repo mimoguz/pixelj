@@ -42,7 +42,7 @@ public class ProjectView extends JFrame {
         button.putClientProperty(
                 FlatClientProperties.BUTTON_TYPE,
                 FlatClientProperties.BUTTON_TYPE_BORDERLESS
-                );
+        );
         button.putClientProperty(FlatClientProperties.BUTTON_TYPE_SQUARE, true);
         button.setFocusable(false);
         Components.setFixedSize(button, size);
@@ -66,24 +66,24 @@ public class ProjectView extends JFrame {
 
         root.addTab(
                 null,
-                res.getIcon(Icons.LIST, res.colors.active()),
+                res.getIcon(Icons.LIST, res.colors.active(), null),
                 charactersScreen,
                 res.getString("charactersScreenTabTooltip")
-                );
+        );
 
         root.addTab(
                 null,
-                res.getIcon(Icons.KERNING, res.colors.faintIcon()),
+                res.getIcon(Icons.KERNING, res.colors.faintIcon(), null),
                 kerningPairsScreen,
                 res.getString("kerningPairsScreenTabTooltip")
-                );
+        );
 
         root.addTab(
                 null,
-                res.getIcon(Icons.EYE, res.colors.faintIcon()),
+                res.getIcon(Icons.EYE, res.colors.faintIcon(), null),
                 previewScreen,
                 res.getString("previewScreenTabTooltip")
-                );
+        );
 
         root.addChangeListener(e -> {
             // Activate-deactivate actions
@@ -110,7 +110,7 @@ public class ProjectView extends JFrame {
                 if (root.getIconAt(index) instanceof FontIcon icn) {
                     icn.setForeground(
                             index == root.getSelectedIndex() ? res.colors.active() : res.colors.faintIcon()
-                            );
+                    );
                 }
             }
         });
@@ -124,8 +124,8 @@ public class ProjectView extends JFrame {
                         menuButtonContainer,
                         menuButtonContainer.getX() + menuButtonContainer.getWidth() + 12,
                         menuButtonContainer.getY()
-                        )
-                ).setTooltipKey("menuButtonAction")
+                )
+        ).setTooltipKey("menuButtonAction")
                 .setIcon(Icons.ELLIPSIS, res.colors.accent(), res.colors.disabledIcon())
                 .setAccelerator(KeyEvent.VK_M, ActionEvent.CTRL_MASK);
         Actions.registerShortcuts(java.util.List.of(menuButtonAction), root);
@@ -153,14 +153,12 @@ public class ProjectView extends JFrame {
         trailingContainer.add(helpButton, c);
         root.putClientProperty(FlatClientProperties.TABBED_PANE_TRAILING_COMPONENT, trailingContainer);
 
-
         ToolTipManager.sharedInstance().setInitialDelay(100);
         ToolTipManager.sharedInstance().setDismissDelay(3000);
         root.putClientProperty(FlatClientProperties.TABBED_PANE_MINIMUM_TAB_WIDTH, buttonSize.width);
         root.putClientProperty(FlatClientProperties.TABBED_PANE_MAXIMUM_TAB_WIDTH, buttonSize.width);
         root.putClientProperty(FlatClientProperties.TABBED_PANE_TAB_HEIGHT, buttonSize.height);
         root.putClientProperty(FlatClientProperties.TABBED_PANE_TAB_ICON_PLACEMENT, SwingConstants.TOP);
-        root.putClientProperty(FlatClientProperties.STYLE_CLASS, "divided");
         root.setTabPlacement(SwingConstants.LEFT);
         root.setFocusable(false);
         add(root);

@@ -6,7 +6,7 @@ public class OneDarkColors implements Colors {
     final Color accent = new Color(41, 121, 255);
     final Color active = new Color(229, 115, 26);
     final Color background = new Color(40, 44, 52);
-    final Color disabledIcon = new Color(45, 49, 58);
+    final Color disabledIcon = new Color(68, 75, 89);
     final Color divider = new Color(53, 58, 68);
     final Color faintIcon = new Color(106, 112, 122);
     final Color focusBackground = accent;

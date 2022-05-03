@@ -47,14 +47,14 @@ public class ApplicationAction extends AbstractAction {
 
     public ApplicationAction setIcon(final Icons iconVariant, final Color color, final Color disabledColor) {
         final var res = Resources.get();
-        final var icon = res.getIcon(
-                iconVariant,
-                color != null ? color : res.colors.icon(),
-                disabledColor != null ? disabledColor : res.colors.disabledIcon()
-        );
+        final var icon = res.getIcon(iconVariant, color, disabledColor);
         putValue(Action.SMALL_ICON, icon);
         putValue(Action.LARGE_ICON_KEY, icon);
         return this;
+    }
+
+    public ApplicationAction setIcon(final Icons iconVariant) {
+        return setIcon(iconVariant, null, null);
     }
 
     public ApplicationAction setTextKey(final String value) {

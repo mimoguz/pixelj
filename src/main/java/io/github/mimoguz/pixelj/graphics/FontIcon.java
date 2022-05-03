@@ -11,6 +11,8 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.Icon;
 
+import com.formdev.flatlaf.FlatLaf;
+
 public class FontIcon implements Icon {
     private Color disabledForeground;
     private final Font font;
@@ -41,14 +43,16 @@ public class FontIcon implements Icon {
         width = metrics.charWidth(codePoint);
     }
 
-    public FontIcon(final int codePoint, final Color foreground, final Font font) {
-        this(codePoint, foreground, foreground, font);
-    }
-
+    /**
+     * @return Color or null
+     */
     public Color getDisabledForeground() {
         return disabledForeground;
     }
 
+    /**
+     * @return Color or null
+     */
     public Color getForeground() {
         return foreground;
     }
@@ -68,16 +72,30 @@ public class FontIcon implements Icon {
         final var g = (Graphics2D) graphics.create();
         g.setFont(font);
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g.setColor(component.isEnabled() ? foreground : disabledForeground);
+        g.setColor(getPaint(component));
         g.drawString(symbol, x, y + g.getFontMetrics().getAscent());
         g.dispose();
     }
 
+    /**
+     * @param value Color or null
+     */
     public void setDisabledForeground(Color value) {
         disabledForeground = value;
     }
 
+    /**
+     * @param value Color or null
+     */
     public void setForeground(Color value) {
         foreground = value;
+    }
+
+    private Color getPaint(final Component component) {
+        if (component.isEnabled()) {
+            return foreground != null ? foreground : component.getForeground();
+        } else {
+            return disabledForeground != null ? disabledForeground : component.getForeground();
+        }
     }
 }

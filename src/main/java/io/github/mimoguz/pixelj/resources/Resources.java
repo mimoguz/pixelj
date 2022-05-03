@@ -50,8 +50,8 @@ public class Resources {
         return strings.format(key, arguments);
     }
 
-    public FontIcon getIcon(final Icons icon, final Color color) {
-        return new FontIcon(icon.codePoint, color, iconFont);
+    public FontIcon getIcon(final Icons icon) {
+        return new FontIcon(icon.codePoint, null, null, iconFont);
     }
 
     public FontIcon getIcon(final Icons icon, final Color color, final Color disabledColor) {

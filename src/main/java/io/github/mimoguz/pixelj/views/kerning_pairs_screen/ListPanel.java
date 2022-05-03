@@ -48,19 +48,16 @@ public class ListPanel extends JPanel implements Detachable {
         addButton = new JButton();
         addButton.setAction(actions.showAddDialogAction);
         Components.setFixedSize(addButton, Dimensions.TEXT_BUTTON_SIZE);
-        addButton.putClientProperty(FlatClientProperties.STYLE_CLASS, "textButton");
 
         removeButton = new JButton();
         removeButton.setAction(actions.showRemoveDialogAction);
         Components.setFixedSize(removeButton, Dimensions.TEXT_BUTTON_SIZE);
-        removeButton.putClientProperty(FlatClientProperties.STYLE_CLASS, "textButton");
 
         list = new JList<>(listModel);
         list.setSelectionModel(selectionModel);
         list.setCellRenderer(new KerningPairCellRenderer(48));
         list.setMaximumSize(Dimensions.MAXIMUM);
         setBorder(Borders.empty);
-        list.putClientProperty(FlatClientProperties.STYLE_CLASS, "focusList");
 
         leftFilterBox = filterBox(lm -> (lm::setLeftRange));
 
@@ -83,7 +80,7 @@ public class ListPanel extends JPanel implements Detachable {
 
         final var filterPanel = new JPanel();
         filterPanel.setBorder(Borders.smallEmptyCup);
-        filterPanel.setLayout(new GridLayout(2, 2));
+        filterPanel.setLayout(new GridLayout(2, 2, 4, 0));
         final var leftTitle = new JLabel(res.getString("leftTitle"));
         leftTitle.putClientProperty(FlatClientProperties.STYLE_CLASS, "h4");
         leftTitle.setHorizontalAlignment(SwingConstants.CENTER);

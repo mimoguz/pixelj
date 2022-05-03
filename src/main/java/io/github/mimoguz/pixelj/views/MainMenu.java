@@ -4,8 +4,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
-import com.formdev.flatlaf.FlatClientProperties;
-
 import io.github.mimoguz.pixelj.actions.MainActions;
 
 public class MainMenu extends JPopupMenu {
@@ -15,19 +13,13 @@ public class MainMenu extends JPopupMenu {
         add(actions.saveAction);
         add(actions.saveAsAction);
         add(actions.exportAction);
-        add(separator());
+        add(new JSeparator(SwingConstants.HORIZONTAL));
         add(actions.showMetricsAction);
         add(actions.showSettingsAction);
-        add(separator());
+        add(new JSeparator(SwingConstants.HORIZONTAL));
         add(actions.showHelpAction);
-        add(separator());
+        add(new JSeparator(SwingConstants.HORIZONTAL));
         add(actions.closeProjectAction);
         add(actions.quitAction);
-    }
-
-    private static JSeparator separator() {
-        final var separator = new JSeparator(SwingConstants.HORIZONTAL);
-        separator.putClientProperty(FlatClientProperties.STYLE_CLASS, "divider");
-        return separator;
     }
 }

@@ -10,6 +10,7 @@ import javax.swing.Action;
 
 import io.github.mimoguz.pixelj.models.ProjectModel;
 import io.github.mimoguz.pixelj.resources.Icons;
+import io.github.mimoguz.pixelj.resources.Resources;
 
 public class MainActions {
     public final Collection<ApplicationAction> all;
@@ -27,38 +28,40 @@ public class MainActions {
     public MainActions(final ProjectModel project) {
         this.project = project;
 
+        final var res = Resources.get();
+
         closeProjectAction = new ApplicationAction("closeProjectAction", this::export)
                 .setTextKey("closeProjectAction")
-                .setIcon(Icons.FILE_EXPORT, null, null);
+                .setIcon(Icons.FILE_EXPORT, res.colors.icon(), res.colors.disabledIcon());
 
         exportAction = new ApplicationAction("exportAction", this::export).setTextKey("exportAction")
-                .setIcon(Icons.FILE_EXPORT, null, null)
+                .setIcon(Icons.FILE_EXPORT, res.colors.icon(), res.colors.disabledIcon())
                 .setAccelerator(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK);
 
         quitAction = new ApplicationAction("quitAction", this::quit).setTextKey("quitAction")
-                .setIcon(Icons.EXIT, null, null)
+                .setIcon(Icons.EXIT, res.colors.icon(), res.colors.disabledIcon())
                 .setAccelerator(KeyEvent.VK_Q, InputEvent.CTRL_DOWN_MASK);
 
         saveAction = new ApplicationAction("saveProjectAction", this::save).setTextKey("saveAction")
-                .setIcon(Icons.FILE_SAVE, null, null)
+                .setIcon(Icons.FILE_SAVE, res.colors.icon(), res.colors.disabledIcon())
                 .setAccelerator(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK);
 
         saveAsAction = new ApplicationAction("saveAsAction", this::saveAs).setTextKey("saveAsAction")
-                .setIcon(Icons.FILE_SAVE_AS, null, null)
+                .setIcon(Icons.FILE_SAVE_AS, res.colors.icon(), res.colors.disabledIcon())
                 .setAccelerator(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK);
 
         showHelpAction = new ApplicationAction("showHelpAction", this::showHelp).setTextKey("showHelpAction")
-                .setIcon(Icons.HELP, null, null)
+                .setIcon(Icons.HELP, res.colors.icon(), res.colors.disabledIcon())
                 .setAccelerator(KeyEvent.VK_F1, 0);
 
         showMetricsAction = new ApplicationAction("showMetricsAction", this::showMetrics)
                 .setTextKey("showMetricsAction")
-                .setIcon(Icons.METRICS, null, null)
+                .setIcon(Icons.METRICS, res.colors.icon(), res.colors.disabledIcon())
                 .setAccelerator(KeyEvent.VK_M, InputEvent.CTRL_DOWN_MASK);
 
         showSettingsAction = new ApplicationAction("showSettingsAction", this::showSettings)
                 .setTextKey("showSettingsAction")
-                .setIcon(Icons.SETTINGS, null, null)
+                .setIcon(Icons.SETTINGS, res.colors.icon(), res.colors.disabledIcon())
                 .setAccelerator(KeyEvent.VK_PERIOD, InputEvent.CTRL_DOWN_MASK);
 
         all = java.util.Collections.unmodifiableCollection(
@@ -71,8 +74,8 @@ public class MainActions {
                         showHelpAction,
                         showMetricsAction,
                         showSettingsAction
-                        )
-                );
+                )
+        );
     }
 
     public boolean isEnabled() {

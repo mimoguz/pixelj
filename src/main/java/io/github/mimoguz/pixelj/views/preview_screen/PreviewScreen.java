@@ -55,12 +55,10 @@ public class PreviewScreen extends JPanel implements Detachable {
         refreshButton = new JButton();
         refreshButton.setAction(actions.refreshAction);
         Components.setFixedSize(refreshButton, Dimensions.TEXT_BUTTON_SIZE);
-        refreshButton.putClientProperty(FlatClientProperties.STYLE_CLASS, "textButton");
 
         clearButton = new JButton();
         clearButton.setAction(actions.clearAction);
         Components.setFixedSize(clearButton, Dimensions.TEXT_BUTTON_SIZE);
-        clearButton.putClientProperty(FlatClientProperties.STYLE_CLASS, "textButton");
 
         Actions.registerShortcuts(actions.all, root);
 
