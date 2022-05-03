@@ -11,6 +11,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 
 import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.PreviewScreenActions;
+import io.github.mimoguz.pixelj.controls.PromptTextArea;
 import io.github.mimoguz.pixelj.models.ProjectModel;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.util.Detachable;
@@ -26,7 +27,7 @@ public class PreviewScreen extends JPanel implements Detachable {
     private final transient ProjectModel project;
     private final transient ProjectModel.ProjectChangeListener projectChangeListener;
     private final JButton refreshButton;
-    private final JTextArea textInput;
+    private final PromptTextArea textInput;
     private final JSlider zoomSlider;
     private final JPanel container;
 
@@ -35,8 +36,9 @@ public class PreviewScreen extends JPanel implements Detachable {
 
         final var res = Resources.get();
 
-        textInput = new JTextArea();
+        textInput = new PromptTextArea();
         textInput.setMaximumSize(Dimensions.MAXIMUM);
+        textInput.setPromptText(res.getString("previewTextInputPrompt"));
 
         container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));

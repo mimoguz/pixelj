@@ -1,26 +1,25 @@
 package io.github.mimoguz.pixelj;
 
-import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
 import io.github.mimoguz.pixelj.models.ExampleData;
-import io.github.mimoguz.pixelj.resources.Colors;
-import io.github.mimoguz.pixelj.resources.OneDarkColors;
-import io.github.mimoguz.pixelj.resources.OneLightColors;
+import io.github.mimoguz.pixelj.resources.DarkColors;
+import io.github.mimoguz.pixelj.resources.LightColors;
 import io.github.mimoguz.pixelj.resources.Resources;
+import io.github.mimoguz.pixelj.themes.PixeljDark;
+import io.github.mimoguz.pixelj.themes.PixeljLight;
 import io.github.mimoguz.pixelj.views.ProjectView;
 
 public class Main {
-    private static final String HEX_FORMAT = "#%02x%02x%02x";
     private static final boolean USE_DARK_THEME = true;
 
     public static void main(final String[] args) {
         if (USE_DARK_THEME) {
-            io.github.mimoguz.pixelj.themes.PixeljDark.setup();
+            PixeljDark.setup();
         } else {
-            io.github.mimoguz.pixelj.themes.PixeljLight.setup();
+            PixeljLight.setup();
         }
-        final var colors = USE_DARK_THEME ? new OneDarkColors() : new OneLightColors();
+        final var colors = USE_DARK_THEME ? new DarkColors() : new LightColors();
         Resources.initialize(colors);
 
         final var view = new ProjectView(ExampleData.project);

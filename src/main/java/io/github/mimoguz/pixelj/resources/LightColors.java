@@ -2,17 +2,17 @@ package io.github.mimoguz.pixelj.resources;
 
 import java.awt.Color;
 
-public class OneDarkColors implements Colors {
+public class LightColors implements Colors {
     final Color accent = new Color(41, 121, 255);
     final Color active = new Color(229, 115, 26);
-    final Color background = new Color(40, 44, 52);
-    final Color disabledIcon = new Color(68, 75, 89);
-    final Color divider = new Color(53, 58, 68);
-    final Color faintIcon = new Color(106, 112, 122);
+    final Color background = new Color(244, 244, 244);
+    final Color disabledIcon = new Color(176, 176, 176);
+    final Color divider = new Color(219, 219, 220);
+    final Color faintIcon = new Color(158, 158, 158);
     final Color focusBackground = accent;
     final Color focusForeground = new Color(244, 244, 244);
-    final Color icon = new Color(151, 159, 173);
-    final Color text = Color.WHITE;
+    final Color icon = new Color(72, 72, 74);
+    final Color text = new Color(35, 35, 36);
 
     @Override
     public Color accent() {
@@ -56,6 +56,7 @@ public class OneDarkColors implements Colors {
 
     @Override
     public Color icon() {
+
         return icon;
     }
 

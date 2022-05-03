@@ -25,7 +25,7 @@ public class Resources {
 
     public static Resources get() {
         if (instance == null) {
-            initialize(new OneDarkColors());
+            initialize(new DarkColors());
         }
         return instance;
     }
