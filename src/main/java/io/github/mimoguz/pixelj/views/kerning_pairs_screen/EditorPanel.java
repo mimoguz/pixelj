@@ -87,36 +87,6 @@ public class EditorPanel extends JPanel implements Detachable {
         // To balance the split pane divider
         scrollPanel.setBorder(Borders.smallEmptyCupCenter);
         scrollPanel.setMaximumSize(Dimensions.MAXIMUM);
-        scrollPanel.setFocusable(true);
-        final var moveFocus = new MouseListener() {
-            @Override
-            public void mouseClicked(final MouseEvent e) {
-                // Ignored
-            }
-
-            @Override
-            public void mouseEntered(final MouseEvent e) {
-                // Ignored
-            }
-
-            @Override
-            public void mouseExited(final MouseEvent e) {
-                // Ignored
-            }
-
-            @Override
-            public void mousePressed(final MouseEvent e) {
-                scrollPanel.requestFocus();
-            }
-
-            @Override
-            public void mouseReleased(final MouseEvent e) {
-                // Ignored
-            }
-        };
-        scrollPanel.addMouseListener(moveFocus);
-        preview.addMouseListener(moveFocus);
-        previewPanel.addMouseListener(moveFocus);
         add(scrollPanel);
 
         final var spinnerPanel = new JPanel();
