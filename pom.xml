@@ -10,7 +10,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <flatlaf.version>2.2</flatlaf.version>
-        <intellij.themes.version>2.1</intellij.themes.version>
     </properties>
 
     <build>
@@ -73,12 +72,6 @@
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf-extras</artifactId>
             <version>${flatlaf.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.formdev</groupId>
-            <artifactId>flatlaf-intellij-themes</artifactId>
-            <version>${intellij.themes.version}</version>
         </dependency>
 
     </dependencies>
