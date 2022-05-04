@@ -56,6 +56,7 @@ public class PreviewScreenActions {
         clearContainer();
         container.revalidate();
         container.repaint();
+        input.setText(null);
     }
 
     private List<CharacterModel> getCharactersOfLine(String line) {
@@ -105,19 +106,21 @@ public class PreviewScreenActions {
     private void refreshPreview(ActionEvent event, Action action) {
         clearContainer();
 
-        final var lines = input.getLineCount();
-        for (var lineIndex = 0; lineIndex < lines; lineIndex++) {
-            try {
-                final var from = input.getLineStartOffset(lineIndex);
-                final var to = input.getLineEndOffset(lineIndex);
-                final var line = input.getText(from, to - from);
-                final var view = getView(line);
-                view.setZoom(zoom);
-                view.setPadding(0);
-                view.setAlignmentX(0f);
-                container.add(view);
-            } catch (BadLocationException exception) {
-                break;
+        if (input.getText() != null && !input.getText().isEmpty()) {
+            final var lines = input.getLineCount();
+            for (var lineIndex = 0; lineIndex < lines; lineIndex++) {
+                try {
+                    final var from = input.getLineStartOffset(lineIndex);
+                    final var to = input.getLineEndOffset(lineIndex);
+                    final var line = input.getText(from, to - from);
+                    final var view = getView(line);
+                    view.setZoom(zoom);
+                    view.setPadding(0);
+                    view.setAlignmentX(0f);
+                    container.add(view);
+                } catch (BadLocationException exception) {
+                    break;
+                }
             }
         }
 

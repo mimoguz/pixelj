@@ -21,10 +21,12 @@ public class StringView extends JPanel {
     private int padding;
     private final ArrayList<Integer> spaces = new ArrayList<>();
     private int zoom;
-    private transient BufferedImage renderTarget = new BufferedImage(16, 16, BufferedImage.TYPE_INT_RGB);
+    private static BufferedImage empty = new BufferedImage(16, 16, BufferedImage.TYPE_INT_RGB);
+    private transient BufferedImage renderTarget;
 
     public StringView(final Color backgroundColor) {
         this.backgroundColor = backgroundColor;
+        renderTarget = empty;
         setZoom(1);
     }
 
@@ -66,14 +68,20 @@ public class StringView extends JPanel {
         var dimensions = Dimensions.LARGE_SQUARE;
 
         if (!characters.isEmpty()) {
-            final var w = characters.stream().mapToInt(CharacterModel::getWidth).sum()
+            var w = characters.stream().mapToInt(CharacterModel::getWidth).sum()
                     + spaces.stream().mapToInt(i -> i).limit(characters.size()).reduce(0, Integer::sum);
-            final var h = characters.stream()
+
+            var h = characters.stream()
                     .mapToInt(chr -> chr.getGlyph() == null ? 0 : chr.getGlyph().getHeight())
                     .max()
                     .orElseGet(() -> 0);
-            renderTarget = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-            dimensions = new Dimension(w * zoom + 2 * padding, h * zoom + 2 * padding);
+
+            if (w != 0 && h != 0) {
+                renderTarget = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+                dimensions = new Dimension(w * zoom + 2 * padding, h * zoom + 2 * padding);
+            } else {
+                renderTarget = empty;
+            }
         }
 
         setMinimumSize(dimensions);

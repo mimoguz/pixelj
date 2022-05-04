@@ -5,14 +5,10 @@ import java.awt.Color;
 public class LightColors implements Colors {
     final Color accent = new Color(41, 121, 255);
     final Color active = new Color(229, 115, 26);
-    final Color background = new Color(244, 244, 244);
     final Color disabledIcon = new Color(176, 176, 176);
     final Color divider = new Color(219, 219, 220);
     final Color faintIcon = new Color(114, 114, 114);
-    final Color focusBackground = accent;
-    final Color focusForeground = new Color(244, 244, 244);
     final Color icon = new Color(72, 72, 74);
-    final Color text = new Color(35, 35, 36);
 
     @Override
     public Color accent() {
@@ -22,11 +18,6 @@ public class LightColors implements Colors {
     @Override
     public Color active() {
         return active;
-    }
-
-    @Override
-    public Color background() {
-        return background;
     }
 
     @Override
@@ -40,18 +31,8 @@ public class LightColors implements Colors {
     }
 
     @Override
-    public Color faintIcon() {
+    public Color inactive() {
         return faintIcon;
-    }
-
-    @Override
-    public Color focusBackground() {
-        return focusBackground;
-    }
-
-    @Override
-    public Color focusForeground() {
-        return focusForeground;
     }
 
     @Override
@@ -60,8 +41,4 @@ public class LightColors implements Colors {
         return icon;
     }
 
-    @Override
-    public Color text() {
-        return text;
-    }
 }

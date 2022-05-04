@@ -45,7 +45,7 @@ public class PromptTextArea extends JTextArea {
         } else {
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         }
-        g2d.setColor(Resources.get().colors.faintIcon());
+        g2d.setColor(Resources.get().colors.inactive());
         g2d.drawString(
                 promptText,
                 getInsets().left,

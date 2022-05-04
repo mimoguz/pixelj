@@ -73,14 +73,14 @@ public class ProjectView extends JFrame {
 
         root.addTab(
                 null,
-                res.getIcon(Icons.KERNING, res.colors.faintIcon(), null),
+                res.getIcon(Icons.KERNING, res.colors.inactive(), null),
                 kerningPairsScreen,
                 res.getString("kerningPairsScreenTabTooltip")
         );
 
         root.addTab(
                 null,
-                res.getIcon(Icons.EYE, res.colors.faintIcon(), null),
+                res.getIcon(Icons.EYE, res.colors.inactive(), null),
                 previewScreen,
                 res.getString("previewScreenTabTooltip")
         );
@@ -109,7 +109,7 @@ public class ProjectView extends JFrame {
             for (var index = 0; index < 3; index++) {
                 if (root.getIconAt(index) instanceof FontIcon icn) {
                     icn.setForeground(
-                            index == root.getSelectedIndex() ? res.colors.active() : res.colors.faintIcon()
+                            index == root.getSelectedIndex() ? res.colors.active() : res.colors.inactive()
                     );
                 }
             }

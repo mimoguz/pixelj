@@ -28,11 +28,11 @@ public class KerningPairListActions {
         this.selectionModel = selectionModel;
 
         showAddDialogAction = new ApplicationAction("showAddDialog", this::showAddDialog)
-                .setTextKey("showAddDialogAction")
+                .setTextKey("kerningPairsShowAddDialogAction")
                 .setAccelerator(KeyEvent.VK_PLUS, InputEvent.ALT_DOWN_MASK);
 
         showRemoveDialogAction = new ApplicationAction("showRemoveDialog", this::showRemoveDialog)
-                .setTextKey("showRemoveDialogAction")
+                .setTextKey("kerningPairsShowRemoveDialogAction")
                 .setAccelerator(KeyEvent.VK_MINUS, InputEvent.ALT_DOWN_MASK);
 
         all = java.util.Collections

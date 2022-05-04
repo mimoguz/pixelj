@@ -1,7 +1,6 @@
 package io.github.mimoguz.pixelj.views.kerning_pairs_screen;
 
 import io.github.mimoguz.pixelj.models.KerningPairModel;
-import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.views.shared.CharacterCell;
 
 import javax.swing.*;
@@ -31,24 +30,19 @@ public class KerningPairCellRenderer implements ListCellRenderer<KerningPairMode
         left.set(value.getLeft());
         right.set(value.getRight());
 
-        var background = list.getBackground();
-        var foreground = list.getForeground();
-
-        if (cellHasFocus && isSelected) {
-            background = Resources.get().colors.focusBackground();
-            foreground = Resources.get().colors.focusForeground();
-        } else if (isSelected) {
-            background = list.getSelectionBackground();
-            foreground = list.getSelectionForeground();
+        if (isSelected) {
+            left.setBackgroundColor(list.getSelectionBackground());
+            left.setForegroundColor(list.getSelectionForeground());
+            right.setBackgroundColor(list.getSelectionBackground());
+            right.setForegroundColor(list.getSelectionForeground());
+            component.setBackground(list.getSelectionBackground());
+        } else {
+            left.setBackgroundColor(list.getBackground());
+            left.setForegroundColor(list.getForeground());
+            right.setBackgroundColor(list.getBackground());
+            right.setForegroundColor(list.getForeground());
+            component.setBackground(list.getBackground());
         }
-
-        left.setBackgroundColor(background);
-        left.setForegroundColor(foreground);
-
-        right.setBackgroundColor(background);
-        right.setForegroundColor(foreground);
-
-        component.setBackground(background);
 
         return component;
     }

@@ -7,19 +7,12 @@ public interface Colors {
 
     Color active();
 
-    Color background();
-
     Color disabledIcon();
 
     Color divider();
 
-    Color faintIcon();
-
-    Color focusBackground();
-
-    Color focusForeground();
+    Color inactive();
 
     Color icon();
 
-    Color text();
 }

@@ -67,6 +67,9 @@ public class KerningPairsScreen extends JSplitPane implements Detachable {
         super.setEnabled(value);
         listPanel.setEnabled(value);
         editorPanel.setEnabled(value);
+        if (value) {
+            listPanel.getList().requestFocus();
+        }
     }
 
     public void updateMetrics(final Metrics metrics) {

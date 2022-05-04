@@ -35,14 +35,16 @@ public class CharacterListActions {
         this.selectionModel = selectionModel;
 
         showAddDialogAction = new ApplicationAction(
-                "showAddDialogAction",
+                "charactersShowAddDialogAction",
                 (e, action) -> System.out.println("Show add dialog action")
-        ).setTextKey("showAddDialogAction").setAccelerator(KeyEvent.VK_PLUS, InputEvent.ALT_DOWN_MASK);
+        ).setTextKey("charactersShowAddDialogAction")
+                .setAccelerator(KeyEvent.VK_PLUS, InputEvent.ALT_DOWN_MASK);
 
         showRemoveDialogAction = new ApplicationAction(
-                "showRemoveDialogAction",
+                "charactersShowRemoveDialogAction",
                 (e, action) -> removeSelected()
-        ).setTextKey("showRemoveDialogAction").setAccelerator(KeyEvent.VK_MINUS, InputEvent.ALT_DOWN_MASK);
+        ).setTextKey("charactersShowRemoveDialogAction")
+                .setAccelerator(KeyEvent.VK_MINUS, InputEvent.ALT_DOWN_MASK);
 
         all = java.util.Collections
                 .unmodifiableCollection(List.of(showAddDialogAction, showRemoveDialogAction));
