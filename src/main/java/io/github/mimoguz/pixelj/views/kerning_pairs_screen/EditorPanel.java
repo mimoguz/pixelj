@@ -2,8 +2,6 @@ package io.github.mimoguz.pixelj.views.kerning_pairs_screen;
 
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.*;

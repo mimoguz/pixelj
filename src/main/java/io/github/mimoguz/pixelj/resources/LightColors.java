@@ -8,7 +8,7 @@ public class LightColors implements Colors {
     final Color background = new Color(244, 244, 244);
     final Color disabledIcon = new Color(176, 176, 176);
     final Color divider = new Color(219, 219, 220);
-    final Color faintIcon = new Color(158, 158, 158);
+    final Color faintIcon = new Color(114, 114, 114);
     final Color focusBackground = accent;
     final Color focusForeground = new Color(244, 244, 244);
     final Color icon = new Color(72, 72, 74);
