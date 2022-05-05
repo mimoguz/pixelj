@@ -231,15 +231,12 @@ public class GlyphView extends JPanel
         final var dy = getHeight() / (double) h;
         for (var line : lines) {
             g.setColor(line.color());
-            switch (line.orientation()) {
-                case HORIZONTAL -> {
-                    final var y = (int) Math.round(line.point() * dy);
-                    g.drawLine(0, y, getWidth(), y);
-                }
-                default -> {
-                    final var x = (int) Math.round(line.point() * dx);
-                    g.drawLine(x, 0, x, getHeight());
-                }
+            if (line.orientation() == Orientation.HORIZONTAL) {
+                final var y = (int) Math.round(line.point() * dy);
+                g.drawLine(0, y, getWidth(), y);
+            } else {
+                final var x = (int) Math.round(line.point() * dx);
+                g.drawLine(x, 0, x, getHeight());
             }
         }
     }

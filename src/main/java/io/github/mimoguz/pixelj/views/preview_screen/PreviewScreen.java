@@ -2,17 +2,22 @@ package io.github.mimoguz.pixelj.views.preview_screen;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridBagLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.GridBagLayout;
 
 import javax.swing.*;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
 import io.github.mimoguz.pixelj.actions.Actions;
+import io.github.mimoguz.pixelj.actions.ApplicationAction;
 import io.github.mimoguz.pixelj.actions.PreviewScreenActions;
 import io.github.mimoguz.pixelj.controls.PromptTextArea;
 import io.github.mimoguz.pixelj.models.ProjectModel;
+import io.github.mimoguz.pixelj.resources.Icons;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.util.Detachable;
 import io.github.mimoguz.pixelj.views.shared.Borders;
@@ -39,6 +44,27 @@ public class PreviewScreen extends JPanel implements Detachable {
         textInput = new PromptTextArea();
         textInput.setMaximumSize(Dimensions.MAXIMUM);
         textInput.setPromptText(res.getString("previewTextInputPrompt"));
+
+        final var contextMenu = new JPopupMenu();
+        contextMenu.add(
+                new ApplicationAction("previewCutAction", (event, action) -> textInput.cut())
+                        .setIcon(Icons.CLIPBOARD_CUT, res.colors.icon(), res.colors.disabledIcon())
+                        .setTextKey("cut")
+                        .setAccelerator(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx())
+        );
+        contextMenu.add(
+                new ApplicationAction("previewCopyAction", (event, action) -> textInput.copy())
+                        .setIcon(Icons.CLIPBOARD_COPY, res.colors.icon(), res.colors.disabledIcon())
+                        .setTextKey("copy")
+                        .setAccelerator(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx())
+        );
+        contextMenu.add(
+                new ApplicationAction("previewPasteAction", (event, action) -> textInput.paste())
+                        .setIcon(Icons.CLIPBOARD_PASTE, res.colors.icon(), res.colors.disabledIcon())
+                        .setTextKey("paste")
+                        .setAccelerator(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx())
+        );
+        textInput.setComponentPopupMenu(contextMenu);
 
         container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));

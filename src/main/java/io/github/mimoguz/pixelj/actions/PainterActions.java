@@ -3,6 +3,7 @@ package io.github.mimoguz.pixelj.actions;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.ActionEvent;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -72,12 +73,18 @@ public class PainterActions {
                 historyUndoAction = new ApplicationAction("painterHistoryUndoAction", this::undo)
                                 .setTooltipKey("painterHistoryUndoActionTooltip")
                                 .setIcon(Icons.HISTORY_UNDO, res.colors.icon(), res.colors.disabledIcon())
-                                .setAccelerator(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK);
+                                .setAccelerator(
+                                                KeyEvent.VK_Z,
+                                                Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()
+                                );
 
                 historyRedoAction = new ApplicationAction("painterHistoryRedoAction", this::redo)
                                 .setTooltipKey("painterHistoryRedoActionTooltip")
                                 .setIcon(Icons.HISTORY_REDO, res.colors.icon(), res.colors.disabledIcon())
-                                .setAccelerator(KeyEvent.VK_Y, InputEvent.CTRL_DOWN_MASK);
+                                .setAccelerator(
+                                                KeyEvent.VK_Y,
+                                                Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()
+                                );
 
                 clipboardCutAction = new ApplicationAction("painterClipboardCutAction", (e, action) -> {
                         if (painter != null) {
@@ -85,7 +92,10 @@ public class PainterActions {
                         }
                 }).setTooltipKey("painterClipboardCutActionTooltip")
                                 .setIcon(Icons.CLIPBOARD_CUT, res.colors.icon(), res.colors.disabledIcon())
-                                .setAccelerator(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK);
+                                .setAccelerator(
+                                                KeyEvent.VK_X,
+                                                Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()
+                                );
 
                 clipboardCopyAction = new ApplicationAction("painterClipboardCopyAction", (e, action) -> {
                         if (painter != null) {
@@ -93,7 +103,10 @@ public class PainterActions {
                         }
                 }).setTooltipKey("painterClipboardCopyActionTooltip")
                                 .setIcon(Icons.CLIPBOARD_COPY, res.colors.icon(), res.colors.disabledIcon())
-                                .setAccelerator(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK);
+                                .setAccelerator(
+                                                KeyEvent.VK_C,
+                                                Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()
+                                );
 
                 clipboardPasteAction = new ApplicationAction("painterClipboardPasteAction", (e, action) -> {
                         if (painter != null) {
@@ -101,7 +114,10 @@ public class PainterActions {
                         }
                 }).setTooltipKey("painterClipboardPasteActionTooltip")
                                 .setIcon(Icons.CLIPBOARD_PASTE, res.colors.icon(), res.colors.disabledIcon())
-                                .setAccelerator(KeyEvent.VK_V, InputEvent.CTRL_DOWN_MASK);
+                                .setAccelerator(
+                                                KeyEvent.VK_V,
+                                                Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()
+                                );
 
                 clipboardImportAction = new ApplicationAction("painterClipboardImportAction", (e, action) -> {
                         if (painter != null) {
@@ -111,7 +127,8 @@ public class PainterActions {
                                 .setIcon(Icons.CLIPBOARD_IMPORT, res.colors.icon(), res.colors.disabledIcon())
                                 .setAccelerator(
                                                 KeyEvent.VK_V,
-                                                InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK
+                                                Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()
+                                                                | InputEvent.SHIFT_DOWN_MASK
                                 );
 
                 flipVerticallyAction = new ApplicationAction(
