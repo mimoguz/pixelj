@@ -19,15 +19,33 @@ public class StringView extends JPanel {
     private final Color backgroundColor;
     private final ArrayList<CharacterModel> characters = new ArrayList<>();
     private int padding;
+    private int lineSpacing;
+    private int maxY;
     private final ArrayList<Integer> spaces = new ArrayList<>();
     private int zoom;
-    private static BufferedImage empty = new BufferedImage(16, 16, BufferedImage.TYPE_INT_RGB);
     private transient BufferedImage renderTarget;
 
     public StringView(final Color backgroundColor) {
         this.backgroundColor = backgroundColor;
-        renderTarget = empty;
         setZoom(1);
+    }
+
+    public int getLineSpacing() {
+        return lineSpacing;
+    }
+
+    public void setLineSpacing(int lineSpacing) {
+        this.lineSpacing = lineSpacing;
+        updateView();
+    }
+
+    public int getMaxY() {
+        return maxY;
+    }
+
+    public void setMaxY(int maxY) {
+        this.maxY = maxY;
+        updateView();
     }
 
     public int getPadding() {
@@ -50,7 +68,8 @@ public class StringView extends JPanel {
 
     public void setPadding(final int value) {
         padding = value;
-        updateView();
+        resizeCanvas();
+        repaint();
     }
 
     public void setSpaces(Collection<Integer> spaces) {
@@ -61,29 +80,56 @@ public class StringView extends JPanel {
 
     public void setZoom(final int value) {
         zoom = value;
-        updateView();
+        resizeCanvas();
+        repaint();
+    }
+
+    private void renderString() {
+        if (characters.isEmpty()) {
+            renderTarget = null;
+            return;
+        }
+
+        final var w = characters.stream().mapToInt(CharacterModel::getWidth).sum()
+                + spaces.stream().mapToInt(i -> i).limit(characters.size()).reduce(0, Integer::sum);
+
+        var h = characters.stream()
+                .mapToInt(chr -> chr.getGlyph() == null ? 0 : chr.getGlyph().getHeight())
+                .max()
+                .orElseGet(() -> 0);
+
+        if (maxY > 0) {
+            h = Math.min(h, maxY);
+        }
+
+        if (w == 0 || h == 0) {
+            renderTarget = null;
+            return;
+        }
+
+        renderTarget = new BufferedImage(w, h + lineSpacing, BufferedImage.TYPE_INT_RGB);
+        final var g = (Graphics2D) renderTarget.getGraphics();
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, renderTarget.getWidth(), renderTarget.getHeight());
+        var x = 0;
+        for (var index = 0; index < characters.size(); index++) {
+            final var character = characters.get(index);
+            if (character.getGlyph() == null) {
+                // Non-printable character. Spaces should handle that.
+                x += spaces.size() > index ? spaces.get(index) : 0;
+                continue;
+            }
+            drawCharacter(renderTarget, character, x, 0);
+            x += characters.get(index).getWidth() + (spaces.size() > index ? spaces.get(index) : 0);
+        }
     }
 
     private void resizeCanvas() {
-        var dimensions = Dimensions.LARGE_SQUARE;
-
-        if (!characters.isEmpty()) {
-            var w = characters.stream().mapToInt(CharacterModel::getWidth).sum()
-                    + spaces.stream().mapToInt(i -> i).limit(characters.size()).reduce(0, Integer::sum);
-
-            var h = characters.stream()
-                    .mapToInt(chr -> chr.getGlyph() == null ? 0 : chr.getGlyph().getHeight())
-                    .max()
-                    .orElseGet(() -> 0);
-
-            if (w != 0 && h != 0) {
-                renderTarget = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-                dimensions = new Dimension(w * zoom + 2 * padding, h * zoom + 2 * padding);
-            } else {
-                renderTarget = empty;
-            }
-        }
-
+        var dimensions = renderTarget == null ? Dimensions.LARGE_SQUARE
+                : new Dimension(
+                        renderTarget.getWidth() * zoom + 2 * padding,
+                        renderTarget.getHeight() * zoom + 2 * padding
+                );
         setMinimumSize(dimensions);
         setMaximumSize(dimensions);
         setPreferredSize(dimensions);
@@ -91,7 +137,8 @@ public class StringView extends JPanel {
         revalidate();
     }
 
-    private void updateView() {
+    public void updateView() {
+        renderString();
         resizeCanvas();
         repaint();
     }
@@ -99,34 +146,20 @@ public class StringView extends JPanel {
     @Override
     protected void paintComponent(final Graphics graphics) {
         final var g2d = (Graphics2D) graphics.create();
-        if (characters.isEmpty()) {
+        if (characters.isEmpty() || renderTarget == null) {
             g2d.setColor(backgroundColor);
             g2d.fillRect(0, 0, getWidth(), getHeight());
         } else {
             // Composite based drawing fails with NotImplementedException on Linux.
             // This method is more naive, but at least works.
             g2d.setColor(Color.WHITE);
-            renderTarget.getGraphics().fillRect(0, 0, renderTarget.getWidth(), renderTarget.getHeight());
-            var x = 0;
-            for (var index = 0; index < characters.size(); index++) {
-                final var character = characters.get(index);
-                if (character.getGlyph() == null) {
-                    // Non-printable character. Spaces should handle that.
-                    x += spaces.size() > index ? spaces.get(index) : 0;
-                    continue;
-                }
-
-                drawCharacter(renderTarget, character, x, 0);
-                x += characters.get(index).getWidth() + (spaces.size() > index ? spaces.get(index) : 0);
-            }
-            g2d.setColor(Color.WHITE);
             g2d.fillRect(0, 0, getWidth(), getHeight());
             g2d.drawImage(
                     renderTarget,
                     padding,
                     padding,
-                    getWidth() - 2 * padding,
-                    getHeight() - 2 * padding,
+                    renderTarget.getWidth() * zoom,
+                    renderTarget.getHeight() * zoom,
                     backgroundColor,
                     null
             );
@@ -143,14 +176,19 @@ public class StringView extends JPanel {
         final var w = character.getWidth();
         final var sourceBuffer = new byte[w];
         final var targetBuffer = new int[w];
-        final var image = character.getGlyph();
-        for (var line = 0; line < image.getHeight(); line++) {
-            image.getRaster().getDataElements(0, line, w, 1, sourceBuffer);
-            target.getRaster().getDataElements(x, y + line, w, 1, targetBuffer);
+        final var source = character.getGlyph();
+        final var firstLine = maxY > 0 ? source.getHeight() - maxY : 0;
+        for (var sourceLine = firstLine; sourceLine < source.getHeight(); sourceLine++) {
+            final var targetLine = sourceLine - firstLine;
+            if (targetLine >= target.getHeight() - lineSpacing) {
+                break;
+            }
+            source.getRaster().getDataElements(0, sourceLine, w, 1, sourceBuffer);
+            target.getRaster().getDataElements(x, y + targetLine, w, 1, targetBuffer);
             for (var i = 0; i < w; i++) {
                 targetBuffer[i] = targetBuffer[i] & (sourceBuffer[i] == 1 ? 0xff_ff_ff_ff : 0);
             }
-            target.getRaster().setDataElements(x, y + line, w, 1, targetBuffer);
+            target.getRaster().setDataElements(x, y + targetLine, w, 1, targetBuffer);
         }
     }
 }

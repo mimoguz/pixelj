@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.GridBagLayout;
 
@@ -177,5 +176,8 @@ public class PreviewScreen extends JPanel implements Detachable {
         super.setEnabled(value);
         textInput.setEnabled(value);
         Actions.setEnabled(actions.all, value);
+        if (value) {
+            actions.refreshAction.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, ""));
+        }
     }
 }

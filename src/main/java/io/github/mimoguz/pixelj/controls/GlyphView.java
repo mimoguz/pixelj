@@ -32,7 +32,7 @@ public class GlyphView extends JPanel
 
     private static final long serialVersionUID = 7841183984464270304L;
 
-    private static final Color SHADE = new Color(0, 0, 0, 30);
+    private static final Color SHADE = new Color(255, 0, 0, 20);
 
     private final Color backgroundColor;
     private final transient BinaryImage.ImageChangeListener imageChangeListener;
@@ -45,6 +45,8 @@ public class GlyphView extends JPanel
     private boolean showLines = false;
     private boolean showOverlay = false;
     private int zoom = 1;
+    private int top;
+    private boolean drawShade;
 
     public GlyphView(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
@@ -58,6 +60,22 @@ public class GlyphView extends JPanel
             repaint();
             fireChangeEvent(this, ViewChangeEvent.GLYPH_MODIFIED);
         };
+    }
+
+    public boolean isShaded() {
+        return drawShade;
+    }
+
+    public void setShaded(boolean value) {
+        this.drawShade = value;
+    }
+
+    public int getTop() {
+        return top;
+    }
+
+    public void setTop(int top) {
+        this.top = top;
     }
 
     public void addLines(Line... lines) {
@@ -167,6 +185,9 @@ public class GlyphView extends JPanel
         if (model != null) {
             model.getGlyph().removeChangeListener(imageChangeListener);
             fireChangeEvent(this, ViewChangeEvent.MODEL_UNLOADED);
+            if (top <= 0) {
+                top = model.getGlyph().getHeight();
+            }
         }
 
         this.model = value;
@@ -242,20 +263,26 @@ public class GlyphView extends JPanel
     }
 
     private void drawOverlay(Graphics2D g) {
-        if (overlay == null | !showOverlay) {
+        if (overlay == null || !showOverlay) {
             return;
         }
         g.drawImage(overlay, 0, 0, getWidth(), getHeight(), null);
     }
 
     private void drawShade(Graphics2D g) {
-        if (model == null || model.getWidth() >= model.getGlyph().getWidth()) {
+        if (model == null || !drawShade) {
             return;
         }
 
+        g.setColor(SHADE);
+
         final var x = (int) Math
                 .round((((double) getWidth()) / model.getGlyph().getWidth()) * model.getWidth());
-        g.setColor(SHADE);
         g.fillRect(x, 0, x, getHeight());
+
+        final var y = (int) Math.round(
+                (((double) getHeight()) / model.getGlyph().getHeight()) * (model.getGlyph().getHeight() - top)
+        );
+        g.fillRect(0, 0, x, y);
     }
 }

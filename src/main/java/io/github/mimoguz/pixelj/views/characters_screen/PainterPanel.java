@@ -1,10 +1,12 @@
 package io.github.mimoguz.pixelj.views.characters_screen;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -34,10 +36,14 @@ public class PainterPanel extends JPanel implements Detachable {
     private final JLabel title;
     private final ArrayList<Snapshot> undoBuffer = new ArrayList<>();
     private final JSlider zoomSlider;
+    private transient BufferedImage overlay;
 
     public PainterPanel(final JComponent root) {
         painter = new GlyphPainter(Resources.get().colors.disabledIcon());
         painter.setZoom(INITIAL_ZOOM);
+        painter.setOverlayVisible(true);
+        painter.setLinesVisible(true);
+        painter.setShaded(true);
         painter.setSnapshotConsumer(snapshot -> {
             undoBuffer.add(snapshot);
             if (undoBuffer.size() > MAX_UNDO) {
@@ -205,11 +211,23 @@ public class PainterPanel extends JPanel implements Detachable {
             return;
         }
 
-        final var colors = Resources.get().colors;
+        painter.setTop(metrics.descender() + metrics.ascender());
+
         painter.addLines(
-                new Line(Orientation.HORIZONTAL, metrics.descender(), colors.accent()),
-                new Line(Orientation.HORIZONTAL, metrics.descender() + metrics.xHeight(), colors.accent()),
-                new Line(Orientation.HORIZONTAL, metrics.descender() + metrics.ascender(), colors.accent())
+                // Cap height
+                new Line(
+                        Orientation.HORIZONTAL,
+                        metrics.canvasHeight() - metrics.descender() - metrics.capHeight(),
+                        Color.YELLOW
+                ),
+                // x height
+                new Line(
+                        Orientation.HORIZONTAL,
+                        metrics.canvasHeight() - metrics.descender() - metrics.xHeight(),
+                        Color.YELLOW
+                ),
+                // Baseline
+                new Line(Orientation.HORIZONTAL, metrics.canvasHeight() - metrics.descender(), Color.BLUE)
         );
     }
 
@@ -223,10 +241,43 @@ public class PainterPanel extends JPanel implements Detachable {
             Actions.setEnabled(actions.all, true);
             title.setText(Integer.toString(value.getCodePoint()));
             zoomSlider.setEnabled(true);
+            if (
+                overlay == null || overlay.getWidth() != value.getGlyph().getWidth()
+                        || overlay.getHeight() != value.getGlyph().getHeight()
+            ) {
+                overlay = checkerBoard(value.getGlyph().getWidth(), value.getGlyph().getHeight());
+            }
+            painter.setOverlay(overlay);
         } else {
             Actions.setEnabled(actions.all, false);
             title.setText(Resources.get().getString("painterTitle"));
             zoomSlider.setEnabled(false);
+            painter.setOverlay(null);
         }
     }
+
+    private static BufferedImage checkerBoard(int w, int h) {
+        final var image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        for (var y = 0; y < h; y++) {
+            for (var x = 0; x < w; x++) {
+                image.setRGB(
+                        x,
+                        y,
+                        ((odd(x) && even(y)) || (odd(y) && even(x))) ? WHITE_SQUARE : BLACK_SQUARE
+                );
+            }
+        }
+        return image;
+    }
+
+    private static boolean odd(int x) {
+        return (x & 1) == 1;
+    }
+
+    private static boolean even(int x) {
+        return (x & 1) == 0;
+    }
+
+    private static final int WHITE_SQUARE = 0x30_ff_ff_ff;
+    private static final int BLACK_SQUARE = 0x10_00_00_00;
 }

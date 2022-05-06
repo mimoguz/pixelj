@@ -50,7 +50,7 @@ public class EditorPanel extends JPanel implements Detachable {
         title.putClientProperty(FlatClientProperties.STYLE_CLASS, "h4");
 
         valueSpinner = new JSpinner();
-        Components.setFixedSize(valueSpinner, Dimensions.TEXT_BUTTON_SIZE);
+        Components.setFixedSize(valueSpinner, Dimensions.SPINNER_SIZE);
         valueSpinner.setAlignmentY(0.5f);
         valueSpinner.addChangeListener(e -> {
             if (model == null) {
@@ -147,6 +147,9 @@ public class EditorPanel extends JPanel implements Detachable {
         zoomSlider.setEnabled(valueIfNotNull);
         spinnerLabel.setEnabled(valueIfNotNull);
         pxLabel.setEnabled(valueIfNotNull);
+        if (value) {
+            preview.updateView();
+        }
     }
 
     /**

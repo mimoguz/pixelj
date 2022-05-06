@@ -97,6 +97,7 @@ public class PreviewScreenActions {
 
     private StringView getView(String line) {
         final var view = new StringView(Color.WHITE);
+        view.setMaxY(project.getMetrics().descender() + project.getMetrics().ascender());
         final var characters = getCharactersOfLine(line);
         final var spaces = getSpaces(characters);
         view.set(characters, spaces);
@@ -116,6 +117,9 @@ public class PreviewScreenActions {
                     final var view = getView(line);
                     view.setZoom(zoom);
                     view.setPadding(0);
+                    if (lineIndex < lines - 1) {
+                        view.setLineSpacing(project.getMetrics().lineSpacing());
+                    }
                     view.setAlignmentX(0f);
                     container.add(view);
                 } catch (BadLocationException exception) {
