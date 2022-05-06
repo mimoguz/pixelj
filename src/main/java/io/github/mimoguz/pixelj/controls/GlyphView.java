@@ -278,7 +278,7 @@ public class GlyphView extends JPanel
 
         final var x = (int) Math
                 .round((((double) getWidth()) / model.getGlyph().getWidth()) * model.getWidth());
-        g.fillRect(x, 0, x, getHeight());
+        g.fillRect(x, 0, getWidth() - x, getHeight());
 
         final var y = (int) Math.round(
                 (((double) getHeight()) / model.getGlyph().getHeight()) * (model.getGlyph().getHeight() - top)
