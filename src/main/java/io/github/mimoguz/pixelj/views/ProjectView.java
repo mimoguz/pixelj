@@ -1,11 +1,13 @@
 package io.github.mimoguz.pixelj.views;
 
+import java.awt.event.KeyEvent;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
+import java.util.Collection;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -26,6 +28,8 @@ import io.github.mimoguz.pixelj.views.shared.Components;
 
 public class ProjectView extends JFrame {
     private static final long serialVersionUID = -8552411151437621157L;
+    private final JTabbedPane root;
+    private final Collection<ApplicationAction> tabActions;
 
     private static JPanel divider(int width) {
         final var divider = new JPanel();
@@ -50,7 +54,8 @@ public class ProjectView extends JFrame {
     }
 
     public ProjectView(final ProjectModel project) {
-        final var root = new JTabbedPane();
+        root = new JTabbedPane();
+
         final var charactersScreen = new CharactersScreen(project, root);
         final var kerningPairsScreen = new KerningPairsScreen(project, root);
         final var previewScreen = new PreviewScreen(project, root);
@@ -63,6 +68,11 @@ public class ProjectView extends JFrame {
         previewScreen.setEnabled(false);
 
         final var res = Resources.get();
+
+        root.putClientProperty(
+                FlatClientProperties.TABBED_PANE_TAB_TYPE,
+                FlatClientProperties.TABBED_PANE_TAB_TYPE_CARD
+        );
 
         root.addTab(
                 null,
@@ -84,6 +94,16 @@ public class ProjectView extends JFrame {
                 previewScreen,
                 res.getString("previewScreenTabTooltip")
         );
+
+        tabActions = List.of(
+                new ApplicationAction("projectViewTab0Action", (event, action) -> root.setSelectedIndex(0))
+                        .setAccelerator(KeyEvent.VK_1, ActionEvent.ALT_MASK),
+                new ApplicationAction("projectViewTab1Action", (event, action) -> root.setSelectedIndex(1))
+                        .setAccelerator(KeyEvent.VK_2, ActionEvent.ALT_MASK),
+                new ApplicationAction("projectViewTab2Action", (event, action) -> root.setSelectedIndex(2))
+                        .setAccelerator(KeyEvent.VK_3, ActionEvent.ALT_MASK)
+        );
+        Actions.registerShortcuts(tabActions, root);
 
         root.addChangeListener(e -> {
             // Activate-deactivate actions
@@ -116,24 +136,25 @@ public class ProjectView extends JFrame {
         });
 
         /* ---------------------------- Leading component --------------------------- */
-        final var menuButtonContainer = new JPanel();
+        final var leadingContainer = new JPanel();
         final var buttonSize = new Dimension(48, 48);
         final var menuButtonAction = new ApplicationAction(
                 "menuButtonAction",
                 (event, action) -> mainMenu.show(
-                        menuButtonContainer,
-                        menuButtonContainer.getX() + menuButtonContainer.getWidth() + 12,
-                        menuButtonContainer.getY()
+                        leadingContainer,
+                        leadingContainer.getX() + leadingContainer.getWidth() + 12,
+                        leadingContainer.getY()
                 )
         ).setTooltipKey("menuButtonAction")
                 .setIcon(Icons.ELLIPSIS, res.colors.accent(), res.colors.disabledIcon())
-                .setAccelerator(KeyEvent.VK_M, ActionEvent.CTRL_MASK);
+                .setAccelerator(KeyEvent.VK_M, ActionEvent.ALT_MASK);
         Actions.registerShortcuts(java.util.List.of(menuButtonAction), root);
         final var menuButton = tabBarButton(menuButtonAction, buttonSize);
-        menuButtonContainer.setLayout(new BorderLayout());
-        menuButtonContainer.add(menuButton, BorderLayout.CENTER);
-        menuButtonContainer.add(divider(buttonSize.width), BorderLayout.SOUTH);
-        root.putClientProperty(FlatClientProperties.TABBED_PANE_LEADING_COMPONENT, menuButtonContainer);
+        leadingContainer.setLayout(new BorderLayout());
+        leadingContainer.setBackground(root.getBackground());
+        leadingContainer.add(menuButton, BorderLayout.CENTER);
+        leadingContainer.add(divider(buttonSize.width), BorderLayout.SOUTH);
+        root.putClientProperty(FlatClientProperties.TABBED_PANE_LEADING_COMPONENT, leadingContainer);
 
         /* --------------------------- Trailing component --------------------------- */
         final var trailingContainer = new JPanel();
@@ -142,6 +163,7 @@ public class ProjectView extends JFrame {
         final var c = new GridBagConstraints();
         trailingContainer.setLayout(new GridBagLayout());
         trailingContainer.setBorder(Borders.empty);
+        trailingContainer.setBackground(root.getBackground());
         c.weighty = 1;
         trailingContainer.add(Box.createHorizontalGlue(), c);
         c.weighty = 0;

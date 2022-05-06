@@ -1,7 +1,6 @@
 package io.github.mimoguz.pixelj.actions;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.List;
@@ -36,19 +35,19 @@ public class MainActions {
 
         exportAction = new ApplicationAction("exportAction", this::export).setTextKey("exportAction")
                 .setIcon(Icons.FILE_EXPORT, res.colors.icon(), res.colors.disabledIcon())
-                .setAccelerator(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK);
+                .setAccelerator(KeyEvent.VK_E, ActionEvent.CTRL_MASK);
 
         quitAction = new ApplicationAction("quitAction", this::quit).setTextKey("quitAction")
                 .setIcon(Icons.EXIT, res.colors.icon(), res.colors.disabledIcon())
-                .setAccelerator(KeyEvent.VK_Q, InputEvent.CTRL_DOWN_MASK);
+                .setAccelerator(KeyEvent.VK_Q, ActionEvent.CTRL_MASK);
 
         saveAction = new ApplicationAction("saveProjectAction", this::save).setTextKey("saveAction")
                 .setIcon(Icons.FILE_SAVE, res.colors.icon(), res.colors.disabledIcon())
-                .setAccelerator(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK);
+                .setAccelerator(KeyEvent.VK_S, ActionEvent.CTRL_MASK);
 
         saveAsAction = new ApplicationAction("saveAsAction", this::saveAs).setTextKey("saveAsAction")
                 .setIcon(Icons.FILE_SAVE_AS, res.colors.icon(), res.colors.disabledIcon())
-                .setAccelerator(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK);
+                .setAccelerator(KeyEvent.VK_S, ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK);
 
         showHelpAction = new ApplicationAction("showHelpAction", this::showHelp).setTextKey("showHelpAction")
                 .setIcon(Icons.HELP, res.colors.icon(), res.colors.disabledIcon())
@@ -57,12 +56,12 @@ public class MainActions {
         showMetricsAction = new ApplicationAction("showMetricsAction", this::showMetrics)
                 .setTextKey("showMetricsAction")
                 .setIcon(Icons.METRICS, res.colors.icon(), res.colors.disabledIcon())
-                .setAccelerator(KeyEvent.VK_M, InputEvent.CTRL_DOWN_MASK);
+                .setAccelerator(KeyEvent.VK_M, ActionEvent.CTRL_MASK);
 
         showSettingsAction = new ApplicationAction("showSettingsAction", this::showSettings)
                 .setTextKey("showSettingsAction")
                 .setIcon(Icons.SETTINGS, res.colors.icon(), res.colors.disabledIcon())
-                .setAccelerator(KeyEvent.VK_PERIOD, InputEvent.CTRL_DOWN_MASK);
+                .setAccelerator(KeyEvent.VK_PERIOD, ActionEvent.CTRL_MASK);
 
         all = java.util.Collections.unmodifiableCollection(
                 List.of(
