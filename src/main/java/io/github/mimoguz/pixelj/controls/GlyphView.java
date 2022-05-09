@@ -14,6 +14,7 @@ import javax.swing.event.EventListenerList;
 
 import io.github.mimoguz.pixelj.graphics.BinaryImage;
 import io.github.mimoguz.pixelj.models.CharacterModel;
+import io.github.mimoguz.pixelj.models.IntValueChangeListener;
 import io.github.mimoguz.pixelj.util.ChangeListener;
 import io.github.mimoguz.pixelj.util.Changeable;
 import io.github.mimoguz.pixelj.util.Detachable;
@@ -38,6 +39,7 @@ public class GlyphView extends JPanel
     private final transient BinaryImage.ImageChangeListener imageChangeListener;
     private final ArrayList<Line> lines = new ArrayList<>();
     private final EventListenerList listeners = new EventListenerList();
+    private final transient IntValueChangeListener characterWidthChangeListener;
     /** May be null; */
     private transient CharacterModel model;
     /** May be null; */
@@ -51,6 +53,8 @@ public class GlyphView extends JPanel
     public GlyphView(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
 
+        characterWidthChangeListener = (source, event) -> repaint();
+
         imageChangeListener = (source, event) -> {
             final var model = this.model;
             if (model == null || source != model.getGlyph()) {
@@ -60,6 +64,7 @@ public class GlyphView extends JPanel
             repaint();
             fireChangeEvent(this, ViewChangeEvent.GLYPH_MODIFIED);
         };
+
     }
 
     public boolean isShaded() {
@@ -181,9 +186,9 @@ public class GlyphView extends JPanel
         if (model == value) {
             return;
         }
-
         if (model != null) {
             model.getGlyph().removeChangeListener(imageChangeListener);
+            model.removeChangeListener(characterWidthChangeListener);
             fireChangeEvent(this, ViewChangeEvent.MODEL_UNLOADED);
             if (top <= 0) {
                 top = model.getGlyph().getHeight();
@@ -195,6 +200,7 @@ public class GlyphView extends JPanel
         if (value != null) {
             if (listen) {
                 value.getGlyph().addChangeListener(imageChangeListener);
+                value.addChangeListener(characterWidthChangeListener);
             }
             fireChangeEvent(this, ViewChangeEvent.MODEL_LOADED);
         }

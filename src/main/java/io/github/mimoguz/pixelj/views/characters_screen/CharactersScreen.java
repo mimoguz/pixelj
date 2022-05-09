@@ -27,7 +27,7 @@ public class CharactersScreen extends JSplitPane implements Detachable {
         listModel = project.getCharacters();
         listPanel = new ListPanel(listModel, selectionModel, project.getMetrics(), root);
 
-        painterPanel = new PainterPanel(root);
+        painterPanel = new PainterPanel(project, root);
         painterPanel.setMetrics(project.getMetrics());
 
         // Connect the listModel to the painter

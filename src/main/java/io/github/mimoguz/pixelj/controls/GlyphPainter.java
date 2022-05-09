@@ -10,6 +10,7 @@ import io.github.mimoguz.pixelj.controls.painter.PaintAdapter;
 import io.github.mimoguz.pixelj.controls.painter.Painter;
 import io.github.mimoguz.pixelj.graphics.Snapshot;
 import io.github.mimoguz.pixelj.models.CharacterModel;
+import io.github.mimoguz.pixelj.models.IntValueChangeListener;
 
 public class GlyphPainter extends GlyphView
         implements
@@ -21,6 +22,7 @@ public class GlyphPainter extends GlyphView
     private static final long serialVersionUID = 2382126540536314203L;
 
     private final transient PaintAdapter paintAdapter;
+    private final transient IntValueChangeListener characterWidthChangeListener;
     private transient Consumer<Snapshot> snapshotConsumer = snapshot -> {
     };
 
@@ -29,6 +31,7 @@ public class GlyphPainter extends GlyphView
         paintAdapter = new PaintAdapter(this);
         addMouseListener(paintAdapter);
         addMouseMotionListener(paintAdapter);
+        characterWidthChangeListener = (sender, event) -> paintAdapter.setExtent(event.newValue());
     }
 
     public void erase() {
@@ -44,8 +47,13 @@ public class GlyphPainter extends GlyphView
 
     @Override
     public void setModel(final CharacterModel value) {
+        final var current = getModel();
+        if (current != null) {
+            current.removeChangeListener(characterWidthChangeListener);
+        }
         if (value != null) {
             paintAdapter.setExtent(value.getWidth());
+            value.addChangeListener(characterWidthChangeListener);
         }
         super.setModel(value);
     }

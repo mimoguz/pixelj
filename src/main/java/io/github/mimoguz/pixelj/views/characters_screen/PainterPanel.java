@@ -20,7 +20,9 @@ import io.github.mimoguz.pixelj.controls.Line;
 import io.github.mimoguz.pixelj.controls.Orientation;
 import io.github.mimoguz.pixelj.graphics.Snapshot;
 import io.github.mimoguz.pixelj.models.CharacterModel;
+import io.github.mimoguz.pixelj.models.IntValueChangeListener;
 import io.github.mimoguz.pixelj.models.Metrics;
+import io.github.mimoguz.pixelj.models.ProjectModel;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.util.Detachable;
 import io.github.mimoguz.pixelj.views.shared.Borders;
@@ -33,12 +35,13 @@ public class PainterPanel extends JPanel implements Detachable {
 
     private final transient PainterActions actions;
     private final GlyphPainter painter;
+    private final InfoPanel infoPanel;
     private final JLabel title;
     private final ArrayList<Snapshot> undoBuffer = new ArrayList<>();
     private final JSlider zoomSlider;
     private transient BufferedImage overlay;
 
-    public PainterPanel(final JComponent root) {
+    public PainterPanel(final ProjectModel project, final JComponent root) {
         painter = new GlyphPainter(Resources.get().colors.disabledIcon());
         painter.setZoom(INITIAL_ZOOM);
         painter.setOverlayVisible(true);
@@ -164,12 +167,12 @@ public class PainterPanel extends JPanel implements Detachable {
 
         // ****************************** EAST ******************************
 
-        final var eastPanel = new JPanel();
-        eastPanel.setMinimumSize(new Dimension(200, 1));
-        eastPanel.setMaximumSize(new Dimension(200, Integer.MAX_VALUE));
-        eastPanel.setPreferredSize(new Dimension(200, 300));
-        eastPanel.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Resources.get().colors.divider()));
-        add(eastPanel, BorderLayout.EAST);
+        infoPanel = new InfoPanel(project);
+        infoPanel.setMinimumSize(new Dimension(200, 1));
+        infoPanel.setMaximumSize(new Dimension(200, Integer.MAX_VALUE));
+        infoPanel.setPreferredSize(new Dimension(200, 300));
+        infoPanel.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Resources.get().colors.divider()));
+        add(infoPanel, BorderLayout.EAST);
 
         setEnabled(false);
     }
@@ -211,6 +214,8 @@ public class PainterPanel extends JPanel implements Detachable {
             return;
         }
 
+        infoPanel.setMetrics(metrics);
+
         painter.setTop(metrics.descender() + metrics.ascender());
 
         painter.addLines(
@@ -236,6 +241,7 @@ public class PainterPanel extends JPanel implements Detachable {
      */
     public void setModel(final CharacterModel value) {
         painter.setModel(value);
+        infoPanel.setModel(value);
 
         if (value != null) {
             Actions.setEnabled(actions.all, true);
