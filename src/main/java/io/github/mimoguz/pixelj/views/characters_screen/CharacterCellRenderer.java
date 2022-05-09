@@ -1,10 +1,12 @@
 package io.github.mimoguz.pixelj.views.characters_screen;
 
+import java.awt.Component;
+
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
+
 import io.github.mimoguz.pixelj.models.CharacterModel;
 import io.github.mimoguz.pixelj.views.shared.CharacterCell;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class CharacterCellRenderer implements ListCellRenderer<CharacterModel> {
     private final CharacterCell component;

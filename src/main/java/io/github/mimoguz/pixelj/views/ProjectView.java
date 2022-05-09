@@ -1,11 +1,11 @@
 package io.github.mimoguz.pixelj.views;
 
-import java.awt.event.KeyEvent;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,16 +28,12 @@ import io.github.mimoguz.pixelj.views.shared.Components;
 
 public class ProjectView extends JFrame {
     private static final long serialVersionUID = -8552411151437621157L;
-    private final JTabbedPane root;
-    private final Collection<ApplicationAction> tabActions;
-
     private static JPanel divider(int width) {
         final var divider = new JPanel();
         divider.setBackground(Resources.get().colors.divider());
         Components.setFixedSize(divider, new Dimension(width, 1));
         return divider;
     }
-
     private static JButton tabBarButton(Action action, Dimension size) {
         final var button = new JButton();
         button.setAction(action);
@@ -52,6 +48,10 @@ public class ProjectView extends JFrame {
         Components.setFixedSize(button, size);
         return button;
     }
+
+    private final JTabbedPane root;
+
+    private final Collection<ApplicationAction> tabActions;
 
     public ProjectView(final ProjectModel project) {
         root = new JTabbedPane();

@@ -5,6 +5,37 @@ import java.util.Arrays;
 public interface CanTranslateImage extends Painter {
 
     /**
+     * Moves the image one pixel left or right
+     *
+     * @param sourceX First column of the source region. If it's 0, the region will
+     *                be moved to the right. If it's 1, the region will be moved to
+     *                the left.
+     */
+    private void moveHorizontally(int sourceX) {
+        final var model = getModel();
+        if (model == null) {
+            return;
+        }
+
+        takeSnapshot();
+
+        final var image = model.getGlyph();
+        final var buffer = new byte[image.getWidth()];
+        final var length = image.getWidth() - 1;
+        final var height = image.getHeight();
+
+        for (var y = 0; y < height; y++) {
+            image.getDataElements(sourceX, y, length, 1, buffer);
+            // Suppress notifications
+            image.setDataElements(1 - sourceX, y, length, 1, buffer, false);
+            image.set(length * sourceX, y, true, false);
+        }
+
+        // Trigger change notification
+        image.requestUpdate();
+    }
+
+    /**
      * Moves the image one pixel down, and fills the first row with 1.
      */
     default void moveOnePixelDown() {
@@ -70,37 +101,6 @@ public interface CanTranslateImage extends Painter {
 
         Arrays.fill(buffer, (byte) 1);
         image.setDataElements(0, height - 1, width, 1, buffer, false);
-
-        // Trigger change notification
-        image.requestUpdate();
-    }
-
-    /**
-     * Moves the image one pixel left or right
-     *
-     * @param sourceX First column of the source region. If it's 0, the region will
-     *                be moved to the right. If it's 1, the region will be moved to
-     *                the left.
-     */
-    private void moveHorizontally(int sourceX) {
-        final var model = getModel();
-        if (model == null) {
-            return;
-        }
-
-        takeSnapshot();
-
-        final var image = model.getGlyph();
-        final var buffer = new byte[image.getWidth()];
-        final var length = image.getWidth() - 1;
-        final var height = image.getHeight();
-
-        for (var y = 0; y < height; y++) {
-            image.getDataElements(sourceX, y, length, 1, buffer);
-            // Suppress notifications
-            image.setDataElements(1 - sourceX, y, length, 1, buffer, false);
-            image.set(length * sourceX, y, true, false);
-        }
 
         // Trigger change notification
         image.requestUpdate();

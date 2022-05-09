@@ -1,10 +1,14 @@
 package io.github.mimoguz.pixelj.views.kerning_pairs_screen;
 
+import java.awt.Component;
+import java.awt.GridLayout;
+
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.ListCellRenderer;
+
 import io.github.mimoguz.pixelj.models.KerningPairModel;
 import io.github.mimoguz.pixelj.views.shared.CharacterCell;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class KerningPairCellRenderer implements ListCellRenderer<KerningPairModel> {
     private final JPanel component = new JPanel(new GridLayout(1, 2));

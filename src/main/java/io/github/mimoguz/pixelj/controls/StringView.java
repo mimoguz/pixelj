@@ -18,12 +18,12 @@ public class StringView extends JPanel {
 
     private final Color backgroundColor;
     private final ArrayList<CharacterModel> characters = new ArrayList<>();
-    private int padding;
     private int lineSpacing;
     private int maxY;
+    private int padding;
+    private transient BufferedImage renderTarget;
     private final ArrayList<Integer> spaces = new ArrayList<>();
     private int zoom;
-    private transient BufferedImage renderTarget;
 
     public StringView(final Color backgroundColor) {
         this.backgroundColor = backgroundColor;
@@ -34,18 +34,8 @@ public class StringView extends JPanel {
         return lineSpacing;
     }
 
-    public void setLineSpacing(int lineSpacing) {
-        this.lineSpacing = lineSpacing;
-        updateView();
-    }
-
     public int getMaxY() {
         return maxY;
-    }
-
-    public void setMaxY(int maxY) {
-        this.maxY = maxY;
-        updateView();
     }
 
     public int getPadding() {
@@ -66,6 +56,16 @@ public class StringView extends JPanel {
         updateView();
     }
 
+    public void setLineSpacing(int lineSpacing) {
+        this.lineSpacing = lineSpacing;
+        updateView();
+    }
+
+    public void setMaxY(int maxY) {
+        this.maxY = maxY;
+        updateView();
+    }
+
     public void setPadding(final int value) {
         padding = value;
         resizeCanvas();
@@ -82,6 +82,37 @@ public class StringView extends JPanel {
         zoom = value;
         resizeCanvas();
         repaint();
+    }
+
+    public void updateView() {
+        renderString();
+        resizeCanvas();
+        repaint();
+    }
+
+    private void drawCharacter(
+            final BufferedImage target,
+            final CharacterModel character,
+            final int x,
+            final int y
+    ) {
+        final var w = character.getWidth();
+        final var sourceBuffer = new byte[w];
+        final var targetBuffer = new int[w];
+        final var source = character.getGlyph();
+        final var firstLine = maxY > 0 ? source.getHeight() - maxY : 0;
+        for (var sourceLine = firstLine; sourceLine < source.getHeight(); sourceLine++) {
+            final var targetLine = sourceLine - firstLine;
+            if (targetLine >= target.getHeight() - lineSpacing) {
+                break;
+            }
+            source.getRaster().getDataElements(0, sourceLine, w, 1, sourceBuffer);
+            target.getRaster().getDataElements(x, y + targetLine, w, 1, targetBuffer);
+            for (var i = 0; i < w; i++) {
+                targetBuffer[i] = targetBuffer[i] & (sourceBuffer[i] == 1 ? 0xff_ff_ff_ff : 0);
+            }
+            target.getRaster().setDataElements(x, y + targetLine, w, 1, targetBuffer);
+        }
     }
 
     private void renderString() {
@@ -137,12 +168,6 @@ public class StringView extends JPanel {
         revalidate();
     }
 
-    public void updateView() {
-        renderString();
-        resizeCanvas();
-        repaint();
-    }
-
     @Override
     protected void paintComponent(final Graphics graphics) {
         final var g2d = (Graphics2D) graphics.create();
@@ -165,30 +190,5 @@ public class StringView extends JPanel {
             );
         }
         g2d.dispose();
-    }
-
-    private void drawCharacter(
-            final BufferedImage target,
-            final CharacterModel character,
-            final int x,
-            final int y
-    ) {
-        final var w = character.getWidth();
-        final var sourceBuffer = new byte[w];
-        final var targetBuffer = new int[w];
-        final var source = character.getGlyph();
-        final var firstLine = maxY > 0 ? source.getHeight() - maxY : 0;
-        for (var sourceLine = firstLine; sourceLine < source.getHeight(); sourceLine++) {
-            final var targetLine = sourceLine - firstLine;
-            if (targetLine >= target.getHeight() - lineSpacing) {
-                break;
-            }
-            source.getRaster().getDataElements(0, sourceLine, w, 1, sourceBuffer);
-            target.getRaster().getDataElements(x, y + targetLine, w, 1, targetBuffer);
-            for (var i = 0; i < w; i++) {
-                targetBuffer[i] = targetBuffer[i] & (sourceBuffer[i] == 1 ? 0xff_ff_ff_ff : 0);
-            }
-            target.getRaster().setDataElements(x, y + targetLine, w, 1, targetBuffer);
-        }
     }
 }

@@ -1,6 +1,9 @@
 package io.github.mimoguz.pixelj.views.characters_screen;
 
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
 import javax.swing.*;
 
@@ -14,11 +17,11 @@ import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 public class InfoPanel extends JPanel {
-    private transient CharacterModel model;
-    private final JLabel glyphLabel;
-    private final JLabel nameLabel;
-    private final JLabel codePointLabel;
     private final JSpinner characterWidthSpinner;
+    private final JLabel codePointLabel;
+    private final JLabel glyphLabel;
+    private transient CharacterModel model;
+    private final JLabel nameLabel;
     private final JCheckBox showGridCheckBox;
     private final JCheckBox showLinesCheckBox;
 
@@ -111,6 +114,25 @@ public class InfoPanel extends JPanel {
         return model;
     }
 
+    public JCheckBox getShowGridCheckBox() {
+        return showGridCheckBox;
+    }
+
+    public JCheckBox getShowLinesCheckBox() {
+        return showLinesCheckBox;
+    }
+
+    public void setMetrics(final Metrics metrics) {
+        characterWidthSpinner.setModel(
+                new SpinnerNumberModel(
+                        model != null ? model.getWidth() : metrics.defaultCharacterWidth(),
+                        0,
+                        metrics.canvasWidth(),
+                        1
+                )
+        );
+    }
+
     public void setModel(final CharacterModel value) {
         this.model = value;
         if (value != null) {
@@ -125,24 +147,5 @@ public class InfoPanel extends JPanel {
             codePointLabel.setText(" ");
             glyphLabel.setText(" ");
         }
-    }
-
-    public void setMetrics(final Metrics metrics) {
-        characterWidthSpinner.setModel(
-                new SpinnerNumberModel(
-                        model != null ? model.getWidth() : metrics.defaultCharacterWidth(),
-                        0,
-                        metrics.canvasWidth(),
-                        1
-                )
-        );
-    }
-
-    public JCheckBox getShowGridCheckBox() {
-        return showGridCheckBox;
-    }
-
-    public JCheckBox getShowLinesCheckBox() {
-        return showLinesCheckBox;
     }
 }

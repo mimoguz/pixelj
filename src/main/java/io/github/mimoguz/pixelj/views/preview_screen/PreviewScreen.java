@@ -2,10 +2,10 @@ package io.github.mimoguz.pixelj.views.preview_screen;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.awt.GridBagLayout;
 
 import javax.swing.*;
 
@@ -28,12 +28,12 @@ public class PreviewScreen extends JPanel implements Detachable {
 
     private final transient PreviewScreenActions actions;
     private final JButton clearButton;
+    private final JPanel container;
     private final transient ProjectModel project;
     private final transient ProjectModel.ProjectChangeListener projectChangeListener;
     private final JButton refreshButton;
     private final PromptTextArea textInput;
     private final JSlider zoomSlider;
-    private final JPanel container;
 
     public PreviewScreen(final ProjectModel project, final JComponent root) {
         this.project = project;

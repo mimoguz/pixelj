@@ -11,7 +11,7 @@ import io.github.mimoguz.pixelj.themes.PixeljLight;
 import io.github.mimoguz.pixelj.views.ProjectView;
 
 public class Main {
-    private static final boolean USE_DARK_THEME = false;
+    private static final boolean USE_DARK_THEME = true;
 
     public static void main(final String[] args) {
         if (USE_DARK_THEME) {
@@ -22,7 +22,7 @@ public class Main {
         final var colors = USE_DARK_THEME ? new DarkColors() : new LightColors();
         Resources.initialize(colors);
 
-        final var view = new ProjectView(ExampleData.project);
+        final var view = new ProjectView(ExampleData.createProject());
         view.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         view.setVisible(true);
     }

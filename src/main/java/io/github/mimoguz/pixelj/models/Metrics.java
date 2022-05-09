@@ -14,21 +14,21 @@ public record Metrics(
         boolean isMonospace
 ) {
     public static class Builder {
-        private int canvasWidth;
-        private int canvasHeight;
-        private int ascender;
-        private int descender;
-        private int capHeight;
-        private int xHeight;
-        private int defaultCharacterWidth;
-        private int spacing;
-        private int spaceSize;
-        private int lineSpacing;
-        private boolean isMonospaced;
-
-        private Builder() {
+        public static Builder from(Metrics metrics) {
+            final var builder = new Builder();
+            builder.canvasWidth = metrics.canvasWidth();
+            builder.canvasHeight = metrics.canvasHeight();
+            builder.ascender = metrics.ascender();
+            builder.descender = metrics.descender();
+            builder.capHeight = metrics.capHeight();
+            builder.xHeight = metrics.xHeight();
+            builder.defaultCharacterWidth = metrics.defaultCharacterWidth();
+            builder.spacing = metrics.spacing();
+            builder.spaceSize = metrics.spaceSize();
+            builder.lineSpacing = metrics.lineSpacing();
+            builder.isMonospaced = metrics.isMonospace();
+            return builder;
         }
-
         public static Builder getDefault() {
             final var builder = new Builder();
             builder.canvasWidth = 24;
@@ -44,21 +44,21 @@ public record Metrics(
             builder.isMonospaced = false;
             return builder;
         }
+        private int ascender;
+        private int canvasHeight;
+        private int canvasWidth;
+        private int capHeight;
+        private int defaultCharacterWidth;
+        private int descender;
+        private boolean isMonospaced;
+        private int lineSpacing;
+        private int spaceSize;
 
-        public static Builder from(Metrics metrics) {
-            final var builder = new Builder();
-            builder.canvasWidth = metrics.canvasWidth();
-            builder.canvasHeight = metrics.canvasHeight();
-            builder.ascender = metrics.ascender();
-            builder.descender = metrics.descender();
-            builder.capHeight = metrics.capHeight();
-            builder.xHeight = metrics.xHeight();
-            builder.defaultCharacterWidth = metrics.defaultCharacterWidth();
-            builder.spacing = metrics.spacing();
-            builder.spaceSize = metrics.spaceSize();
-            builder.lineSpacing = metrics.lineSpacing();
-            builder.isMonospaced = metrics.isMonospace();
-            return builder;
+        private int spacing;
+
+        private int xHeight;
+
+        private Builder() {
         }
 
         public Metrics build() {
@@ -77,8 +77,8 @@ public record Metrics(
             );
         }
 
-        public Builder setCanvasWidth(int value) {
-            canvasWidth = value;
+        public Builder setAscender(int value) {
+            ascender = value;
             return this;
         }
 
@@ -87,13 +87,8 @@ public record Metrics(
             return this;
         }
 
-        public Builder setAscender(int value) {
-            ascender = value;
-            return this;
-        }
-
-        public Builder setDescender(int value) {
-            descender = value;
+        public Builder setCanvasWidth(int value) {
+            canvasWidth = value;
             return this;
         }
 
@@ -102,23 +97,13 @@ public record Metrics(
             return this;
         }
 
-        public Builder setXHeight(int value) {
-            xHeight = value;
-            return this;
-        }
-
         public Builder setDefaultCharacterWidth(int value) {
             defaultCharacterWidth = value;
             return this;
         }
 
-        public Builder setSpacing(int value) {
-            spacing = value;
-            return this;
-        }
-
-        public Builder setSpaceSize(int value) {
-            spaceSize = value;
+        public Builder setDescender(int value) {
+            descender = value;
             return this;
         }
 
@@ -129,6 +114,21 @@ public record Metrics(
 
         public Builder setMonospaced(boolean value) {
             isMonospaced = value;
+            return this;
+        }
+
+        public Builder setSpaceSize(int value) {
+            spaceSize = value;
+            return this;
+        }
+
+        public Builder setSpacing(int value) {
+            spacing = value;
+            return this;
+        }
+
+        public Builder setXHeight(int value) {
+            xHeight = value;
             return this;
         }
     }

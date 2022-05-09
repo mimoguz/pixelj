@@ -7,8 +7,6 @@ import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
 public class Actions {
-    private Actions() {}
-
     public static void registerShortcuts(Collection<ApplicationAction> actions, JComponent root) {
         for (var action : actions) {
             if (action.getValue(Action.ACCELERATOR_KEY) instanceof KeyStroke accelerator) {
@@ -23,4 +21,6 @@ public class Actions {
             action.setEnabled(isEnabled);
         }
     }
+
+    private Actions() {}
 }

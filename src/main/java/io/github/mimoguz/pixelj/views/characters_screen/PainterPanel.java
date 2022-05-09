@@ -20,7 +20,6 @@ import io.github.mimoguz.pixelj.controls.Line;
 import io.github.mimoguz.pixelj.controls.Orientation;
 import io.github.mimoguz.pixelj.graphics.Snapshot;
 import io.github.mimoguz.pixelj.models.CharacterModel;
-import io.github.mimoguz.pixelj.models.IntValueChangeListener;
 import io.github.mimoguz.pixelj.models.Metrics;
 import io.github.mimoguz.pixelj.models.ProjectModel;
 import io.github.mimoguz.pixelj.resources.Resources;
@@ -29,17 +28,47 @@ import io.github.mimoguz.pixelj.views.shared.Borders;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 public class PainterPanel extends JPanel implements Detachable {
+    private static final Color BASELINE = new Color(45, 147, 173);
+    private static final int BLACK_SQUARE = 0x10_00_00_00;
+    private static final Color CAP_HEIGHT = new Color(41, 191, 18);
     private static final int INITIAL_ZOOM = 12;
     private static final int MAX_UNDO = 64;
+
     private static final long serialVersionUID = -2196271415900003483L;
 
+    private static final int WHITE_SQUARE = 0x30_ff_ff_ff;
+    private static final Color X_HEIGHT = CAP_HEIGHT;
+    private static BufferedImage checkerBoard(int w, int h) {
+        final var image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        for (var y = 0; y < h; y++) {
+            for (var x = 0; x < w; x++) {
+                image.setRGB(
+                        x,
+                        y,
+                        ((odd(x) && even(y)) || (odd(y) && even(x))) ? WHITE_SQUARE : BLACK_SQUARE
+                );
+            }
+        }
+        return image;
+    }
+    private static boolean even(int x) {
+        return (x & 1) == 0;
+    }
+    private static boolean odd(int x) {
+        return (x & 1) == 1;
+    }
     private final transient PainterActions actions;
-    private final GlyphPainter painter;
     private final InfoPanel infoPanel;
-    private final JLabel title;
-    private final ArrayList<Snapshot> undoBuffer = new ArrayList<>();
-    private final JSlider zoomSlider;
+
     private transient BufferedImage overlay;
+
+    private final GlyphPainter painter;
+
+    private final JLabel title;
+
+    private final ArrayList<Snapshot> undoBuffer = new ArrayList<>();
+
+    private final JSlider zoomSlider;
 
     public PainterPanel(final ProjectModel project, final JComponent root) {
         painter = new GlyphPainter(Resources.get().colors.disabledIcon());
@@ -233,19 +262,18 @@ public class PainterPanel extends JPanel implements Detachable {
                 new Line(
                         Orientation.HORIZONTAL,
                         metrics.canvasHeight() - metrics.descender() - metrics.capHeight(),
-                        Color.YELLOW
+                        CAP_HEIGHT
                 ),
                 // x height
                 new Line(
                         Orientation.HORIZONTAL,
                         metrics.canvasHeight() - metrics.descender() - metrics.xHeight(),
-                        Color.YELLOW
+                        X_HEIGHT
                 ),
                 // Baseline
-                new Line(Orientation.HORIZONTAL, metrics.canvasHeight() - metrics.descender(), Color.BLUE)
+                new Line(Orientation.HORIZONTAL, metrics.canvasHeight() - metrics.descender(), BASELINE)
         );
     }
-
     /**
      * @param value May be null
      */
@@ -271,29 +299,4 @@ public class PainterPanel extends JPanel implements Detachable {
             painter.setOverlay(null);
         }
     }
-
-    private static BufferedImage checkerBoard(int w, int h) {
-        final var image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-        for (var y = 0; y < h; y++) {
-            for (var x = 0; x < w; x++) {
-                image.setRGB(
-                        x,
-                        y,
-                        ((odd(x) && even(y)) || (odd(y) && even(x))) ? WHITE_SQUARE : BLACK_SQUARE
-                );
-            }
-        }
-        return image;
-    }
-
-    private static boolean odd(int x) {
-        return (x & 1) == 1;
-    }
-
-    private static boolean even(int x) {
-        return (x & 1) == 0;
-    }
-
-    private static final int WHITE_SQUARE = 0x30_ff_ff_ff;
-    private static final int BLACK_SQUARE = 0x10_00_00_00;
 }

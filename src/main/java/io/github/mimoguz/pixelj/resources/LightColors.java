@@ -37,14 +37,14 @@ public class LightColors implements Colors {
     }
 
     @Override
-    public Color inactive() {
-        return faintIcon;
-    }
-
-    @Override
     public Color icon() {
 
         return icon;
+    }
+
+    @Override
+    public Color inactive() {
+        return faintIcon;
     }
 
 }

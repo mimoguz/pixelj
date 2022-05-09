@@ -16,18 +16,14 @@ import io.github.mimoguz.pixelj.resources.Resources;
  * https://stackoverflow.com/questions/16213836/java-swing-jtextfield-set-placeholder
  */
 public class PromptTextArea extends JTextArea {
-    private static final long serialVersionUID = 4432702411987454931L;
     private static final Map<?, ?> hints = (Map<?, ?>) Toolkit.getDefaultToolkit()
             .getDesktopProperty("awt.font.desktophints");
+    private static final long serialVersionUID = 4432702411987454931L;
 
     private String promptText;
 
     public String getPromptText() {
         return promptText;
-    }
-
-    public void setPromptText(String promptText) {
-        this.promptText = promptText;
     }
 
     @Override
@@ -52,5 +48,9 @@ public class PromptTextArea extends JTextArea {
                 graphics.getFontMetrics().getMaxAscent() + getInsets().top
         );
         g2d.dispose();
+    }
+
+    public void setPromptText(String promptText) {
+        this.promptText = promptText;
     }
 }

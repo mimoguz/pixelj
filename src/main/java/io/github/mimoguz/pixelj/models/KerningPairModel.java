@@ -6,8 +6,20 @@ package io.github.mimoguz.pixelj.models;
  * using getHash static method.
  */
 public class KerningPairModel extends MutableIntValueModel implements Comparable<KerningPairModel> {
+	/**
+	 * This is essentially a hack. I use this method to calculate a hash without
+	 * creating an instance, then use that hash to search a model in a
+	 * KerningPairListModel.
+	 */
+	public static int getHash(final CharacterModel left, final CharacterModel right) {
+		// >In the Unicode Standard, the codespace consists of the integers from 0 to
+		// 10FFFF.<
+		// 10FFFF occupies 21 bits, there shouldn't be any collisions here.
+		return (left.hashCode() << 24) | right.hashCode();
+	}
 	private int kerningValue;
 	private final CharacterModel left;
+
 	private final CharacterModel right;
 
 	public KerningPairModel(CharacterModel left, CharacterModel right, int kerningValue) {
@@ -61,17 +73,5 @@ public class KerningPairModel extends MutableIntValueModel implements Comparable
 		final var event = new IntValueChangeEvent(kerningValue, value);
 		kerningValue = value;
 		fireChangeEvent(this, event);
-	}
-
-	/**
-	 * This is essentially a hack. I use this method to calculate a hash without
-	 * creating an instance, then use that hash to search a model in a
-	 * KerningPairListModel.
-	 */
-	public static int getHash(final CharacterModel left, final CharacterModel right) {
-		// >In the Unicode Standard, the codespace consists of the integers from 0 to
-		// 10FFFF.<
-		// 10FFFF occupies 21 bits, there shouldn't be any collisions here.
-		return (left.hashCode() << 24) | right.hashCode();
 	}
 }

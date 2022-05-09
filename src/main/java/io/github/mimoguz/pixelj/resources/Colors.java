@@ -13,7 +13,7 @@ public interface Colors {
 
     Color divider();
 
-    Color inactive();
-
     Color icon();
+
+    Color inactive();
 }

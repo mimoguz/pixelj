@@ -1,11 +1,6 @@
 package io.github.mimoguz.pixelj.controls;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -32,23 +27,21 @@ public class GlyphView extends JPanel
     }
 
     private static final long serialVersionUID = 7841183984464270304L;
-
-    private static final Color SHADE = new Color(255, 0, 0, 20);
-
+    private static final Color SHADE = new Color(242, 27, 63, 50);
     private final Color backgroundColor;
+    private final transient IntValueChangeListener characterWidthChangeListener;
+    private boolean drawShade;
     private final transient BinaryImage.ImageChangeListener imageChangeListener;
     private final ArrayList<Line> lines = new ArrayList<>();
     private final EventListenerList listeners = new EventListenerList();
-    private final transient IntValueChangeListener characterWidthChangeListener;
     /** May be null; */
     private transient CharacterModel model;
     /** May be null; */
     private transient Image overlay;
     private boolean showLines = false;
     private boolean showOverlay = false;
-    private int zoom = 1;
     private int top;
-    private boolean drawShade;
+    private int zoom = 1;
 
     public GlyphView(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
@@ -56,7 +49,6 @@ public class GlyphView extends JPanel
         characterWidthChangeListener = (source, event) -> repaint();
 
         imageChangeListener = (source, event) -> {
-            final var model = this.model;
             if (model == null || source != model.getGlyph()) {
                 return;
             }
@@ -65,22 +57,6 @@ public class GlyphView extends JPanel
             fireChangeEvent(this, ViewChangeEvent.GLYPH_MODIFIED);
         };
 
-    }
-
-    public boolean isShaded() {
-        return drawShade;
-    }
-
-    public void setShaded(boolean value) {
-        this.drawShade = value;
-    }
-
-    public int getTop() {
-        return top;
-    }
-
-    public void setTop(int top) {
-        this.top = top;
     }
 
     public void addLines(Line... lines) {
@@ -122,6 +98,10 @@ public class GlyphView extends JPanel
         return overlay;
     }
 
+    public int getTop() {
+        return top;
+    }
+
     public int getZoom() {
         return zoom;
     }
@@ -132,6 +112,10 @@ public class GlyphView extends JPanel
 
     public boolean isOverlayVisible() {
         return showOverlay;
+    }
+
+    public boolean isShaded() {
+        return drawShade;
     }
 
     @Override
@@ -225,6 +209,14 @@ public class GlyphView extends JPanel
         }
         this.showOverlay = value;
         repaint();
+    }
+
+    public void setShaded(boolean value) {
+        this.drawShade = value;
+    }
+
+    public void setTop(int top) {
+        this.top = top;
     }
 
     public void setZoom(int value) {

@@ -3,11 +3,7 @@ package io.github.mimoguz.pixelj.controls;
 import java.awt.Color;
 import java.util.function.Consumer;
 
-import io.github.mimoguz.pixelj.controls.painter.CanFlipImage;
-import io.github.mimoguz.pixelj.controls.painter.CanRotateImage;
-import io.github.mimoguz.pixelj.controls.painter.CanTranslateImage;
-import io.github.mimoguz.pixelj.controls.painter.PaintAdapter;
-import io.github.mimoguz.pixelj.controls.painter.Painter;
+import io.github.mimoguz.pixelj.controls.painter.*;
 import io.github.mimoguz.pixelj.graphics.Snapshot;
 import io.github.mimoguz.pixelj.models.CharacterModel;
 import io.github.mimoguz.pixelj.models.IntValueChangeListener;
@@ -21,8 +17,8 @@ public class GlyphPainter extends GlyphView
 
     private static final long serialVersionUID = 2382126540536314203L;
 
-    private final transient PaintAdapter paintAdapter;
     private final transient IntValueChangeListener characterWidthChangeListener;
+    private final transient PaintAdapter paintAdapter;
     private transient Consumer<Snapshot> snapshotConsumer = snapshot -> {
     };
 

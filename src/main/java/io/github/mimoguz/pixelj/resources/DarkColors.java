@@ -37,13 +37,13 @@ public class DarkColors implements Colors {
     }
 
     @Override
-    public Color inactive() {
-        return faintIcon;
+    public Color icon() {
+        return icon;
     }
 
     @Override
-    public Color icon() {
-        return icon;
+    public Color inactive() {
+        return faintIcon;
     }
 
 }

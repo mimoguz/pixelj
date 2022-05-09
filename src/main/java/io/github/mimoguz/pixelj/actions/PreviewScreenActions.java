@@ -45,6 +45,16 @@ public class PreviewScreenActions {
         all.add(refreshAction);
     }
 
+    public void setZoom(int value) {
+        zoom = value;
+        for (var child : container.getComponents()) {
+            if (child instanceof StringView view) {
+                view.setZoom(value);
+            }
+        }
+        container.revalidate();
+    }
+
     private void clearContainer() {
         var currentViews = container.getComponents();
         for (var view : currentViews) {
@@ -130,15 +140,5 @@ public class PreviewScreenActions {
 
         container.revalidate();
         container.repaint();
-    }
-
-    public void setZoom(int value) {
-        zoom = value;
-        for (var child : container.getComponents()) {
-            if (child instanceof StringView view) {
-                view.setZoom(value);
-            }
-        }
-        container.revalidate();
     }
 }
