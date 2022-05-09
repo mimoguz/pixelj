@@ -7,6 +7,8 @@ public interface Colors {
 
     Color active();
 
+    Color box();
+
     Color disabledIcon();
 
     Color divider();
@@ -14,5 +16,4 @@ public interface Colors {
     Color inactive();
 
     Color icon();
-
 }

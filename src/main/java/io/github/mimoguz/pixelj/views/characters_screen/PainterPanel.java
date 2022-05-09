@@ -59,6 +59,17 @@ public class PainterPanel extends JPanel implements Detachable {
         painter.setSnapshotConsumer(actions.snapshotConsumer);
         Actions.registerShortcuts(actions.all, root);
 
+        infoPanel = new InfoPanel(project);
+        infoPanel.getShowGridCheckBox()
+                .addChangeListener(
+                        e -> painter.setOverlayVisible(infoPanel.getShowGridCheckBox().isSelected())
+                );
+        infoPanel.getShowLinesCheckBox().addChangeListener(e -> {
+            final var visible = infoPanel.getShowLinesCheckBox().isSelected();
+            painter.setLinesVisible(visible);
+            painter.setShaded(visible);
+        });
+
         title = new JLabel(Resources.get().getString("painterTitle"));
         title.putClientProperty(FlatClientProperties.STYLE_CLASS, "h4");
 
@@ -163,15 +174,14 @@ public class PainterPanel extends JPanel implements Detachable {
         centerPanel.add(titlePanel);
         centerPanel.add(scrollPanel);
         centerPanel.add(zoomPanel);
+        centerPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Resources.get().colors.divider()));
         add(centerPanel, BorderLayout.CENTER);
 
         // ****************************** EAST ******************************
 
-        infoPanel = new InfoPanel(project);
         infoPanel.setMinimumSize(new Dimension(200, 1));
         infoPanel.setMaximumSize(new Dimension(200, Integer.MAX_VALUE));
         infoPanel.setPreferredSize(new Dimension(200, 300));
-        infoPanel.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Resources.get().colors.divider()));
         add(infoPanel, BorderLayout.EAST);
 
         setEnabled(false);
