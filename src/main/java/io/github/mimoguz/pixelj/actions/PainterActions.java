@@ -75,15 +75,12 @@ public class PainterActions {
     public final ApplicationAction moveUpAction;
     public final ApplicationAction rotateLeftAction;
     public final ApplicationAction rotateRightAction;
-
     public final Consumer<Snapshot> snapshotConsumer;
-
     public final ApplicationAction symmetryToggleAction;
     private Snapshot clipboard = null;
     private boolean enabled = true;
     private GlyphPainter painter;
     private final ArrayList<Snapshot> redoBuffer = new ArrayList<>(MAX_UNDO);
-
     private final ArrayList<Snapshot> undoBuffer = new ArrayList<>(MAX_UNDO);
 
     public PainterActions() {

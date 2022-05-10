@@ -11,7 +11,7 @@ public record Metrics(
         int spacing,
         int spaceSize,
         int lineSpacing,
-        boolean isMonospace
+        boolean isMonospaced
 ) {
     public static class Builder {
         public static Builder from(Metrics metrics) {
@@ -26,7 +26,7 @@ public record Metrics(
             builder.spacing = metrics.spacing();
             builder.spaceSize = metrics.spaceSize();
             builder.lineSpacing = metrics.lineSpacing();
-            builder.isMonospaced = metrics.isMonospace();
+            builder.isMonospaced = metrics.isMonospaced();
             return builder;
         }
         public static Builder getDefault() {

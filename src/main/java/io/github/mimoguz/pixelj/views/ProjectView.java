@@ -9,7 +9,14 @@ import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.Action;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
+import javax.swing.ToolTipManager;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
@@ -28,12 +35,14 @@ import io.github.mimoguz.pixelj.views.shared.Components;
 
 public class ProjectView extends JFrame {
     private static final long serialVersionUID = -8552411151437621157L;
+
     private static JPanel divider(int width) {
         final var divider = new JPanel();
         divider.setBackground(Resources.get().colors.divider());
         Components.setFixedSize(divider, new Dimension(width, 1));
         return divider;
     }
+
     private static JButton tabBarButton(Action action, Dimension size) {
         final var button = new JButton();
         button.setAction(action);
@@ -54,6 +63,8 @@ public class ProjectView extends JFrame {
     private final Collection<ApplicationAction> tabActions;
 
     public ProjectView(final ProjectModel project) {
+        super();
+
         root = new JTabbedPane();
 
         final var charactersScreen = new CharactersScreen(project, root);
