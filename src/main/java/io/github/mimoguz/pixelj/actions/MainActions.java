@@ -6,10 +6,12 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.swing.Action;
+import javax.swing.JFrame;
 
 import io.github.mimoguz.pixelj.models.ProjectModel;
 import io.github.mimoguz.pixelj.resources.Icons;
 import io.github.mimoguz.pixelj.resources.Resources;
+import io.github.mimoguz.pixelj.views.MetricsDialog;
 
 public class MainActions {
     public final Collection<ApplicationAction> all;
@@ -22,10 +24,12 @@ public class MainActions {
     public final ApplicationAction showMetricsAction;
     public final ApplicationAction showSettingsAction;
     private boolean enabled = true;
+    private final JFrame frame;
     private final ProjectModel project;
 
-    public MainActions(final ProjectModel project) {
+    public MainActions(final ProjectModel project, JFrame frame) {
         this.project = project;
+        this.frame = frame;
 
         final var res = Resources.get();
 
@@ -115,7 +119,9 @@ public class MainActions {
     }
 
     private void showMetrics(final ActionEvent event, final Action action) {
-        System.out.println(action.getValue(Action.NAME));
+        final var metricsDialog = new MetricsDialog(project.getMetrics(), frame);
+        metricsDialog.setVisible(true);
+        System.out.println(metricsDialog.getResult());
     }
 
     private void showSettings(ActionEvent event, Action action) {

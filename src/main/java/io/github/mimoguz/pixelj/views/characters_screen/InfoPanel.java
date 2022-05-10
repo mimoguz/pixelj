@@ -1,8 +1,19 @@
 package io.github.mimoguz.pixelj.views.characters_screen;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
@@ -16,14 +27,14 @@ import io.github.mimoguz.pixelj.views.shared.Dimensions;
 public class InfoPanel extends JPanel {
     private static Color LABEL_FOREGROUND = new Color(50, 55, 65);
 
-    private final JCheckBox showGridCheckBox;
-    private final JCheckBox showLinesCheckBox;
     private final JLabel characterWidthLabel;
+    private final JSpinner characterWidthSpinner;
     private final JLabel codePointLabel;
     private final JLabel glyphLabel;
-    private final JLabel nameLabel;
-    private final JSpinner characterWidthSpinner;
     private transient CharacterModel model;
+    private final JLabel nameLabel;
+    private final JCheckBox showGridCheckBox;
+    private final JCheckBox showLinesCheckBox;
 
     public InfoPanel(final ProjectModel project) {
         final var res = Resources.get();
@@ -59,18 +70,21 @@ public class InfoPanel extends JPanel {
             }
         });
 
-        final var pad = 4;
+        final var pad = 6;
+        final var focusWidth = 4;
+        final var divWidth = 4;
         final var panelWidth = 200;
         final var cons = new GridBagConstraints();
 
         setLayout(new GridBagLayout());
-        setBorder(BorderFactory.createEmptyBorder(pad, pad, pad, 0));
+        setBorder(BorderFactory.createEmptyBorder(pad, pad, pad, pad - divWidth));
         setMaximumSize(new Dimension(panelWidth, Integer.MAX_VALUE));
         setPreferredSize(new Dimension(panelWidth, 400));
 
         cons.gridy = 0;
         cons.gridwidth = 2;
         cons.weighty = 0.0;
+        cons.insets = new Insets(pad, 0, pad, 0);
         final var glyphBackground = new JPanel(new GridBagLayout());
         Components.setFixedSize(glyphBackground, new Dimension(panelWidth - pad, panelWidth - pad));
         glyphBackground.add(glyphLabel, new GridBagConstraints());
@@ -78,9 +92,9 @@ public class InfoPanel extends JPanel {
         add(glyphBackground, cons);
 
         cons.gridy = 1;
+        cons.insets = new Insets(pad, focusWidth, pad, focusWidth);
         final var titlePanel = new JPanel();
-        Components.setFixedSize(titlePanel, new Dimension(panelWidth - pad, 96));
-        titlePanel.setBorder(BorderFactory.createEmptyBorder(pad, pad, pad, pad));
+        Components.setFixedSize(titlePanel, new Dimension(panelWidth - pad - focusWidth, 96));
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
         titlePanel.add(nameLabel);
         titlePanel.add(codePointLabel);
@@ -89,9 +103,11 @@ public class InfoPanel extends JPanel {
         cons.gridy = 2;
         cons.gridwidth = 1;
         cons.gridx = 0;
+        cons.insets = new Insets(pad, focusWidth, pad, pad);
         add(characterWidthLabel, cons);
 
         cons.gridx = 1;
+        cons.insets = new Insets(pad, 0, pad, 0);
         cons.anchor = GridBagConstraints.EAST;
         add(characterWidthSpinner, cons);
 
@@ -104,16 +120,12 @@ public class InfoPanel extends JPanel {
         cons.gridx = 0;
         cons.weighty = 0.0;
         cons.anchor = GridBagConstraints.WEST;
+        cons.insets = new Insets(pad, 0, pad, 0);
         add(showGridCheckBox, cons);
 
         cons.gridy = 5;
-        add(Box.createRigidArea(Dimensions.MEDIUM_SQUARE), cons);
-
-        cons.gridy = 6;
+        cons.insets = new Insets(pad, 0, pad * 2, 0);
         add(showLinesCheckBox, cons);
-
-        cons.gridy = 7;
-        add(Box.createRigidArea(Dimensions.MEDIUM_SQUARE), cons);
 
         setMetrics(project.getMetrics());
     }

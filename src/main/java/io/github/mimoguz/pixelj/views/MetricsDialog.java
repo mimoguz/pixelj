@@ -1,15 +1,20 @@
 package io.github.mimoguz.pixelj.views;
 
 import java.awt.BorderLayout;
+import java.awt.Dialog;
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
@@ -18,27 +23,45 @@ import com.formdev.flatlaf.FlatClientProperties;
 
 import io.github.mimoguz.pixelj.models.Metrics;
 import io.github.mimoguz.pixelj.resources.Resources;
+import io.github.mimoguz.pixelj.views.shared.Borders;
+import io.github.mimoguz.pixelj.views.shared.Components;
+import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
-public class MetricsDialog extends JFrame {
+public class MetricsDialog extends JDialog {
     private static final long serialVersionUID = 1185992736696485089L;
+
+    private static JSpinner getSpinner(final int value) {
+        return getSpinner(value, 1);
+    }
+
+    private static JSpinner getSpinner(final int value, final int minimum) {
+        final var spinner = new JSpinner(new SpinnerNumberModel(value, minimum, 512, 1));
+        Components.setFixedSize(spinner, Dimensions.SPINNER_SIZE);
+        return spinner;
+    }
 
     private static int getValue(JSpinner spinner) {
         return ((SpinnerNumberModel) spinner.getModel()).getNumber().intValue();
     }
 
     private final JButton applyButton;
+
     private final JSpinner ascender;
     private final JSpinner canvasHeight;
     private final JSpinner canvasWidth;
     private final JSpinner capHeight;
-    private final JSpinner defaultWidth;
+    private final JSpinner defaultCharacterWidth;
     private final JSpinner descender;
     private final JCheckBox isMonospaced;
+    private final JSpinner lineSpacing;
+    private Metrics result;
+
+    private final JSpinner spaceSize;
 
     private final JSpinner xHeight;
 
-    public MetricsDialog(final Metrics source) {
-        super();
+    public MetricsDialog(final Metrics source, final Frame owner) {
+        super(owner, Resources.get().getString("metricsDialogTitle"), Dialog.ModalityType.APPLICATION_MODAL);
 
         final var res = Resources.get();
 
@@ -50,12 +73,14 @@ public class MetricsDialog extends JFrame {
 
         final var cons = new GridBagConstraints();
         cons.insets = new Insets(4, 4, 4, 4);
+        cons.anchor = GridBagConstraints.WEST;
+        cons.weighty = 0.0;
 
         cons.gridx = 0;
         cons.gridy = 0;
         content.add(new JLabel(res.getString("metricsCanvasWidth")), cons);
         cons.gridx = 1;
-        canvasWidth = new JSpinner(new SpinnerNumberModel(source.canvasWidth(), 1, 512, 1));
+        canvasWidth = getSpinner(source.canvasWidth());
         content.add(canvasWidth, cons);
         canvasWidth.setEnabled(false);
 
@@ -63,7 +88,7 @@ public class MetricsDialog extends JFrame {
         cons.gridy = 1;
         content.add(new JLabel(res.getString("metricsCanvasHeight")), cons);
         cons.gridx = 1;
-        canvasHeight = new JSpinner(new SpinnerNumberModel(source.canvasWidth(), 1, 512, 1));
+        canvasHeight = getSpinner(source.canvasHeight());
         content.add(canvasHeight, cons);
         canvasHeight.setEnabled(false);
 
@@ -71,7 +96,7 @@ public class MetricsDialog extends JFrame {
         cons.gridy = 2;
         content.add(new JLabel(res.getString("metricsAscender")), cons);
         cons.gridx = 1;
-        ascender = new JSpinner(new SpinnerNumberModel(source.canvasWidth(), 1, 512, 1));
+        ascender = getSpinner(source.ascender());
         ascender.addChangeListener(this::onSpinnerChanged);
         content.add(ascender, cons);
 
@@ -79,14 +104,14 @@ public class MetricsDialog extends JFrame {
         cons.gridy = 3;
         content.add(new JLabel(res.getString("metricsDescender")), cons);
         cons.gridx = 1;
-        descender = new JSpinner(new SpinnerNumberModel(source.canvasWidth(), 1, 512, 1));
+        descender = getSpinner(source.descender());
         content.add(descender, cons);
 
         cons.gridx = 0;
         cons.gridy = 4;
         content.add(new JLabel(res.getString("metricsCapHeight")), cons);
         cons.gridx = 1;
-        capHeight = new JSpinner(new SpinnerNumberModel(source.canvasWidth(), 1, 512, 1));
+        capHeight = getSpinner(source.capHeight());
         capHeight.addChangeListener(this::onSpinnerChanged);
         content.add(capHeight, cons);
 
@@ -94,7 +119,7 @@ public class MetricsDialog extends JFrame {
         cons.gridy = 5;
         content.add(new JLabel(res.getString("metricsXHeight")), cons);
         cons.gridx = 1;
-        xHeight = new JSpinner(new SpinnerNumberModel(source.canvasWidth(), 1, 512, 1));
+        xHeight = getSpinner(source.xHeight());
         xHeight.addChangeListener(this::onSpinnerChanged);
         content.add(xHeight, cons);
 
@@ -102,26 +127,80 @@ public class MetricsDialog extends JFrame {
         cons.gridy = 6;
         content.add(new JLabel(res.getString("metricsDefaultCharacterWidth")), cons);
         cons.gridx = 1;
-        defaultWidth = new JSpinner(new SpinnerNumberModel(source.canvasWidth(), 1, 512, 1));
-        defaultWidth.addChangeListener(this::onSpinnerChanged);
-        content.add(defaultWidth, cons);
+        defaultCharacterWidth = getSpinner(source.defaultCharacterWidth());
+        defaultCharacterWidth.addChangeListener(this::onSpinnerChanged);
+        content.add(defaultCharacterWidth, cons);
 
         cons.gridx = 0;
         cons.gridy = 7;
+        content.add(new JLabel(res.getString("metricsSpaceSize")), cons);
+        cons.gridx = 1;
+        spaceSize = getSpinner(source.spaceSize(), 0);
+        content.add(spaceSize, cons);
+
+        cons.gridx = 0;
+        cons.gridy = 8;
+        content.add(new JLabel(res.getString("metricsLineSpacing")), cons);
+        cons.gridx = 1;
+        lineSpacing = getSpinner(source.lineSpacing(), 0);
+        content.add(lineSpacing, cons);
+
+        cons.gridx = 0;
+        cons.gridy = 9;
         content.add(new JLabel(res.getString("metricsIsMonospaced")), cons);
         cons.gridx = 1;
         isMonospaced = new JCheckBox();
         isMonospaced.setSelected(source.isMonospaced());
         content.add(isMonospaced, cons);
 
-        root.add(content, BorderLayout.CENTER);
+        cons.gridx = 0;
+        cons.gridy = 10;
+        cons.weighty = 1.0;
+        content.add(new JPanel(), cons);
+
+        final var scroll = new JScrollPane(content);
+        scroll.setBorder(Borders.empty);
+        root.add(scroll, BorderLayout.CENTER);
 
         applyButton = new JButton(res.getString("apply"));
+        applyButton.addActionListener(e -> {
+            result = Metrics.Builder.from(source)
+                    .setAscender(getValue(ascender))
+                    .setDescender(getValue(descender))
+                    .setCapHeight(getValue(capHeight))
+                    .setXHeight(getValue(xHeight))
+                    .setDefaultCharacterWidth(getValue(defaultCharacterWidth))
+                    .setMonospaced(isMonospaced.isSelected())
+                    .build();
+            setVisible(false);
+        });
+
+        final var cancelButton = new JButton(res.getString("cancel"));
+        cancelButton.addActionListener(e -> setVisible(false));
+
+        final var buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+        buttonPanel.add(Box.createHorizontalGlue());
+        buttonPanel.add(cancelButton);
+        buttonPanel.add(Box.createRigidArea(Dimensions.MEDIUM_SQUARE));
+        buttonPanel.add(applyButton);
+        buttonPanel.setBorder(Borders.smallEmpty);
+        root.add(buttonPanel, BorderLayout.SOUTH);
+
+        root.setBorder(Borders.mediumEmpty);
+        setContentPane(root);
+
+        setSize(300, 500);
+    }
+
+    public Metrics getResult() {
+        return result;
     }
 
     private void onSpinnerChanged(ChangeEvent e) {
-        final var valid = validateAscender() && validateDescender() && validateCapHeight()
-                && validateXHeight() && validateDefaultWidth();
+        // Do not short-circuit
+        final var valid = validateAscender() & validateDescender() & validateCapHeight() & validateXHeight()
+                & validateDefaultWidth();
         applyButton.setEnabled(valid);
     }
 
@@ -147,8 +226,8 @@ public class MetricsDialog extends JFrame {
 
     private boolean validateDefaultWidth() {
         // defaultWidth <= canvasWidth
-        final var validDefaultWidth = getValue(defaultWidth) <= getValue(canvasWidth);
-        defaultWidth.putClientProperty(
+        final var validDefaultWidth = getValue(defaultCharacterWidth) <= getValue(canvasWidth);
+        defaultCharacterWidth.putClientProperty(
                 FlatClientProperties.OUTLINE,
                 validDefaultWidth ? null : FlatClientProperties.OUTLINE_ERROR
         );

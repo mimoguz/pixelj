@@ -70,7 +70,7 @@ public class ProjectView extends JFrame {
         final var charactersScreen = new CharactersScreen(project, root);
         final var kerningPairsScreen = new KerningPairsScreen(project, root);
         final var previewScreen = new PreviewScreen(project, root);
-        final var globalActions = new MainActions(project);
+        final var globalActions = new MainActions(project, this);
         final var mainMenu = new MainMenu(globalActions);
 
         Actions.registerShortcuts(globalActions.all, root);
