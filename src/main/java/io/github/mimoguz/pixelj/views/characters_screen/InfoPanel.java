@@ -25,7 +25,8 @@ import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 public class InfoPanel extends JPanel {
-    private static Color LABEL_FOREGROUND = new Color(50, 55, 65);
+    private static final long serialVersionUID = 1793227912035744053L;
+    private static final Color LABEL_FOREGROUND = new Color(50, 55, 65);
 
     private final JLabel characterWidthLabel;
     private final JSpinner characterWidthSpinner;
@@ -40,7 +41,7 @@ public class InfoPanel extends JPanel {
         final var res = Resources.get();
 
         glyphLabel = new JLabel(" ");
-        glyphLabel.setFont(glyphLabel.getFont().deriveFont(Font.PLAIN, 102));
+        glyphLabel.setFont(glyphLabel.getFont().deriveFont(Font.PLAIN, 120));
         glyphLabel.setForeground(LABEL_FOREGROUND);
 
         nameLabel = new JLabel(" ");
@@ -70,31 +71,32 @@ public class InfoPanel extends JPanel {
             }
         });
 
-        final var pad = 6;
-        final var focusWidth = 4;
+        final var pad = Dimensions.MEDIUM_SQUARE.width;
+        final var focusWidth = 2;
         final var divWidth = 4;
-        final var panelWidth = 200;
+        final var panelWidth = 212;
         final var cons = new GridBagConstraints();
+        final var innerWidth = panelWidth - 2 * pad + divWidth;
 
         setLayout(new GridBagLayout());
-        setBorder(BorderFactory.createEmptyBorder(pad, pad, pad, pad - divWidth));
         setMaximumSize(new Dimension(panelWidth, Integer.MAX_VALUE));
+        setMinimumSize(new Dimension(panelWidth, 1));
         setPreferredSize(new Dimension(panelWidth, 400));
 
         cons.gridy = 0;
         cons.gridwidth = 2;
         cons.weighty = 0.0;
-        cons.insets = new Insets(pad, 0, pad, 0);
+        cons.insets = new Insets(pad - focusWidth, pad, pad, pad - divWidth);
         final var glyphBackground = new JPanel(new GridBagLayout());
-        Components.setFixedSize(glyphBackground, new Dimension(panelWidth - pad, panelWidth - pad));
+        Components.setFixedSize(glyphBackground, new Dimension(innerWidth, innerWidth));
         glyphBackground.add(glyphLabel, new GridBagConstraints());
         glyphBackground.setBackground(Color.WHITE);
         add(glyphBackground, cons);
 
         cons.gridy = 1;
-        cons.insets = new Insets(pad, focusWidth, pad, focusWidth);
+        cons.insets = new Insets(pad, pad, pad, pad - divWidth);
         final var titlePanel = new JPanel();
-        Components.setFixedSize(titlePanel, new Dimension(panelWidth - pad - focusWidth, 96));
+        Components.setFixedSize(titlePanel, new Dimension(innerWidth, 96));
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
         titlePanel.add(nameLabel);
         titlePanel.add(codePointLabel);
@@ -103,11 +105,11 @@ public class InfoPanel extends JPanel {
         cons.gridy = 2;
         cons.gridwidth = 1;
         cons.gridx = 0;
-        cons.insets = new Insets(pad, focusWidth, pad, pad);
+        cons.insets = new Insets(pad, pad, pad, pad);
         add(characterWidthLabel, cons);
 
         cons.gridx = 1;
-        cons.insets = new Insets(pad, 0, pad, 0);
+        cons.insets = new Insets(pad, 0, pad, pad - divWidth - focusWidth);
         cons.anchor = GridBagConstraints.EAST;
         add(characterWidthSpinner, cons);
 
@@ -120,11 +122,11 @@ public class InfoPanel extends JPanel {
         cons.gridx = 0;
         cons.weighty = 0.0;
         cons.anchor = GridBagConstraints.WEST;
-        cons.insets = new Insets(pad, 0, pad, 0);
+        cons.insets = new Insets(pad, pad - focusWidth, pad, pad - divWidth);
         add(showGridCheckBox, cons);
 
         cons.gridy = 5;
-        cons.insets = new Insets(pad, 0, pad * 2, 0);
+        cons.insets = new Insets(0, pad - focusWidth, pad * 2, pad - divWidth);
         add(showLinesCheckBox, cons);
 
         setMetrics(project.getMetrics());

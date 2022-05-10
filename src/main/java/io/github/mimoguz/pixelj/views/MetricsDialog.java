@@ -1,22 +1,8 @@
 package io.github.mimoguz.pixelj.views;
 
-import java.awt.BorderLayout;
-import java.awt.Dialog;
-import java.awt.Frame;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.*;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 
 import com.formdev.flatlaf.FlatClientProperties;
@@ -45,7 +31,6 @@ public class MetricsDialog extends JDialog {
     }
 
     private final JButton applyButton;
-
     private final JSpinner ascender;
     private final JSpinner canvasHeight;
     private final JSpinner canvasWidth;
@@ -54,10 +39,8 @@ public class MetricsDialog extends JDialog {
     private final JSpinner descender;
     private final JCheckBox isMonospaced;
     private final JSpinner lineSpacing;
-    private Metrics result;
-
+    private transient Metrics result;
     private final JSpinner spaceSize;
-
     private final JSpinner xHeight;
 
     public MetricsDialog(final Metrics source, final Frame owner) {
@@ -191,6 +174,7 @@ public class MetricsDialog extends JDialog {
         setContentPane(root);
 
         setSize(300, 500);
+        setLocationRelativeTo(owner);
     }
 
     public Metrics getResult() {

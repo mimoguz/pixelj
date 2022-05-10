@@ -38,6 +38,7 @@ public class PainterPanel extends JPanel implements Detachable {
 
     private static final int WHITE_SQUARE = 0x30_ff_ff_ff;
     private static final Color X_HEIGHT = CAP_HEIGHT;
+
     private static BufferedImage checkerBoard(int w, int h) {
         final var image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         for (var y = 0; y < h; y++) {
@@ -51,12 +52,15 @@ public class PainterPanel extends JPanel implements Detachable {
         }
         return image;
     }
+
     private static boolean even(int x) {
         return (x & 1) == 0;
     }
+
     private static boolean odd(int x) {
         return (x & 1) == 1;
     }
+
     private final transient PainterActions actions;
     private final InfoPanel infoPanel;
 
@@ -207,10 +211,6 @@ public class PainterPanel extends JPanel implements Detachable {
         add(centerPanel, BorderLayout.CENTER);
 
         // ****************************** EAST ******************************
-
-        infoPanel.setMinimumSize(new Dimension(200, 1));
-        infoPanel.setMaximumSize(new Dimension(200, Integer.MAX_VALUE));
-        infoPanel.setPreferredSize(new Dimension(200, 300));
         add(infoPanel, BorderLayout.EAST);
 
         setEnabled(false);
@@ -274,6 +274,7 @@ public class PainterPanel extends JPanel implements Detachable {
                 new Line(Orientation.HORIZONTAL, metrics.canvasHeight() - metrics.descender(), BASELINE)
         );
     }
+
     /**
      * @param value May be null
      */
