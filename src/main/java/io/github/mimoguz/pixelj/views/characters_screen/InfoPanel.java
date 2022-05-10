@@ -1,9 +1,6 @@
 package io.github.mimoguz.pixelj.views.characters_screen;
 
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.*;
 
 import javax.swing.*;
 
@@ -17,19 +14,23 @@ import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 public class InfoPanel extends JPanel {
-    private final JSpinner characterWidthSpinner;
-    private final JLabel codePointLabel;
-    private final JLabel glyphLabel;
-    private transient CharacterModel model;
-    private final JLabel nameLabel;
+    private static Color LABEL_FOREGROUND = new Color(50, 55, 65);
+
     private final JCheckBox showGridCheckBox;
     private final JCheckBox showLinesCheckBox;
+    private final JLabel characterWidthLabel;
+    private final JLabel codePointLabel;
+    private final JLabel glyphLabel;
+    private final JLabel nameLabel;
+    private final JSpinner characterWidthSpinner;
+    private transient CharacterModel model;
 
     public InfoPanel(final ProjectModel project) {
         final var res = Resources.get();
 
         glyphLabel = new JLabel(" ");
         glyphLabel.setFont(glyphLabel.getFont().deriveFont(Font.PLAIN, 102));
+        glyphLabel.setForeground(LABEL_FOREGROUND);
 
         nameLabel = new JLabel(" ");
 
@@ -38,6 +39,10 @@ public class InfoPanel extends JPanel {
 
         characterWidthSpinner = new JSpinner();
         Components.setFixedSize(characterWidthSpinner, Dimensions.SPINNER_SIZE);
+        characterWidthSpinner.setEnabled(false);
+
+        characterWidthLabel = new JLabel(res.getString("characterWidthSpinnerLabel"));
+        characterWidthLabel.setEnabled(false);
 
         showGridCheckBox = new JCheckBox(res.getString("showGrid"));
         showGridCheckBox.setSelected(true);
@@ -69,7 +74,7 @@ public class InfoPanel extends JPanel {
         final var glyphBackground = new JPanel(new GridBagLayout());
         Components.setFixedSize(glyphBackground, new Dimension(panelWidth - pad, panelWidth - pad));
         glyphBackground.add(glyphLabel, new GridBagConstraints());
-        glyphBackground.setBackground(Resources.get().colors.box());
+        glyphBackground.setBackground(Color.WHITE);
         add(glyphBackground, cons);
 
         cons.gridy = 1;
@@ -84,7 +89,7 @@ public class InfoPanel extends JPanel {
         cons.gridy = 2;
         cons.gridwidth = 1;
         cons.gridx = 0;
-        add(new JLabel(res.getString("characterWidthSpinnerLabel")), cons);
+        add(characterWidthLabel, cons);
 
         cons.gridx = 1;
         cons.anchor = GridBagConstraints.EAST;
@@ -106,6 +111,9 @@ public class InfoPanel extends JPanel {
 
         cons.gridy = 6;
         add(showLinesCheckBox, cons);
+
+        cons.gridy = 7;
+        add(Box.createRigidArea(Dimensions.MEDIUM_SQUARE), cons);
 
         setMetrics(project.getMetrics());
     }
@@ -141,11 +149,15 @@ public class InfoPanel extends JPanel {
             glyphLabel.setText(Character.toString((char) model.getCodePoint()));
             if (characterWidthSpinner.getModel() instanceof SpinnerNumberModel numberModel) {
                 numberModel.setValue(value.getWidth());
+                characterWidthSpinner.setEnabled(true);
+                characterWidthLabel.setEnabled(true);
             }
         } else {
             nameLabel.setText(" ");
             codePointLabel.setText(" ");
             glyphLabel.setText(" ");
+            characterWidthSpinner.setEnabled(false);
+            characterWidthLabel.setEnabled(false);
         }
     }
 }
