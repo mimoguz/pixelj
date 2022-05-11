@@ -48,7 +48,7 @@ public class Resources {
         iconFont = loadFont();
         strings = new Strings(loadResourceBundle());
         this.colors = colors;
-        metricsGuide = new FlatSVGIcon(BASE + "metrics_guide.svg", 416, 338, getClass().getClassLoader());
+        metricsGuide = new FlatSVGIcon(BASE + "metrics_guide.svg", 324, 288, getClass().getClassLoader());
     }
 
     public String formatString(final String key, final Object... arguments) {

@@ -226,7 +226,7 @@ public class MetricsDialog extends JDialog {
         setContentPane(root);
         getRootPane().setDefaultButton(cancelButton);
 
-        setSize(712, 532);
+        setSize(res.metricsGuide.getIconWidth() + 300, 532);
         setResizable(false);
         setLocationRelativeTo(owner);
     }
