@@ -30,7 +30,6 @@ public class PreviewScreen extends JPanel implements Detachable {
     private final JButton clearButton;
     private final JPanel container;
     private final transient ProjectModel project;
-    private final transient ProjectModel.ProjectChangeListener projectChangeListener;
     private final JButton refreshButton;
     private final PromptTextArea textInput;
     private final JSlider zoomSlider;
@@ -88,13 +87,6 @@ public class PreviewScreen extends JPanel implements Detachable {
         Components.setFixedSize(clearButton, Dimensions.TEXT_BUTTON_SIZE);
 
         Actions.registerShortcuts(actions.all, root);
-
-        projectChangeListener = (sender, event) -> {
-            if (event instanceof ProjectModel.ProjectChangeEvent.MetricsChanged) {
-                actions.refreshAction
-                        .actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, ""));
-            }
-        };
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -156,7 +148,7 @@ public class PreviewScreen extends JPanel implements Detachable {
 
     @Override
     public void detach() {
-        project.removeChangeListener(projectChangeListener);
+        // TODO: Remove
     }
 
     public JButton getClearButton() {
@@ -171,13 +163,17 @@ public class PreviewScreen extends JPanel implements Detachable {
         return textInput;
     }
 
+    public void refresh() {
+        actions.refreshAction.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, ""));
+    }
+
     @Override
     public void setEnabled(final boolean value) {
         super.setEnabled(value);
         textInput.setEnabled(value);
         Actions.setEnabled(actions.all, value);
         if (value) {
-            actions.refreshAction.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, ""));
+            refresh();
         }
     }
 }

@@ -16,19 +16,20 @@ public record Metrics(
     public static class Builder {
         public static Builder from(Metrics metrics) {
             final var builder = new Builder();
-            builder.canvasWidth = metrics.canvasWidth();
-            builder.canvasHeight = metrics.canvasHeight();
             builder.ascender = metrics.ascender();
-            builder.descender = metrics.descender();
+            builder.canvasHeight = metrics.canvasHeight();
+            builder.canvasWidth = metrics.canvasWidth();
             builder.capHeight = metrics.capHeight();
-            builder.xHeight = metrics.xHeight();
             builder.defaultCharacterWidth = metrics.defaultCharacterWidth();
-            builder.spacing = metrics.spacing();
-            builder.spaceSize = metrics.spaceSize();
-            builder.lineSpacing = metrics.lineSpacing();
+            builder.descender = metrics.descender();
             builder.isMonospaced = metrics.isMonospaced();
+            builder.lineSpacing = metrics.lineSpacing();
+            builder.spaceSize = metrics.spaceSize();
+            builder.spacing = metrics.spacing();
+            builder.xHeight = metrics.xHeight();
             return builder;
         }
+
         public static Builder getDefault() {
             final var builder = new Builder();
             builder.canvasWidth = 24;
@@ -44,6 +45,7 @@ public record Metrics(
             builder.isMonospaced = false;
             return builder;
         }
+
         private int ascender;
         private int canvasHeight;
         private int canvasWidth;

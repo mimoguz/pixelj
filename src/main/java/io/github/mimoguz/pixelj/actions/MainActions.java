@@ -121,7 +121,10 @@ public class MainActions {
     private void showMetrics(final ActionEvent event, final Action action) {
         final var metricsDialog = new MetricsDialog(project.getMetrics(), frame);
         metricsDialog.setVisible(true);
-        System.out.println(metricsDialog.getResult());
+        final var result = metricsDialog.getResult();
+        if (result != null && !project.getMetrics().equals(result)) {
+            project.setMetrics(result);
+        }
     }
 
     private void showSettings(ActionEvent event, Action action) {

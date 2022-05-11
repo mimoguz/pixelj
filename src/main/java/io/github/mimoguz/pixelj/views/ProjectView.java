@@ -25,6 +25,7 @@ import io.github.mimoguz.pixelj.actions.ApplicationAction;
 import io.github.mimoguz.pixelj.actions.MainActions;
 import io.github.mimoguz.pixelj.graphics.FontIcon;
 import io.github.mimoguz.pixelj.models.ProjectModel;
+import io.github.mimoguz.pixelj.models.ProjectModel.ProjectChangeEvent;
 import io.github.mimoguz.pixelj.resources.Icons;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.views.characters_screen.CharactersScreen;
@@ -59,24 +60,29 @@ public class ProjectView extends JFrame {
     }
 
     private final JTabbedPane root;
-
     private final Collection<ApplicationAction> tabActions;
+    private final CharactersScreen charactersScreen;
+    private final KerningPairsScreen kerningPairsScreen;
+    private final PreviewScreen previewScreen;
+    private final transient MainActions mainActions;
 
     public ProjectView(final ProjectModel project) {
         super();
 
         root = new JTabbedPane();
 
-        final var charactersScreen = new CharactersScreen(project, root);
-        final var kerningPairsScreen = new KerningPairsScreen(project, root);
-        final var previewScreen = new PreviewScreen(project, root);
-        final var globalActions = new MainActions(project, this);
-        final var mainMenu = new MainMenu(globalActions);
+        charactersScreen = new CharactersScreen(project, root);
+        kerningPairsScreen = new KerningPairsScreen(project, root);
+        previewScreen = new PreviewScreen(project, root);
+        mainActions = new MainActions(project, this);
+        final var mainMenu = new MainMenu(mainActions);
 
-        Actions.registerShortcuts(globalActions.all, root);
+        Actions.registerShortcuts(mainActions.all, root);
         // Invisible screens should be disabled to prevent shortcut collisions.
         kerningPairsScreen.setEnabled(false);
         previewScreen.setEnabled(false);
+
+        project.addChangeListener(this::onChange);
 
         final var res = Resources.get();
 
@@ -169,8 +175,8 @@ public class ProjectView extends JFrame {
 
         /* --------------------------- Trailing component --------------------------- */
         final var trailingContainer = new JPanel();
-        final var settingsButton = tabBarButton(globalActions.showSettingsAction, buttonSize);
-        final var helpButton = tabBarButton(globalActions.showHelpAction, buttonSize);
+        final var settingsButton = tabBarButton(mainActions.showSettingsAction, buttonSize);
+        final var helpButton = tabBarButton(mainActions.showHelpAction, buttonSize);
         final var c = new GridBagConstraints();
         trailingContainer.setLayout(new GridBagLayout());
         trailingContainer.setBorder(Borders.empty);
@@ -196,5 +202,15 @@ public class ProjectView extends JFrame {
         root.setFocusable(false);
         add(root);
         pack();
+    }
+
+    private void onChange(final ProjectModel source, final ProjectChangeEvent event) {
+        if (event instanceof ProjectChangeEvent.MetricsChanged metricsChanged) {
+            charactersScreen.updateMetrics(metricsChanged.metrics());
+            kerningPairsScreen.updateMetrics(metricsChanged.metrics());
+            if (previewScreen.isEnabled()) {
+                previewScreen.refresh();
+            }
+        }
     }
 }

@@ -41,6 +41,7 @@ public class MetricsDialog extends JDialog {
     private final JSpinner lineSpacing;
     private transient Metrics result;
     private final JSpinner spaceSize;
+    private final JSpinner spacing;
     private final JSpinner xHeight;
 
     public MetricsDialog(final Metrics source, final Frame owner) {
@@ -116,20 +117,27 @@ public class MetricsDialog extends JDialog {
 
         cons.gridx = 0;
         cons.gridy = 7;
+        content.add(new JLabel(res.getString("metricsCharacterSpacing")), cons);
+        cons.gridx = 1;
+        spacing = getSpinner(source.spacing(), 0);
+        content.add(spacing, cons);
+
+        cons.gridx = 0;
+        cons.gridy = 8;
         content.add(new JLabel(res.getString("metricsSpaceSize")), cons);
         cons.gridx = 1;
         spaceSize = getSpinner(source.spaceSize(), 0);
         content.add(spaceSize, cons);
 
         cons.gridx = 0;
-        cons.gridy = 8;
+        cons.gridy = 9;
         content.add(new JLabel(res.getString("metricsLineSpacing")), cons);
         cons.gridx = 1;
         lineSpacing = getSpinner(source.lineSpacing(), 0);
         content.add(lineSpacing, cons);
 
         cons.gridx = 0;
-        cons.gridy = 9;
+        cons.gridy = 10;
         content.add(new JLabel(res.getString("metricsIsMonospaced")), cons);
         cons.gridx = 1;
         isMonospaced = new JCheckBox();
@@ -137,7 +145,7 @@ public class MetricsDialog extends JDialog {
         content.add(isMonospaced, cons);
 
         cons.gridx = 0;
-        cons.gridy = 10;
+        cons.gridy = 11;
         cons.weighty = 1.0;
         content.add(new JPanel(), cons);
 
@@ -146,6 +154,7 @@ public class MetricsDialog extends JDialog {
         root.add(scroll, BorderLayout.CENTER);
 
         applyButton = new JButton(res.getString("apply"));
+        Components.setFixedSize(applyButton, Dimensions.TEXT_BUTTON_SIZE);
         applyButton.addActionListener(e -> {
             result = Metrics.Builder.from(source)
                     .setAscender(getValue(ascender))
@@ -153,12 +162,16 @@ public class MetricsDialog extends JDialog {
                     .setCapHeight(getValue(capHeight))
                     .setXHeight(getValue(xHeight))
                     .setDefaultCharacterWidth(getValue(defaultCharacterWidth))
+                    .setSpacing(getValue(spacing))
+                    .setSpaceSize(getValue(spaceSize))
+                    .setLineSpacing(getValue(lineSpacing))
                     .setMonospaced(isMonospaced.isSelected())
                     .build();
             setVisible(false);
         });
 
         final var cancelButton = new JButton(res.getString("cancel"));
+        Components.setFixedSize(cancelButton, Dimensions.TEXT_BUTTON_SIZE);
         cancelButton.addActionListener(e -> setVisible(false));
 
         final var buttonPanel = new JPanel();
@@ -172,8 +185,9 @@ public class MetricsDialog extends JDialog {
 
         root.setBorder(Borders.mediumEmpty);
         setContentPane(root);
+        getRootPane().setDefaultButton(cancelButton);
 
-        setSize(300, 500);
+        setSize(300, 530);
         setLocationRelativeTo(owner);
     }
 
