@@ -1,8 +1,23 @@
 package io.github.mimoguz.pixelj.views;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dialog;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 
 import com.formdev.flatlaf.FlatClientProperties;
@@ -59,6 +74,7 @@ public class MetricsDialog extends JDialog {
         cons.insets = new Insets(4, 4, 4, 4);
         cons.anchor = GridBagConstraints.WEST;
         cons.weighty = 0.0;
+        cons.weightx = 0.0;
 
         cons.gridx = 0;
         cons.gridy = 0;
@@ -149,9 +165,32 @@ public class MetricsDialog extends JDialog {
         cons.weighty = 1.0;
         content.add(new JPanel(), cons);
 
+        cons.gridx = 2;
+        cons.gridy = 0;
+        cons.gridheight = 12;
+        cons.weightx = 1.0;
+        cons.insets = new Insets(0, 0, 0, 0);
+        content.add(new JPanel(), cons);
+
         final var scroll = new JScrollPane(content);
         scroll.setBorder(Borders.empty);
         root.add(scroll, BorderLayout.CENTER);
+
+        final var guide = new JLabel();
+        guide.setIcon(res.metricsGuide);
+        final var guidePanel = new JPanel();
+        guidePanel.setBorder(
+                BorderFactory.createEmptyBorder(
+                        Dimensions.SMALL_SQUARE.width,
+                        0,
+                        Dimensions.SMALL_SQUARE.width,
+                        Dimensions.SMALL_SQUARE.width
+                )
+        );
+        guidePanel.setLayout(new BoxLayout(guidePanel, BoxLayout.Y_AXIS));
+        guidePanel.add(guide);
+        guidePanel.add(Box.createVerticalGlue());
+        root.add(guidePanel, BorderLayout.EAST);
 
         applyButton = new JButton(res.getString("apply"));
         Components.setFixedSize(applyButton, Dimensions.TEXT_BUTTON_SIZE);
@@ -187,7 +226,8 @@ public class MetricsDialog extends JDialog {
         setContentPane(root);
         getRootPane().setDefaultButton(cancelButton);
 
-        setSize(300, 530);
+        setSize(712, 532);
+        setResizable(false);
         setLocationRelativeTo(owner);
     }
 

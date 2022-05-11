@@ -9,6 +9,10 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import javax.swing.Icon;
+
+import com.formdev.flatlaf.extras.FlatSVGIcon;
+
 import io.github.mimoguz.pixelj.graphics.FontIcon;
 
 public class Resources {
@@ -35,15 +39,16 @@ public class Resources {
     }
 
     public final Colors colors;
+    public final Icon metricsGuide;
 
     private final Font iconFont;
-
     private final Strings strings;
 
     private Resources(final Colors colors) {
         iconFont = loadFont();
         strings = new Strings(loadResourceBundle());
         this.colors = colors;
+        metricsGuide = new FlatSVGIcon(BASE + "metrics_guide.svg", 416, 338, getClass().getClassLoader());
     }
 
     public String formatString(final String key, final Object... arguments) {
