@@ -3,8 +3,6 @@ package io.github.mimoguz.pixelj;
 import javax.swing.WindowConstants;
 
 import io.github.mimoguz.pixelj.models.ExampleData;
-import io.github.mimoguz.pixelj.resources.DarkColors;
-import io.github.mimoguz.pixelj.resources.LightColors;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.themes.PixeljDark;
 import io.github.mimoguz.pixelj.themes.PixeljLight;
@@ -19,8 +17,7 @@ public class Main {
         } else {
             PixeljLight.setup();
         }
-        final var colors = USE_DARK_THEME ? new DarkColors() : new LightColors();
-        Resources.initialize(colors);
+        Resources.initialize(USE_DARK_THEME);
 
         final var view = new ProjectView(ExampleData.createProject());
         view.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

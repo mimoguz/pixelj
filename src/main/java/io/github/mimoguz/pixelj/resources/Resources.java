@@ -29,13 +29,13 @@ public class Resources {
 
     public static Resources get() {
         if (instance == null) {
-            initialize(new DarkColors());
+            initialize(true);
         }
         return instance;
     }
 
-    public static void initialize(final Colors colors) {
-        instance = new Resources(colors);
+    public static void initialize(final boolean useDarkTheme) {
+        instance = new Resources(useDarkTheme);
     }
 
     public final Colors colors;
@@ -44,11 +44,12 @@ public class Resources {
     private final Font iconFont;
     private final Strings strings;
 
-    private Resources(final Colors colors) {
+    private Resources(final boolean useDarkTheme) {
         iconFont = loadFont();
         strings = new Strings(loadResourceBundle());
-        this.colors = colors;
-        metricsGuide = new FlatSVGIcon(BASE + "metrics_guide.svg", 324, 288, getClass().getClassLoader());
+        this.colors = useDarkTheme ? new DarkColors() : new LightColors();
+        final var metricsGuideResource = useDarkTheme ? "metrics_guide_dark.svg" : "metrics_guide_light.svg";
+        metricsGuide = new FlatSVGIcon(BASE + metricsGuideResource, 324, 288, getClass().getClassLoader());
     }
 
     public String formatString(final String key, final Object... arguments) {
