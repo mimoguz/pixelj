@@ -49,7 +49,7 @@ public class Resources {
         strings = new Strings(loadResourceBundle());
         this.colors = useDarkTheme ? new DarkColors() : new LightColors();
         final var metricsGuideResource = useDarkTheme ? "metrics_guide_dark.svg" : "metrics_guide_light.svg";
-        metricsGuide = new FlatSVGIcon(BASE + metricsGuideResource, 324, 288, getClass().getClassLoader());
+        metricsGuide = new FlatSVGIcon(BASE + metricsGuideResource, 280, 520, getClass().getClassLoader());
     }
 
     public String formatString(final String key, final Object... arguments) {

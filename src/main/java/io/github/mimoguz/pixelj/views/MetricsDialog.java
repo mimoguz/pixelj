@@ -1,30 +1,18 @@
 package io.github.mimoguz.pixelj.views;
 
-import java.awt.BorderLayout;
-import java.awt.Dialog;
-import java.awt.Frame;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
 import io.github.mimoguz.pixelj.models.Metrics;
+import io.github.mimoguz.pixelj.resources.Icons;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.views.shared.Borders;
 import io.github.mimoguz.pixelj.views.shared.Components;
@@ -198,17 +186,50 @@ public class MetricsDialog extends JDialog {
         infoItem.setIcon(res.metricsGuide);
         infoItem.setBorder(Borders.mediumEmpty);
         infoPopup.add(infoItem);
-        final var infoButton = new JButton();
-        infoButton.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_HELP);
-        infoButton
-                .addActionListener(
-                        e -> infoPopup.show(
-                                infoButton,
-                                0,
-                                -res.metricsGuide.getIconHeight() - infoButton.getHeight()
-                                        - Dimensions.PADDING
-                        )
+        final var infoButton = new JToggleButton(
+                null,
+                res.getIcon(Icons.HELP, res.colors.icon(), res.colors.disabledIcon())
+        );
+        infoButton.setFocusable(false);
+        infoButton.putClientProperty(
+                FlatClientProperties.BUTTON_TYPE,
+                FlatClientProperties.BUTTON_TYPE_BORDERLESS
+        );
+        infoButton.addActionListener(e -> {
+            if (infoButton.isSelected()) {
+                infoPopup.show(
+                        infoButton,
+                        0,
+                        -res.metricsGuide.getIconHeight() - infoButton.getHeight() - Dimensions.PADDING
                 );
+            } else {
+                infoPopup.setVisible(false);
+            }
+        });
+        infoPopup.addPopupMenuListener(new PopupMenuListener() {
+            @Override
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+                // Ignored
+            }
+
+            @Override
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+
+                infoButton.setSelected(false);
+
+            }
+
+            @Override
+            public void popupMenuCanceled(PopupMenuEvent e) {
+                // Ignored
+            }
+        });
+        infoPopup.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                infoPopup.setVisible(false);
+            }
+        });
 
         final var buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
