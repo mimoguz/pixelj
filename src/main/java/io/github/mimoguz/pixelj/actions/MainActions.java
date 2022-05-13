@@ -4,6 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.Action;
 import javax.swing.JFrame;
@@ -26,10 +29,14 @@ public class MainActions {
     private boolean enabled = true;
     private final JFrame frame;
     private final ProjectModel project;
+    private final Logger logger;
 
     public MainActions(final ProjectModel project, JFrame frame) {
         this.project = project;
         this.frame = frame;
+
+        logger = Logger.getLogger(this.getClass().getName());
+        logger.addHandler(new ConsoleHandler());
 
         final var res = Resources.get();
 
@@ -91,31 +98,23 @@ public class MainActions {
     }
 
     private void export(final ActionEvent event, final Action action) {
-        System.out.println(action.getValue(Action.NAME));
-    }
-
-    private void newProject(final ActionEvent event, final Action action) {
-        System.out.println(action.getValue(Action.NAME));
-    }
-
-    private void openProject(final ActionEvent event, final Action action) {
-        System.out.println(action.getValue(Action.NAME));
+        logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
     }
 
     private void quit(final ActionEvent event, final Action action) {
-        System.out.println(action.getValue(Action.NAME));
+        logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
     }
 
     private void save(final ActionEvent event, final Action action) {
-        System.out.println(action.getValue(Action.NAME));
+        logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
     }
 
     private void saveAs(final ActionEvent event, final Action action) {
-        System.out.println(action.getValue(Action.NAME));
+        logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
     }
 
     private void showHelp(final ActionEvent event, final Action action) {
-        System.out.println(action.getValue(Action.NAME));
+        logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
     }
 
     private void showMetrics(final ActionEvent event, final Action action) {
@@ -128,6 +127,6 @@ public class MainActions {
     }
 
     private void showSettings(ActionEvent event, Action action) {
-        System.out.println(action.getValue(Action.NAME));
+        logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
     }
 }

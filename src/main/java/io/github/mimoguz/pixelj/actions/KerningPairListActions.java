@@ -5,6 +5,9 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.Action;
 import javax.swing.ListSelectionModel;
@@ -16,8 +19,11 @@ public class KerningPairListActions {
     public final ApplicationAction showAddDialogAction;
     public final ApplicationAction showRemoveDialogAction;
 
+    @SuppressWarnings("unused")
     private final KerningPairListModel listModel;
+    @SuppressWarnings("unused")
     private final ListSelectionModel selectionModel;
+    private final Logger logger;
 
     public KerningPairListActions(
             final KerningPairListModel listModel,
@@ -26,6 +32,9 @@ public class KerningPairListActions {
 
         this.listModel = listModel;
         this.selectionModel = selectionModel;
+
+        logger = Logger.getLogger(this.getClass().getName());
+        logger.addHandler(new ConsoleHandler());
 
         showAddDialogAction = new ApplicationAction("showAddDialog", this::showAddDialog)
                 .setTextKey("kerningPairsShowAddDialogAction")
@@ -40,10 +49,10 @@ public class KerningPairListActions {
     }
 
     private void showAddDialog(final ActionEvent event, final Action action) {
-        System.out.println(action.getValue(Action.NAME));
+        logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
     }
 
     private void showRemoveDialog(final ActionEvent event, final Action action) {
-        System.out.println(action.getValue(Action.NAME));
+        logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
     }
 }

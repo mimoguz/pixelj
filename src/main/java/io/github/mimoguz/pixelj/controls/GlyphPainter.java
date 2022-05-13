@@ -19,7 +19,7 @@ public class GlyphPainter extends GlyphView
 
     private final transient IntValueChangeListener characterWidthChangeListener;
     private final transient PaintAdapter paintAdapter;
-    private transient Consumer<Snapshot> snapshotConsumer = snapshot -> {
+    private transient Consumer<Snapshot> snapshotConsumer = snapshot -> { // Ignore
     };
 
     public GlyphPainter(final Color backgroundColor) {

@@ -24,6 +24,7 @@ public class GlyphView extends JPanel
     }
 
     public interface ViewChangeListener extends ChangeListener<GlyphView, ViewChangeEvent> {
+        // Empty
     }
 
     private static final long serialVersionUID = 7841183984464270304L;

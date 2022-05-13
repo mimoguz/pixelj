@@ -17,10 +17,11 @@ public class BinaryImage extends Image
     }
 
     public interface ImageChangeListener extends ChangeListener<BinaryImage, ImageChangeEvent> {
+        // Empty
     }
 
-    private static final byte b0 = 0;
-    private static final byte b1 = 1;
+    private static final byte BYTE_0 = 0;
+    private static final byte BYTE_1 = 1;
 
     public static BinaryImage from(final BufferedImage image) {
         if (image.getType() != BufferedImage.TYPE_BYTE_BINARY) {
@@ -55,6 +56,9 @@ public class BinaryImage extends Image
     protected final BufferedImage image;
 
     private BinaryImage(final int width, final int height, final BufferedImage image) {
+        if (image.getWidth() != width || image.getHeight() != height) {
+            throw new IllegalArgumentException("Dimensions don't match");
+        }
         this.image = image;
         raster = image.getRaster();
     }
@@ -69,7 +73,7 @@ public class BinaryImage extends Image
 
     public void fill(final boolean value, final boolean notify) {
         var lineBuffer = new byte[image.getWidth()];
-        Arrays.fill(lineBuffer, (value ? b1 : b0));
+        Arrays.fill(lineBuffer, (value ? BYTE_1 : BYTE_0));
         for (var y = 0; y < image.getHeight(); y++) {
             raster.setDataElements(0, y, image.getWidth(), 1, lineBuffer);
         }
@@ -86,7 +90,7 @@ public class BinaryImage extends Image
 
     public boolean get(final int x, final int y) {
         raster.getDataElements(x, y, pixelBuffer);
-        return pixelBuffer[0] == b1;
+        return pixelBuffer[0] == BYTE_1;
     }
 
     @Override
@@ -202,7 +206,7 @@ public class BinaryImage extends Image
     }
 
     public void set(final int x, final int y, final boolean value, final boolean notify) {
-        pixelBuffer[0] = value ? b1 : b0;
+        pixelBuffer[0] = value ? BYTE_1 : BYTE_0;
         raster.setDataElements(x, y, pixelBuffer);
         if (notify) {
             fireChangeEvent(this, ImageChangeEvent.IMAGE_MODIFIED);
@@ -238,6 +242,7 @@ public class BinaryImage extends Image
         }
     }
 
+    @SuppressWarnings("unused")
     private void setByteValue(final int x, final int y, final byte value) {
         pixelBuffer[0] = value;
         raster.setDataElements(x, y, pixelBuffer);

@@ -39,7 +39,7 @@ public class PaintAdapter implements MouseListener, MouseMotionListener {
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
+    public void mouseClicked(MouseEvent e) { // Ignore
     }
 
     @Override
@@ -58,7 +58,7 @@ public class PaintAdapter implements MouseListener, MouseMotionListener {
     }
 
     @Override
-    public void mouseEntered(final MouseEvent e) {
+    public void mouseEntered(final MouseEvent e) { // Ignore
     }
 
     @Override
@@ -67,7 +67,7 @@ public class PaintAdapter implements MouseListener, MouseMotionListener {
     }
 
     @Override
-    public void mouseMoved(final MouseEvent e) {
+    public void mouseMoved(final MouseEvent e) { // Ignore
     }
 
     @Override

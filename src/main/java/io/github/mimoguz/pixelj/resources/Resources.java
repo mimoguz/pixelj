@@ -5,13 +5,10 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-
-import javax.swing.Icon;
-
-import com.formdev.flatlaf.extras.FlatSVGIcon;
 
 import io.github.mimoguz.pixelj.graphics.FontIcon;
 
@@ -39,7 +36,6 @@ public class Resources {
     }
 
     public final Colors colors;
-    public final Icon metricsGuide;
 
     private final Font iconFont;
     private final Strings strings;
@@ -48,8 +44,6 @@ public class Resources {
         iconFont = loadFont();
         strings = new Strings(loadResourceBundle());
         this.colors = useDarkTheme ? new DarkColors() : new LightColors();
-        final var metricsGuideResource = useDarkTheme ? "metrics_guide_dark.svg" : "metrics_guide_light.svg";
-        metricsGuide = new FlatSVGIcon(BASE + metricsGuideResource, 280, 520, getClass().getClassLoader());
     }
 
     public String formatString(final String key, final Object... arguments) {
@@ -75,17 +69,21 @@ public class Resources {
     private Font loadFont() {
         try (final var stream = getClass().getResourceAsStream("pxf16.otf")) {
             if (stream == null) {
-                throw new IOException("The resource pxf16.otf is not found.");
+                throw new ResourceInitializationException("The resource pxf16.otf is not found.");
             }
-            try {
-                final var font = Font.createFont(Font.TRUETYPE_FONT, stream).deriveFont(Font.PLAIN, 16);
-                GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
-                return font;
-            } catch (final IOException | FontFormatException e) {
-                throw new ResourceInitializationException("Can't read font file: \n" + e.getMessage());
-            }
+            return loadFont(stream);
         } catch (final IOException e) {
             throw new ResourceInitializationException("Can't read font file:\n" + e.getMessage());
+        }
+    }
+
+    private Font loadFont(final InputStream stream) {
+        try {
+            final var font = Font.createFont(Font.TRUETYPE_FONT, stream).deriveFont(Font.PLAIN, 16);
+            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
+            return font;
+        } catch (final IOException | FontFormatException e) {
+            throw new ResourceInitializationException("Can't read font file: \n" + e.getMessage());
         }
     }
 

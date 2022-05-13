@@ -6,6 +6,9 @@ import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.ListSelectionModel;
 
@@ -25,6 +28,7 @@ public class CharacterListActions {
     private boolean enabled = true;
     private final CharacterListModel listModel;
     private final ListSelectionModel selectionModel;
+    private final Logger logger;
 
     public CharacterListActions(
             final CharacterListModel listModel,
@@ -34,9 +38,13 @@ public class CharacterListActions {
         this.listModel = listModel;
         this.selectionModel = selectionModel;
 
+        logger = Logger.getLogger(this.getClass().getName());
+        logger.addHandler(new ConsoleHandler());
+        logger.setLevel(Level.INFO);
+
         showAddDialogAction = new ApplicationAction(
                 "charactersShowAddDialogAction",
-                (e, action) -> System.out.println("Show add dialog action")
+                (e, action) -> logger.log(Level.INFO, "Show add dialog action")
         ).setTextKey("charactersShowAddDialogAction")
                 .setAccelerator(KeyEvent.VK_PLUS, InputEvent.ALT_DOWN_MASK);
 
@@ -52,9 +60,9 @@ public class CharacterListActions {
         canvasSize = new Dimension(metrics.canvasWidth(), metrics.canvasHeight());
         defaultCharacterWidth = metrics.defaultCharacterWidth();
 
-        selectionModel.addListSelectionListener(e -> {
-            showRemoveDialogAction.setEnabled(selectionModel.getMinSelectionIndex() >= 0);
-        });
+        selectionModel.addListSelectionListener(
+                e -> showRemoveDialogAction.setEnabled(selectionModel.getMinSelectionIndex() >= 0)
+        );
     }
 
     public int getDefaultCharacterWidth() {
@@ -79,6 +87,7 @@ public class CharacterListActions {
         defaultCharacterWidth = metrics.defaultCharacterWidth();
     }
 
+    @SuppressWarnings("unused")
     private void addCharacters(int... codePoints) {
         for (var codePoint : codePoints) {
             listModel.add(
@@ -103,9 +112,9 @@ public class CharacterListActions {
         for (var index = index0; index <= index1; index++) {
             kerningPairs.addAll(listModel.findDependent(listModel.getElementAt(index)));
         }
-        if (kerningPairs.size() > 0) {
-            System.out.println("Caution! " + kerningPairs.size() + " kerning pairs will also be removed.");
+        if (!kerningPairs.isEmpty()) {
+            logger.log(Level.INFO, "Caution! {0}  kerning pairs will also be removed.", kerningPairs.size());
         }
-        System.out.println("Removing " + (index1 - index0 + 1) + " characters.");
+        logger.log(Level.INFO, "Removing  {0} characters.", index1 - index0 + 1);
     }
 }

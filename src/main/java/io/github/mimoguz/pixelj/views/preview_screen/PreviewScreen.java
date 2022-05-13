@@ -29,14 +29,11 @@ public class PreviewScreen extends JPanel implements Detachable {
     private final transient PreviewScreenActions actions;
     private final JButton clearButton;
     private final JPanel container;
-    private final transient ProjectModel project;
     private final JButton refreshButton;
     private final PromptTextArea textInput;
     private final JSlider zoomSlider;
 
     public PreviewScreen(final ProjectModel project, final JComponent root) {
-        this.project = project;
-
         final var res = Resources.get();
 
         textInput = new PromptTextArea();

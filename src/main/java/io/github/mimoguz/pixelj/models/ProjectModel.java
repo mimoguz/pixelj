@@ -11,13 +11,16 @@ public class ProjectModel
 
     public sealed interface ProjectChangeEvent permits ProjectChangeEvent.MetricsChanged, ProjectChangeEvent.TitleChanged {
         record MetricsChanged(Metrics metrics) implements ProjectChangeEvent {
+            // Empty
         }
 
         record TitleChanged(String title) implements ProjectChangeEvent {
+            // Empty
         }
     }
 
     public interface ProjectChangeListener extends ChangeListener<ProjectModel, ProjectChangeEvent> {
+        // Empty
     }
 
     private final CharacterListModel characters;

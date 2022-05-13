@@ -13,19 +13,19 @@ public class CharacterListModel extends DisplayListModel<CharacterModel> {
     private final ListDataListener kerningPairRemover = new ListDataListener() {
         @Override
         public void contentsChanged(final ListDataEvent e) {
-            sync(e);
+            sync();
         }
 
         @Override
-        public void intervalAdded(final ListDataEvent e) {
+        public void intervalAdded(final ListDataEvent e) { // Ignore
         }
 
         @Override
         public void intervalRemoved(final ListDataEvent e) {
-            sync(e);
+            sync();
         }
 
-        private void sync(final ListDataEvent e) {
+        private void sync() {
 
             if (pairedKerningPairListModel == null) {
                 return;

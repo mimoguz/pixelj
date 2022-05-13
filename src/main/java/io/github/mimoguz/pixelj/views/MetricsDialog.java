@@ -1,16 +1,18 @@
 package io.github.mimoguz.pixelj.views;
 
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.KeyEvent;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
+import io.github.mimoguz.pixelj.actions.Actions;
+import io.github.mimoguz.pixelj.actions.ApplicationAction;
 import io.github.mimoguz.pixelj.models.Metrics;
 import io.github.mimoguz.pixelj.resources.Icons;
 import io.github.mimoguz.pixelj.resources.Resources;
@@ -51,6 +53,9 @@ public class MetricsDialog extends JDialog {
 
     public MetricsDialog(final Metrics source, final Frame owner) {
         super(owner, Resources.get().getString("metricsDialogTitle"), Dialog.ModalityType.APPLICATION_MODAL);
+
+        final var logger = Logger.getLogger(this.getClass().getName());
+        logger.addHandler(new ConsoleHandler());
 
         final var res = Resources.get();
 
@@ -144,7 +149,6 @@ public class MetricsDialog extends JDialog {
 
         cons.gridx = 0;
         cons.gridy = cons.gridy + 1;
-        ;
         content.add(new JLabel(res.getString("metricsIsMonospaced")), cons);
         cons.gridx = 1;
         isMonospaced = new JCheckBox();
@@ -181,55 +185,20 @@ public class MetricsDialog extends JDialog {
         Components.setFixedSize(cancelButton, Dimensions.TEXT_BUTTON_SIZE);
         cancelButton.addActionListener(e -> setVisible(false));
 
-        final var infoPopup = new JPopupMenu();
-        final var infoItem = new JLabel();
-        infoItem.setIcon(res.metricsGuide);
-        infoItem.setBorder(Borders.mediumEmpty);
-        infoPopup.add(infoItem);
-        final var infoButton = new JToggleButton(
-                null,
-                res.getIcon(Icons.HELP, res.colors.icon(), res.colors.disabledIcon())
-        );
-        infoButton.setFocusable(false);
-        infoButton.putClientProperty(
+        final var helpAction = new ApplicationAction(
+                "metricsDialogHelpAction",
+                (event, action) -> logger.log(Level.INFO, "Metrics help")
+        ).setIcon(Icons.HELP, res.colors.icon(), res.colors.disabledIcon()).setAccelerator(KeyEvent.VK_F1, 0);
+        Actions.registerShortcuts(java.util.List.of(helpAction), root);
+        final var helpButton = new JButton(helpAction);
+        helpButton.putClientProperty(
                 FlatClientProperties.BUTTON_TYPE,
                 FlatClientProperties.BUTTON_TYPE_BORDERLESS
         );
-        infoButton.addActionListener(e -> {
-            if (infoButton.isSelected()) {
-                infoPopup.show(MetricsDialog.this, -res.metricsGuide.getIconWidth() - 8, 6);
-            } else {
-                infoPopup.setVisible(false);
-            }
-        });
-        infoPopup.addPopupMenuListener(new PopupMenuListener() {
-            @Override
-            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-                // Ignored
-            }
-
-            @Override
-            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-
-                infoButton.setSelected(false);
-
-            }
-
-            @Override
-            public void popupMenuCanceled(PopupMenuEvent e) {
-                // Ignored
-            }
-        });
-        infoPopup.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                infoPopup.setVisible(false);
-            }
-        });
 
         final var buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
-        buttonPanel.add(infoButton);
+        buttonPanel.add(helpButton);
         buttonPanel.add(Box.createHorizontalGlue());
         buttonPanel.add(cancelButton);
         buttonPanel.add(Box.createRigidArea(Dimensions.MEDIUM_SQUARE));
@@ -251,7 +220,7 @@ public class MetricsDialog extends JDialog {
         return result;
     }
 
-    @SuppressWarnings("java:S2178")
+    @SuppressWarnings({ "java:S2178" })
     private void onSpinnerChanged(ChangeEvent e) {
         // Do not short-circuit
         final var valid = validateAscender() & validateDescender() & validateCapHeight() & validateXHeight()
