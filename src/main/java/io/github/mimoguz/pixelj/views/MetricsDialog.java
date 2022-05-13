@@ -197,7 +197,7 @@ public class MetricsDialog extends JDialog {
         );
         infoButton.addActionListener(e -> {
             if (infoButton.isSelected()) {
-                infoPopup.show(infoButton, infoButton.getWidth() + Dimensions.PADDING, 0);
+                infoPopup.show(MetricsDialog.this, -res.metricsGuide.getIconWidth() - 8, 6);
             } else {
                 infoPopup.setVisible(false);
             }
