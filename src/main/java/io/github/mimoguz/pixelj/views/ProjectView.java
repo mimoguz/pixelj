@@ -9,14 +9,9 @@ import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.List;
 
-import javax.swing.Action;
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.SwingConstants;
-import javax.swing.ToolTipManager;
+import javax.swing.*;
+import javax.swing.event.PopupMenuListener;
+import javax.swing.event.PopupMenuEvent;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
@@ -33,6 +28,7 @@ import io.github.mimoguz.pixelj.views.kerning_pairs_screen.KerningPairsScreen;
 import io.github.mimoguz.pixelj.views.preview_screen.PreviewScreen;
 import io.github.mimoguz.pixelj.views.shared.Borders;
 import io.github.mimoguz.pixelj.views.shared.Components;
+import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 public class ProjectView extends JFrame {
     private static final long serialVersionUID = -8552411151437621157L;
@@ -44,9 +40,10 @@ public class ProjectView extends JFrame {
         return divider;
     }
 
-    private static JButton tabBarButton(Action action, Dimension size) {
-        final var button = new JButton();
-        button.setAction(action);
+    private static <T extends AbstractButton> T tabBarButton(T button, Action action, Dimension size) {
+        if (action != null) {
+            button.setAction(action);
+        }
         button.setText(null);
         button.setBorder(Borders.empty);
         button.putClientProperty(
@@ -155,18 +152,36 @@ public class ProjectView extends JFrame {
         /* ---------------------------- Leading component --------------------------- */
         final var leadingContainer = new JPanel();
         final var buttonSize = new Dimension(48, 48);
-        final var menuButtonAction = new ApplicationAction(
-                "menuButtonAction",
-                (event, action) -> mainMenu.show(
-                        leadingContainer,
-                        leadingContainer.getX() + leadingContainer.getWidth() + 12,
-                        leadingContainer.getY()
-                )
-        ).setTooltipKey("menuButtonAction")
+        final var menuButton = new JToggleButton();
+        final var menuButtonAction = new ApplicationAction("menuButtonAction", (event, action) -> {
+            if (menuButton.isSelected()) {
+                mainMenu.show(menuButton, menuButton.getWidth() + Dimensions.PADDING, 0);
+            } else {
+                mainMenu.setVisible(false);
+            }
+        }).setTooltipKey("menuButtonAction")
                 .setIcon(Icons.ELLIPSIS, res.colors.accent(), res.colors.disabledIcon())
                 .setAccelerator(KeyEvent.VK_M, ActionEvent.ALT_MASK);
+
+        mainMenu.addPopupMenuListener(new PopupMenuListener() {
+            @Override
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+                // Ignored
+            }
+
+            @Override
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+                menuButton.setSelected(false);
+            }
+
+            @Override
+            public void popupMenuCanceled(PopupMenuEvent e) {
+                // Ignored
+            }
+        });
+
         Actions.registerShortcuts(java.util.List.of(menuButtonAction), root);
-        final var menuButton = tabBarButton(menuButtonAction, buttonSize);
+        tabBarButton(menuButton, menuButtonAction, buttonSize);
         leadingContainer.setLayout(new BorderLayout());
         leadingContainer.setBackground(root.getBackground());
         leadingContainer.add(menuButton, BorderLayout.CENTER);
@@ -175,8 +190,8 @@ public class ProjectView extends JFrame {
 
         /* --------------------------- Trailing component --------------------------- */
         final var trailingContainer = new JPanel();
-        final var settingsButton = tabBarButton(mainActions.showSettingsAction, buttonSize);
-        final var helpButton = tabBarButton(mainActions.showHelpAction, buttonSize);
+        final var settingsButton = tabBarButton(new JButton(), mainActions.showSettingsAction, buttonSize);
+        final var helpButton = tabBarButton(new JButton(), mainActions.showHelpAction, buttonSize);
         final var c = new GridBagConstraints();
         trailingContainer.setLayout(new GridBagLayout());
         trailingContainer.setBorder(Borders.empty);
