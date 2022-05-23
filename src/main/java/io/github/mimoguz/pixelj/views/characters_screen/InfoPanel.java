@@ -72,7 +72,7 @@ public class InfoPanel extends JPanel {
 
         final var pad = Dimensions.MEDIUM_SQUARE.width;
         final var focusWidth = 2;
-        final var divWidth = 4;
+        final var divWidth = 5;
         final var panelWidth = 212;
         final var cons = new GridBagConstraints();
         final var innerWidth = panelWidth - 2 * pad + divWidth;
