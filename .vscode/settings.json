@@ -1,12 +1,13 @@
 {
     "java.format.settings.url": "eclipse_format.xml",
     "java.configuration.updateBuildConfiguration": "interactive",
-   
-    "cSpell.words": [
-        "Darcula",
-        "Intelli",
-        "kerninig",
-        "mimoguz",
-        "Pixelj"
+    "spellright.language": [
+        "en"
+    ],
+    "spellright.documentTypes": [
+        "markdown",
+        "latex",
+        "plaintext",
+        "jsonc"
     ],
 }

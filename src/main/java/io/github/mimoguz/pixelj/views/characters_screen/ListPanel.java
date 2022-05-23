@@ -1,14 +1,14 @@
 package io.github.mimoguz.pixelj.views.characters_screen;
 
 import java.awt.Dimension;
-import java.util.List;
-import java.util.Objects;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
 import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.CharacterListActions;
 import io.github.mimoguz.pixelj.controls.SearchableComboBox;
+import io.github.mimoguz.pixelj.models.BlockModel;
 import io.github.mimoguz.pixelj.models.CharacterListModel;
 import io.github.mimoguz.pixelj.models.CharacterModel;
 import io.github.mimoguz.pixelj.models.Metrics;
@@ -23,7 +23,7 @@ public class ListPanel extends JPanel implements Detachable {
 
     private final transient CharacterListActions actions;
     private final JButton addButton;
-    private final SearchableComboBox<String> filterBox;
+    private final SearchableComboBox<BlockModel> filterBox;
     private final JList<CharacterModel> list;
     private final JButton removeButton;
     private final transient ListSelectionModel selectionModel;
@@ -56,17 +56,15 @@ public class ListPanel extends JPanel implements Detachable {
         list.setMaximumSize(Dimensions.MAXIMUM);
         setBorder(Borders.empty);
 
-        filterBox = new SearchableComboBox<>(List.of(res.getString("showAll"), "60-70", "71-80", "81-90"));
+        filterBox = new SearchableComboBox<>(res.blockList);
         filterBox.setMaximumSize(Dimensions.MAXIMUM_COMBO_BOX_SIZE);
         filterBox.setMinimumSize(Dimensions.MINIMUM_COMBO_BOX_SIZE);
         filterBox.addActionListener(event -> {
             if (list.getModel() instanceof CharacterListModel lm) {
                 final var item = filterBox.getSelectedItem();
-                final var split = Objects.toString(item).split("-");
                 try {
-                    final var min = Integer.parseInt(split[0]);
-                    final var max = Integer.parseInt(split[1]);
-                    lm.setRange(min, max);
+                    final var block = (BlockModel) item;
+                    lm.setRange(block.starts(), block.ends());
                 } catch (Exception e) {
                     lm.setRange(0, Integer.MAX_VALUE);
                 }
@@ -113,7 +111,7 @@ public class ListPanel extends JPanel implements Detachable {
         return addButton;
     }
 
-    public SearchableComboBox<String> getFilterBox() {
+    public SearchableComboBox<BlockModel> getFilterBox() {
         return filterBox;
     }
 

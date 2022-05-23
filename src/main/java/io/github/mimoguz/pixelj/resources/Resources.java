@@ -11,6 +11,9 @@ import java.util.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.eclipse.collections.api.map.primitive.ImmutableIntObjectMap;
+import org.eclipse.collections.impl.map.mutable.primitive.IntObjectHashMap;
+
 import io.github.mimoguz.pixelj.graphics.FontIcon;
 import io.github.mimoguz.pixelj.models.BlockModel;
 
@@ -37,14 +40,23 @@ public class Resources {
         instance = new Resources(useDarkTheme);
     }
 
-    public final Collection<BlockModel> blocks;
+    public final Collection<BlockModel> blockList;
+    public final ImmutableIntObjectMap<BlockModel> blockMap;
     public final Colors colors;
 
     private final Font iconFont;
     private final Strings strings;
 
     private Resources(final boolean useDarkTheme) {
-        blocks = loadBlocks();
+        final var blocks = new ArrayList<BlockModel>();
+        blocks.add(new BlockModel(0, "All", 0, Integer.MAX_VALUE));
+        blocks.addAll(loadBlocks());
+        blockList = Collections.unmodifiableCollection(blocks);
+
+        final var blockHashMap = new IntObjectHashMap<BlockModel>();
+        blocks.stream().forEach(block -> blockHashMap.put(block.id(), block));
+        blockMap = blockHashMap.toImmutable();
+
         iconFont = loadFont();
         strings = new Strings(loadResourceBundle());
         this.colors = useDarkTheme ? new DarkColors() : new LightColors();
