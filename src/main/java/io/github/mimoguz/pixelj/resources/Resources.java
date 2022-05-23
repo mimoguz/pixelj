@@ -6,11 +6,13 @@ import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+import java.util.*;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.github.mimoguz.pixelj.graphics.FontIcon;
+import io.github.mimoguz.pixelj.models.BlockModel;
 
 public class Resources {
     public static class ResourceInitializationException extends RuntimeException {
@@ -35,12 +37,14 @@ public class Resources {
         instance = new Resources(useDarkTheme);
     }
 
+    public final Collection<BlockModel> blocks;
     public final Colors colors;
 
     private final Font iconFont;
     private final Strings strings;
 
     private Resources(final boolean useDarkTheme) {
+        blocks = loadBlocks();
         iconFont = loadFont();
         strings = new Strings(loadResourceBundle());
         this.colors = useDarkTheme ? new DarkColors() : new LightColors();
@@ -66,6 +70,20 @@ public class Resources {
         return strings.get(key);
     }
 
+    private Collection<BlockModel> loadBlocks() {
+        final var objectMapper = new ObjectMapper();
+        try {
+            final var blocks = objectMapper.readValue(
+                    getClass().getResourceAsStream("blocks.json"),
+                    new TypeReference<List<BlockModel>>() {
+                    }
+            );
+            return Collections.unmodifiableCollection(blocks);
+        } catch (final IOException e) {
+            throw new ResourceInitializationException("Can't read blocks.json:\n" + e.getMessage());
+        }
+    }
+
     private Font loadFont() {
         try (final var stream = getClass().getResourceAsStream("pxf16.otf")) {
             if (stream == null) {
@@ -73,7 +91,7 @@ public class Resources {
             }
             return loadFont(stream);
         } catch (final IOException e) {
-            throw new ResourceInitializationException("Can't read font file:\n" + e.getMessage());
+            throw new ResourceInitializationException("Can't read the font file:\n" + e.getMessage());
         }
     }
 
@@ -83,7 +101,7 @@ public class Resources {
             GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
             return font;
         } catch (final IOException | FontFormatException e) {
-            throw new ResourceInitializationException("Can't read font file: \n" + e.getMessage());
+            throw new ResourceInitializationException("Can't read the font file: \n" + e.getMessage());
         }
     }
 
