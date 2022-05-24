@@ -2,11 +2,10 @@ package io.github.mimoguz.pixelj.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record BlockModel(
-        @JsonProperty("id") int id,
+public record CharacterData(
+        @JsonProperty("codePoint") int codePoint,
         @JsonProperty("name") String name,
-        @JsonProperty("firstCodePoint") int starts,
-        @JsonProperty("lastCodePoint") int ends
+        @JsonProperty("blockId") int blockId
 ) {
     @Override
     public String toString() {
@@ -15,7 +14,7 @@ public record BlockModel(
 
     @Override
     public int hashCode() {
-        return id;
+        return codePoint;
     }
 
     @Override
@@ -23,8 +22,8 @@ public record BlockModel(
         if (this == obj) {
             return true;
         }
-        if (obj instanceof BlockModel other) {
-            return id == other.id();
+        if (obj instanceof CharacterData other) {
+            return codePoint == other.codePoint();
         }
         return false;
     }

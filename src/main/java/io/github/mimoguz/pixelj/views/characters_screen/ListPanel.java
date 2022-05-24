@@ -7,7 +7,7 @@ import javax.swing.*;
 import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.CharacterListActions;
 import io.github.mimoguz.pixelj.controls.SearchableComboBox;
-import io.github.mimoguz.pixelj.models.BlockModel;
+import io.github.mimoguz.pixelj.models.BlockData;
 import io.github.mimoguz.pixelj.models.CharacterListModel;
 import io.github.mimoguz.pixelj.models.CharacterModel;
 import io.github.mimoguz.pixelj.models.Metrics;
@@ -22,7 +22,7 @@ public class ListPanel extends JPanel implements Detachable {
 
     private final transient CharacterListActions actions;
     private final JButton addButton;
-    private final SearchableComboBox<BlockModel> filterBox;
+    private final SearchableComboBox<BlockData> filterBox;
     private final JList<CharacterModel> list;
     private final JButton removeButton;
     private final transient ListSelectionModel selectionModel;
@@ -62,7 +62,7 @@ public class ListPanel extends JPanel implements Detachable {
             if (list.getModel() instanceof CharacterListModel lm) {
                 final var item = filterBox.getSelectedItem();
                 try {
-                    final var block = (BlockModel) item;
+                    final var block = (BlockData) item;
                     lm.setRange(block.starts(), block.ends());
                 } catch (Exception e) {
                     lm.setRange(0, Integer.MAX_VALUE);
@@ -110,7 +110,7 @@ public class ListPanel extends JPanel implements Detachable {
         return addButton;
     }
 
-    public SearchableComboBox<BlockModel> getFilterBox() {
+    public SearchableComboBox<BlockData> getFilterBox() {
         return filterBox;
     }
 

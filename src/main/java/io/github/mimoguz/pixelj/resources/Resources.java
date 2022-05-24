@@ -7,15 +7,18 @@ import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.eclipse.collections.api.map.primitive.ImmutableIntObjectMap;
 import org.eclipse.collections.impl.map.mutable.primitive.IntObjectHashMap;
 
 import io.github.mimoguz.pixelj.graphics.FontIcon;
-import io.github.mimoguz.pixelj.models.BlockModel;
+import io.github.mimoguz.pixelj.models.BlockData;
+import io.github.mimoguz.pixelj.models.CharacterData;
 
 public class Resources {
     public static class ResourceInitializationException extends RuntimeException {
@@ -40,22 +43,39 @@ public class Resources {
         instance = new Resources(useDarkTheme);
     }
 
-    public final Collection<BlockModel> blockList;
-    public final ImmutableIntObjectMap<BlockModel> blockMap;
+    public final Collection<BlockData> blockList;
+    public final ImmutableIntObjectMap<BlockData> blockMap;
+    public final ImmutableIntObjectMap<CharacterData> characterMap;
+    public final ImmutableIntObjectMap<Collection<CharacterData>> charactersInBlock;
     public final Colors colors;
 
     private final Font iconFont;
     private final Strings strings;
 
     private Resources(final boolean useDarkTheme) {
-        final var blocks = new ArrayList<BlockModel>();
-        blocks.add(new BlockModel(0, "All", 0, Integer.MAX_VALUE));
+        final var blocks = new ArrayList<BlockData>();
+        blocks.add(new BlockData(0, "All", 0, Integer.MAX_VALUE));
         blocks.addAll(loadBlocks());
         blockList = Collections.unmodifiableCollection(blocks);
 
-        final var blockHashMap = new IntObjectHashMap<BlockModel>();
-        blocks.stream().forEach(block -> blockHashMap.put(block.id(), block));
+        final var blockHashMap = new IntObjectHashMap<BlockData>(blocks.size());
+        for (var block : blocks) {
+            blockHashMap.put(block.id(), block);
+        }
         blockMap = blockHashMap.toImmutable();
+
+        final Collection<CharacterData> characterList = loadCharacters();
+        final var characters = new IntObjectHashMap<CharacterData>(characterList.size());
+        for (var character : characterList) {
+            characters.put(character.codePoint(), character);
+        }
+        characterMap = characters.toImmutable();
+
+        final var blockChars = new IntObjectHashMap<Collection<CharacterData>>();
+        characterList.stream()
+                .collect(Collectors.groupingBy(CharacterData::blockId))
+                .forEach((key, value) -> blockChars.put(key, Collections.unmodifiableCollection(value)));
+        charactersInBlock = blockChars.toImmutable();
 
         iconFont = loadFont();
         strings = new Strings(loadResourceBundle());
@@ -82,22 +102,29 @@ public class Resources {
         return strings.get(key);
     }
 
-    private Collection<BlockModel> loadBlocks() {
+    private static <T> Collection<T> loadCollection(String resource, TypeReference<Collection<T>> typeRef) {
         final var objectMapper = new ObjectMapper();
         try {
-            final var blocks = objectMapper.readValue(
-                    getClass().getResourceAsStream("blocks.json"),
-                    new TypeReference<List<BlockModel>>() {
-                    }
+            return Collections.unmodifiableCollection(
+                    objectMapper.readValue(Resources.class.getResourceAsStream(resource), typeRef)
             );
-            return Collections.unmodifiableCollection(blocks);
         } catch (final IOException e) {
-            throw new ResourceInitializationException("Can't read blocks.json:\n" + e.getMessage());
+            throw new ResourceInitializationException("Can't read " + resource + "\n" + e.getMessage());
         }
     }
 
-    private Font loadFont() {
-        try (final var stream = getClass().getResourceAsStream("pxf16.otf")) {
+    private static Collection<BlockData> loadBlocks() {
+        return loadCollection("blocks.json", new TypeReference<Collection<BlockData>>() {
+        });
+    }
+
+    private static Collection<CharacterData> loadCharacters() {
+        return loadCollection("characterData.json", new TypeReference<Collection<CharacterData>>() {
+        });
+    }
+
+    private static Font loadFont() {
+        try (final var stream = Resources.class.getResourceAsStream("pxf16.otf")) {
             if (stream == null) {
                 throw new ResourceInitializationException("The resource pxf16.otf is not found.");
             }
@@ -107,7 +134,7 @@ public class Resources {
         }
     }
 
-    private Font loadFont(final InputStream stream) {
+    private static Font loadFont(final InputStream stream) {
         try {
             final var font = Font.createFont(Font.TRUETYPE_FONT, stream).deriveFont(Font.PLAIN, 16);
             GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
@@ -117,15 +144,16 @@ public class Resources {
         }
     }
 
-    private ResourceBundle loadResourceBundle() {
+    private static ResourceBundle loadResourceBundle() {
         final var bundleBase = "strings/strings";
         ResourceBundle bundle;
         try {
             bundle = ResourceBundle
-                    .getBundle(BASE + bundleBase, Locale.getDefault(), getClass().getClassLoader());
+                    .getBundle(BASE + bundleBase, Locale.getDefault(), Resources.class.getClassLoader());
         } catch (final MissingResourceException e1) {
             try {
-                bundle = ResourceBundle.getBundle(BASE + bundleBase, Locale.US, getClass().getClassLoader());
+                bundle = ResourceBundle
+                        .getBundle(BASE + bundleBase, Locale.US, Resources.class.getClassLoader());
             } catch (final MissingResourceException e2) {
                 throw new ResourceInitializationException(
                         "Can't find strings:\n" + e1.getMessage() + "\n\n--------------------------\n\n"

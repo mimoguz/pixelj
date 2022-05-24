@@ -8,6 +8,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.formdev.flatlaf.FlatClientProperties;
+
 import io.github.mimoguz.pixelj.controls.GlyphView;
 import io.github.mimoguz.pixelj.models.CharacterModel;
 import io.github.mimoguz.pixelj.resources.Resources;
@@ -38,6 +40,8 @@ public class CharacterCell extends JPanel {
         final var letterSize = new Dimension(30, 30);
         letter.setMinimumSize(letterSize);
         letter.setPreferredSize(letterSize);
+
+        subtitle.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
 
         titleBox.setLayout(new BoxLayout(titleBox, BoxLayout.Y_AXIS));
         titleBox.setOpaque(false);
@@ -76,8 +80,8 @@ public class CharacterCell extends JPanel {
             picture.setZoom(1);
         }
 
-        title.setText(Integer.toString(model.getCodePoint()));
-        subtitle.setText("Description here");
+        title.setText(Resources.get().characterMap.get(model.getCodePoint()).name());
+        subtitle.setText(Integer.toString(model.getCodePoint()));
         letter.setText(Character.toString((char) model.getCodePoint()));
     }
 

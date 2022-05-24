@@ -12,7 +12,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.KerningPairListActions;
 import io.github.mimoguz.pixelj.controls.SearchableComboBox;
-import io.github.mimoguz.pixelj.models.BlockModel;
+import io.github.mimoguz.pixelj.models.BlockData;
 import io.github.mimoguz.pixelj.models.KerningPairListModel;
 import io.github.mimoguz.pixelj.models.KerningPairModel;
 import io.github.mimoguz.pixelj.resources.Resources;
@@ -26,10 +26,10 @@ public class ListPanel extends JPanel implements Detachable {
 
     private final transient KerningPairListActions actions;
     private final JButton addButton;
-    private final SearchableComboBox<BlockModel> leftFilterBox;
+    private final SearchableComboBox<BlockData> leftFilterBox;
     private final JList<KerningPairModel> list;
     private final JButton removeButton;
-    private final SearchableComboBox<BlockModel> rightFilterBox;
+    private final SearchableComboBox<BlockData> rightFilterBox;
     private final transient ListSelectionModel selectionModel;
 
     public ListPanel(
@@ -111,7 +111,7 @@ public class ListPanel extends JPanel implements Detachable {
         return addButton;
     }
 
-    public SearchableComboBox<BlockModel> getLeftFilterBox() {
+    public SearchableComboBox<BlockData> getLeftFilterBox() {
         return leftFilterBox;
     }
 
@@ -123,7 +123,7 @@ public class ListPanel extends JPanel implements Detachable {
         return removeButton;
     }
 
-    public SearchableComboBox<BlockModel> getRightFilterBox() {
+    public SearchableComboBox<BlockData> getRightFilterBox() {
         return rightFilterBox;
     }
 
@@ -134,17 +134,17 @@ public class ListPanel extends JPanel implements Detachable {
         actions.showRemoveDialogAction.setEnabled(value && (selectionModel.getMinSelectionIndex() >= 0));
     }
 
-    private SearchableComboBox<BlockModel> filterBox(
+    private SearchableComboBox<BlockData> filterBox(
             Function<KerningPairListModel, BiConsumer<Integer, Integer>> setter
     ) {
-        final var box = new SearchableComboBox<BlockModel>(Resources.get().blockList);
+        final var box = new SearchableComboBox<BlockData>(Resources.get().blockList);
         box.setMaximumSize(Dimensions.MAXIMUM_COMBO_BOX_SIZE);
         box.setMinimumSize(Dimensions.MINIMUM_COMBO_BOX_SIZE);
         box.addActionListener(event -> {
             if (list.getModel() instanceof KerningPairListModel lm) {
                 final var item = box.getSelectedItem();
                 try {
-                    final var block = (BlockModel) item;
+                    final var block = (BlockData) item;
                     setter.apply(lm).accept(block.starts(), block.ends());
                 } catch (Exception e) {
                     setter.apply(lm).accept(0, Integer.MAX_VALUE);
