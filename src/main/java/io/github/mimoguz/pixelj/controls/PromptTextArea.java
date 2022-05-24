@@ -18,6 +18,7 @@ import io.github.mimoguz.pixelj.resources.Resources;
 public class PromptTextArea extends JTextArea {
     private static final Map<?, ?> hints = (Map<?, ?>) Toolkit.getDefaultToolkit()
             .getDesktopProperty("awt.font.desktophints");
+
     private static final long serialVersionUID = 4432702411987454931L;
 
     private String promptText;
@@ -50,7 +51,7 @@ public class PromptTextArea extends JTextArea {
         g2d.dispose();
     }
 
-    public void setPromptText(String promptText) {
+    public void setPromptText(final String promptText) {
         this.promptText = promptText;
     }
 }

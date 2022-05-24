@@ -137,7 +137,7 @@ public class ListPanel extends JPanel implements Detachable {
     private SearchableComboBox<BlockData> filterBox(
             Function<KerningPairListModel, BiConsumer<Integer, Integer>> setter
     ) {
-        final var box = new SearchableComboBox<BlockData>(Resources.get().blockList);
+        final var box = new SearchableComboBox<BlockData>(Resources.get().getBlocks());
         box.setMaximumSize(Dimensions.MAXIMUM_COMBO_BOX_SIZE);
         box.setMinimumSize(Dimensions.MINIMUM_COMBO_BOX_SIZE);
         box.addActionListener(event -> {

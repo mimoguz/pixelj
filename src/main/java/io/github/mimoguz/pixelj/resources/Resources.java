@@ -9,12 +9,11 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.eclipse.collections.api.map.primitive.ImmutableIntObjectMap;
 import org.eclipse.collections.impl.map.mutable.primitive.IntObjectHashMap;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.github.mimoguz.pixelj.graphics.FontIcon;
 import io.github.mimoguz.pixelj.models.BlockData;
@@ -32,24 +31,18 @@ public class Resources {
     private static final String BASE = "io/github/mimoguz/pixelj/resources/";
     private static Resources instance = null;
 
-    public static Resources get() {
-        if (instance == null) {
-            initialize(true);
-        }
-        return instance;
-    }
-
-    public static void initialize(final boolean useDarkTheme) {
-        instance = new Resources(useDarkTheme);
-    }
-
-    public final Collection<BlockData> blockList;
-    public final ImmutableIntObjectMap<BlockData> blockMap;
-    public final ImmutableIntObjectMap<CharacterData> characterMap;
-    public final ImmutableIntObjectMap<Collection<CharacterData>> charactersInBlock;
     public final Colors colors;
 
+    private final Collection<BlockData> blockList;
+
+    private final ImmutableIntObjectMap<BlockData> blockMap;
+
+    private final ImmutableIntObjectMap<CharacterData> characterMap;
+
+    private final ImmutableIntObjectMap<Collection<CharacterData>> charactersInBlock;
+
     private final Font iconFont;
+
     private final Strings strings;
 
     private Resources(final boolean useDarkTheme) {
@@ -59,14 +52,14 @@ public class Resources {
         blockList = Collections.unmodifiableCollection(blocks);
 
         final var blockHashMap = new IntObjectHashMap<BlockData>(blocks.size());
-        for (var block : blocks) {
+        for (final var block : blocks) {
             blockHashMap.put(block.id(), block);
         }
         blockMap = blockHashMap.toImmutable();
 
         final Collection<CharacterData> characterList = loadCharacters();
         final var characters = new IntObjectHashMap<CharacterData>(characterList.size());
-        for (var character : characterList) {
+        for (final var character : characterList) {
             characters.put(character.codePoint(), character);
         }
         characterMap = characters.toImmutable();
@@ -86,6 +79,22 @@ public class Resources {
         return strings.format(key, arguments);
     }
 
+    public BlockData getBlockData(final int blockId) {
+        return blockMap.get(blockId);
+    }
+
+    public Collection<BlockData> getBlocks() {
+        return blockList;
+    }
+
+    public CharacterData getCharacterData(final int codePoint) {
+        return characterMap.get(codePoint);
+    }
+
+    public Collection<CharacterData> getCharacters(final int blockId) {
+        return charactersInBlock.get(blockId);
+    }
+
     public FontIcon getIcon(final Icons icon) {
         return new FontIcon(icon.codePoint, null, null, iconFont);
     }
@@ -102,15 +111,15 @@ public class Resources {
         return strings.get(key);
     }
 
-    private static <T> Collection<T> loadCollection(String resource, TypeReference<Collection<T>> typeRef) {
-        final var objectMapper = new ObjectMapper();
-        try {
-            return Collections.unmodifiableCollection(
-                    objectMapper.readValue(Resources.class.getResourceAsStream(resource), typeRef)
-            );
-        } catch (final IOException e) {
-            throw new ResourceInitializationException("Can't read " + resource + "\n" + e.getMessage());
+    public static Resources get() {
+        if (instance == null) {
+            initialize(true);
         }
+        return instance;
+    }
+
+    public static void initialize(final boolean useDarkTheme) {
+        instance = new Resources(useDarkTheme);
     }
 
     private static Collection<BlockData> loadBlocks() {
@@ -121,6 +130,20 @@ public class Resources {
     private static Collection<CharacterData> loadCharacters() {
         return loadCollection("characterData.json", new TypeReference<Collection<CharacterData>>() {
         });
+    }
+
+    private static <T> Collection<T> loadCollection(
+            final String resource,
+            final TypeReference<Collection<T>> typeRef
+    ) {
+        final var objectMapper = new ObjectMapper();
+        try {
+            return Collections.unmodifiableCollection(
+                    objectMapper.readValue(Resources.class.getResourceAsStream(resource), typeRef)
+            );
+        } catch (final IOException e) {
+            throw new ResourceInitializationException("Can't read " + resource + "\n" + e.getMessage());
+        }
     }
 
     private static Font loadFont() {

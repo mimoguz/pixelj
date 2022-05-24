@@ -55,7 +55,7 @@ public class ListPanel extends JPanel implements Detachable {
         list.setMaximumSize(Dimensions.MAXIMUM);
         setBorder(Borders.empty);
 
-        filterBox = new SearchableComboBox<>(res.blockList);
+        filterBox = new SearchableComboBox<>(res.getBlocks());
         filterBox.setMaximumSize(Dimensions.MAXIMUM_COMBO_BOX_SIZE);
         filterBox.setMinimumSize(Dimensions.MINIMUM_COMBO_BOX_SIZE);
         filterBox.addActionListener(event -> {

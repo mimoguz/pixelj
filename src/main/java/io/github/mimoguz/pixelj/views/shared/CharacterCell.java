@@ -80,7 +80,7 @@ public class CharacterCell extends JPanel {
             picture.setZoom(1);
         }
 
-        title.setText(Resources.get().characterMap.get(model.getCodePoint()).name());
+        title.setText(Resources.get().getCharacterData(model.getCodePoint()).name());
         subtitle.setText(Integer.toString(model.getCodePoint()));
         letter.setText(Character.toString((char) model.getCodePoint()));
     }

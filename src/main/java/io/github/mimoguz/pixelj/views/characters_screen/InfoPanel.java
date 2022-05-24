@@ -30,6 +30,7 @@ public class InfoPanel extends JPanel {
     private final JLabel characterWidthLabel;
     private final JSpinner characterWidthSpinner;
     private final JLabel codePointLabel;
+    private final JLabel blockNamePanel;
     private final JLabel glyphLabel;
     private transient CharacterModel model;
     private final JLabel nameLabel;
@@ -47,6 +48,9 @@ public class InfoPanel extends JPanel {
 
         codePointLabel = new JLabel(" ");
         codePointLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
+
+        blockNamePanel = new JLabel(" ");
+        blockNamePanel.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
 
         characterWidthSpinner = new JSpinner();
         Components.setFixedSize(characterWidthSpinner, Dimensions.SPINNER_SIZE);
@@ -99,6 +103,7 @@ public class InfoPanel extends JPanel {
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
         titlePanel.add(nameLabel);
         titlePanel.add(codePointLabel);
+        titlePanel.add(blockNamePanel);
         add(titlePanel, cons);
 
         cons.gridy = 2;
@@ -157,8 +162,15 @@ public class InfoPanel extends JPanel {
     public void setModel(final CharacterModel value) {
         this.model = value;
         if (value != null) {
-            nameLabel.setText("CHARACTER NAME");
-            codePointLabel.setText(Integer.toString(value.getCodePoint()));
+            final var res = Resources.get();
+            final var characterData = res.getCharacterData(value.getCodePoint());
+            nameLabel.setText(characterData.name());
+            codePointLabel.setText(
+                    res.formatString("codePointLabel", Integer.toHexString(characterData.codePoint()))
+            );
+            blockNamePanel.setText(
+                    res.formatString("blockNameLabel", res.getBlockData(characterData.blockId()).name())
+            );
             glyphLabel.setText(Character.toString((char) model.getCodePoint()));
             if (characterWidthSpinner.getModel() instanceof SpinnerNumberModel numberModel) {
                 numberModel.setValue(value.getWidth());
@@ -168,6 +180,7 @@ public class InfoPanel extends JPanel {
         } else {
             nameLabel.setText(" ");
             codePointLabel.setText(" ");
+            blockNamePanel.setText(" ");
             glyphLabel.setText(" ");
             characterWidthSpinner.setEnabled(false);
             characterWidthLabel.setEnabled(false);

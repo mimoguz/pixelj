@@ -6,8 +6,6 @@
     ],
     "spellright.documentTypes": [
         "markdown",
-        "latex",
-        "plaintext",
-        "jsonc"
+        "java"
     ],
 }
