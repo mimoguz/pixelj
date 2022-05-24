@@ -47,8 +47,8 @@ public class CharacterCell extends JPanel {
         titleBox.setOpaque(false);
         titleBox.setBackground(new Color(0, 0, 0, 0));
         titleBox.add(Box.createVerticalGlue());
-        titleBox.add(title);
         titleBox.add(subtitle);
+        titleBox.add(title);
         titleBox.add(Box.createVerticalGlue());
 
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -81,7 +81,7 @@ public class CharacterCell extends JPanel {
         }
 
         title.setText(Resources.get().getCharacterData(model.getCodePoint()).name());
-        subtitle.setText(Integer.toString(model.getCodePoint()));
+        subtitle.setText("0x" + Integer.toHexString(model.getCodePoint()));
         letter.setText(Character.toString((char) model.getCodePoint()));
     }
 
