@@ -2,7 +2,6 @@ package io.github.mimoguz.pixelj.views.kerning_pairs_screen;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -13,6 +12,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.KerningPairListActions;
 import io.github.mimoguz.pixelj.controls.SearchableComboBox;
+import io.github.mimoguz.pixelj.models.BlockModel;
 import io.github.mimoguz.pixelj.models.KerningPairListModel;
 import io.github.mimoguz.pixelj.models.KerningPairModel;
 import io.github.mimoguz.pixelj.resources.Resources;
@@ -26,10 +26,10 @@ public class ListPanel extends JPanel implements Detachable {
 
     private final transient KerningPairListActions actions;
     private final JButton addButton;
-    private final SearchableComboBox<String> leftFilterBox;
+    private final SearchableComboBox<BlockModel> leftFilterBox;
     private final JList<KerningPairModel> list;
     private final JButton removeButton;
-    private final SearchableComboBox<String> rightFilterBox;
+    private final SearchableComboBox<BlockModel> rightFilterBox;
     private final transient ListSelectionModel selectionModel;
 
     public ListPanel(
@@ -60,7 +60,6 @@ public class ListPanel extends JPanel implements Detachable {
         setBorder(Borders.empty);
 
         leftFilterBox = filterBox(lm -> (lm::setLeftRange));
-
         rightFilterBox = filterBox(lm -> (lm::setRightRange));
 
         setPreferredSize(new Dimension(400, 100));
@@ -112,7 +111,7 @@ public class ListPanel extends JPanel implements Detachable {
         return addButton;
     }
 
-    public SearchableComboBox<String> getLeftFilterBox() {
+    public SearchableComboBox<BlockModel> getLeftFilterBox() {
         return leftFilterBox;
     }
 
@@ -124,7 +123,7 @@ public class ListPanel extends JPanel implements Detachable {
         return removeButton;
     }
 
-    public SearchableComboBox<String> getRightFilterBox() {
+    public SearchableComboBox<BlockModel> getRightFilterBox() {
         return rightFilterBox;
     }
 
@@ -135,22 +134,18 @@ public class ListPanel extends JPanel implements Detachable {
         actions.showRemoveDialogAction.setEnabled(value && (selectionModel.getMinSelectionIndex() >= 0));
     }
 
-    private SearchableComboBox<String> filterBox(
+    private SearchableComboBox<BlockModel> filterBox(
             Function<KerningPairListModel, BiConsumer<Integer, Integer>> setter
     ) {
-        final var box = new SearchableComboBox<String>(
-                java.util.List.of(Resources.get().getString("showAll"), "60-70", "71-80", "81-90")
-        );
+        final var box = new SearchableComboBox<BlockModel>(Resources.get().blockList);
         box.setMaximumSize(Dimensions.MAXIMUM_COMBO_BOX_SIZE);
         box.setMinimumSize(Dimensions.MINIMUM_COMBO_BOX_SIZE);
         box.addActionListener(event -> {
             if (list.getModel() instanceof KerningPairListModel lm) {
                 final var item = box.getSelectedItem();
-                final var split = Objects.toString(item).split("-");
                 try {
-                    final var min = Integer.parseInt(split[0]);
-                    final var max = Integer.parseInt(split[1]);
-                    setter.apply(lm).accept(min, max);
+                    final var block = (BlockModel) item;
+                    setter.apply(lm).accept(block.starts(), block.ends());
                 } catch (Exception e) {
                     setter.apply(lm).accept(0, Integer.MAX_VALUE);
                 }
