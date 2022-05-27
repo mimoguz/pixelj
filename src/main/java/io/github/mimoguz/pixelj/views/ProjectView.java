@@ -68,7 +68,7 @@ public class ProjectView extends JFrame {
 
         root = new JTabbedPane();
 
-        charactersScreen = new CharactersScreen(project, root);
+        charactersScreen = new CharactersScreen(project, root, this);
         kerningPairsScreen = new KerningPairsScreen(project, root);
         previewScreen = new PreviewScreen(project, root);
         mainActions = new MainActions(project, this);

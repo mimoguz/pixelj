@@ -2,10 +2,10 @@
     "java.format.settings.url": "eclipse_format.xml",
     "java.configuration.updateBuildConfiguration": "interactive",
     "spellright.language": [
-        "en"
+        "en",
+        "tr"
     ],
     "spellright.documentTypes": [
-        "markdown",
-        "java"
+        "markdown"
     ],
 }

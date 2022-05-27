@@ -151,7 +151,11 @@ class SearchableDocument<E> extends PlainDocument {
         editor.setSelectionStart(offset);
         editor.setSelectionEnd(getLength());
         editor.setCaretPosition(getLength());
-        editor.moveCaretPosition(offset);
+        try {
+            editor.moveCaretPosition(offset);
+        } catch (IllegalArgumentException e) {
+            // Ignore
+        }
     }
 
     private Object lookupItem(final String pattern) {

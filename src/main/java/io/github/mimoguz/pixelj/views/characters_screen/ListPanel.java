@@ -31,13 +31,14 @@ public class ListPanel extends JPanel implements Detachable {
             final CharacterListModel listModel,
             final ListSelectionModel selectionModel,
             final Metrics metrics,
-            final JComponent root
+            final JComponent root,
+            final JFrame frame
     ) {
         this.selectionModel = selectionModel;
 
         final var res = Resources.get();
 
-        actions = new CharacterListActions(listModel, selectionModel, metrics);
+        actions = new CharacterListActions(frame, listModel, selectionModel, metrics);
         actions.showRemoveDialogAction.setEnabled(false);
         Actions.registerShortcuts(actions.all, root);
 

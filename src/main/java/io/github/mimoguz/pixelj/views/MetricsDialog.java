@@ -59,11 +59,11 @@ public class MetricsDialog extends JDialog {
 
         final var res = Resources.get();
 
-        final var root = new JPanel();
-        root.setLayout(new BorderLayout(8, 8));
-
         final var content = new JPanel();
-        content.setLayout(new GridBagLayout());
+        content.setLayout(new BorderLayout(8, 8));
+
+        final var inputPanel = new JPanel();
+        inputPanel.setLayout(new GridBagLayout());
 
         final var cons = new GridBagConstraints();
         cons.insets = new Insets(4, 4, 4, 4);
@@ -73,96 +73,96 @@ public class MetricsDialog extends JDialog {
 
         cons.gridx = 0;
         cons.gridy = 0;
-        content.add(new JLabel(res.getString("metricsCanvasWidth")), cons);
+        inputPanel.add(new JLabel(res.getString("metricsCanvasWidth")), cons);
         cons.gridx = 1;
         canvasWidth = getSpinner(source.canvasWidth());
-        content.add(canvasWidth, cons);
+        inputPanel.add(canvasWidth, cons);
         canvasWidth.setEnabled(false);
 
         cons.gridx = 0;
         cons.gridy = cons.gridy + 1;
-        content.add(new JLabel(res.getString("metricsCanvasHeight")), cons);
+        inputPanel.add(new JLabel(res.getString("metricsCanvasHeight")), cons);
         cons.gridx = 1;
         canvasHeight = getSpinner(source.canvasHeight());
-        content.add(canvasHeight, cons);
+        inputPanel.add(canvasHeight, cons);
         canvasHeight.setEnabled(false);
 
         cons.gridx = 0;
         cons.gridy = cons.gridy + 1;
-        content.add(new JLabel(res.getString("metricsAscender")), cons);
+        inputPanel.add(new JLabel(res.getString("metricsAscender")), cons);
         cons.gridx = 1;
         ascender = getSpinner(source.ascender());
         ascender.addChangeListener(this::onSpinnerChanged);
-        content.add(ascender, cons);
+        inputPanel.add(ascender, cons);
 
         cons.gridx = 0;
         cons.gridy = cons.gridy + 1;
-        content.add(new JLabel(res.getString("metricsDescender")), cons);
+        inputPanel.add(new JLabel(res.getString("metricsDescender")), cons);
         cons.gridx = 1;
         descender = getSpinner(source.descender());
-        content.add(descender, cons);
+        inputPanel.add(descender, cons);
 
         cons.gridx = 0;
         cons.gridy = cons.gridy + 1;
-        content.add(new JLabel(res.getString("metricsCapHeight")), cons);
+        inputPanel.add(new JLabel(res.getString("metricsCapHeight")), cons);
         cons.gridx = 1;
         capHeight = getSpinner(source.capHeight());
         capHeight.addChangeListener(this::onSpinnerChanged);
-        content.add(capHeight, cons);
+        inputPanel.add(capHeight, cons);
 
         cons.gridx = 0;
         cons.gridy = cons.gridy + 1;
-        content.add(new JLabel(res.getString("metricsXHeight")), cons);
+        inputPanel.add(new JLabel(res.getString("metricsXHeight")), cons);
         cons.gridx = 1;
         xHeight = getSpinner(source.xHeight());
         xHeight.addChangeListener(this::onSpinnerChanged);
-        content.add(xHeight, cons);
+        inputPanel.add(xHeight, cons);
 
         cons.gridx = 0;
         cons.gridy = cons.gridy + 1;
-        content.add(new JLabel(res.getString("metricsDefaultCharacterWidth")), cons);
+        inputPanel.add(new JLabel(res.getString("metricsDefaultCharacterWidth")), cons);
         cons.gridx = 1;
         defaultCharacterWidth = getSpinner(source.defaultCharacterWidth());
         defaultCharacterWidth.addChangeListener(this::onSpinnerChanged);
-        content.add(defaultCharacterWidth, cons);
+        inputPanel.add(defaultCharacterWidth, cons);
 
         cons.gridx = 0;
         cons.gridy = cons.gridy + 1;
-        content.add(new JLabel(res.getString("metricsCharacterSpacing")), cons);
+        inputPanel.add(new JLabel(res.getString("metricsCharacterSpacing")), cons);
         cons.gridx = 1;
         spacing = getSpinner(source.spacing(), 0);
-        content.add(spacing, cons);
+        inputPanel.add(spacing, cons);
 
         cons.gridx = 0;
         cons.gridy = cons.gridy + 1;
-        content.add(new JLabel(res.getString("metricsSpaceSize")), cons);
+        inputPanel.add(new JLabel(res.getString("metricsSpaceSize")), cons);
         cons.gridx = 1;
         spaceSize = getSpinner(source.spaceSize(), 0);
-        content.add(spaceSize, cons);
+        inputPanel.add(spaceSize, cons);
 
         cons.gridx = 0;
         cons.gridy = cons.gridy + 1;
-        content.add(new JLabel(res.getString("metricsLineSpacing")), cons);
+        inputPanel.add(new JLabel(res.getString("metricsLineSpacing")), cons);
         cons.gridx = 1;
         lineSpacing = getSpinner(source.lineSpacing(), 0);
-        content.add(lineSpacing, cons);
+        inputPanel.add(lineSpacing, cons);
 
         cons.gridx = 0;
         cons.gridy = cons.gridy + 1;
-        content.add(new JLabel(res.getString("metricsIsMonospaced")), cons);
+        inputPanel.add(new JLabel(res.getString("metricsIsMonospaced")), cons);
         cons.gridx = 1;
         isMonospaced = new JCheckBox();
         isMonospaced.setSelected(source.isMonospaced());
-        content.add(isMonospaced, cons);
+        inputPanel.add(isMonospaced, cons);
 
         cons.gridx = 0;
         cons.gridy = cons.gridy + 1;
         cons.weighty = 1.0;
-        content.add(new JPanel(), cons);
+        inputPanel.add(new JPanel(), cons);
 
-        final var scroll = new JScrollPane(content);
+        final var scroll = new JScrollPane(inputPanel);
         scroll.setBorder(Borders.empty);
-        root.add(scroll, BorderLayout.CENTER);
+        content.add(scroll, BorderLayout.CENTER);
 
         applyButton = new JButton(res.getString("apply"));
         Components.setFixedSize(applyButton, Dimensions.TEXT_BUTTON_SIZE);
@@ -189,7 +189,7 @@ public class MetricsDialog extends JDialog {
                 "metricsDialogHelpAction",
                 (event, action) -> logger.log(Level.INFO, "Metrics help")
         ).setIcon(Icons.HELP, res.colors.icon(), res.colors.disabledIcon()).setAccelerator(KeyEvent.VK_F1, 0);
-        Actions.registerShortcuts(java.util.List.of(helpAction), root);
+        Actions.registerShortcuts(java.util.List.of(helpAction), content);
         final var helpButton = new JButton(helpAction);
         helpButton.putClientProperty(
                 FlatClientProperties.BUTTON_TYPE,
@@ -204,11 +204,11 @@ public class MetricsDialog extends JDialog {
         buttonPanel.add(Box.createRigidArea(Dimensions.MEDIUM_SQUARE));
         buttonPanel.add(applyButton);
         buttonPanel.setBorder(Borders.smallEmpty);
-        root.add(buttonPanel, BorderLayout.SOUTH);
+        content.add(buttonPanel, BorderLayout.SOUTH);
 
-        root.setBorder(Borders.mediumEmpty);
+        content.setBorder(Borders.mediumEmpty);
 
-        setContentPane(root);
+        setContentPane(content);
         getRootPane().setDefaultButton(cancelButton);
 
         setSize(300, 564);

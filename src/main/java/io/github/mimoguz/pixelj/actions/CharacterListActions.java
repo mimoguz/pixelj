@@ -9,7 +9,10 @@ import java.util.List;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.awt.event.ActionEvent;
+import javax.swing.Action;
 
+import javax.swing.JFrame;
 import javax.swing.ListSelectionModel;
 
 import io.github.mimoguz.pixelj.graphics.BinaryImage;
@@ -17,6 +20,7 @@ import io.github.mimoguz.pixelj.models.CharacterListModel;
 import io.github.mimoguz.pixelj.models.CharacterModel;
 import io.github.mimoguz.pixelj.models.KerningPairModel;
 import io.github.mimoguz.pixelj.models.Metrics;
+import io.github.mimoguz.pixelj.views.characters_screen.AddDialog;
 
 public class CharacterListActions {
     public final Collection<ApplicationAction> all;
@@ -29,8 +33,10 @@ public class CharacterListActions {
     private final CharacterListModel listModel;
     private final ListSelectionModel selectionModel;
     private final Logger logger;
+    private final AddDialog addDialog;
 
     public CharacterListActions(
+            final JFrame frame,
             final CharacterListModel listModel,
             final ListSelectionModel selectionModel,
             final Metrics metrics
@@ -42,10 +48,10 @@ public class CharacterListActions {
         logger.addHandler(new ConsoleHandler());
         logger.setLevel(Level.INFO);
 
-        showAddDialogAction = new ApplicationAction(
-                "charactersShowAddDialogAction",
-                (e, action) -> logger.log(Level.INFO, "Show add dialog action")
-        ).setTextKey("charactersShowAddDialogAction")
+        addDialog = new AddDialog(frame);
+
+        showAddDialogAction = new ApplicationAction("charactersShowAddDialogAction", this::showAddDialog)
+                .setTextKey("charactersShowAddDialogAction")
                 .setAccelerator(KeyEvent.VK_PLUS, InputEvent.ALT_DOWN_MASK);
 
         showRemoveDialogAction = new ApplicationAction(
@@ -98,6 +104,10 @@ public class CharacterListActions {
                     )
             );
         }
+    }
+
+    private void showAddDialog(final ActionEvent event, final Action action) {
+        addDialog.setVisible(true);
     }
 
     private void removeSelected() {
