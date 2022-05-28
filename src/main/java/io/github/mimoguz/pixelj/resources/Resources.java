@@ -124,11 +124,13 @@ public class Resources {
 
     private static Collection<BlockData> loadBlocks() {
         return loadCollection("blocks.json", new TypeReference<Collection<BlockData>>() {
+            // Empty
         });
     }
 
     private static Collection<CharacterData> loadCharacters() {
         return loadCollection("characterData.json", new TypeReference<Collection<CharacterData>>() {
+            // Empty
         });
     }
 
@@ -137,10 +139,8 @@ public class Resources {
             final TypeReference<Collection<T>> typeRef
     ) {
         final var objectMapper = new ObjectMapper();
-        try {
-            return Collections.unmodifiableCollection(
-                    objectMapper.readValue(Resources.class.getResourceAsStream(resource), typeRef)
-            );
+        try (var source = Resources.class.getResourceAsStream(resource)) {
+            return Collections.unmodifiableCollection(objectMapper.readValue(source, typeRef));
         } catch (final IOException e) {
             throw new ResourceInitializationException("Can't read " + resource + "\n" + e.getMessage());
         }
@@ -148,9 +148,6 @@ public class Resources {
 
     private static Font loadFont() {
         try (final var stream = Resources.class.getResourceAsStream("pxf16.otf")) {
-            if (stream == null) {
-                throw new ResourceInitializationException("The resource pxf16.otf is not found.");
-            }
             return loadFont(stream);
         } catch (final IOException e) {
             throw new ResourceInitializationException("Can't read the font file:\n" + e.getMessage());
