@@ -9,7 +9,6 @@ import java.util.Collections;
 
 import javax.swing.*;
 
-import io.github.mimoguz.pixelj.actions.ApplicationAction;
 import io.github.mimoguz.pixelj.controls.SearchableComboBox;
 import io.github.mimoguz.pixelj.models.BlockData;
 import io.github.mimoguz.pixelj.models.CharacterData;
@@ -30,7 +29,7 @@ public class AddDialog extends JDialog {
     public AddDialog(final Frame owner) {
         super(
                 owner,
-                Resources.get().getString("addCharactersDialogTitle"),
+                Resources.get().getString("charactersAddDialogTitle"),
                 Dialog.ModalityType.APPLICATION_MODAL
         );
 
@@ -40,6 +39,7 @@ public class AddDialog extends JDialog {
         selectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         list.setModel(listModel);
         list.setSelectionModel(selectionModel);
+        list.setCellRenderer(new CharacterDataCellRenderer());
         final var scroll = new JScrollPane(list);
 
         final var filterBox = new SearchableComboBox<>(res.getBlocks().stream().skip(1).toList());

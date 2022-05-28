@@ -61,7 +61,7 @@ public class CharacterCell extends JPanel {
         add(Box.createHorizontalGlue());
     }
 
-    public void set(final CharacterModel model) {
+    public void set(final CharacterModel model, int contentWidth) {
         picture.setModel(model, false);
 
         final int pictureWidth = model.getGlyph().getWidth();
@@ -81,6 +81,13 @@ public class CharacterCell extends JPanel {
         }
 
         title.setText(Resources.get().getCharacterData(model.getCodePoint()).name());
+        title.setMaximumSize(
+                new Dimension(
+                        contentWidth - pictureWidth - Dimensions.LETTER_BOX_SIZE.width
+                                - Dimensions.PADDING * 5,
+                        Integer.MAX_VALUE
+                )
+        );
         subtitle.setText("0x" + Integer.toHexString(model.getCodePoint()));
         letter.setText(Character.toString((char) model.getCodePoint()));
     }

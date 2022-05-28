@@ -23,7 +23,7 @@ public class CharacterCellRenderer implements ListCellRenderer<CharacterModel> {
             final boolean isSelected,
             final boolean cellHasFocus
     ) {
-        component.set(value);
+        component.set(value, list.getWidth());
         if (isSelected) {
             component.setBackgroundColor(list.getSelectionBackground());
             component.setForegroundColor(list.getSelectionForeground());

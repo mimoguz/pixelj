@@ -31,8 +31,8 @@ public class KerningPairCellRenderer implements ListCellRenderer<KerningPairMode
             final boolean isSelected,
             final boolean cellHasFocus
     ) {
-        left.set(value.getLeft());
-        right.set(value.getRight());
+        left.set(value.getLeft(), list.getWidth());
+        right.set(value.getRight(), list.getWidth());
 
         if (isSelected) {
             left.setBackgroundColor(list.getSelectionBackground());

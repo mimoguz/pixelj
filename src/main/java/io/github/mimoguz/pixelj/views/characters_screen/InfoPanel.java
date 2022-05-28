@@ -164,7 +164,11 @@ public class InfoPanel extends JPanel {
         if (value != null) {
             final var res = Resources.get();
             final var characterData = res.getCharacterData(value.getCodePoint());
-            nameLabel.setText(characterData.name());
+            final var name = String.format(
+                    "<html><body style=\"text-align: left; \">%s</body></html>",
+                    characterData.name()
+            );
+            nameLabel.setText(name);
             codePointLabel.setText(
                     res.formatString("codePointLabel", Integer.toHexString(characterData.codePoint()))
             );
