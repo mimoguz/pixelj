@@ -62,7 +62,7 @@ public class ListPanel extends JPanel implements Detachable {
         leftFilterBox = filterBox(lm -> (lm::setLeftRange));
         rightFilterBox = filterBox(lm -> (lm::setRightRange));
 
-        setPreferredSize(new Dimension(400, 100));
+        setPreferredSize(new Dimension(520, 100));
         setMinimumSize(new Dimension(220, 100));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, res.colors.divider()));
