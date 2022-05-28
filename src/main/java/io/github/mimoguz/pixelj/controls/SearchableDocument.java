@@ -31,7 +31,7 @@ class SearchableDocument<E> extends PlainDocument {
     private BackspaceState backspaceState = BackspaceState.NO_HIT;
     private final JComboBox<E> comboBox;
     private final JTextComponent editor;
-    private final ComboBoxModel<E> model;
+    private final transient ComboBoxModel<E> model;
 
     private boolean selecting = false;
 
@@ -106,7 +106,7 @@ class SearchableDocument<E> extends PlainDocument {
         }
         clearError();
         super.insertString(offset, string, attributes);
-        final var pattern = getText(0, offset + 1);
+        final var pattern = getText(0, offset + string.length());
         final var item = lookupItem(pattern);
         if (item != null) {
             setSelected(item);
@@ -185,7 +185,7 @@ class SearchableDocument<E> extends PlainDocument {
             super.remove(0, getLength());
             super.insertString(0, text, null);
         } catch (BadLocationException e) {
-            System.err.println(e.getMessage());
+            // Ignore
         }
     }
 }
