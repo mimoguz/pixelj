@@ -108,6 +108,19 @@ public class CharacterListActions {
 
     private void showAddDialog(final ActionEvent event, final Action action) {
         addDialog.setVisible(true);
+        final var result = addDialog.getResult();
+        if (result.isEmpty()) {
+            return;
+        }
+        for (var characterData : result) {
+            listModel.add(
+                    new CharacterModel(
+                            characterData.codePoint(),
+                            defaultCharacterWidth,
+                            BinaryImage.of(canvasSize.width, canvasSize.height, true)
+                    )
+            );
+        }
     }
 
     private void removeSelected() {

@@ -9,6 +9,7 @@ import java.util.Collections;
 
 import javax.swing.*;
 
+import io.github.mimoguz.pixelj.actions.ApplicationAction;
 import io.github.mimoguz.pixelj.controls.SearchableComboBox;
 import io.github.mimoguz.pixelj.models.BlockData;
 import io.github.mimoguz.pixelj.models.CharacterData;
@@ -57,10 +58,14 @@ public class AddDialog extends JDialog {
 
         final var addButton = new JButton(res.getString("add"));
         Components.setFixedSize(addButton, Dimensions.TEXT_BUTTON_SIZE);
+        addButton.setEnabled(false);
         addButton.addActionListener(event -> {
             fillResult();
             setVisible(false);
         });
+        selectionModel.addListSelectionListener(
+                e -> addButton.setEnabled(selectionModel.getMinSelectionIndex() >= 0)
+        );
 
         final var cancelButton = new JButton(res.getString("cancel"));
         Components.setFixedSize(cancelButton, Dimensions.TEXT_BUTTON_SIZE);
