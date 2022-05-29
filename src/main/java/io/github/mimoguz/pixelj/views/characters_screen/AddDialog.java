@@ -79,18 +79,18 @@ public class AddDialog extends JDialog {
         buttonPanel.add(addButton);
 
         final var content = new JPanel();
-        content.setLayout(new BorderLayout(Dimensions.PADDING, Dimensions.PADDING));
+        content.setLayout(new BorderLayout(Dimensions.MEDIUM_PADDING, Dimensions.MEDIUM_PADDING));
 
         content.add(filterBox, BorderLayout.NORTH);
         content.add(scroll, BorderLayout.CENTER);
         content.add(buttonPanel, BorderLayout.SOUTH);
-        content.setBorder(Borders.mediumEmpty);
+        content.setBorder(Borders.MEDIUM_EMPTY);
         setContentPane(content);
         getRootPane().setDefaultButton(cancelButton);
 
         pack();
         list.requestFocusInWindow();
-        setSize(300, 400);
+        setSize(400, 600);
         setResizable(true);
     }
 

@@ -26,7 +26,6 @@ public class EditorPanel extends JPanel implements Detachable {
     private final ArrayList<Integer> spaces = new ArrayList<>(java.util.List.of(0));
     private int spacing;
     private final JLabel spinnerLabel;
-    private final JLabel title;
     private final JSpinner valueSpinner;
     private final JSlider zoomSlider;
 
@@ -34,7 +33,7 @@ public class EditorPanel extends JPanel implements Detachable {
         final var res = Resources.get();
 
         preview = new StringView(res.colors.disabledIcon());
-        preview.setPadding(Dimensions.PADDING);
+        preview.setPadding(Dimensions.MEDIUM_PADDING);
         preview.setZoom(INITIAL_ZOOM);
 
         zoomSlider = new JSlider(1, 48, INITIAL_ZOOM);
@@ -45,9 +44,6 @@ public class EditorPanel extends JPanel implements Detachable {
                 preview.setZoom(zoomSlider.getValue());
             }
         });
-
-        title = new JLabel(res.getString("kerningValueEditorTitle"));
-        title.putClientProperty(FlatClientProperties.STYLE_CLASS, "h4");
 
         valueSpinner = new JSpinner();
         Components.setFixedSize(valueSpinner, Dimensions.SPINNER_SIZE);
@@ -71,10 +67,13 @@ public class EditorPanel extends JPanel implements Detachable {
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
+        final var title = new JLabel(res.getString("kerningValueEditorTitle"));
+        title.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
         final var titlePanel = new JPanel();
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.X_AXIS));
-        titlePanel.setBorder(Borders.titleCenter);
-        titlePanel.add(Box.createHorizontalGlue());
+        titlePanel.setBorder(Borders.TITLE_CENTER);
+//        titlePanel.add(Box.createHorizontalGlue());
+        titlePanel.add(Box.createHorizontalStrut(Dimensions.LARGE_PADDING));
         titlePanel.add(title);
         titlePanel.add(Box.createHorizontalGlue());
         add(titlePanel);
@@ -83,13 +82,13 @@ public class EditorPanel extends JPanel implements Detachable {
         previewPanel.add(preview);
         final var scrollPanel = new JScrollPane(previewPanel);
         // To balance the split pane divider
-        scrollPanel.setBorder(Borders.smallEmptyCupCenter);
+        scrollPanel.setBorder(Borders.SMALL_EMPTY_CUP_CENTER);
         scrollPanel.setMaximumSize(Dimensions.MAXIMUM);
         add(scrollPanel);
 
         final var spinnerPanel = new JPanel();
         spinnerPanel.setLayout(new BoxLayout(spinnerPanel, BoxLayout.X_AXIS));
-        spinnerPanel.setBorder(Borders.smallEmptyBottomCenterPanel);
+        spinnerPanel.setBorder(Borders.SMALL_EMPTY_BOTTOM_CENTER_PANEL);
         spinnerPanel.add(Box.createHorizontalGlue());
         spinnerPanel.add(spinnerLabel);
         spinnerPanel.add(Box.createRigidArea(Dimensions.SMALL_SQUARE));
@@ -100,7 +99,7 @@ public class EditorPanel extends JPanel implements Detachable {
         add(spinnerPanel);
 
         final var zoomPanel = new JPanel();
-        zoomPanel.setBorder(Borders.smallEmptyCupCenter);
+        zoomPanel.setBorder(Borders.SMALL_EMPTY_CUP_CENTER);
         zoomPanel.setLayout(new BoxLayout(zoomPanel, BoxLayout.X_AXIS));
         zoomPanel.add(Box.createHorizontalGlue());
         zoomPanel.add(zoomSlider);
@@ -125,10 +124,6 @@ public class EditorPanel extends JPanel implements Detachable {
 
     public int getSpacing() {
         return spacing;
-    }
-
-    public JLabel getTitle() {
-        return title;
     }
 
     public JSpinner getValueSpinner() {
@@ -162,15 +157,10 @@ public class EditorPanel extends JPanel implements Detachable {
         model = value;
         if (model == null) {
             preview.set(java.util.Collections.emptyList(), spaces);
-            title.setText(Resources.get().getString("kerningValueEditorTitle"));
             setEnabled(false);
         } else {
             spaces.set(0, spacing + model.getKerningValue());
             preview.set(java.util.List.of(model.getLeft(), model.getRight()), spaces);
-            title.setText(
-                    Character.toString(model.getLeft().getCodePoint()) + " + "
-                            + Character.toString(model.getRight().getCodePoint())
-            );
             valueSpinner.setModel(
                     new SpinnerNumberModel(
                             model.getKerningValue(),

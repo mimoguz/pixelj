@@ -10,8 +10,8 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.swing.*;
-import javax.swing.event.PopupMenuListener;
 import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
@@ -33,35 +33,14 @@ import io.github.mimoguz.pixelj.views.shared.Dimensions;
 public class ProjectView extends JFrame {
     private static final long serialVersionUID = -8552411151437621157L;
 
-    private static JPanel divider(int width) {
-        final var divider = new JPanel();
-        divider.setBackground(Resources.get().colors.divider());
-        Components.setFixedSize(divider, new Dimension(width, 1));
-        return divider;
-    }
+    private final CharactersScreen charactersScreen;
 
-    private static <T extends AbstractButton> T tabBarButton(T button, Action action, Dimension size) {
-        if (action != null) {
-            button.setAction(action);
-        }
-        button.setText(null);
-        button.setBorder(Borders.empty);
-        button.putClientProperty(
-                FlatClientProperties.BUTTON_TYPE,
-                FlatClientProperties.BUTTON_TYPE_BORDERLESS
-        );
-        button.putClientProperty(FlatClientProperties.BUTTON_TYPE_SQUARE, true);
-        button.setFocusable(false);
-        Components.setFixedSize(button, size);
-        return button;
-    }
+    private final KerningPairsScreen kerningPairsScreen;
 
+    private final transient MainActions mainActions;
+    private final PreviewScreen previewScreen;
     private final JTabbedPane root;
     private final Collection<ApplicationAction> tabActions;
-    private final CharactersScreen charactersScreen;
-    private final KerningPairsScreen kerningPairsScreen;
-    private final PreviewScreen previewScreen;
-    private final transient MainActions mainActions;
 
     public ProjectView(final ProjectModel project) {
         super();
@@ -155,7 +134,7 @@ public class ProjectView extends JFrame {
         final var menuButton = new JToggleButton();
         final var menuButtonAction = new ApplicationAction("menuButtonAction", (event, action) -> {
             if (menuButton.isSelected()) {
-                mainMenu.show(menuButton, menuButton.getWidth() + Dimensions.PADDING, 0);
+                mainMenu.show(menuButton, menuButton.getWidth() + Dimensions.MEDIUM_PADDING, 0);
             } else {
                 mainMenu.setVisible(false);
             }
@@ -165,7 +144,7 @@ public class ProjectView extends JFrame {
 
         mainMenu.addPopupMenuListener(new PopupMenuListener() {
             @Override
-            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+            public void popupMenuCanceled(PopupMenuEvent e) {
                 // Ignored
             }
 
@@ -175,7 +154,7 @@ public class ProjectView extends JFrame {
             }
 
             @Override
-            public void popupMenuCanceled(PopupMenuEvent e) {
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
                 // Ignored
             }
         });
@@ -194,7 +173,7 @@ public class ProjectView extends JFrame {
         final var helpButton = tabBarButton(new JButton(), mainActions.showHelpAction, buttonSize);
         final var c = new GridBagConstraints();
         trailingContainer.setLayout(new GridBagLayout());
-        trailingContainer.setBorder(Borders.empty);
+        trailingContainer.setBorder(Borders.EMPTY);
         trailingContainer.setBackground(root.getBackground());
         c.weighty = 1;
         trailingContainer.add(Box.createHorizontalGlue(), c);
@@ -217,6 +196,8 @@ public class ProjectView extends JFrame {
         root.setFocusable(false);
         add(root);
         pack();
+        setSize(1200, 720);
+        setLocationRelativeTo(null);
     }
 
     private void onChange(final ProjectModel source, final ProjectChangeEvent event) {
@@ -227,5 +208,28 @@ public class ProjectView extends JFrame {
                 previewScreen.refresh();
             }
         }
+    }
+
+    private static JPanel divider(int width) {
+        final var divider = new JPanel();
+        divider.setBackground(Resources.get().colors.divider());
+        Components.setFixedSize(divider, new Dimension(width, 1));
+        return divider;
+    }
+
+    private static <T extends AbstractButton> T tabBarButton(T button, Action action, Dimension size) {
+        if (action != null) {
+            button.setAction(action);
+        }
+        button.setText(null);
+        button.setBorder(Borders.EMPTY);
+        button.putClientProperty(
+                FlatClientProperties.BUTTON_TYPE,
+                FlatClientProperties.BUTTON_TYPE_BORDERLESS
+        );
+        button.putClientProperty(FlatClientProperties.BUTTON_TYPE_SQUARE, true);
+        button.setFocusable(false);
+        Components.setFixedSize(button, size);
+        return button;
     }
 }

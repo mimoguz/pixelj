@@ -65,10 +65,10 @@ public class PreviewScreen extends JPanel implements Detachable {
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
         container.setBorder(
                 BorderFactory.createMatteBorder(
-                        Dimensions.PADDING,
-                        Dimensions.PADDING,
-                        Dimensions.PADDING,
-                        Dimensions.PADDING,
+                        Dimensions.MEDIUM_PADDING,
+                        Dimensions.MEDIUM_PADDING,
+                        Dimensions.MEDIUM_PADDING,
+                        Dimensions.MEDIUM_PADDING,
                         Color.WHITE
                 )
         );
@@ -88,11 +88,11 @@ public class PreviewScreen extends JPanel implements Detachable {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         final var title = new JLabel(res.getString("previewTitle"));
-        title.putClientProperty(FlatClientProperties.STYLE_CLASS, "h4");
+        title.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
         final var titlePanel = new JPanel();
-        titlePanel.setBorder(Borders.titleCenter);
+        titlePanel.setBorder(Borders.TITLE_CENTER);
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.X_AXIS));
-        titlePanel.add(Box.createHorizontalGlue());
+        titlePanel.add(Box.createHorizontalStrut(Dimensions.LARGE_PADDING));
         titlePanel.add(title);
         titlePanel.add(Box.createHorizontalGlue());
         add(titlePanel);
@@ -101,7 +101,7 @@ public class PreviewScreen extends JPanel implements Detachable {
         previewPanel.add(container);
         final var scrollPanel = new JScrollPane(previewPanel);
         scrollPanel.setMaximumSize(Dimensions.MAXIMUM);
-        scrollPanel.setBorder(Borders.smallEmptyCenter);
+        scrollPanel.setBorder(Borders.SMALL_EMPTY_CENTER_PANEL);
         add(scrollPanel);
 
         final var inputPanel = new JPanel();
@@ -120,7 +120,7 @@ public class PreviewScreen extends JPanel implements Detachable {
         inputPanel.add(buttonPanel);
         final var bottomPanel = new JPanel();
         bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
-        bottomPanel.setBorder(Borders.smallEmptyBottomCenterPanel);
+        bottomPanel.setBorder(Borders.SMALL_EMPTY_BOTTOM_CENTER_PANEL);
         bottomPanel.add(Box.createHorizontalGlue());
         bottomPanel.add(inputPanel);
         bottomPanel.add(Box.createHorizontalGlue());
@@ -135,7 +135,7 @@ public class PreviewScreen extends JPanel implements Detachable {
             }
         });
         final var zoomPanel = new JPanel();
-        zoomPanel.setBorder(Borders.smallEmptyCupCenter);
+        zoomPanel.setBorder(Borders.SMALL_EMPTY_CUP_CENTER);
         zoomPanel.setLayout(new BoxLayout(zoomPanel, BoxLayout.X_AXIS));
         zoomPanel.add(Box.createHorizontalGlue());
         zoomPanel.add(zoomSlider);

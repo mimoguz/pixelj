@@ -161,7 +161,7 @@ public class MetricsDialog extends JDialog {
         inputPanel.add(new JPanel(), cons);
 
         final var scroll = new JScrollPane(inputPanel);
-        scroll.setBorder(Borders.empty);
+        scroll.setBorder(Borders.EMPTY);
         content.add(scroll, BorderLayout.CENTER);
 
         applyButton = new JButton(res.getString("apply"));
@@ -203,10 +203,10 @@ public class MetricsDialog extends JDialog {
         buttonPanel.add(cancelButton);
         buttonPanel.add(Box.createRigidArea(Dimensions.MEDIUM_SQUARE));
         buttonPanel.add(applyButton);
-        buttonPanel.setBorder(Borders.smallEmpty);
+        buttonPanel.setBorder(Borders.SMALL_EMPTY);
         content.add(buttonPanel, BorderLayout.SOUTH);
 
-        content.setBorder(Borders.mediumEmpty);
+        content.setBorder(Borders.MEDIUM_EMPTY);
 
         setContentPane(content);
         getRootPane().setDefaultButton(cancelButton);

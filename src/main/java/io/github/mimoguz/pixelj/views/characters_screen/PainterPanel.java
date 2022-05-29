@@ -33,45 +33,15 @@ public class PainterPanel extends JPanel implements Detachable {
     private static final Color CAP_HEIGHT = new Color(41, 191, 18);
     private static final int INITIAL_ZOOM = 12;
     private static final int MAX_UNDO = 64;
-
     private static final long serialVersionUID = -2196271415900003483L;
-
     private static final int WHITE_SQUARE = 0x30_ff_ff_ff;
     private static final Color X_HEIGHT = CAP_HEIGHT;
 
-    private static BufferedImage checkerBoard(int w, int h) {
-        final var image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-        for (var y = 0; y < h; y++) {
-            for (var x = 0; x < w; x++) {
-                image.setRGB(
-                        x,
-                        y,
-                        ((odd(x) && even(y)) || (odd(y) && even(x))) ? WHITE_SQUARE : BLACK_SQUARE
-                );
-            }
-        }
-        return image;
-    }
-
-    private static boolean even(int x) {
-        return (x & 1) == 0;
-    }
-
-    private static boolean odd(int x) {
-        return (x & 1) == 1;
-    }
-
     private final transient PainterActions actions;
     private final InfoPanel infoPanel;
-
     private transient BufferedImage overlay;
-
     private final GlyphPainter painter;
-
-    private final JLabel title;
-
     private final ArrayList<Snapshot> undoBuffer = new ArrayList<>();
-
     private final JSlider zoomSlider;
 
     public PainterPanel(final ProjectModel project, final JComponent root) {
@@ -102,9 +72,6 @@ public class PainterPanel extends JPanel implements Detachable {
             painter.setLinesVisible(visible);
             painter.setShaded(visible);
         });
-
-        title = new JLabel(Resources.get().getString("painterTitle"));
-        title.putClientProperty(FlatClientProperties.STYLE_CLASS, "h4");
 
         zoomSlider = new JSlider(1, 48, INITIAL_ZOOM);
         zoomSlider.setMinimumSize(new Dimension(96, 24));
@@ -143,22 +110,24 @@ public class PainterPanel extends JPanel implements Detachable {
         toolBar.addSeparator();
         toolBar.add(actions.eraseAction);
         toolBar.setOrientation(SwingConstants.VERTICAL);
-        toolBar.setBorder(Borders.smallEmpty);
+        toolBar.setBorder(Borders.SMALL_EMPTY_CUP);
         add(toolBar, BorderLayout.WEST);
 
         // ****************************** CENTER ******************************
 
         final var zoomPanel = new JPanel();
-        zoomPanel.setBorder(Borders.smallEmptyCupCenter);
+        zoomPanel.setBorder(Borders.SMALL_EMPTY_CUP_CENTER);
         zoomPanel.setLayout(new BoxLayout(zoomPanel, BoxLayout.X_AXIS));
         zoomPanel.add(Box.createHorizontalGlue());
         zoomPanel.add(zoomSlider);
         zoomPanel.add(Box.createHorizontalGlue());
 
+        final var title = new JLabel(Resources.get().getString("painterTitle"));
+        title.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
         final var titlePanel = new JPanel();
-        titlePanel.setBorder(Borders.titleCenter);
+        titlePanel.setBorder(Borders.TITLE_CENTER);
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.X_AXIS));
-        titlePanel.add(Box.createHorizontalGlue());
+        titlePanel.add(Box.createHorizontalStrut(Dimensions.LARGE_PADDING));
         titlePanel.add(title);
         titlePanel.add(Box.createHorizontalGlue());
 
@@ -168,7 +137,7 @@ public class PainterPanel extends JPanel implements Detachable {
         painterPanel.add(painter);
 
         final var scrollPanel = new JScrollPane(painterPanel);
-        scrollPanel.setBorder(Borders.smallEmptyCupCenter);
+        scrollPanel.setBorder(Borders.SMALL_EMPTY_CUP_CENTER);
         scrollPanel.setFocusable(true);
         scrollPanel.setMaximumSize(Dimensions.MAXIMUM);
 
@@ -203,10 +172,13 @@ public class PainterPanel extends JPanel implements Detachable {
         painter.addMouseListener(moveFocus);
 
         final var centerPanel = new JPanel();
-        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-        centerPanel.add(titlePanel);
-        centerPanel.add(scrollPanel);
-        centerPanel.add(zoomPanel);
+        centerPanel.setLayout(new BorderLayout());
+        final var editorPanel = new JPanel(new BorderLayout());
+        editorPanel.add(titlePanel, BorderLayout.NORTH);
+        editorPanel.add(toolBar, BorderLayout.WEST);
+        editorPanel.add(scrollPanel, BorderLayout.CENTER);
+        editorPanel.add(zoomPanel, BorderLayout.SOUTH);
+        centerPanel.add(editorPanel, BorderLayout.CENTER);
         centerPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Resources.get().colors.divider()));
         add(centerPanel, BorderLayout.CENTER);
 
@@ -227,10 +199,6 @@ public class PainterPanel extends JPanel implements Detachable {
 
     public GlyphPainter getPainter() {
         return painter;
-    }
-
-    public JLabel getTitle() {
-        return title;
     }
 
     public JSlider getZoomSlider() {
@@ -284,7 +252,6 @@ public class PainterPanel extends JPanel implements Detachable {
 
         if (value != null) {
             Actions.setEnabled(actions.all, true);
-            title.setText(Integer.toString(value.getCodePoint()));
             zoomSlider.setEnabled(true);
             if (
                 overlay == null || overlay.getWidth() != value.getGlyph().getWidth()
@@ -295,9 +262,30 @@ public class PainterPanel extends JPanel implements Detachable {
             painter.setOverlay(overlay);
         } else {
             Actions.setEnabled(actions.all, false);
-            title.setText(Resources.get().getString("painterTitle"));
             zoomSlider.setEnabled(false);
             painter.setOverlay(null);
         }
+    }
+
+    private static BufferedImage checkerBoard(int w, int h) {
+        final var image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        for (var y = 0; y < h; y++) {
+            for (var x = 0; x < w; x++) {
+                image.setRGB(
+                        x,
+                        y,
+                        ((odd(x) && even(y)) || (odd(y) && even(x))) ? WHITE_SQUARE : BLACK_SQUARE
+                );
+            }
+        }
+        return image;
+    }
+
+    private static boolean even(int x) {
+        return (x & 1) == 0;
+    }
+
+    private static boolean odd(int x) {
+        return (x & 1) == 1;
     }
 }

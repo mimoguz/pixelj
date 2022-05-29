@@ -37,9 +37,8 @@ public class CharacterCell extends JPanel {
         title = new JLabel(" ");
         titleBox = new JPanel();
 
-        final var letterSize = new Dimension(30, 30);
-        letter.setMinimumSize(letterSize);
-        letter.setPreferredSize(letterSize);
+        letter.setMinimumSize(Dimensions.LETTER_BOX_SIZE);
+        letter.setPreferredSize(Dimensions.LETTER_BOX_SIZE);
 
         subtitle.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
 
@@ -52,7 +51,7 @@ public class CharacterCell extends JPanel {
         titleBox.add(Box.createVerticalGlue());
 
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-        setBorder(Borders.mediumEmpty);
+        setBorder(Borders.LIST_ITEM);
         add(picture);
         add(Box.createHorizontalStrut(8));
         add(letter);
@@ -84,7 +83,7 @@ public class CharacterCell extends JPanel {
         title.setMaximumSize(
                 new Dimension(
                         contentWidth - pictureWidth - Dimensions.LETTER_BOX_SIZE.width
-                                - Dimensions.PADDING * 5,
+                                - Dimensions.MEDIUM_PADDING * 5,
                         Integer.MAX_VALUE
                 )
         );

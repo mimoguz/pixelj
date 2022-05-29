@@ -4,12 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.ListCellRenderer;
+import javax.swing.*;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
@@ -40,11 +35,36 @@ public class CharacterDataCellRenderer implements ListCellRenderer<CharacterData
         titleBox.add(Box.createVerticalGlue());
 
         component.setLayout(new BoxLayout(component, BoxLayout.X_AXIS));
-        component.setBorder(Borders.mediumEmpty);
+        component.setBorder(Borders.LIST_ITEM);
         component.add(letter);
         component.add(Box.createHorizontalStrut(8));
         component.add(titleBox);
         component.add(Box.createHorizontalGlue());
+    }
+
+    @Override
+    public Component getListCellRendererComponent(
+            final JList<? extends CharacterData> list,
+            final CharacterData value,
+            final int index,
+            final boolean isSelected,
+            final boolean cellHasFocus
+    ) {
+        title.setMaximumSize(
+                new Dimension(
+                        list.getWidth() - Dimensions.LETTER_BOX_SIZE.width - Dimensions.MEDIUM_PADDING * 3,
+                        Integer.MAX_VALUE
+                )
+        );
+        set(value);
+        if (isSelected) {
+            setBackgroundColor(list.getSelectionBackground());
+            setForegroundColor(list.getSelectionForeground());
+        } else {
+            setBackgroundColor(list.getBackground());
+            setForegroundColor(list.getForeground());
+        }
+        return component;
     }
 
     public void set(final CharacterData data) {
@@ -63,30 +83,5 @@ public class CharacterDataCellRenderer implements ListCellRenderer<CharacterData
         subtitle.setForeground(color);
         letter.setForeground(color);
         component.setForeground(color);
-    }
-
-    @Override
-    public Component getListCellRendererComponent(
-            final JList<? extends CharacterData> list,
-            final CharacterData value,
-            final int index,
-            final boolean isSelected,
-            final boolean cellHasFocus
-    ) {
-        title.setMaximumSize(
-                new Dimension(
-                        list.getWidth() - Dimensions.LETTER_BOX_SIZE.width - Dimensions.PADDING * 3,
-                        Integer.MAX_VALUE
-                )
-        );
-        set(value);
-        if (isSelected) {
-            setBackgroundColor(list.getSelectionBackground());
-            setForegroundColor(list.getSelectionForeground());
-        } else {
-            setBackgroundColor(list.getBackground());
-            setForegroundColor(list.getForeground());
-        }
-        return component;
     }
 }

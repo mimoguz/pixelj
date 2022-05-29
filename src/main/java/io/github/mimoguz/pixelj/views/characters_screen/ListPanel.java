@@ -53,7 +53,7 @@ public class ListPanel extends JPanel implements Detachable {
         list.setSelectionModel(selectionModel);
         list.setCellRenderer(new CharacterCellRenderer(48));
         list.setMaximumSize(Dimensions.MAXIMUM);
-        setBorder(Borders.empty);
+        setBorder(Borders.EMPTY);
 
         filterBox = new SearchableComboBox<>(res.getBlocks());
         filterBox.setMaximumSize(Dimensions.MAXIMUM_COMBO_BOX_SIZE);
@@ -76,7 +76,7 @@ public class ListPanel extends JPanel implements Detachable {
         setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, res.colors.divider()));
 
         final var buttonPanel = new JPanel();
-        buttonPanel.setBorder(Borders.smallEmpty);
+        buttonPanel.setBorder(Borders.SMALL_EMPTY);
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
         buttonPanel.add(Box.createHorizontalGlue());
         buttonPanel.add(addButton);
@@ -86,14 +86,14 @@ public class ListPanel extends JPanel implements Detachable {
         add(buttonPanel);
 
         final var filterPanel = new JPanel();
-        filterPanel.setBorder(Borders.smallEmptyCup);
+        filterPanel.setBorder(Borders.SMALL_EMPTY_CUP);
         filterPanel.setLayout(new BoxLayout(filterPanel, BoxLayout.X_AXIS));
         filterPanel.add(filterBox);
         add(filterPanel);
 
         final var scrollPanel = new JScrollPane(list);
         scrollPanel.setMaximumSize(Dimensions.MAXIMUM);
-        scrollPanel.setBorder(Borders.empty);
+        scrollPanel.setBorder(Borders.EMPTY);
         add(scrollPanel);
     }
 
