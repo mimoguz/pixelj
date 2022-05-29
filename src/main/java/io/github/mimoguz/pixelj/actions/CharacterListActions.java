@@ -1,6 +1,7 @@
 package io.github.mimoguz.pixelj.actions;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
@@ -9,11 +10,8 @@ import java.util.List;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.awt.event.ActionEvent;
-import javax.swing.Action;
 
-import javax.swing.JFrame;
-import javax.swing.ListSelectionModel;
+import javax.swing.*;
 
 import io.github.mimoguz.pixelj.graphics.BinaryImage;
 import io.github.mimoguz.pixelj.models.CharacterListModel;
@@ -27,19 +25,19 @@ public class CharacterListActions {
     public final ApplicationAction showAddDialogAction;
     public final ApplicationAction showRemoveDialogAction;
 
+    private final AddDialog addDialog;
     private Dimension canvasSize;
     private int defaultCharacterWidth;
     private boolean enabled = true;
     private final CharacterListModel listModel;
-    private final ListSelectionModel selectionModel;
     private final Logger logger;
-    private final AddDialog addDialog;
+    private final ListSelectionModel selectionModel;
 
     public CharacterListActions(
-            final JFrame frame,
             final CharacterListModel listModel,
             final ListSelectionModel selectionModel,
-            final Metrics metrics
+            final Metrics metrics,
+            final JComponent root
     ) {
         this.listModel = listModel;
         this.selectionModel = selectionModel;
@@ -48,7 +46,7 @@ public class CharacterListActions {
         logger.addHandler(new ConsoleHandler());
         logger.setLevel(Level.INFO);
 
-        addDialog = new AddDialog(frame);
+        addDialog = new AddDialog((JFrame) SwingUtilities.getWindowAncestor(root));
 
         showAddDialogAction = new ApplicationAction("charactersShowAddDialogAction", this::showAddDialog)
                 .setTextKey("charactersShowAddDialogAction")
@@ -106,23 +104,6 @@ public class CharacterListActions {
         }
     }
 
-    private void showAddDialog(final ActionEvent event, final Action action) {
-        addDialog.setVisible(true);
-        final var result = addDialog.getResult();
-        if (result.isEmpty()) {
-            return;
-        }
-        for (var characterData : result) {
-            listModel.add(
-                    new CharacterModel(
-                            characterData.codePoint(),
-                            defaultCharacterWidth,
-                            BinaryImage.of(canvasSize.width, canvasSize.height, true)
-                    )
-            );
-        }
-    }
-
     private void removeSelected() {
         final var index0 = selectionModel.getMinSelectionIndex();
         final var index1 = selectionModel.getMaxSelectionIndex();
@@ -139,5 +120,22 @@ public class CharacterListActions {
             logger.log(Level.INFO, "Caution! {0}  kerning pairs will also be removed.", kerningPairs.size());
         }
         logger.log(Level.INFO, "Removing  {0} characters.", index1 - index0 + 1);
+    }
+
+    private void showAddDialog(final ActionEvent event, final Action action) {
+        addDialog.setVisible(true);
+        final var result = addDialog.getResult();
+        if (result.isEmpty()) {
+            return;
+        }
+        for (var characterData : result) {
+            listModel.add(
+                    new CharacterModel(
+                            characterData.codePoint(),
+                            defaultCharacterWidth,
+                            BinaryImage.of(canvasSize.width, canvasSize.height, true)
+                    )
+            );
+        }
     }
 }
