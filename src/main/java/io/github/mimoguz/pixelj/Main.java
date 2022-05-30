@@ -9,7 +9,7 @@ import io.github.mimoguz.pixelj.themes.PixeljLight;
 import io.github.mimoguz.pixelj.views.ProjectView;
 
 public class Main {
-    private static final boolean USE_DARK_THEME = false;
+    private static final boolean USE_DARK_THEME = true;
 
     public static void main(final String[] args) {
         if (USE_DARK_THEME) {

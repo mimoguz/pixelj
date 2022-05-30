@@ -8,12 +8,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.swing.*;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
 
 import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.ApplicationAction;
@@ -45,6 +47,21 @@ public class ProjectView extends JFrame {
     public ProjectView(final ProjectModel project) {
         super();
 
+        final var res = Resources.get();
+
+        setTitle(project.getTitle() + " - " + res.getString("applicationName"));
+        setIconImages(
+                Stream.of(16, 32, 48, 64, 128, 256)
+                        .map(
+                                size -> new FlatSVGIcon(
+                                        "io/github/mimoguz/pixelj/resources/application_icon.svg",
+                                        size,
+                                        getClass().getClassLoader()
+                                ).getImage()
+                        )
+                        .toList()
+        );
+
         root = new JTabbedPane();
 
         charactersScreen = new CharactersScreen(project, root);
@@ -59,8 +76,6 @@ public class ProjectView extends JFrame {
         previewScreen.setEnabled(false);
 
         project.addChangeListener(this::onChange);
-
-        final var res = Resources.get();
 
         root.putClientProperty(
                 FlatClientProperties.TABBED_PANE_TAB_TYPE,
