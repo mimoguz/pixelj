@@ -1,13 +1,6 @@
 {
     "java.format.settings.url": "eclipse_format.xml",
     "java.configuration.updateBuildConfiguration": "interactive",
-    "spellright.language": [
-        "en",
-        "tr"
-    ],
-    "spellright.documentTypes": [
-        "markdown"
-    ],
     "cSpell.words": [
         "Bierhance's",
         "Intelli",
