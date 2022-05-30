@@ -9,11 +9,12 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <flatlaf.version>2.2</flatlaf.version>
+        <flatlaf.version>2.3</flatlaf.version>
     </properties>
 
     <build>
         <plugins>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -55,11 +56,11 @@
     </build>
 
     <dependencies>
-    
+
 	    <dependency>
-			<groupId>org.eclipse.collections</groupId>
-			<artifactId>eclipse-collections</artifactId>
-			<version>11.0.0</version>
+		    <groupId>org.eclipse.collections</groupId>
+		    <artifactId>eclipse-collections</artifactId>
+		    <version>11.0.0</version>
 		</dependency>
 		
 		<dependency>

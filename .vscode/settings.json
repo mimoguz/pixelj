@@ -1,6 +1,6 @@
 {
     "java.format.settings.url": "eclipse_format.xml",
-    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.configuration.updateBuildConfiguration": "automatic",
     "cSpell.words": [
         "Bierhance's",
         "Intelli",
