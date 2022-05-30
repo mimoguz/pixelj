@@ -25,6 +25,8 @@ public class CharacterModelCell extends JPanel {
     public CharacterModelCell(final int maxPictureSize) {
         this.maxPictureSize = maxPictureSize;
 
+        characterCell.setOpaque(false);
+
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         setBorder(Borders.LIST_ITEM);
         add(picture);

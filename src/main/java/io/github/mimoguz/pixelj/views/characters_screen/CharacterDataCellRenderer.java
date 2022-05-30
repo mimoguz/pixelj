@@ -29,7 +29,7 @@ public class CharacterDataCellRenderer implements ListCellRenderer<CharacterData
         component.set(
                 value.codePoint(),
                 Resources.get().getCharacterData(value.codePoint()).name(),
-                list.getWidth() - Dimensions.MEDIUM_PADDING
+                list.getWidth() - Dimensions.MEDIUM_PADDING * 3
         );
         if (isSelected) {
             component.setBackgroundColor(list.getSelectionBackground());

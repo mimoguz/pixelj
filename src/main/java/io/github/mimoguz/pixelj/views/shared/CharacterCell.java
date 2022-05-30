@@ -15,8 +15,6 @@ public class CharacterCell extends JPanel {
     private final JLabel title = new JLabel();
 
     public CharacterCell() {
-        setOpaque(false);
-
         Components.setFixedSize(letter, Dimensions.LETTER_BOX_SIZE);
         letter.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
         subtitle.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
