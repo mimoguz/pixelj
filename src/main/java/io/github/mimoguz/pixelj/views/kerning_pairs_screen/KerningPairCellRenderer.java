@@ -8,16 +8,16 @@ import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 
 import io.github.mimoguz.pixelj.models.KerningPairModel;
-import io.github.mimoguz.pixelj.views.shared.CharacterCell;
+import io.github.mimoguz.pixelj.views.shared.CharacterModelCell;
 
 public class KerningPairCellRenderer implements ListCellRenderer<KerningPairModel> {
     private final JPanel component = new JPanel(new GridLayout(1, 2));
-    private final CharacterCell left;
-    private final CharacterCell right;
+    private final CharacterModelCell left;
+    private final CharacterModelCell right;
 
     public KerningPairCellRenderer(final int maximumPictureSize) {
-        left = new CharacterCell(maximumPictureSize);
-        right = new CharacterCell(maximumPictureSize);
+        left = new CharacterModelCell(maximumPictureSize);
+        right = new CharacterModelCell(maximumPictureSize);
 
         component.add(left);
         component.add(right);
@@ -31,8 +31,9 @@ public class KerningPairCellRenderer implements ListCellRenderer<KerningPairMode
             final boolean isSelected,
             final boolean cellHasFocus
     ) {
-        left.set(value.getLeft(), list.getWidth());
-        right.set(value.getRight(), list.getWidth());
+        final var partWidth = list.getWidth() / 2;
+        left.set(value.getLeft(), partWidth);
+        right.set(value.getRight(), partWidth);
 
         if (isSelected) {
             left.setBackgroundColor(list.getSelectionBackground());

@@ -1,98 +1,60 @@
 package io.github.mimoguz.pixelj.views.shared;
 
-import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.*;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
-import io.github.mimoguz.pixelj.controls.GlyphView;
-import io.github.mimoguz.pixelj.models.CharacterModel;
-import io.github.mimoguz.pixelj.resources.Resources;
-
 public class CharacterCell extends JPanel {
-    private static final long serialVersionUID = 5319221937480404986L;
+    private static final long serialVersionUID = -9001351906799070443L;
 
-    private final JLabel letter;
-    private final int maxPictureSize;
-    private final GlyphView picture;
-    private final JLabel subtitle;
-    private final JLabel title;
-    private final JPanel titleBox;
+    private final JLabel letter = new JLabel();
+    private final JLabel subtitle = new JLabel();
+    private final JLabel title = new JLabel();
 
     public CharacterCell() {
-        this(48);
-    }
+        setOpaque(false);
 
-    public CharacterCell(final int maxPictureSize) {
-        this.maxPictureSize = maxPictureSize;
-
-        letter = new JLabel(" ");
-        picture = new GlyphView(Resources.get().colors.disabledIcon());
-        subtitle = new JLabel(" ");
-        title = new JLabel(" ");
-        titleBox = new JPanel();
-
-        letter.setMinimumSize(Dimensions.LETTER_BOX_SIZE);
-        letter.setPreferredSize(Dimensions.LETTER_BOX_SIZE);
-
+        Components.setFixedSize(letter, Dimensions.LETTER_BOX_SIZE);
+        letter.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
         subtitle.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
 
-        titleBox.setLayout(new BoxLayout(titleBox, BoxLayout.Y_AXIS));
-        titleBox.setOpaque(false);
-        titleBox.setBackground(new Color(0, 0, 0, 0));
-        titleBox.add(Box.createVerticalGlue());
-        titleBox.add(subtitle);
-        titleBox.add(title);
-        titleBox.add(Box.createVerticalGlue());
+        setLayout(new GridBagLayout());
+        final var constraints = new GridBagConstraints();
 
-        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-        setBorder(Borders.LIST_ITEM);
-        add(picture);
-        add(Box.createHorizontalStrut(8));
-        add(letter);
-        add(Box.createHorizontalStrut(8));
-        add(titleBox);
-        add(Box.createHorizontalGlue());
+        constraints.insets = new Insets(0, 0, 0, Dimensions.MEDIUM_PADDING);
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.gridheight = 2;
+        constraints.weightx = 0.0;
+        constraints.anchor = GridBagConstraints.WEST;
+        add(letter, constraints);
+
+        constraints.insets = new Insets(0, 0, 0, 0);
+        constraints.gridheight = 1;
+        constraints.gridx = 1;
+        constraints.gridy = 0;
+        constraints.weightx = 1.0;
+        constraints.weighty = 0.0;
+        constraints.anchor = GridBagConstraints.SOUTHWEST;
+        add(subtitle, constraints);
+
+        constraints.gridy = 1;
+        constraints.weighty = 1.0;
+        constraints.anchor = GridBagConstraints.NORTHWEST;
+        add(title, constraints);
     }
 
-    public void set(final CharacterModel model, int contentWidth) {
-        picture.setModel(model, false);
-
-        final int pictureWidth = model.getGlyph().getWidth();
-        final int pictureHeight = model.getGlyph().getHeight();
-        final var pictureSize = Math.max(pictureWidth, pictureHeight);
-        if (pictureSize > maxPictureSize) {
-            picture.setZoom(0);
-            final var scale = ((double) maxPictureSize) / pictureSize;
-            picture.setSize(
-                    new Dimension(
-                            (int) Math.round(pictureWidth * scale),
-                            (int) Math.round(pictureHeight * scale)
-                    )
-            );
-        } else {
-            picture.setZoom(1);
-        }
-
-        title.setText(Resources.get().getCharacterData(model.getCodePoint()).name());
-        title.setMaximumSize(
-                new Dimension(
-                        contentWidth - pictureWidth - Dimensions.LETTER_BOX_SIZE.width
-                                - Dimensions.MEDIUM_PADDING * 5,
-                        Integer.MAX_VALUE
-                )
-        );
-        subtitle.setText("0x" + Integer.toHexString(model.getCodePoint()));
-        letter.setText(Character.toString((char) model.getCodePoint()));
+    public void set(final int codePoint, final String title, final int maximumSize) {
+        this.letter.setText(Character.toString((char) codePoint));
+        this.title.setText(title);
+        this.subtitle.setText("0x" + Integer.toHexString(codePoint));
+        setMaximumSize(new Dimension(maximumSize, Integer.MAX_VALUE));
     }
 
     public void setBackgroundColor(final Color color) {
-        titleBox.setBackground(color);
         setBackground(color);
     }
 
@@ -100,6 +62,5 @@ public class CharacterCell extends JPanel {
         title.setForeground(color);
         subtitle.setForeground(color);
         letter.setForeground(color);
-        setForeground(color);
     }
 }

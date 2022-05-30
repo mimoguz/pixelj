@@ -40,7 +40,9 @@ public class AddDialog extends JDialog {
         list.setModel(listModel);
         list.setSelectionModel(selectionModel);
         list.setCellRenderer(new CharacterDataCellRenderer());
-        final var scroll = new JScrollPane(list);
+
+        final var scrollPanel = new JScrollPane(list);
+        scrollPanel.setMaximumSize(Dimensions.MAXIMUM);
 
         final var filterBox = new SearchableComboBox<>(res.getBlocks().stream().skip(1).toList());
         filterBox.setSelectedIndex(0);
@@ -51,7 +53,7 @@ public class AddDialog extends JDialog {
                 final var block = (BlockData) item;
                 listModel.clear();
                 listModel.addAll(res.getCharacters(block.id()));
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 // Ignore
             }
         });
@@ -82,7 +84,7 @@ public class AddDialog extends JDialog {
         content.setLayout(new BorderLayout(Dimensions.MEDIUM_PADDING, Dimensions.MEDIUM_PADDING));
 
         content.add(filterBox, BorderLayout.NORTH);
-        content.add(scroll, BorderLayout.CENTER);
+        content.add(scrollPanel, BorderLayout.CENTER);
         content.add(buttonPanel, BorderLayout.SOUTH);
         content.setBorder(Borders.MEDIUM_EMPTY);
         setContentPane(content);
@@ -110,7 +112,7 @@ public class AddDialog extends JDialog {
 
     private void fillResult() {
         final var indices = selectionModel.getSelectedIndices();
-        for (var i : indices) {
+        for (final var i : indices) {
             result.add(listModel.get(i));
         }
     }

@@ -6,13 +6,13 @@ import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
 import io.github.mimoguz.pixelj.models.CharacterModel;
-import io.github.mimoguz.pixelj.views.shared.CharacterCell;
+import io.github.mimoguz.pixelj.views.shared.CharacterModelCell;
 
 public class CharacterCellRenderer implements ListCellRenderer<CharacterModel> {
-    private final CharacterCell component;
+    private final CharacterModelCell component;
 
     public CharacterCellRenderer(final int maxPictureSize) {
-        component = new CharacterCell(maxPictureSize);
+        component = new CharacterModelCell(maxPictureSize);
     }
 
     @Override
