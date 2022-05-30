@@ -21,7 +21,7 @@ public class KerningPairsScreen extends JSplitPane implements Detachable {
 
     public KerningPairsScreen(final ProjectModel project, final JComponent root) {
         selectionModel = new DefaultListSelectionModel();
-        selectionModel.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        selectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
         listModel = project.getKerningPairs();
         listPanel = new ListPanel(listModel, selectionModel, root);

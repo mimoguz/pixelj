@@ -17,9 +17,9 @@ public class CharactersScreen extends JSplitPane implements Detachable {
     private final PainterPanel painterPanel;
     private final transient ListSelectionModel selectionModel;
 
-    public CharactersScreen(final ProjectModel project, final JComponent root, final JFrame frame) {
+    public CharactersScreen(final ProjectModel project, final JComponent root) {
         selectionModel = new DefaultListSelectionModel();
-        selectionModel.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        selectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
         listModel = project.getCharacters();
         listPanel = new ListPanel(listModel, selectionModel, project.getMetrics(), root);
