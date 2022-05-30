@@ -1,9 +1,6 @@
 package io.github.mimoguz.pixelj.controls;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.util.Map;
 
 import javax.swing.JTextArea;
@@ -21,10 +18,23 @@ public class PromptTextArea extends JTextArea {
 
     private static final long serialVersionUID = 4432702411987454931L;
 
+    private Color promptColor;
     private String promptText;
+
+    public Color getPromptColor() {
+        return promptColor;
+    }
+
+    public void setPromptColor(Color promptColor) {
+        this.promptColor = promptColor;
+    }
 
     public String getPromptText() {
         return promptText;
+    }
+
+    public void setPromptText(final String promptText) {
+        this.promptText = promptText;
     }
 
     @Override
@@ -42,16 +52,12 @@ public class PromptTextArea extends JTextArea {
         } else {
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         }
-        g2d.setColor(Resources.get().colors.inactive());
+        g2d.setColor(promptColor != null ? promptColor : Color.GRAY);
         g2d.drawString(
                 promptText,
                 getInsets().left,
                 graphics.getFontMetrics().getMaxAscent() + getInsets().top
         );
         g2d.dispose();
-    }
-
-    public void setPromptText(final String promptText) {
-        this.promptText = promptText;
     }
 }

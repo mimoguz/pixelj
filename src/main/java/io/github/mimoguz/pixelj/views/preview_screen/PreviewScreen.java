@@ -37,6 +37,7 @@ public class PreviewScreen extends JPanel implements Detachable {
         final var res = Resources.get();
 
         textInput = new PromptTextArea();
+        textInput.setPromptColor(res.colors.inactive());
         textInput.setMaximumSize(Dimensions.MAXIMUM);
         textInput.setPromptText(res.getString("previewTextInputPrompt"));
 
