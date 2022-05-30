@@ -5,8 +5,6 @@ import java.util.Map;
 
 import javax.swing.JTextArea;
 
-import io.github.mimoguz.pixelj.resources.Resources;
-
 /**
  * A text area control that can display a prompt text when it's empty and
  * unfocused.<br />
@@ -25,16 +23,8 @@ public class PromptTextArea extends JTextArea {
         return promptColor;
     }
 
-    public void setPromptColor(Color promptColor) {
-        this.promptColor = promptColor;
-    }
-
     public String getPromptText() {
         return promptText;
-    }
-
-    public void setPromptText(final String promptText) {
-        this.promptText = promptText;
     }
 
     @Override
@@ -59,5 +49,13 @@ public class PromptTextArea extends JTextArea {
                 graphics.getFontMetrics().getMaxAscent() + getInsets().top
         );
         g2d.dispose();
+    }
+
+    public void setPromptColor(final Color promptColor) {
+        this.promptColor = promptColor;
+    }
+
+    public void setPromptText(final String promptText) {
+        this.promptText = promptText;
     }
 }

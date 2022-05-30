@@ -1,6 +1,7 @@
 package io.github.mimoguz.pixelj.views;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
@@ -23,23 +24,12 @@ import io.github.mimoguz.pixelj.views.shared.Dimensions;
 public class MetricsDialog extends JDialog {
     private static final long serialVersionUID = 1185992736696485089L;
 
-    private static JSpinner getSpinner(final int value) {
-        return getSpinner(value, 1);
-    }
-
-    private static JSpinner getSpinner(final int value, final int minimum) {
-        final var spinner = new JSpinner(new SpinnerNumberModel(value, minimum, 512, 1));
-        Components.setFixedSize(spinner, Dimensions.SPINNER_SIZE);
-        return spinner;
-    }
-
-    private static int getValue(JSpinner spinner) {
-        return ((SpinnerNumberModel) spinner.getModel()).getNumber().intValue();
-    }
-
     private final JButton applyButton;
+
     private final JSpinner ascender;
+
     private final JSpinner canvasHeight;
+
     private final JSpinner canvasWidth;
     private final JSpinner capHeight;
     private final JSpinner defaultCharacterWidth;
@@ -51,7 +41,7 @@ public class MetricsDialog extends JDialog {
     private final JSpinner spacing;
     private final JSpinner xHeight;
 
-    public MetricsDialog(final Metrics source, final Frame owner) {
+    public MetricsDialog(final Frame owner) {
         super(owner, Resources.get().getString("metricsDialogTitle"), Dialog.ModalityType.APPLICATION_MODAL);
 
         final var logger = Logger.getLogger(this.getClass().getName());
@@ -75,7 +65,7 @@ public class MetricsDialog extends JDialog {
         cons.gridy = 0;
         inputPanel.add(new JLabel(res.getString("metricsCanvasWidth")), cons);
         cons.gridx = 1;
-        canvasWidth = getSpinner(source.canvasWidth());
+        canvasWidth = getSpinner();
         inputPanel.add(canvasWidth, cons);
         canvasWidth.setEnabled(false);
 
@@ -83,7 +73,7 @@ public class MetricsDialog extends JDialog {
         cons.gridy = cons.gridy + 1;
         inputPanel.add(new JLabel(res.getString("metricsCanvasHeight")), cons);
         cons.gridx = 1;
-        canvasHeight = getSpinner(source.canvasHeight());
+        canvasHeight = getSpinner();
         inputPanel.add(canvasHeight, cons);
         canvasHeight.setEnabled(false);
 
@@ -91,7 +81,7 @@ public class MetricsDialog extends JDialog {
         cons.gridy = cons.gridy + 1;
         inputPanel.add(new JLabel(res.getString("metricsAscender")), cons);
         cons.gridx = 1;
-        ascender = getSpinner(source.ascender());
+        ascender = getSpinner();
         ascender.addChangeListener(this::onSpinnerChanged);
         inputPanel.add(ascender, cons);
 
@@ -99,14 +89,14 @@ public class MetricsDialog extends JDialog {
         cons.gridy = cons.gridy + 1;
         inputPanel.add(new JLabel(res.getString("metricsDescender")), cons);
         cons.gridx = 1;
-        descender = getSpinner(source.descender());
+        descender = getSpinner();
         inputPanel.add(descender, cons);
 
         cons.gridx = 0;
         cons.gridy = cons.gridy + 1;
         inputPanel.add(new JLabel(res.getString("metricsCapHeight")), cons);
         cons.gridx = 1;
-        capHeight = getSpinner(source.capHeight());
+        capHeight = getSpinner();
         capHeight.addChangeListener(this::onSpinnerChanged);
         inputPanel.add(capHeight, cons);
 
@@ -114,7 +104,7 @@ public class MetricsDialog extends JDialog {
         cons.gridy = cons.gridy + 1;
         inputPanel.add(new JLabel(res.getString("metricsXHeight")), cons);
         cons.gridx = 1;
-        xHeight = getSpinner(source.xHeight());
+        xHeight = getSpinner();
         xHeight.addChangeListener(this::onSpinnerChanged);
         inputPanel.add(xHeight, cons);
 
@@ -122,7 +112,7 @@ public class MetricsDialog extends JDialog {
         cons.gridy = cons.gridy + 1;
         inputPanel.add(new JLabel(res.getString("metricsDefaultCharacterWidth")), cons);
         cons.gridx = 1;
-        defaultCharacterWidth = getSpinner(source.defaultCharacterWidth());
+        defaultCharacterWidth = getSpinner();
         defaultCharacterWidth.addChangeListener(this::onSpinnerChanged);
         inputPanel.add(defaultCharacterWidth, cons);
 
@@ -130,21 +120,21 @@ public class MetricsDialog extends JDialog {
         cons.gridy = cons.gridy + 1;
         inputPanel.add(new JLabel(res.getString("metricsCharacterSpacing")), cons);
         cons.gridx = 1;
-        spacing = getSpinner(source.spacing(), 0);
+        spacing = getSpinner(0);
         inputPanel.add(spacing, cons);
 
         cons.gridx = 0;
         cons.gridy = cons.gridy + 1;
         inputPanel.add(new JLabel(res.getString("metricsSpaceSize")), cons);
         cons.gridx = 1;
-        spaceSize = getSpinner(source.spaceSize(), 0);
+        spaceSize = getSpinner(0);
         inputPanel.add(spaceSize, cons);
 
         cons.gridx = 0;
         cons.gridy = cons.gridy + 1;
         inputPanel.add(new JLabel(res.getString("metricsLineSpacing")), cons);
         cons.gridx = 1;
-        lineSpacing = getSpinner(source.lineSpacing(), 0);
+        lineSpacing = getSpinner(0);
         inputPanel.add(lineSpacing, cons);
 
         cons.gridx = 0;
@@ -152,7 +142,6 @@ public class MetricsDialog extends JDialog {
         inputPanel.add(new JLabel(res.getString("metricsIsMonospaced")), cons);
         cons.gridx = 1;
         isMonospaced = new JCheckBox();
-        isMonospaced.setSelected(source.isMonospaced());
         inputPanel.add(isMonospaced, cons);
 
         cons.gridx = 0;
@@ -166,20 +155,7 @@ public class MetricsDialog extends JDialog {
 
         applyButton = new JButton(res.getString("apply"));
         Components.setFixedSize(applyButton, Dimensions.TEXT_BUTTON_SIZE);
-        applyButton.addActionListener(e -> {
-            result = Metrics.Builder.from(source)
-                    .setAscender(getValue(ascender))
-                    .setDescender(getValue(descender))
-                    .setCapHeight(getValue(capHeight))
-                    .setXHeight(getValue(xHeight))
-                    .setDefaultCharacterWidth(getValue(defaultCharacterWidth))
-                    .setSpacing(getValue(spacing))
-                    .setSpaceSize(getValue(spaceSize))
-                    .setLineSpacing(getValue(lineSpacing))
-                    .setMonospaced(isMonospaced.isSelected())
-                    .build();
-            setVisible(false);
-        });
+        applyButton.addActionListener(this::onApply);
 
         final var cancelButton = new JButton(res.getString("cancel"));
         Components.setFixedSize(cancelButton, Dimensions.TEXT_BUTTON_SIZE);
@@ -200,9 +176,9 @@ public class MetricsDialog extends JDialog {
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
         buttonPanel.add(helpButton);
         buttonPanel.add(Box.createHorizontalGlue());
-        buttonPanel.add(cancelButton);
-        buttonPanel.add(Box.createRigidArea(Dimensions.MEDIUM_SQUARE));
         buttonPanel.add(applyButton);
+        buttonPanel.add(Box.createRigidArea(Dimensions.MEDIUM_SQUARE));
+        buttonPanel.add(cancelButton);
         buttonPanel.setBorder(Borders.SMALL_EMPTY);
         content.add(buttonPanel, BorderLayout.SOUTH);
 
@@ -220,8 +196,45 @@ public class MetricsDialog extends JDialog {
         return result;
     }
 
+    public void set(final Metrics metrics) {
+        canvasWidth.setValue(metrics.canvasWidth());
+        canvasHeight.setValue(metrics.canvasHeight());
+        ascender.setValue(metrics.ascender());
+        descender.setValue(metrics.descender());
+        capHeight.setValue(metrics.capHeight());
+        xHeight.setValue(metrics.xHeight());
+        defaultCharacterWidth.setValue(metrics.defaultCharacterWidth());
+        spacing.setValue(metrics.spacing());
+        spaceSize.setValue(metrics.spaceSize());
+        lineSpacing.setValue(metrics.lineSpacing());
+        isMonospaced.setSelected(metrics.isMonospaced());
+    }
+
+    @Override
+    public void setVisible(final boolean visible) {
+        if (visible) {
+            result = null;
+        }
+        super.setVisible(visible);
+    }
+
+    private void onApply(final ActionEvent e) {
+        result = Metrics.Builder.getDefault()
+                .setAscender(getValue(ascender))
+                .setDescender(getValue(descender))
+                .setCapHeight(getValue(capHeight))
+                .setXHeight(getValue(xHeight))
+                .setDefaultCharacterWidth(getValue(defaultCharacterWidth))
+                .setSpacing(getValue(spacing))
+                .setSpaceSize(getValue(spaceSize))
+                .setLineSpacing(getValue(lineSpacing))
+                .setMonospaced(isMonospaced.isSelected())
+                .build();
+        setVisible(false);
+    }
+
     @SuppressWarnings({ "java:S2178" })
-    private void onSpinnerChanged(ChangeEvent e) {
+    private void onSpinnerChanged(final ChangeEvent e) {
         // Do not short-circuit
         final var valid = validateAscender() & validateDescender() & validateCapHeight() & validateXHeight()
                 & validateDefaultWidth();
@@ -276,5 +289,19 @@ public class MetricsDialog extends JDialog {
                 validXHeight ? null : FlatClientProperties.OUTLINE_ERROR
         );
         return validXHeight;
+    }
+
+    private static JSpinner getSpinner() {
+        return getSpinner(1);
+    }
+
+    private static JSpinner getSpinner(final int minimum) {
+        final var spinner = new JSpinner(new SpinnerNumberModel(minimum, minimum, 512, 1));
+        Components.setFixedSize(spinner, Dimensions.SPINNER_SIZE);
+        return spinner;
+    }
+
+    private static int getValue(final JSpinner spinner) {
+        return ((SpinnerNumberModel) spinner.getModel()).getNumber().intValue();
     }
 }

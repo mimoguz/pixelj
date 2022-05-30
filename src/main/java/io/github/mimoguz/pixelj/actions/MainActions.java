@@ -1,5 +1,6 @@
 package io.github.mimoguz.pixelj.actions;
 
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
@@ -9,7 +10,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.Action;
-import javax.swing.JFrame;
+import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
 
 import io.github.mimoguz.pixelj.models.ProjectModel;
 import io.github.mimoguz.pixelj.resources.Icons;
@@ -27,13 +29,15 @@ public class MainActions {
     public final ApplicationAction showMetricsAction;
     public final ApplicationAction showSettingsAction;
     private boolean enabled = true;
-    private final JFrame frame;
-    private final ProjectModel project;
     private final Logger logger;
+    private final MetricsDialog metricsDialog;
+    private final ProjectModel project;
+    private final JComponent root;
 
-    public MainActions(final ProjectModel project, JFrame frame) {
+    public MainActions(final ProjectModel project, final JComponent root) {
         this.project = project;
-        this.frame = frame;
+        this.root = root;
+        metricsDialog = new MetricsDialog((Frame) SwingUtilities.windowForComponent(root));
 
         logger = Logger.getLogger(this.getClass().getName());
         logger.addHandler(new ConsoleHandler());
@@ -118,7 +122,7 @@ public class MainActions {
     }
 
     private void showMetrics(final ActionEvent event, final Action action) {
-        final var metricsDialog = new MetricsDialog(project.getMetrics(), frame);
+        metricsDialog.set(project.getMetrics());
         metricsDialog.setVisible(true);
         final var result = metricsDialog.getResult();
         if (result != null && !project.getMetrics().equals(result)) {
@@ -126,7 +130,7 @@ public class MainActions {
         }
     }
 
-    private void showSettings(ActionEvent event, Action action) {
+    private void showSettings(final ActionEvent event, final Action action) {
         logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
     }
 }

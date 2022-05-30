@@ -76,9 +76,9 @@ public class AddDialog extends JDialog {
         final var buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
         buttonPanel.add(Box.createHorizontalGlue());
-        buttonPanel.add(cancelButton);
-        buttonPanel.add(Box.createRigidArea(Dimensions.MEDIUM_SQUARE));
         buttonPanel.add(addButton);
+        buttonPanel.add(Box.createRigidArea(Dimensions.MEDIUM_SQUARE));
+        buttonPanel.add(cancelButton);
 
         final var content = new JPanel();
         content.setLayout(new BorderLayout(Dimensions.MEDIUM_PADDING, Dimensions.MEDIUM_PADDING));
@@ -101,13 +101,13 @@ public class AddDialog extends JDialog {
     }
 
     @Override
-    public void setVisible(final boolean value) {
-        if (value) {
+    public void setVisible(final boolean visible) {
+        if (visible) {
             result.clear();
             selectionModel.clearSelection();
             setLocationRelativeTo(getOwner());
         }
-        super.setVisible(value);
+        super.setVisible(visible);
     }
 
     private void fillResult() {

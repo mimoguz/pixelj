@@ -1,6 +1,5 @@
 package io.github.mimoguz.pixelj.views;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -49,6 +48,19 @@ public class ProjectView extends JFrame {
 
         final var res = Resources.get();
 
+        root = new JTabbedPane();
+
+        charactersScreen = new CharactersScreen(project, root);
+        kerningPairsScreen = new KerningPairsScreen(project, root);
+        previewScreen = new PreviewScreen(project, root);
+        mainActions = new MainActions(project, root);
+        final var mainMenu = new MainMenu(mainActions);
+
+        Actions.registerShortcuts(mainActions.all, root);
+        // Invisible screens should be disabled to prevent shortcut collisions.
+        kerningPairsScreen.setEnabled(false);
+        previewScreen.setEnabled(false);
+
         setTitle(project.getTitle() + " - " + res.getString("applicationName"));
         setIconImages(
                 Stream.of(16, 32, 48, 64, 128, 256)
@@ -61,19 +73,6 @@ public class ProjectView extends JFrame {
                         )
                         .toList()
         );
-
-        root = new JTabbedPane();
-
-        charactersScreen = new CharactersScreen(project, root);
-        kerningPairsScreen = new KerningPairsScreen(project, root);
-        previewScreen = new PreviewScreen(project, root);
-        mainActions = new MainActions(project, this);
-        final var mainMenu = new MainMenu(mainActions);
-
-        Actions.registerShortcuts(mainActions.all, root);
-        // Invisible screens should be disabled to prevent shortcut collisions.
-        kerningPairsScreen.setEnabled(false);
-        previewScreen.setEnabled(false);
 
         project.addChangeListener(this::onChange);
 
@@ -135,7 +134,7 @@ public class ProjectView extends JFrame {
 
             // Fix icon color
             for (var index = 0; index < 3; index++) {
-                if (root.getIconAt(index) instanceof FontIcon icn) {
+                if (root.getIconAt(index) instanceof final FontIcon icn) {
                     icn.setForeground(
                             index == root.getSelectedIndex() ? res.colors.active() : res.colors.inactive()
                     );
@@ -159,50 +158,57 @@ public class ProjectView extends JFrame {
 
         mainMenu.addPopupMenuListener(new PopupMenuListener() {
             @Override
-            public void popupMenuCanceled(PopupMenuEvent e) {
+            public void popupMenuCanceled(final PopupMenuEvent e) {
                 // Ignored
             }
 
             @Override
-            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+            public void popupMenuWillBecomeInvisible(final PopupMenuEvent e) {
                 menuButton.setSelected(false);
             }
 
             @Override
-            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+            public void popupMenuWillBecomeVisible(final PopupMenuEvent e) {
                 // Ignored
             }
         });
 
         Actions.registerShortcuts(java.util.List.of(menuButtonAction), root);
         tabBarButton(menuButton, menuButtonAction, buttonSize);
-        leadingContainer.setLayout(new BorderLayout());
-        leadingContainer.setBackground(root.getBackground());
-        leadingContainer.add(menuButton, BorderLayout.CENTER);
-        leadingContainer.add(divider(buttonSize.width), BorderLayout.SOUTH);
+        leadingContainer.setLayout(new BoxLayout(leadingContainer, BoxLayout.Y_AXIS));
+        leadingContainer.add(menuButton);
         root.putClientProperty(FlatClientProperties.TABBED_PANE_LEADING_COMPONENT, leadingContainer);
 
         /* --------------------------- Trailing component --------------------------- */
         final var trailingContainer = new JPanel();
-        final var settingsButton = tabBarButton(new JButton(), mainActions.showSettingsAction, buttonSize);
-        final var helpButton = tabBarButton(new JButton(), mainActions.showHelpAction, buttonSize);
-        final var c = new GridBagConstraints();
         trailingContainer.setLayout(new GridBagLayout());
         trailingContainer.setBorder(Borders.EMPTY);
-        trailingContainer.setBackground(root.getBackground());
-        c.weighty = 1;
-        trailingContainer.add(Box.createHorizontalGlue(), c);
-        c.weighty = 0;
-        c.gridy = 2;
-        trailingContainer.add(divider(buttonSize.width), c);
-        c.gridy = c.gridy + 1;
-        trailingContainer.add(settingsButton, c);
-        c.gridy = c.gridy + 1;
-        trailingContainer.add(helpButton, c);
+
+        final var constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.BOTH;
+
+        final var emptyBox = new JPanel();
+        emptyBox.setBackground(root.getBackground());
+        emptyBox.setMaximumSize(Dimensions.MAXIMUM);
+        constraints.weighty = 1.0;
+        constraints.gridy = 0;
+        trailingContainer.add(emptyBox, constraints);
+
+        final var settingsButton = tabBarButton(new JButton(), mainActions.showSettingsAction, buttonSize);
+        constraints.weighty = 0.0;
+        constraints.gridy += 1;
+        trailingContainer.add(settingsButton, constraints);
+
+        final var helpButton = tabBarButton(new JButton(), mainActions.showHelpAction, buttonSize);
+        constraints.gridy += 1;
+        trailingContainer.add(helpButton, constraints);
         root.putClientProperty(FlatClientProperties.TABBED_PANE_TRAILING_COMPONENT, trailingContainer);
+
+        /* --------------------------- Other tweaks --------------------------- */
 
         ToolTipManager.sharedInstance().setInitialDelay(100);
         ToolTipManager.sharedInstance().setDismissDelay(3000);
+
         root.putClientProperty(FlatClientProperties.TABBED_PANE_MINIMUM_TAB_WIDTH, buttonSize.width);
         root.putClientProperty(FlatClientProperties.TABBED_PANE_MAXIMUM_TAB_WIDTH, buttonSize.width);
         root.putClientProperty(FlatClientProperties.TABBED_PANE_TAB_HEIGHT, buttonSize.height);
@@ -210,29 +216,32 @@ public class ProjectView extends JFrame {
         root.setTabPlacement(SwingConstants.LEFT);
         root.setFocusable(false);
         add(root);
+
         pack();
         setSize(1200, 720);
         setLocationRelativeTo(null);
     }
 
     private void onChange(final ProjectModel source, final ProjectChangeEvent event) {
-        if (event instanceof ProjectChangeEvent.MetricsChanged metricsChanged) {
-            charactersScreen.updateMetrics(metricsChanged.metrics());
-            kerningPairsScreen.updateMetrics(metricsChanged.metrics());
-            if (previewScreen.isEnabled()) {
-                previewScreen.refresh();
+        switch (event) {
+            case final ProjectChangeEvent.MetricsChanged metricsChanged -> {
+                charactersScreen.updateMetrics(metricsChanged.metrics());
+                kerningPairsScreen.updateMetrics(metricsChanged.metrics());
+                if (previewScreen.isEnabled()) {
+                    previewScreen.refresh();
+                }
             }
+            case final ProjectChangeEvent.TitleChanged titleChanged ->
+                setTitle(titleChanged.title() + " - " + Resources.get().getString("applicationName"));
+            default -> throw new IllegalArgumentException("Unexpected value: " + event);
         }
     }
 
-    private static JPanel divider(int width) {
-        final var divider = new JPanel();
-        divider.setBackground(Resources.get().colors.divider());
-        Components.setFixedSize(divider, new Dimension(width, 1));
-        return divider;
-    }
-
-    private static <T extends AbstractButton> T tabBarButton(T button, Action action, Dimension size) {
+    private static <T extends AbstractButton> T tabBarButton(
+            final T button,
+            final Action action,
+            final Dimension size
+    ) {
         if (action != null) {
             button.setAction(action);
         }
