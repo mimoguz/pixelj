@@ -4,12 +4,10 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.*;
 
@@ -18,6 +16,7 @@ import io.github.mimoguz.pixelj.models.CharacterListModel;
 import io.github.mimoguz.pixelj.models.CharacterModel;
 import io.github.mimoguz.pixelj.models.KerningPairModel;
 import io.github.mimoguz.pixelj.models.Metrics;
+import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.views.characters_screen.AddDialog;
 
 public class CharacterListActions {
@@ -30,8 +29,8 @@ public class CharacterListActions {
     private int defaultCharacterWidth;
     private boolean enabled = true;
     private final CharacterListModel listModel;
-    private final Logger logger;
     private final ListSelectionModel selectionModel;
+    private final JComponent root;
 
     public CharacterListActions(
             final CharacterListModel listModel,
@@ -41,10 +40,7 @@ public class CharacterListActions {
     ) {
         this.listModel = listModel;
         this.selectionModel = selectionModel;
-
-        logger = Logger.getLogger(this.getClass().getName());
-        logger.addHandler(new ConsoleHandler());
-        logger.setLevel(Level.INFO);
+        this.root = root;
 
         addDialog = new AddDialog((JFrame) SwingUtilities.getWindowAncestor(root));
 
@@ -54,7 +50,7 @@ public class CharacterListActions {
 
         showRemoveDialogAction = new ApplicationAction(
                 "charactersShowRemoveDialogAction",
-                (e, action) -> removeSelected()
+                this::showRemoveDialog
         ).setTextKey("charactersShowRemoveDialogAction")
                 .setAccelerator(KeyEvent.VK_MINUS, InputEvent.ALT_DOWN_MASK);
 
@@ -104,24 +100,6 @@ public class CharacterListActions {
         }
     }
 
-    private void removeSelected() {
-        final var index0 = selectionModel.getMinSelectionIndex();
-        final var index1 = selectionModel.getMaxSelectionIndex();
-
-        if (index0 < 0) {
-            return;
-        }
-
-        final var kerningPairs = new HashSet<KerningPairModel>();
-        for (var index = index0; index <= index1; index++) {
-            kerningPairs.addAll(listModel.findDependent(listModel.getElementAt(index)));
-        }
-        if (!kerningPairs.isEmpty()) {
-            logger.log(Level.INFO, "Caution! {0}  kerning pairs will also be removed.", kerningPairs.size());
-        }
-        logger.log(Level.INFO, "Removing  {0} characters.", index1 - index0 + 1);
-    }
-
     private void showAddDialog(final ActionEvent event, final Action action) {
         addDialog.setVisible(true);
         final var result = addDialog.getResult();
@@ -137,5 +115,38 @@ public class CharacterListActions {
                     )
             );
         }
+    }
+
+    private void showRemoveDialog(final ActionEvent event, final Action action) {
+        final var indices = selectionModel.getSelectedIndices();
+        if (indices.length == 0) {
+            return;
+        }
+
+        final var characters = Arrays.stream(indices).mapToObj(listModel::getElementAt).toList();
+        final var kerningPairs = countAffectedKerningPairs(characters);
+
+        final var res = Resources.get();
+        final var message = kerningPairs == 0 ? res.formatString("removingCharactersMessage", indices.length)
+                : res.formatString("removingCharactersAndKerningPairsMessage", indices.length, kerningPairs);
+        final var result = JOptionPane.showConfirmDialog(
+                root,
+                message,
+                res.getString("nonUndoable"),
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+        if (result != JOptionPane.OK_OPTION) {
+            return;
+        }
+        listModel.removeAll(characters);
+    }
+
+    private int countAffectedKerningPairs(final Collection<CharacterModel> characters) {
+        final var kerningPairs = new HashSet<KerningPairModel>();
+        for (var character : characters) {
+            kerningPairs.addAll(listModel.findDependent(character));
+        }
+        return kerningPairs.size();
     }
 }
