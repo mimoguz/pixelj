@@ -214,6 +214,7 @@ public class MetricsDialog extends JDialog {
     public void setVisible(final boolean visible) {
         if (visible) {
             result = null;
+            setLocationRelativeTo(getOwner());
         }
         super.setVisible(visible);
     }
