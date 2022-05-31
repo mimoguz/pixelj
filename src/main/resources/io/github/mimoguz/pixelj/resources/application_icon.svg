@@ -1,8 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
-    <path d="M8,1C11.863,1 15,4.137 15,8C15,11.863 11.863,15 8,15C4.137,15 1,11.863 1,8C1,4.137 4.137,1 8,1ZM8,3C10.76,3 13,5.24 13,8C13,10.76 10.76,13 8,13C5.24,13 3,10.76 3,8C3,5.24 5.24,3 8,3Z" style="fill:rgb(255,116,119);"/>
-    <g transform="matrix(0.707107,0.707107,-0.696111,0.696111,7.5887,-2.90241)">
-        <rect x="7" y="1.071" width="2" height="12.929" style="fill:rgb(255,116,119);"/>
-    </g>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 4.2333332 4.2333335"
+   version="1.1"
+   id="svg5"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs2" />
+  <g
+     id="layer1">
+    <path
+       id="rect1542"
+       style="fill:#f6f6f6;fill-opacity:1;stroke-width:0.264999;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke"
+       d="m 0.26458333,2.1166666 1.05833337,1e-7 c 0.5291666,0 0.79375,-0.2645834 0.79375,-0.79375 C 2.1169605,0.90475977 2.1176551,0.600271 2.1171056,0.26458297 2.116866,0.11852998 2.2351968,2.6564614e-6 2.38125,0 h 1.5875 c 0.1461253,1.1045695e-8 0.2645833,0.118458 0.2645833,0.26458333 l 0,3.17499997 c 0,0.5291667 -0.2645833,0.7937501 -0.79375,0.79375 l -3.17499997,-2e-7 C 0.118458,4.2333331 1.6568541e-8,4.1148751 0,3.9687498 V 2.3812499 C 1.6568541e-8,2.2351246 0.118458,2.1166666 0.26458333,2.1166666 Z" />
+    <rect
+       style="fill:#2979ff;stroke-width:0.264999;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke;fill-opacity:1"
+       id="rect850"
+       width="1.5875"
+       height="1.5875"
+       x="2.3812499"
+       y="0.26458332" />
+    <rect
+       style="fill:#2979ff;stroke-width:0.264999;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke;fill-opacity:1"
+       id="rect852"
+       width="1.5875"
+       height="1.5875001"
+       x="0.26458332"
+       y="2.3812499" />
+    <path
+       id="rect854"
+       style="fill:#7cadff;stroke-width:0.264999;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke"
+       d="M 2.3812499,2.3812499 H 3.96875 l 0,1.0583334 C 3.96875,3.7210776 3.7041667,3.96875 3.4395833,3.96875 H 2.3812499 Z" />
+  </g>
 </svg>
