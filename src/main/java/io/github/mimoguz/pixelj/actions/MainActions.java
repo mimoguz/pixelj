@@ -32,11 +32,9 @@ public class MainActions {
     private final Logger logger;
     private final MetricsDialog metricsDialog;
     private final ProjectModel project;
-    private final JComponent root;
 
     public MainActions(final ProjectModel project, final JComponent root) {
         this.project = project;
-        this.root = root;
         metricsDialog = new MetricsDialog((Frame) SwingUtilities.windowForComponent(root));
 
         logger = Logger.getLogger(this.getClass().getName());
