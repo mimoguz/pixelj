@@ -41,7 +41,7 @@ public class ListPanel extends JPanel implements Detachable {
 
         final var res = Resources.get();
 
-        actions = new KerningPairListActions(listModel, selectionModel);
+        actions = new KerningPairListActions(listModel, selectionModel, root);
         actions.showRemoveDialogAction.setEnabled(false);
         Actions.registerShortcuts(actions.all, root);
 
