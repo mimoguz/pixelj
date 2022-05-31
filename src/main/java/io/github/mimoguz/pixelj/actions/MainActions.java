@@ -20,7 +20,7 @@ import io.github.mimoguz.pixelj.views.MetricsDialog;
 
 public class MainActions {
     public final Collection<ApplicationAction> all;
-    public final ApplicationAction closeProjectAction;
+    public final ApplicationAction returnToProjectManagerAction;
     public final ApplicationAction exportAction;
     public final ApplicationAction quitAction;
     public final ApplicationAction saveAction;
@@ -42,9 +42,10 @@ public class MainActions {
 
         final var res = Resources.get();
 
-        closeProjectAction = new ApplicationAction("closeProjectAction", this::export)
-                .setTextKey("closeProjectAction")
-                .setIcon(Icons.FILE_EXPORT, res.colors.icon(), res.colors.disabledIcon());
+        returnToProjectManagerAction = new ApplicationAction("returnToProjectManagerAction", this::export)
+                .setTextKey("returnToProjectManagerAction")
+                .setIcon(Icons.PROJECT_MANAGER, res.colors.icon(), res.colors.disabledIcon())
+                .setAccelerator(KeyEvent.VK_W, ActionEvent.CTRL_MASK);
 
         exportAction = new ApplicationAction("exportAction", this::export).setTextKey("exportAction")
                 .setIcon(Icons.FILE_EXPORT, res.colors.icon(), res.colors.disabledIcon())
@@ -78,7 +79,7 @@ public class MainActions {
 
         all = java.util.Collections.unmodifiableCollection(
                 List.of(
-                        closeProjectAction,
+                        returnToProjectManagerAction,
                         exportAction,
                         quitAction,
                         saveAction,

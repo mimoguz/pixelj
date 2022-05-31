@@ -19,7 +19,7 @@ public class MainMenu extends JPopupMenu {
         add(new JSeparator(SwingConstants.HORIZONTAL));
         add(actions.showHelpAction);
         add(new JSeparator(SwingConstants.HORIZONTAL));
-        add(actions.closeProjectAction);
+        add(actions.returnToProjectManagerAction);
         add(actions.quitAction);
     }
 }
