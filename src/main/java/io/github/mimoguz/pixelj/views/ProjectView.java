@@ -152,9 +152,12 @@ public class ProjectView extends JFrame {
             } else {
                 mainMenu.setVisible(false);
             }
-        }).setTooltipKey("menuButtonAction")
-                .setIcon(Icons.ELLIPSIS, res.colors.accent(), res.colors.disabledIcon())
-                .setAccelerator(KeyEvent.VK_M, ActionEvent.ALT_MASK);
+        })
+                .setTooltipWithAccelerator(
+                        res.getString("menuButtonAction"),
+                        KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.ALT_MASK)
+                )
+                .setIcon(Icons.ELLIPSIS, res.colors.accent(), res.colors.disabledIcon());
 
         mainMenu.addPopupMenuListener(new PopupMenuListener() {
             @Override
@@ -219,6 +222,7 @@ public class ProjectView extends JFrame {
 
         pack();
         setSize(1200, 720);
+        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
         setLocationRelativeTo(null);
     }
 

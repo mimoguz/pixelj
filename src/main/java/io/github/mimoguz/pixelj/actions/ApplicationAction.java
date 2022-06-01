@@ -36,7 +36,7 @@ public class ApplicationAction extends AbstractAction {
         return key;
     }
 
-    public ApplicationAction setAccelerator(int key, int mask) {
+    public ApplicationAction setAccelerator(final int key, final int mask) {
         return setAccelerator(KeyStroke.getKeyStroke(key, mask));
     }
 
@@ -62,8 +62,18 @@ public class ApplicationAction extends AbstractAction {
         return this;
     }
 
-    public ApplicationAction setTooltipKey(final String value) {
-        putValue(Action.SHORT_DESCRIPTION, Resources.get().getString(value));
+    public ApplicationAction setTooltip(final String value) {
+        putValue(Action.SHORT_DESCRIPTION, value);
+        return this;
+    }
+
+    public ApplicationAction setTooltipWithAccelerator(final String tooltip, final KeyStroke accelerator) {
+        putValue(
+                Action.SHORT_DESCRIPTION,
+                "<html><body>" + tooltip + "<br /><strong>" + accelerator.toString().replace("pressed", "+")
+                        + "</strong><body></html>"
+        );
+        putValue(Action.ACCELERATOR_KEY, accelerator);
         return this;
     }
 }
