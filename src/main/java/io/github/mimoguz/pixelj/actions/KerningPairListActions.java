@@ -1,24 +1,19 @@
 package io.github.mimoguz.pixelj.actions;
 
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.awt.Frame;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.Action;
-import javax.swing.JComponent;
-import javax.swing.JOptionPane;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
-import io.github.mimoguz.pixelj.models.CharacterListModel;
 import io.github.mimoguz.pixelj.models.KerningPairListModel;
+import io.github.mimoguz.pixelj.models.ProjectModel;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.views.kerning_pairs_screen.AddDialog;
 
@@ -27,26 +22,25 @@ public class KerningPairListActions {
     public final ApplicationAction showAddDialogAction;
     public final ApplicationAction showRemoveDialogAction;
 
+    private final AddDialog addDialog;
     @SuppressWarnings("unused")
     private final KerningPairListModel listModel;
-    @SuppressWarnings("unused")
-    private final ListSelectionModel selectionModel;
     private final Logger logger;
     private final JComponent root;
-    private final AddDialog addDialog;
+    @SuppressWarnings("unused")
+    private final ListSelectionModel selectionModel;
 
     public KerningPairListActions(
-            final CharacterListModel characterListModel,
-            final KerningPairListModel listModel,
+            final ProjectModel project,
             final ListSelectionModel selectionModel,
             final JComponent root
     ) {
 
-        this.listModel = listModel;
+        listModel = project.getKerningPairs();
         this.selectionModel = selectionModel;
         this.root = root;
 
-        addDialog = new AddDialog(characterListModel, (Frame) SwingUtilities.getWindowAncestor(root));
+        addDialog = new AddDialog(project.getCharacters(), (Frame) SwingUtilities.getWindowAncestor(root));
 
         logger = Logger.getLogger(this.getClass().getName());
         logger.addHandler(new ConsoleHandler());
@@ -69,6 +63,10 @@ public class KerningPairListActions {
 
     private void showAddDialog(final ActionEvent event, final Action action) {
         addDialog.setVisible(true);
+        final var result = addDialog.getResult();
+        if (result != null) {
+            listModel.add(result);
+        }
     }
 
     private void showRemoveDialog(final ActionEvent event, final Action action) {

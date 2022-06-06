@@ -42,12 +42,7 @@ public class ListPanel extends JPanel implements Detachable {
 
         final var res = Resources.get();
 
-        actions = new KerningPairListActions(
-                project.getCharacters(),
-                project.getKerningPairs(),
-                selectionModel,
-                root
-        );
+        actions = new KerningPairListActions(project, selectionModel, root);
         actions.showRemoveDialogAction.setEnabled(false);
         Actions.registerShortcuts(actions.all, root);
 
@@ -134,25 +129,25 @@ public class ListPanel extends JPanel implements Detachable {
     }
 
     @Override
-    public void setEnabled(boolean value) {
+    public void setEnabled(final boolean value) {
         super.setEnabled(value);
         actions.showAddDialogAction.setEnabled(value);
         actions.showRemoveDialogAction.setEnabled(value && (selectionModel.getMinSelectionIndex() >= 0));
     }
 
     private SearchableComboBox<BlockData> filterBox(
-            Function<KerningPairListModel, BiConsumer<Integer, Integer>> setter
+            final Function<KerningPairListModel, BiConsumer<Integer, Integer>> setter
     ) {
         final var box = new SearchableComboBox<BlockData>(Resources.get().getBlocks());
         box.setMaximumSize(Dimensions.MAXIMUM_COMBO_BOX_SIZE);
         box.setMinimumSize(Dimensions.MINIMUM_COMBO_BOX_SIZE);
         box.addActionListener(event -> {
-            if (list.getModel() instanceof KerningPairListModel lm) {
+            if (list.getModel() instanceof final KerningPairListModel lm) {
                 final var item = box.getSelectedItem();
                 try {
                     final var block = (BlockData) item;
                     setter.apply(lm).accept(block.starts(), block.ends());
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     setter.apply(lm).accept(0, Integer.MAX_VALUE);
                 }
             }

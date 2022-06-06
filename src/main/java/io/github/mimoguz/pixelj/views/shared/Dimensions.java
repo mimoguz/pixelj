@@ -11,6 +11,7 @@ public class Dimensions {
     public static final int MEDIUM_PADDING = 8;
     public static final Dimension MEDIUM_SQUARE = new Dimension(8, 8);
     public static final Dimension MINIMUM_COMBO_BOX_SIZE = new Dimension(64, 48);
+    public static final int SMALL_PADDING = 4;
     public static final Dimension SMALL_SQUARE = new Dimension(4, 4);
     public static final Dimension SPINNER_SIZE = new Dimension(90, 30);
     public static final Dimension TEXT_BUTTON_SIZE = new Dimension(90, 25);

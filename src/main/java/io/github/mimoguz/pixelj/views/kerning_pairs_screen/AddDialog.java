@@ -1,42 +1,32 @@
 package io.github.mimoguz.pixelj.views.kerning_pairs_screen;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dialog;
+import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 
 import javax.swing.*;
 
 import io.github.mimoguz.pixelj.controls.SearchableComboBox;
 import io.github.mimoguz.pixelj.models.BlockData;
-import io.github.mimoguz.pixelj.models.CharacterData;
 import io.github.mimoguz.pixelj.models.CharacterListModel;
 import io.github.mimoguz.pixelj.models.CharacterModel;
 import io.github.mimoguz.pixelj.models.KerningPairModel;
 import io.github.mimoguz.pixelj.resources.Resources;
-import io.github.mimoguz.pixelj.views.shared.Borders;
-import io.github.mimoguz.pixelj.views.shared.CharacterCellRenderer;
-import io.github.mimoguz.pixelj.views.shared.CharacterModelCell;
-import io.github.mimoguz.pixelj.views.shared.Components;
-import io.github.mimoguz.pixelj.views.shared.Dimensions;
+import io.github.mimoguz.pixelj.views.shared.*;
 
 public class AddDialog extends JDialog {
     private static final long serialVersionUID = -2069391980463198716L;
 
-    private transient KerningPairModel result;
-    private final ListSelectionModel selectionModel = new DefaultListSelectionModel();
     private transient CharacterModel left;
+    private transient KerningPairModel result;
     private transient CharacterModel right;
+    private final ListSelectionModel selectionModel = new DefaultListSelectionModel();
 
-    public AddDialog(CharacterListModel listModel, final Frame owner) {
+    public AddDialog(final CharacterListModel source, final Frame owner) {
         super(
                 owner,
-                Resources.get().getString("charactersAddDialogTitle"),
+                Resources.get().getString("kerningPairsAddDialogTitle"),
                 Dialog.ModalityType.APPLICATION_MODAL
         );
 
@@ -44,7 +34,7 @@ public class AddDialog extends JDialog {
 
         final JList<CharacterModel> list = new JList<>();
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        list.setModel(listModel);
+        list.setModel(source);
         list.setSelectionModel(selectionModel);
         list.setCellRenderer(new CharacterCellRenderer(48));
 
@@ -57,7 +47,7 @@ public class AddDialog extends JDialog {
             final var item = filterBox.getSelectedItem();
             try {
                 final var block = (BlockData) item;
-                listModel.setRange(block.starts(), block.ends());
+                source.setRange(block.starts(), block.ends());
             } catch (final Exception e) {
                 // Ignore
             }
@@ -81,7 +71,7 @@ public class AddDialog extends JDialog {
         setLeftButton.setEnabled(false);
         setLeftButton.addActionListener(event -> {
             if (selectionModel.getMinSelectionIndex() >= 0) {
-                left = listModel.getElementAt(selectionModel.getMinSelectionIndex());
+                left = source.getElementAt(selectionModel.getMinSelectionIndex());
                 leftView.set(left, Integer.MAX_VALUE);
                 addButton.setEnabled(right != null);
             }
@@ -92,7 +82,7 @@ public class AddDialog extends JDialog {
         setRightButton.setEnabled(false);
         setRightButton.addActionListener(event -> {
             if (selectionModel.getMinSelectionIndex() >= 0) {
-                right = listModel.getElementAt(selectionModel.getMinSelectionIndex());
+                right = source.getElementAt(selectionModel.getMinSelectionIndex());
                 rightView.set(right, Integer.MAX_VALUE);
                 addButton.setEnabled(right != null);
             }
@@ -107,33 +97,40 @@ public class AddDialog extends JDialog {
         Components.setFixedSize(cancelButton, Dimensions.TEXT_BUTTON_SIZE);
         cancelButton.addActionListener(event -> setVisible(false));
 
-        final var selectionPanel = new JPanel(new GridBagLayout());
-        selectionPanel.setBackground(Color.CYAN);
+        final var selectionPanel = new JPanel();
+        selectionPanel.setLayout(new BoxLayout(selectionPanel, BoxLayout.Y_AXIS));
+        selectionPanel.setBorder(Borders.EMPTY);
 
-        final var cons = new GridBagConstraints();
+        final var leftSelectionPanel = new JPanel();
+        leftSelectionPanel.setLayout(new BoxLayout(leftSelectionPanel, BoxLayout.X_AXIS));
+        leftSelectionPanel
+                .setMaximumSize(new Dimension(Integer.MAX_VALUE, 48 + Dimensions.SMALL_PADDING * 2));
+        leftSelectionPanel.add(setLeftButton);
+        leftSelectionPanel.add(leftView);
+        leftSelectionPanel.add(Box.createHorizontalGlue());
+        leftSelectionPanel.setBorder(Borders.MEDIUM_EMPTY);
+        Components.addOuterBorder(
+                leftSelectionPanel,
+                BorderFactory.createMatteBorder(1, 0, 1, 0, res.colors.divider())
+        );
 
-        cons.gridx = 0;
-        cons.gridy = 0;
-        cons.gridwidth = 2;
-        cons.weighty = 1.0;
-        cons.fill = GridBagConstraints.BOTH;
-        selectionPanel.add(scrollPanel, cons);
+        final var rightSelectionPanel = new JPanel();
+        rightSelectionPanel.setLayout(new BoxLayout(rightSelectionPanel, BoxLayout.X_AXIS));
+        rightSelectionPanel
+                .setMaximumSize(new Dimension(Integer.MAX_VALUE, 48 + Dimensions.SMALL_PADDING * 2));
+        rightSelectionPanel.add(setRightButton);
+        rightSelectionPanel.add(rightView);
+        rightSelectionPanel.add(Box.createHorizontalGlue());
+        rightSelectionPanel.setBorder(Borders.MEDIUM_EMPTY);
+        Components.addOuterBorder(
+                rightSelectionPanel,
+                BorderFactory.createMatteBorder(0, 0, 1, 0, res.colors.divider())
+        );
 
-        cons.gridy += 1;
-        cons.gridx = 0;
-        cons.gridwidth = 1;
-        cons.weighty = 0.0;
-        cons.weightx = 0.5;
-        cons.fill = GridBagConstraints.HORIZONTAL;
-        selectionPanel.add(setLeftButton, cons);
-        cons.gridx = 1;
-        selectionPanel.add(setRightButton, cons);
-
-        cons.gridy += 1;
-        cons.gridx = 0;
-        selectionPanel.add(leftView, cons);
-        cons.gridx = 1;
-        selectionPanel.add(rightView, cons);
+        selectionPanel.add(scrollPanel);
+        selectionPanel.add(Box.createVerticalStrut(Dimensions.MEDIUM_PADDING));
+        selectionPanel.add(leftSelectionPanel);
+        selectionPanel.add(rightSelectionPanel);
 
         final var buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
