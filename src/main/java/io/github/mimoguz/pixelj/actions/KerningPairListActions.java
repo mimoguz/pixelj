@@ -3,6 +3,7 @@ package io.github.mimoguz.pixelj.actions;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.Frame;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -14,9 +15,12 @@ import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 
+import io.github.mimoguz.pixelj.models.CharacterListModel;
 import io.github.mimoguz.pixelj.models.KerningPairListModel;
 import io.github.mimoguz.pixelj.resources.Resources;
+import io.github.mimoguz.pixelj.views.kerning_pairs_screen.AddDialog;
 
 public class KerningPairListActions {
     public final Collection<ApplicationAction> all;
@@ -29,8 +33,10 @@ public class KerningPairListActions {
     private final ListSelectionModel selectionModel;
     private final Logger logger;
     private final JComponent root;
+    private final AddDialog addDialog;
 
     public KerningPairListActions(
+            final CharacterListModel characterListModel,
             final KerningPairListModel listModel,
             final ListSelectionModel selectionModel,
             final JComponent root
@@ -39,6 +45,8 @@ public class KerningPairListActions {
         this.listModel = listModel;
         this.selectionModel = selectionModel;
         this.root = root;
+
+        addDialog = new AddDialog(characterListModel, (Frame) SwingUtilities.getWindowAncestor(root));
 
         logger = Logger.getLogger(this.getClass().getName());
         logger.addHandler(new ConsoleHandler());
@@ -60,7 +68,7 @@ public class KerningPairListActions {
     }
 
     private void showAddDialog(final ActionEvent event, final Action action) {
-        logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
+        addDialog.setVisible(true);
     }
 
     private void showRemoveDialog(final ActionEvent event, final Action action) {

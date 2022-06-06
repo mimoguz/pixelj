@@ -15,6 +15,7 @@ import io.github.mimoguz.pixelj.controls.SearchableComboBox;
 import io.github.mimoguz.pixelj.models.BlockData;
 import io.github.mimoguz.pixelj.models.KerningPairListModel;
 import io.github.mimoguz.pixelj.models.KerningPairModel;
+import io.github.mimoguz.pixelj.models.ProjectModel;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.util.Detachable;
 import io.github.mimoguz.pixelj.views.shared.Borders;
@@ -33,7 +34,7 @@ public class ListPanel extends JPanel implements Detachable {
     private final transient ListSelectionModel selectionModel;
 
     public ListPanel(
-            final KerningPairListModel listModel,
+            final ProjectModel project,
             final ListSelectionModel selectionModel,
             final JComponent root
     ) {
@@ -41,7 +42,12 @@ public class ListPanel extends JPanel implements Detachable {
 
         final var res = Resources.get();
 
-        actions = new KerningPairListActions(listModel, selectionModel, root);
+        actions = new KerningPairListActions(
+                project.getCharacters(),
+                project.getKerningPairs(),
+                selectionModel,
+                root
+        );
         actions.showRemoveDialogAction.setEnabled(false);
         Actions.registerShortcuts(actions.all, root);
 
@@ -53,7 +59,7 @@ public class ListPanel extends JPanel implements Detachable {
         removeButton.setAction(actions.showRemoveDialogAction);
         Components.setFixedSize(removeButton, Dimensions.TEXT_BUTTON_SIZE);
 
-        list = new JList<>(listModel);
+        list = new JList<>(project.getKerningPairs());
         list.setSelectionModel(selectionModel);
         list.setCellRenderer(new KerningPairCellRenderer(48));
         list.setMaximumSize(Dimensions.MAXIMUM);

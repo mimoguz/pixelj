@@ -1,4 +1,4 @@
-package io.github.mimoguz.pixelj.views.characters_screen;
+package io.github.mimoguz.pixelj.views.shared;
 
 import java.awt.Component;
 
@@ -7,9 +7,6 @@ import javax.swing.ListCellRenderer;
 
 import io.github.mimoguz.pixelj.models.CharacterData;
 import io.github.mimoguz.pixelj.resources.Resources;
-import io.github.mimoguz.pixelj.views.shared.Borders;
-import io.github.mimoguz.pixelj.views.shared.CharacterCell;
-import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 public class CharacterDataCellRenderer implements ListCellRenderer<CharacterData> {
     private final CharacterCell component = new CharacterCell();

@@ -14,6 +14,7 @@ import io.github.mimoguz.pixelj.models.BlockData;
 import io.github.mimoguz.pixelj.models.CharacterData;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.views.shared.Borders;
+import io.github.mimoguz.pixelj.views.shared.CharacterDataCellRenderer;
 import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
