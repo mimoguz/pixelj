@@ -55,8 +55,14 @@ public class IntObjectMapModel<E extends Comparable<E>> implements ListModel<E> 
             }
             source.put(element.hashCode(), element);
             final var index = insertOrdered(element);
-            index0 = Math.min(index0, index);
-            index1 = Math.max(index1, index);
+            if (index0 == -1 || index < index0) {
+                index0 = index;
+            }
+            if (index1 == -1 || index > index1) {
+                index1 = index;
+            } else if (index > index0) {
+                index1 += 1;
+            }
         }
         if (index0 >= 0) {
             fireIntervalAddedEvent(index0, index1);

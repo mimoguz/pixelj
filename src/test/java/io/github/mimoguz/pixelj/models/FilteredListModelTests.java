@@ -17,17 +17,12 @@ public class FilteredListModelTests {
     }
 
     @Test
-    public void addOne() {
+    public void removeInside() {
         final var model = new IntObjectMapModel<>(List.of(2, 4, 6, 8));
-        model.add(3);
-        assertArrayEquals(new Integer[] { 2, 3, 4, 6, 8 }, model.display.toArray());
-    }
-
-    @Test
-    public void removeAt() {
-        final var model = new IntObjectMapModel<>(List.of(2, 4, 6, 8));
-        model.removeElementAt(2);
-        assertArrayEquals(new Integer[] { 2, 4, 8 }, model.display.toArray());
+        final var wrapper = new FilteredListModel<>(model);
+        wrapper.setFilter(i -> i > 3 && i < 7);
+        model.removeElementAt(1);
+        assertArrayEquals(new Integer[] { 6 }, wrapper.display.toArray());
     }
 
     @Test
@@ -49,5 +44,14 @@ public class FilteredListModelTests {
         final var model = new IntObjectMapModel<>(List.of(2, 4, 6, 8));
         model.remove(4);
         assertArrayEquals(new Integer[] { 2, 6, 8 }, model.display.toArray());
+    }
+
+    @Test
+    public void removeOutside() {
+        final var model = new IntObjectMapModel<>(List.of(2, 4, 6, 8));
+        final var wrapper = new FilteredListModel<>(model);
+        wrapper.setFilter(i -> i > 3 && i < 7);
+        model.removeElementAt(0);
+        assertArrayEquals(new Integer[] { 4, 6 }, wrapper.display.toArray());
     }
 }
