@@ -36,7 +36,7 @@ public class AddDialog extends JDialog {
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setModel(source);
         list.setSelectionModel(selectionModel);
-        list.setCellRenderer(new CharacterCellRenderer(48));
+        list.setCellRenderer(new CharacterCellRenderer(Dimensions.MAXIMUM_PREVIEW_SIZE));
 
         final var scrollPanel = new JScrollPane(list);
         scrollPanel.setMaximumSize(Dimensions.MAXIMUM);
@@ -53,8 +53,8 @@ public class AddDialog extends JDialog {
             }
         });
 
-        final var leftView = new CharacterModelCell(48);
-        final var rightView = new CharacterModelCell(48);
+        final var leftView = new CharacterModelCell(Dimensions.MAXIMUM_PREVIEW_SIZE);
+        final var rightView = new CharacterModelCell(Dimensions.MAXIMUM_PREVIEW_SIZE);
 
         final var addButton = new JButton(res.getString("add"));
         Components.setFixedSize(addButton, Dimensions.TEXT_BUTTON_SIZE);
@@ -103,8 +103,7 @@ public class AddDialog extends JDialog {
 
         final var leftSelectionPanel = new JPanel();
         leftSelectionPanel.setLayout(new BoxLayout(leftSelectionPanel, BoxLayout.X_AXIS));
-        leftSelectionPanel
-                .setMaximumSize(new Dimension(Integer.MAX_VALUE, 48 + Dimensions.SMALL_PADDING * 2));
+        leftSelectionPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, Dimensions.MAXIMUM_PREVIEW_SIZE));
         leftSelectionPanel.add(setLeftButton);
         leftSelectionPanel.add(leftView);
         leftSelectionPanel.add(Box.createHorizontalGlue());
