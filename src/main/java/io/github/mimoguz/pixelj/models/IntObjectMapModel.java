@@ -27,7 +27,7 @@ public class IntObjectMapModel<E extends Comparable<E>> implements ListModel<E> 
     }
 
     public IntObjectMapModel(final Collection<E> elements) {
-        for (var elem : elements) {
+        for (final var elem : elements) {
             if (elem == null) {
                 continue;
             }
@@ -49,7 +49,7 @@ public class IntObjectMapModel<E extends Comparable<E>> implements ListModel<E> 
     public void addAll(final Collection<E> collection) {
         var index0 = -1;
         var index1 = -1;
-        for (var element : collection) {
+        for (final var element : collection) {
             if (element == null || source.contains(element)) {
                 continue;
             }
@@ -142,7 +142,7 @@ public class IntObjectMapModel<E extends Comparable<E>> implements ListModel<E> 
     public void removeAll(final Collection<E> collection) {
         var index0 = -1;
         var index1 = -1;
-        for (var element : collection) {
+        for (final var element : collection) {
             if (element == null) {
                 continue;
             }
@@ -168,14 +168,17 @@ public class IntObjectMapModel<E extends Comparable<E>> implements ListModel<E> 
     }
 
     /**
-     * @param from  Index to visible list, inclusive
-     * @param until Index to visible list, exclusive
+     * @param from Index to visible list, inclusive
+     * @param to   Index to visible list, inclusive
      */
-    public void removeInterval(final int from, final int until) {
-        final var elements = display.subList(from, until);
+    public void removeInterval(final int from, final int to) {
+        if (to < from) {
+            return;
+        }
+        final var elements = display.subList(from, to + 1);
         elements.forEach(e -> source.remove(e.hashCode()));
         display.removeAll(elements);
-        fireIntervalRemovedEvent(from, until);
+        fireIntervalRemovedEvent(from, to - 1);
     }
 
     @Override
@@ -193,12 +196,6 @@ public class IntObjectMapModel<E extends Comparable<E>> implements ListModel<E> 
 
     private int findPlace(final E element) {
         return (int) display.stream().takeWhile(item -> item.compareTo(element) < 0).count();
-    }
-
-    protected int insertOrdered(final E element) {
-        final var index = findPlace(element);
-        display.add(index, element);
-        return index;
     }
 
     protected void fireContentsChangedEvent(final int index0, final int index1) {
@@ -222,5 +219,11 @@ public class IntObjectMapModel<E extends Comparable<E>> implements ListModel<E> 
             lst[index]
                     .intervalRemoved(new ListDataEvent(this, ListDataEvent.INTERVAL_REMOVED, index0, index1));
         }
+    }
+
+    protected int insertOrdered(final E element) {
+        final var index = findPlace(element);
+        display.add(index, element);
+        return index;
     }
 }

@@ -10,12 +10,18 @@ public class FilteredListModel<E extends Comparable<E>> extends IntObjectMapMode
     private final IntObjectMapModel<E> delegate;
     private Predicate<E> filter = t -> true;
 
-    public FilteredListModel(IntObjectMapModel<E> delegate) {
+    public FilteredListModel(final IntObjectMapModel<E> delegate) {
         this.delegate = delegate;
         addAll(delegate.display.stream().filter(filter).toList());
         delegate.addListDataListener(new ListDataListener() {
             @Override
-            public void intervalAdded(ListDataEvent e) {
+            public void contentsChanged(final ListDataEvent e) {
+                clear();
+                addAll(delegate.display.stream().filter(filter).toList());
+            }
+
+            @Override
+            public void intervalAdded(final ListDataEvent e) {
                 if (e.getIndex0() == e.getIndex1()) {
                     final var item = delegate.getElementAt(e.getIndex0());
                     if (filter.test(item)) {
@@ -31,7 +37,7 @@ public class FilteredListModel<E extends Comparable<E>> extends IntObjectMapMode
             }
 
             @Override
-            public void intervalRemoved(ListDataEvent e) {
+            public void intervalRemoved(final ListDataEvent e) {
                 final var items = delegate.display.subList(e.getIndex0(), e.getIndex1())
                         .stream()
                         .filter(filter)
@@ -40,12 +46,6 @@ public class FilteredListModel<E extends Comparable<E>> extends IntObjectMapMode
                     clear();
                     addAll(delegate.display.stream().filter(filter).toList());
                 }
-            }
-
-            @Override
-            public void contentsChanged(ListDataEvent e) {
-                clear();
-                addAll(delegate.display.stream().filter(filter).toList());
             }
         });
     }
@@ -85,6 +85,12 @@ public class FilteredListModel<E extends Comparable<E>> extends IntObjectMapMode
     public void removeInterval(final int from, final int until) {
         final var elements = display.subList(from, until);
         delegate.removeAll(elements);
+    }
+
+    public void setFilter(final Predicate<E> filter) {
+        this.filter = filter;
+        clear();
+        addAll(delegate.display.stream().filter(filter).toList());
     }
 
     @Override
