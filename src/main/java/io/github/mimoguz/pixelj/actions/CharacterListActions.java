@@ -12,10 +12,10 @@ import java.util.List;
 import javax.swing.*;
 
 import io.github.mimoguz.pixelj.graphics.BinaryImage;
-import io.github.mimoguz.pixelj.models.CharacterListModel;
 import io.github.mimoguz.pixelj.models.CharacterModel;
 import io.github.mimoguz.pixelj.models.KerningPairModel;
 import io.github.mimoguz.pixelj.models.Metrics;
+import io.github.mimoguz.pixelj.models.ProjectModel;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.views.characters_screen.AddDialog;
 
@@ -28,17 +28,17 @@ public class CharacterListActions {
     private Dimension canvasSize;
     private int defaultCharacterWidth;
     private boolean enabled = true;
-    private final CharacterListModel listModel;
-    private final ListSelectionModel selectionModel;
+    private final ProjectModel project;
     private final JComponent root;
+    private final ListSelectionModel selectionModel;
 
     public CharacterListActions(
-            final CharacterListModel listModel,
+            final ProjectModel project,
             final ListSelectionModel selectionModel,
             final Metrics metrics,
             final JComponent root
     ) {
-        this.listModel = listModel;
+        this.project = project;
         this.selectionModel = selectionModel;
         this.root = root;
 
@@ -88,16 +88,25 @@ public class CharacterListActions {
     }
 
     @SuppressWarnings("unused")
-    private void addCharacters(int... codePoints) {
-        for (var codePoint : codePoints) {
-            listModel.add(
-                    new CharacterModel(
-                            codePoint,
-                            defaultCharacterWidth,
-                            BinaryImage.of(canvasSize.width, canvasSize.height)
-                    )
-            );
+    private void addCharacters(final int... codePoints) {
+        for (final var codePoint : codePoints) {
+            project.getCharacters()
+                    .add(
+                            new CharacterModel(
+                                    codePoint,
+                                    defaultCharacterWidth,
+                                    BinaryImage.of(canvasSize.width, canvasSize.height)
+                            )
+                    );
         }
+    }
+
+    private int countAffectedKerningPairs(final Collection<CharacterModel> characters) {
+        final var kerningPairs = new HashSet<KerningPairModel>();
+        for (final var character : characters) {
+            kerningPairs.addAll(project.findDependent(character));
+        }
+        return kerningPairs.size();
     }
 
     private void showAddDialog(final ActionEvent event, final Action action) {
@@ -106,14 +115,15 @@ public class CharacterListActions {
         if (result.isEmpty()) {
             return;
         }
-        for (var characterData : result) {
-            listModel.add(
-                    new CharacterModel(
-                            characterData.codePoint(),
-                            defaultCharacterWidth,
-                            BinaryImage.of(canvasSize.width, canvasSize.height, true)
-                    )
-            );
+        for (final var characterData : result) {
+            project.getCharacters()
+                    .add(
+                            new CharacterModel(
+                                    characterData.codePoint(),
+                                    defaultCharacterWidth,
+                                    BinaryImage.of(canvasSize.width, canvasSize.height, true)
+                            )
+                    );
         }
     }
 
@@ -123,6 +133,7 @@ public class CharacterListActions {
             return;
         }
 
+        final var listModel = project.getCharacters();
         final var characters = Arrays.stream(indices).mapToObj(listModel::getElementAt).toList();
         final var kerningPairs = countAffectedKerningPairs(characters);
 
@@ -140,13 +151,5 @@ public class CharacterListActions {
             return;
         }
         listModel.removeAll(characters);
-    }
-
-    private int countAffectedKerningPairs(final Collection<CharacterModel> characters) {
-        final var kerningPairs = new HashSet<KerningPairModel>();
-        for (var character : characters) {
-            kerningPairs.addAll(listModel.findDependent(character));
-        }
-        return kerningPairs.size();
     }
 }

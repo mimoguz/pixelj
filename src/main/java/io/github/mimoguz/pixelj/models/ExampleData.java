@@ -5,6 +5,9 @@ import java.util.List;
 import io.github.mimoguz.pixelj.graphics.BinaryImage;
 
 public class ExampleData {
+    private ExampleData() {
+    }
+
     public static ProjectModel createProject() {
         final var metrics = Metrics.Builder.getDefault().build();
 
@@ -102,12 +105,9 @@ public class ExampleData {
 
         return new ProjectModel(
                 "Example project",
-                new CharacterListModel(characters),
-                new KerningPairListModel(kerningPairs),
+                new HashListModel<>(characters),
+                new HashListModel<>(kerningPairs),
                 metrics
         );
-    }
-
-    private ExampleData() {
     }
 }

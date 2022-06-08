@@ -8,10 +8,7 @@ import java.awt.Frame;
 import javax.swing.*;
 
 import io.github.mimoguz.pixelj.controls.SearchableComboBox;
-import io.github.mimoguz.pixelj.models.BlockData;
-import io.github.mimoguz.pixelj.models.CharacterListModel;
-import io.github.mimoguz.pixelj.models.CharacterModel;
-import io.github.mimoguz.pixelj.models.KerningPairModel;
+import io.github.mimoguz.pixelj.models.*;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.views.shared.*;
 
@@ -23,7 +20,7 @@ public class AddDialog extends JDialog {
     private transient CharacterModel right;
     private final ListSelectionModel selectionModel = new DefaultListSelectionModel();
 
-    public AddDialog(final CharacterListModel source, final Frame owner) {
+    public AddDialog(final HashListModel<CharacterModel> source, final Frame owner) {
         super(
                 owner,
                 Resources.get().getString("kerningPairsAddDialogTitle"),
@@ -32,9 +29,10 @@ public class AddDialog extends JDialog {
 
         final var res = Resources.get();
 
+        final var listModel = new FilteredListModel<>(source);
         final JList<CharacterModel> list = new JList<>();
+        list.setModel(listModel);
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        list.setModel(source);
         list.setSelectionModel(selectionModel);
         list.setCellRenderer(new CharacterCellRenderer(Dimensions.MAXIMUM_PREVIEW_SIZE));
 
@@ -47,7 +45,9 @@ public class AddDialog extends JDialog {
             final var item = filterBox.getSelectedItem();
             try {
                 final var block = (BlockData) item;
-                source.setRange(block.starts(), block.ends());
+                listModel.setFilter(
+                        chr -> chr.getCodePoint() >= block.starts() && chr.getCodePoint() <= block.ends()
+                );
             } catch (final Exception e) {
                 // Ignore
             }

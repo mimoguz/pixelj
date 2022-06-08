@@ -13,7 +13,7 @@ import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.KerningPairListActions;
 import io.github.mimoguz.pixelj.controls.SearchableComboBox;
 import io.github.mimoguz.pixelj.models.BlockData;
-import io.github.mimoguz.pixelj.models.KerningPairListModel;
+import io.github.mimoguz.pixelj.models.FilteredKerningPairListModel;
 import io.github.mimoguz.pixelj.models.KerningPairModel;
 import io.github.mimoguz.pixelj.models.ProjectModel;
 import io.github.mimoguz.pixelj.resources.Resources;
@@ -136,13 +136,13 @@ public class ListPanel extends JPanel implements Detachable {
     }
 
     private SearchableComboBox<BlockData> filterBox(
-            final Function<KerningPairListModel, BiConsumer<Integer, Integer>> setter
+            final Function<FilteredKerningPairListModel, BiConsumer<Integer, Integer>> setter
     ) {
         final var box = new SearchableComboBox<BlockData>(Resources.get().getBlocks());
         box.setMaximumSize(Dimensions.MAXIMUM_COMBO_BOX_SIZE);
         box.setMinimumSize(Dimensions.MINIMUM_COMBO_BOX_SIZE);
         box.addActionListener(event -> {
-            if (list.getModel() instanceof final KerningPairListModel lm) {
+            if (list.getModel() instanceof final FilteredKerningPairListModel lm) {
                 final var item = box.getSelectedItem();
                 try {
                     final var block = (BlockData) item;

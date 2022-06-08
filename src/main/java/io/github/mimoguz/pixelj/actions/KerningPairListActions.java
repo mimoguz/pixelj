@@ -12,7 +12,6 @@ import java.util.logging.Logger;
 
 import javax.swing.*;
 
-import io.github.mimoguz.pixelj.models.KerningPairListModel;
 import io.github.mimoguz.pixelj.models.ProjectModel;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.views.kerning_pairs_screen.AddDialog;
@@ -24,8 +23,8 @@ public class KerningPairListActions {
 
     private final AddDialog addDialog;
     @SuppressWarnings("unused")
-    private final KerningPairListModel listModel;
     private final Logger logger;
+    private final ProjectModel project;
     private final JComponent root;
     @SuppressWarnings("unused")
     private final ListSelectionModel selectionModel;
@@ -36,7 +35,7 @@ public class KerningPairListActions {
             final JComponent root
     ) {
 
-        listModel = project.getKerningPairs();
+        this.project = project;
         this.selectionModel = selectionModel;
         this.root = root;
 
@@ -65,7 +64,7 @@ public class KerningPairListActions {
         addDialog.setVisible(true);
         final var result = addDialog.getResult();
         if (result != null) {
-            listModel.add(result);
+            project.getKerningPairs().add(result);
         }
     }
 
@@ -86,6 +85,7 @@ public class KerningPairListActions {
         if (result != JOptionPane.OK_OPTION) {
             return;
         }
+        final var listModel = project.getKerningPairs();
         listModel.removeAll(Arrays.stream(indices).mapToObj(listModel::getElementAt).toList());
     }
 }

@@ -1,9 +1,11 @@
 package io.github.mimoguz.pixelj.views.characters_screen;
 
-import javax.swing.*;
+import javax.swing.DefaultListSelectionModel;
+import javax.swing.JComponent;
+import javax.swing.JSplitPane;
+import javax.swing.ListSelectionModel;
 
 import io.github.mimoguz.pixelj.controls.GlyphView;
-import io.github.mimoguz.pixelj.models.CharacterListModel;
 import io.github.mimoguz.pixelj.models.Metrics;
 import io.github.mimoguz.pixelj.models.ProjectModel;
 import io.github.mimoguz.pixelj.util.Detachable;
@@ -12,7 +14,6 @@ import io.github.mimoguz.pixelj.views.shared.Dimensions;
 public class CharactersScreen extends JSplitPane implements Detachable {
     private static final long serialVersionUID = -7882245338313749432L;
 
-    private final transient CharacterListModel listModel;
     private final ListPanel listPanel;
     private final PainterPanel painterPanel;
     private final transient ListSelectionModel selectionModel;
@@ -21,8 +22,8 @@ public class CharactersScreen extends JSplitPane implements Detachable {
         selectionModel = new DefaultListSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-        listModel = project.getCharacters();
-        listPanel = new ListPanel(listModel, selectionModel, project.getMetrics(), root);
+        final var listModel = project.getCharacters();
+        listPanel = new ListPanel(project, selectionModel, project.getMetrics(), root);
 
         painterPanel = new PainterPanel(project, root);
         painterPanel.setMetrics(project.getMetrics());
@@ -43,7 +44,7 @@ public class CharactersScreen extends JSplitPane implements Detachable {
         painterPanel.getPainter().addChangeListener((sender, event) -> {
             if (event == GlyphView.ViewChangeEvent.GLYPH_MODIFIED) {
                 final var index = selectionModel.getMinSelectionIndex();
-                if (index >= 0 && painterPanel.getModel() == this.listModel.getElementAt(index)) {
+                if (index >= 0 && painterPanel.getModel() == project.getCharacters().getElementAt(index)) {
                     listModel.requestEvent(index);
                 }
             }

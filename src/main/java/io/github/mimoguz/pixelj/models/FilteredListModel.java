@@ -7,15 +7,18 @@ import java.util.function.Predicate;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
-public class FilteredListModel<E extends Comparable<E>> extends IntObjectMapModel<E> {
+/**
+ * A wrapper for HashListModel which adds filtering capability.
+ */
+public class FilteredListModel<E extends Comparable<E>> extends HashListModel<E> {
     private static record Interval(int index0, int index1) {
     }
 
-    private final IntObjectMapModel<E> delegate;
+    private final HashListModel<E> delegate;
 
     private Predicate<E> filter = t -> true;
 
-    public FilteredListModel(final IntObjectMapModel<E> delegate) {
+    public FilteredListModel(final HashListModel<E> delegate) {
         this.delegate = delegate;
         pushAll(delegate.display);
 
@@ -45,20 +48,7 @@ public class FilteredListModel<E extends Comparable<E>> extends IntObjectMapMode
 
             @Override
             public void intervalRemoved(final ListDataEvent e) {
-                if (e.getIndex0() == e.getIndex1()) {
-                    final var element = delegate.getElementAt(e.getIndex0());
-                    final var hash = element.hashCode();
-                    if (source.containsKey(hash)) {
-                        source.remove(hash);
-                        final var index = display.indexOf(element);
-                        display.remove(index);
-                        fireIntervalRemovedEvent(index, index);
-                    }
-                } else {
-                    clear();
-                    pushAll(delegate.display.stream().filter(filter).toList());
-                    fireContentsChangedEvent(0, display.size());
-                }
+                contentsChanged(e);
             }
         });
     }

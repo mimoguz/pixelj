@@ -5,7 +5,7 @@ import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 
-import io.github.mimoguz.pixelj.models.KerningPairListModel;
+import io.github.mimoguz.pixelj.models.FilteredKerningPairListModel;
 import io.github.mimoguz.pixelj.models.Metrics;
 import io.github.mimoguz.pixelj.models.ProjectModel;
 import io.github.mimoguz.pixelj.util.Detachable;
@@ -15,7 +15,7 @@ public class KerningPairsScreen extends JSplitPane implements Detachable {
     private static final long serialVersionUID = -8264436768125439149L;
 
     private final EditorPanel editorPanel;
-    private final transient KerningPairListModel listModel;
+    private final transient FilteredKerningPairListModel listModel;
     private final ListPanel listPanel;
     private final transient ListSelectionModel selectionModel;
 

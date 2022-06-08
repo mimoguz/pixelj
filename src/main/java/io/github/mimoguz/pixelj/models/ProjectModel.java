@@ -1,6 +1,11 @@
 package io.github.mimoguz.pixelj.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.event.EventListenerList;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 
 import io.github.mimoguz.pixelj.util.ChangeListener;
 import io.github.mimoguz.pixelj.util.Changeable;
@@ -23,8 +28,10 @@ public class ProjectModel
         // Empty
     }
 
-    private final CharacterListModel characters;
-    private final KerningPairListModel kerningPairs;
+    private final HashListModel<CharacterModel> characters;
+    private final ListDataListener kerningPairRemover;
+    private final HashListModel<KerningPairModel> kerningPairs;
+
     private final EventListenerList listeners = new EventListenerList();
 
     private Metrics metrics;
@@ -33,22 +40,68 @@ public class ProjectModel
 
     public ProjectModel(
             final String title,
-            final CharacterListModel characters,
-            final KerningPairListModel kerningPairs,
+            final HashListModel<CharacterModel> characters,
+            final HashListModel<KerningPairModel> kerningPairs,
             final Metrics metrics
     ) {
         this.title = title;
         this.characters = characters;
         this.kerningPairs = kerningPairs;
         this.metrics = metrics;
-        characters.pair(kerningPairs);
+
+        kerningPairRemover = new ListDataListener() {
+            @Override
+            public void contentsChanged(final ListDataEvent e) {
+                sync();
+            }
+
+            @Override
+            public void intervalAdded(final ListDataEvent e) { // Ignore
+            }
+
+            @Override
+            public void intervalRemoved(final ListDataEvent e) {
+                sync();
+            }
+
+            private void sync() {
+
+                if (kerningPairs == null) {
+                    return;
+                }
+
+                // Kerning pairs which depend on non-existing characters
+                final var marked = new ArrayList<KerningPairModel>();
+                for (var index = 0; index < kerningPairs.getSize(); index++) {
+                    final var model = kerningPairs.getElementAt(index);
+                    if (
+                        !characters.sourceContains(model.getLeft())
+                                || !characters.sourceContains(model.getRight())
+                    ) {
+                        marked.add(model);
+                    }
+                }
+
+                kerningPairs.removeAll(marked);
+            }
+        };
+
+        characters.addListDataListener(kerningPairRemover);
     }
 
-    public CharacterListModel getCharacters() {
+    public int countDependent(final CharacterModel model) {
+        return kerningPairs.countWhere(p -> p.getLeft().equals(model) || p.getRight().equals(model));
+    }
+
+    public List<KerningPairModel> findDependent(final CharacterModel model) {
+        return kerningPairs.find(p -> p.getLeft().equals(model) || p.getRight().equals(model));
+    }
+
+    public HashListModel<CharacterModel> getCharacters() {
         return characters;
     }
 
-    public KerningPairListModel getKerningPairs() {
+    public HashListModel<KerningPairModel> getKerningPairs() {
         return kerningPairs;
     }
 
@@ -70,12 +123,12 @@ public class ProjectModel
         return title;
     }
 
-    public void setMetrics(Metrics value) {
+    public void setMetrics(final Metrics value) {
         metrics = value;
         fireChangeEvent(this, new ProjectChangeEvent.MetricsChanged(value));
     }
 
-    public void setTitle(String value) {
+    public void setTitle(final String value) {
         title = value;
         fireChangeEvent(this, new ProjectChangeEvent.TitleChanged(value));
     }

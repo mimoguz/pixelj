@@ -7,10 +7,7 @@ import javax.swing.*;
 import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.CharacterListActions;
 import io.github.mimoguz.pixelj.controls.SearchableComboBox;
-import io.github.mimoguz.pixelj.models.BlockData;
-import io.github.mimoguz.pixelj.models.CharacterListModel;
-import io.github.mimoguz.pixelj.models.CharacterModel;
-import io.github.mimoguz.pixelj.models.Metrics;
+import io.github.mimoguz.pixelj.models.*;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.util.Detachable;
 import io.github.mimoguz.pixelj.views.shared.Borders;
@@ -29,7 +26,7 @@ public class ListPanel extends JPanel implements Detachable {
     private final transient ListSelectionModel selectionModel;
 
     public ListPanel(
-            final CharacterListModel listModel,
+            final ProjectModel project,
             final ListSelectionModel selectionModel,
             final Metrics metrics,
             final JComponent root
@@ -38,7 +35,7 @@ public class ListPanel extends JPanel implements Detachable {
 
         final var res = Resources.get();
 
-        actions = new CharacterListActions(listModel, selectionModel, metrics, root);
+        actions = new CharacterListActions(project, selectionModel, metrics, root);
         actions.showRemoveDialogAction.setEnabled(false);
         Actions.registerShortcuts(actions.all, root);
 
@@ -50,6 +47,7 @@ public class ListPanel extends JPanel implements Detachable {
         removeButton.setAction(actions.showRemoveDialogAction);
         Components.setFixedSize(removeButton, Dimensions.TEXT_BUTTON_SIZE);
 
+        final var listModel = new FilteredListModel<>(project.getCharacters());
         list = new JList<>(listModel);
         list.setSelectionModel(selectionModel);
         list.setCellRenderer(new CharacterCellRenderer(48));
@@ -60,14 +58,14 @@ public class ListPanel extends JPanel implements Detachable {
         filterBox.setMaximumSize(Dimensions.MAXIMUM_COMBO_BOX_SIZE);
         filterBox.setMinimumSize(Dimensions.MINIMUM_COMBO_BOX_SIZE);
         filterBox.addActionListener(event -> {
-            if (list.getModel() instanceof CharacterListModel lm) {
-                final var item = filterBox.getSelectedItem();
-                try {
-                    final var block = (BlockData) item;
-                    lm.setRange(block.starts(), block.ends());
-                } catch (Exception e) {
-                    lm.setRange(0, Integer.MAX_VALUE);
-                }
+            final var item = filterBox.getSelectedItem();
+            try {
+                final var block = (BlockData) item;
+                listModel.setFilter(
+                        chr -> chr.getCodePoint() >= block.starts() && chr.getCodePoint() <= block.ends()
+                );
+            } catch (final Exception e) {
+                listModel.setFilter(chr -> true);
             }
         });
 
