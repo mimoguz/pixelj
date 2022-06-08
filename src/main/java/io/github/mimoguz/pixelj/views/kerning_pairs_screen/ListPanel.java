@@ -33,11 +33,7 @@ public class ListPanel extends JPanel implements Detachable {
     private final SearchableComboBox<BlockData> rightFilterBox;
     private final transient ListSelectionModel selectionModel;
 
-    public ListPanel(
-            final Project project,
-            final ListSelectionModel selectionModel,
-            final JComponent root
-    ) {
+    public ListPanel(final Project project, final ListSelectionModel selectionModel, final JComponent root) {
         this.selectionModel = selectionModel;
 
         final var res = Resources.get();
@@ -121,7 +117,6 @@ public class ListPanel extends JPanel implements Detachable {
         return list;
     }
 
-    @SuppressWarnings("unchecked")
     public SortedList<KerningPair> getListModel() {
         return listModel;
     }
