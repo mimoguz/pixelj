@@ -60,6 +60,7 @@ public class KerningPairListActions {
         }
     }
 
+    // FIXME: IndexOutOfBoundsException on remove
     private void showRemoveDialog(final ActionEvent event, final Action action) {
         final var indices = selectionModel.getSelectedIndices();
         if (indices.length == 0) {
