@@ -7,8 +7,6 @@ import java.awt.event.KeyEvent;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Logger;
 
 import javax.swing.*;
 
@@ -22,11 +20,8 @@ public class KerningPairListActions {
     public final ApplicationAction showRemoveDialogAction;
 
     private final AddDialog addDialog;
-    @SuppressWarnings("unused")
-    private final Logger logger;
     private final Project project;
     private final JComponent root;
-    @SuppressWarnings("unused")
     private final ListSelectionModel selectionModel;
 
     public KerningPairListActions(
@@ -40,9 +35,6 @@ public class KerningPairListActions {
         this.root = root;
 
         addDialog = new AddDialog(project.getCharacters(), (Frame) SwingUtilities.getWindowAncestor(root));
-
-        logger = Logger.getLogger(this.getClass().getName());
-        logger.addHandler(new ConsoleHandler());
 
         showAddDialogAction = new ApplicationAction("showAddDialog", this::showAddDialog)
                 .setTextKey("kerningPairsShowAddDialogAction")
