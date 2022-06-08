@@ -35,7 +35,7 @@ public class CharacterCell extends JPanel {
         constraints.gridx = 1;
         constraints.gridy = 0;
         constraints.weightx = 1.0;
-        constraints.weighty = 0.0;
+        constraints.weighty = 1.0;
         constraints.anchor = GridBagConstraints.SOUTHWEST;
         add(subtitle, constraints);
 

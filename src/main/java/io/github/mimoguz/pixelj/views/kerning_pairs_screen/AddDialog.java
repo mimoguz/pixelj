@@ -2,7 +2,6 @@ package io.github.mimoguz.pixelj.views.kerning_pairs_screen;
 
 import java.awt.BorderLayout;
 import java.awt.Dialog;
-import java.awt.Dimension;
 import java.awt.Frame;
 
 import javax.swing.*;
@@ -97,39 +96,53 @@ public class AddDialog extends JDialog {
         Components.setFixedSize(cancelButton, Dimensions.TEXT_BUTTON_SIZE);
         cancelButton.addActionListener(event -> setVisible(false));
 
+        final var centerPanel = new JPanel(new BorderLayout());
+        centerPanel.add(scrollPanel, BorderLayout.CENTER);
+
         final var selectionPanel = new JPanel();
-        selectionPanel.setLayout(new BoxLayout(selectionPanel, BoxLayout.Y_AXIS));
         selectionPanel.setBorder(Borders.EMPTY);
+        final var selectionPanelLayout = new GroupLayout(selectionPanel);
+        selectionPanel.setLayout(selectionPanelLayout);
 
-        final var leftSelectionPanel = new JPanel();
-        leftSelectionPanel.setLayout(new BoxLayout(leftSelectionPanel, BoxLayout.X_AXIS));
-        leftSelectionPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, Dimensions.MAXIMUM_PREVIEW_SIZE));
-        leftSelectionPanel.add(setLeftButton);
-        leftSelectionPanel.add(leftView);
-        leftSelectionPanel.add(Box.createHorizontalGlue());
-        leftSelectionPanel.setBorder(Borders.MEDIUM_EMPTY);
-        Components.addOuterBorder(
-                leftSelectionPanel,
-                BorderFactory.createMatteBorder(1, 0, 1, 0, res.colors.divider())
+        selectionPanelLayout.setHorizontalGroup(
+                selectionPanelLayout.createSequentialGroup()
+                        .addGroup(
+                                selectionPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(setLeftButton)
+                                        .addComponent(setRightButton)
+                        )
+                        .addGroup(
+                                selectionPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(
+                                                leftView,
+                                                GroupLayout.DEFAULT_SIZE,
+                                                GroupLayout.PREFERRED_SIZE,
+                                                Short.MAX_VALUE
+                                        )
+                                        .addComponent(
+                                                rightView,
+                                                GroupLayout.DEFAULT_SIZE,
+                                                GroupLayout.PREFERRED_SIZE,
+                                                Short.MAX_VALUE
+                                        )
+                        )
         );
 
-        final var rightSelectionPanel = new JPanel();
-        rightSelectionPanel.setLayout(new BoxLayout(rightSelectionPanel, BoxLayout.X_AXIS));
-        rightSelectionPanel
-                .setMaximumSize(new Dimension(Integer.MAX_VALUE, 48 + Dimensions.SMALL_PADDING * 2));
-        rightSelectionPanel.add(setRightButton);
-        rightSelectionPanel.add(rightView);
-        rightSelectionPanel.add(Box.createHorizontalGlue());
-        rightSelectionPanel.setBorder(Borders.MEDIUM_EMPTY);
-        Components.addOuterBorder(
-                rightSelectionPanel,
-                BorderFactory.createMatteBorder(0, 0, 1, 0, res.colors.divider())
+        selectionPanelLayout.setVerticalGroup(
+                selectionPanelLayout.createSequentialGroup()
+                        .addGroup(
+                                selectionPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+                                        .addComponent(setLeftButton)
+                                        .addComponent(leftView, 64, 64, 64)
+                        )
+                        .addGroup(
+                                selectionPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+                                        .addComponent(setRightButton)
+                                        .addComponent(rightView, 64, 64, 64)
+                        )
         );
 
-        selectionPanel.add(scrollPanel);
-        selectionPanel.add(Box.createVerticalStrut(Dimensions.MEDIUM_PADDING));
-        selectionPanel.add(leftSelectionPanel);
-        selectionPanel.add(rightSelectionPanel);
+        centerPanel.add(selectionPanel, BorderLayout.SOUTH);
 
         final var buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
@@ -142,7 +155,7 @@ public class AddDialog extends JDialog {
         content.setLayout(new BorderLayout(Dimensions.MEDIUM_PADDING, Dimensions.MEDIUM_PADDING));
 
         content.add(filterBox, BorderLayout.NORTH);
-        content.add(selectionPanel, BorderLayout.CENTER);
+        content.add(centerPanel, BorderLayout.CENTER);
         content.add(buttonPanel, BorderLayout.SOUTH);
         content.setBorder(Borders.MEDIUM_EMPTY);
         setContentPane(content);

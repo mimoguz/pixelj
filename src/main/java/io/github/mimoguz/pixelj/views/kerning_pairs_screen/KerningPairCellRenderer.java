@@ -9,6 +9,7 @@ import javax.swing.ListCellRenderer;
 
 import io.github.mimoguz.pixelj.models.KerningPair;
 import io.github.mimoguz.pixelj.views.shared.CharacterModelCell;
+import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 public class KerningPairCellRenderer implements ListCellRenderer<KerningPair> {
     private final JPanel component = new JPanel(new GridLayout(1, 2));
@@ -31,7 +32,7 @@ public class KerningPairCellRenderer implements ListCellRenderer<KerningPair> {
             final boolean isSelected,
             final boolean cellHasFocus
     ) {
-        final var partWidth = list.getWidth() / 2;
+        final var partWidth = list.getWidth() / 2 - Dimensions.MEDIUM_PADDING;
         left.set(value.getLeft(), partWidth);
         right.set(value.getRight(), partWidth);
 
