@@ -35,8 +35,9 @@ public class FilteredListModel<E extends Comparable<E>> extends HashListModel<E>
             @Override
             public void intervalAdded(final ListDataEvent e) {
                 if (e.getIndex0() == e.getIndex1()) {
-                    if (push(delegate.getElementAt(e.getIndex0()))) {
-                        fireIntervalAddedEvent(e.getIndex0(), e.getIndex0());
+                    final var index = push(delegate.getElementAt(e.getIndex0()));
+                    if (index >= 0) {
+                        fireIntervalAddedEvent(index, index);
                     }
                 } else {
                     final var interval = pushAll(delegate.display.subList(e.getIndex0(), e.getIndex1() + 1));
@@ -110,13 +111,12 @@ public class FilteredListModel<E extends Comparable<E>> extends HashListModel<E>
         return delegate.sourceContains(element);
     }
 
-    private boolean push(final E element) {
+    private int push(final E element) {
         if (filter.test(element) && !source.containsKey(element.hashCode())) {
             source.put(element.hashCode(), element);
-            insertOrdered(element);
-            return true;
+            return insertOrdered(element);
         }
-        return false;
+        return -1;
     }
 
     private Interval pushAll(final Collection<E> collection) {

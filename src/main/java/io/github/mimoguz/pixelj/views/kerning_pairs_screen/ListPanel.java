@@ -3,7 +3,7 @@ package io.github.mimoguz.pixelj.views.kerning_pairs_screen;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
+import java.util.function.Predicate;
 
 import javax.swing.*;
 
@@ -12,10 +12,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.KerningPairListActions;
 import io.github.mimoguz.pixelj.controls.SearchableComboBox;
-import io.github.mimoguz.pixelj.models.BlockData;
-import io.github.mimoguz.pixelj.models.FilteredKerningPairListModel;
-import io.github.mimoguz.pixelj.models.KerningPairModel;
-import io.github.mimoguz.pixelj.models.ProjectModel;
+import io.github.mimoguz.pixelj.models.*;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.util.Detachable;
 import io.github.mimoguz.pixelj.views.shared.Borders;
@@ -27,8 +24,11 @@ public class ListPanel extends JPanel implements Detachable {
 
     private final transient KerningPairListActions actions;
     private final JButton addButton;
+    private Predicate<KerningPairModel> filterLeft = model -> true;
+    private final Predicate<KerningPairModel> filterRight = model -> true;
     private final SearchableComboBox<BlockData> leftFilterBox;
     private final JList<KerningPairModel> list;
+    private final transient FilteredListModel<KerningPairModel> listModel;
     private final JButton removeButton;
     private final SearchableComboBox<BlockData> rightFilterBox;
     private final transient ListSelectionModel selectionModel;
@@ -54,14 +54,15 @@ public class ListPanel extends JPanel implements Detachable {
         removeButton.setAction(actions.showRemoveDialogAction);
         Components.setFixedSize(removeButton, Dimensions.TEXT_BUTTON_SIZE);
 
-        list = new JList<>(project.getKerningPairs());
+        listModel = new FilteredListModel<>(project.getKerningPairs());
+        list = new JList<>(listModel);
         list.setSelectionModel(selectionModel);
         list.setCellRenderer(new KerningPairCellRenderer(48));
         list.setMaximumSize(Dimensions.MAXIMUM);
         setBorder(Borders.EMPTY);
 
-        leftFilterBox = filterBox(lm -> (lm::setLeftRange));
-        rightFilterBox = filterBox(lm -> (lm::setRightRange));
+        leftFilterBox = filterBox(this::setFilterLeft);
+        rightFilterBox = filterBox(this::setFilterRight);
 
         setPreferredSize(new Dimension(520, 100));
         setMinimumSize(new Dimension(220, 100));
@@ -120,6 +121,11 @@ public class ListPanel extends JPanel implements Detachable {
         return list;
     }
 
+    @SuppressWarnings("unchecked")
+    public HashListModel<KerningPairModel> getListModel() {
+        return listModel;
+    }
+
     public JButton getRemoveButton() {
         return removeButton;
     }
@@ -135,23 +141,30 @@ public class ListPanel extends JPanel implements Detachable {
         actions.showRemoveDialogAction.setEnabled(value && (selectionModel.getMinSelectionIndex() >= 0));
     }
 
-    private SearchableComboBox<BlockData> filterBox(
-            final Function<FilteredKerningPairListModel, BiConsumer<Integer, Integer>> setter
-    ) {
+    private SearchableComboBox<BlockData> filterBox(final BiConsumer<Integer, Integer> setter) {
         final var box = new SearchableComboBox<BlockData>(Resources.get().getBlocks());
         box.setMaximumSize(Dimensions.MAXIMUM_COMBO_BOX_SIZE);
         box.setMinimumSize(Dimensions.MINIMUM_COMBO_BOX_SIZE);
         box.addActionListener(event -> {
-            if (list.getModel() instanceof final FilteredKerningPairListModel lm) {
-                final var item = box.getSelectedItem();
-                try {
-                    final var block = (BlockData) item;
-                    setter.apply(lm).accept(block.starts(), block.ends());
-                } catch (final Exception e) {
-                    setter.apply(lm).accept(0, Integer.MAX_VALUE);
-                }
+            final var item = box.getSelectedItem();
+            try {
+                final var block = (BlockData) item;
+                setter.accept(block.starts(), block.ends());
+            } catch (final Exception e) {
+                setter.accept(0, Integer.MAX_VALUE);
             }
         });
         return box;
+    }
+
+    private void setFilterLeft(final int from, final int to) {
+        filterLeft = model -> model.getLeft().getCodePoint() >= from && model.getLeft().getCodePoint() <= to;
+        listModel.setFilter(model -> filterLeft.test(model) && filterRight.test(model));
+    }
+
+    private void setFilterRight(final int from, final int to) {
+        filterLeft = model -> model.getRight().getCodePoint() >= from
+                && model.getRight().getCodePoint() <= to;
+        listModel.setFilter(model -> filterLeft.test(model) && filterRight.test(model));
     }
 }
