@@ -27,9 +27,15 @@ public class FilteredList<E extends Comparable<E>> extends SortedList<E> {
         delegate.addListDataListener(new ListDataListener() {
             @Override
             public void contentsChanged(final ListDataEvent e) {
-                clear();
-                pushAll(delegate.display);
-                fireContentsChangedEvent(0, display.size());
+                if (e.getIndex0() == e.getIndex1()) {
+                    final var element = delegate.getElementAt(e.getIndex0());
+                    final var index = display.indexOf(element);
+                    fireContentsChangedEvent(index, index);
+                } else {
+                    clear();
+                    pushAll(delegate.display);
+                    fireContentsChangedEvent(0, display.size());
+                }
             }
 
             @Override
@@ -49,7 +55,9 @@ public class FilteredList<E extends Comparable<E>> extends SortedList<E> {
 
             @Override
             public void intervalRemoved(final ListDataEvent e) {
-                contentsChanged(e);
+                clear();
+                pushAll(delegate.display);
+                fireContentsChangedEvent(0, display.size());
             }
         });
     }
