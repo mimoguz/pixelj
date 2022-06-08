@@ -1,11 +1,11 @@
 package io.github.mimoguz.pixelj.controls.painter;
 
-import io.github.mimoguz.pixelj.models.CharacterModel;
+import io.github.mimoguz.pixelj.models.CharacterItem;
 
 public interface Painter {
     int getHeight();
 
-    CharacterModel getModel();
+    CharacterItem getModel();
 
     int getWidth();
 

@@ -6,19 +6,19 @@ import io.github.mimoguz.pixelj.graphics.BinaryImage;
  * Two characters are equal if their code points are equal. 
  * Hash code of a character is its code point.
  */
-public class CharacterModel extends MutableIntValueModel implements Comparable<CharacterModel> {
+public class CharacterItem extends MutableIntValueModel implements Comparable<CharacterItem> {
     private final int codePoint;
     private final BinaryImage glyph;
     private int width;
 
-    public CharacterModel(final int codePoint, final int width, final BinaryImage glyph) {
+    public CharacterItem(final int codePoint, final int width, final BinaryImage glyph) {
         this.codePoint = codePoint;
         this.width = width;
         this.glyph = glyph;
     }
 
     @Override
-    public int compareTo(final CharacterModel that) {
+    public int compareTo(final CharacterItem that) {
         return Integer.compare(codePoint, that.codePoint);
     }
 
@@ -27,7 +27,7 @@ public class CharacterModel extends MutableIntValueModel implements Comparable<C
         if (this == that) {
             return true;
         }
-        if (that instanceof CharacterModel other) {
+        if (that instanceof CharacterItem other) {
             return codePoint == other.codePoint;
         }
         return false;

@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 
 import javax.swing.*;
 
-import io.github.mimoguz.pixelj.models.ProjectModel;
+import io.github.mimoguz.pixelj.models.Project;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.views.kerning_pairs_screen.AddDialog;
 
@@ -24,13 +24,13 @@ public class KerningPairListActions {
     private final AddDialog addDialog;
     @SuppressWarnings("unused")
     private final Logger logger;
-    private final ProjectModel project;
+    private final Project project;
     private final JComponent root;
     @SuppressWarnings("unused")
     private final ListSelectionModel selectionModel;
 
     public KerningPairListActions(
-            final ProjectModel project,
+            final Project project,
             final ListSelectionModel selectionModel,
             final JComponent root
     ) {

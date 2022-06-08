@@ -20,8 +20,8 @@ import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.ApplicationAction;
 import io.github.mimoguz.pixelj.actions.MainActions;
 import io.github.mimoguz.pixelj.graphics.FontIcon;
-import io.github.mimoguz.pixelj.models.ProjectModel;
-import io.github.mimoguz.pixelj.models.ProjectModel.ProjectChangeEvent;
+import io.github.mimoguz.pixelj.models.Project;
+import io.github.mimoguz.pixelj.models.Project.ProjectChangeEvent;
 import io.github.mimoguz.pixelj.resources.Icons;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.views.characters_screen.CharactersScreen;
@@ -43,7 +43,7 @@ public class ProjectView extends JFrame {
     private final JTabbedPane root;
     private final Collection<ApplicationAction> tabActions;
 
-    public ProjectView(final ProjectModel project) {
+    public ProjectView(final Project project) {
         super();
 
         final var res = Resources.get();
@@ -226,7 +226,7 @@ public class ProjectView extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    private void onChange(final ProjectModel source, final ProjectChangeEvent event) {
+    private void onChange(final Project source, final ProjectChangeEvent event) {
         switch (event) {
             case final ProjectChangeEvent.MetricsChanged metricsChanged -> {
                 charactersScreen.updateMetrics(metricsChanged.metrics());

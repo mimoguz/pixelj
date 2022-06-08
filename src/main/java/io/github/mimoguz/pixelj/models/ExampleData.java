@@ -8,86 +8,86 @@ public class ExampleData {
     private ExampleData() {
     }
 
-    public static ProjectModel createProject() {
+    public static Project createProject() {
         final var metrics = Metrics.Builder.getDefault().build();
 
         final var characters = List.of(
-                new CharacterModel(
+                new CharacterItem(
                         65,
                         metrics.defaultCharacterWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterModel(
+                new CharacterItem(
                         66,
                         metrics.defaultCharacterWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterModel(
+                new CharacterItem(
                         67,
                         metrics.defaultCharacterWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterModel(
+                new CharacterItem(
                         68,
                         metrics.defaultCharacterWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterModel(
+                new CharacterItem(
                         69,
                         metrics.defaultCharacterWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterModel(
+                new CharacterItem(
                         70,
                         metrics.defaultCharacterWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterModel(
+                new CharacterItem(
                         71,
                         metrics.defaultCharacterWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterModel(
+                new CharacterItem(
                         72,
                         metrics.defaultCharacterWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterModel(
+                new CharacterItem(
                         73,
                         metrics.defaultCharacterWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterModel(
+                new CharacterItem(
                         74,
                         metrics.defaultCharacterWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterModel(
+                new CharacterItem(
                         75,
                         metrics.defaultCharacterWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterModel(
+                new CharacterItem(
                         76,
                         metrics.defaultCharacterWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterModel(
+                new CharacterItem(
                         77,
                         metrics.defaultCharacterWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterModel(
+                new CharacterItem(
                         78,
                         metrics.defaultCharacterWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterModel(
+                new CharacterItem(
                         79,
                         metrics.defaultCharacterWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterModel(
+                new CharacterItem(
                         80,
                         metrics.defaultCharacterWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
@@ -95,18 +95,18 @@ public class ExampleData {
         );
 
         final var kerningPairs = List.of(
-                new KerningPairModel(characters.get(0), characters.get(1), 0),
-                new KerningPairModel(characters.get(1), characters.get(2), 0),
-                new KerningPairModel(characters.get(2), characters.get(3), 0),
-                new KerningPairModel(characters.get(3), characters.get(4), 0),
-                new KerningPairModel(characters.get(4), characters.get(5), 0),
-                new KerningPairModel(characters.get(5), characters.get(6), 0)
+                new KerningPair(characters.get(0), characters.get(1), 0),
+                new KerningPair(characters.get(1), characters.get(2), 0),
+                new KerningPair(characters.get(2), characters.get(3), 0),
+                new KerningPair(characters.get(3), characters.get(4), 0),
+                new KerningPair(characters.get(4), characters.get(5), 0),
+                new KerningPair(characters.get(5), characters.get(6), 0)
         );
 
-        return new ProjectModel(
+        return new Project(
                 "Example project",
-                new HashListModel<>(characters),
-                new HashListModel<>(kerningPairs),
+                new SortedList<>(characters),
+                new SortedList<>(kerningPairs),
                 metrics
         );
     }

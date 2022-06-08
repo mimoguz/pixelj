@@ -7,7 +7,7 @@ import javax.swing.ListSelectionModel;
 
 import io.github.mimoguz.pixelj.controls.GlyphView;
 import io.github.mimoguz.pixelj.models.Metrics;
-import io.github.mimoguz.pixelj.models.ProjectModel;
+import io.github.mimoguz.pixelj.models.Project;
 import io.github.mimoguz.pixelj.util.Detachable;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
@@ -18,7 +18,7 @@ public class CharactersScreen extends JSplitPane implements Detachable {
     private final PainterPanel painterPanel;
     private final transient ListSelectionModel selectionModel;
 
-    public CharactersScreen(final ProjectModel project, final JComponent root) {
+    public CharactersScreen(final Project project, final JComponent root) {
         selectionModel = new DefaultListSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 

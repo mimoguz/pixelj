@@ -8,7 +8,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 import io.github.mimoguz.pixelj.controls.GlyphView;
-import io.github.mimoguz.pixelj.models.CharacterModel;
+import io.github.mimoguz.pixelj.models.CharacterItem;
 import io.github.mimoguz.pixelj.resources.Resources;
 
 public class CharacterModelCell extends JPanel {
@@ -34,7 +34,7 @@ public class CharacterModelCell extends JPanel {
         add(characterCell);
     }
 
-    public void set(final CharacterModel model, final int contentWidth) {
+    public void set(final CharacterItem model, final int contentWidth) {
         picture.setModel(model, false);
 
         final int pictureWidth = model.getGlyph().getWidth();

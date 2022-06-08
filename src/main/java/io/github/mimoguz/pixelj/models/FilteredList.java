@@ -8,17 +8,17 @@ import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
 /**
- * A wrapper for HashListModel which adds filtering capability.
+ * A wrapper for HashList which adds filtering capability.
  */
-public class FilteredListModel<E extends Comparable<E>> extends HashListModel<E> {
+public class FilteredList<E extends Comparable<E>> extends SortedList<E> {
     private static record Interval(int index0, int index1) {
     }
 
-    private final HashListModel<E> delegate;
+    private final SortedList<E> delegate;
 
     private Predicate<E> filter = t -> true;
 
-    public FilteredListModel(final HashListModel<E> delegate) {
+    public FilteredList(final SortedList<E> delegate) {
         this.delegate = delegate;
         pushAll(delegate.display);
 

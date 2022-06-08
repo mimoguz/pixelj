@@ -13,7 +13,7 @@ import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
-import io.github.mimoguz.pixelj.models.ProjectModel;
+import io.github.mimoguz.pixelj.models.Project;
 import io.github.mimoguz.pixelj.resources.Icons;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.views.MetricsDialog;
@@ -31,9 +31,9 @@ public class MainActions {
     private boolean enabled = true;
     private final Logger logger;
     private final MetricsDialog metricsDialog;
-    private final ProjectModel project;
+    private final Project project;
 
-    public MainActions(final ProjectModel project, final JComponent root) {
+    public MainActions(final Project project, final JComponent root) {
         this.project = project;
         metricsDialog = new MetricsDialog((Frame) SwingUtilities.windowForComponent(root));
 

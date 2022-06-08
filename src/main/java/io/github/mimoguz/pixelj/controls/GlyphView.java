@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.event.EventListenerList;
 
 import io.github.mimoguz.pixelj.graphics.BinaryImage;
-import io.github.mimoguz.pixelj.models.CharacterModel;
+import io.github.mimoguz.pixelj.models.CharacterItem;
 import io.github.mimoguz.pixelj.models.IntValueChangeListener;
 import io.github.mimoguz.pixelj.util.ChangeListener;
 import io.github.mimoguz.pixelj.util.Changeable;
@@ -36,7 +36,7 @@ public class GlyphView extends JPanel
     private final ArrayList<Line> lines = new ArrayList<>();
     private final EventListenerList listeners = new EventListenerList();
     /** May be null; */
-    private transient CharacterModel model;
+    private transient CharacterItem model;
     /** May be null; */
     private transient Image overlay;
     private boolean showLines = false;
@@ -88,7 +88,7 @@ public class GlyphView extends JPanel
     /**
      * @return Character model or null
      */
-    public CharacterModel getModel() {
+    public CharacterItem getModel() {
         return model;
     }
 
@@ -159,7 +159,7 @@ public class GlyphView extends JPanel
     /**
      * @param value May be null.
      */
-    public void setModel(final CharacterModel value) {
+    public void setModel(final CharacterItem value) {
         setModel(value, true);
     }
 
@@ -167,7 +167,7 @@ public class GlyphView extends JPanel
      * @param value  May be null.
      * @param listen If true, the view will add an imageChangeListener to the glyph.
      */
-    public void setModel(final CharacterModel value, final boolean listen) {
+    public void setModel(final CharacterItem value, final boolean listen) {
         if (model == value) {
             return;
         }

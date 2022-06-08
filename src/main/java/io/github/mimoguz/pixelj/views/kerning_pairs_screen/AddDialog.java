@@ -15,12 +15,12 @@ import io.github.mimoguz.pixelj.views.shared.*;
 public class AddDialog extends JDialog {
     private static final long serialVersionUID = -2069391980463198716L;
 
-    private transient CharacterModel left;
-    private transient KerningPairModel result;
-    private transient CharacterModel right;
+    private transient CharacterItem left;
+    private transient KerningPair result;
+    private transient CharacterItem right;
     private final ListSelectionModel selectionModel = new DefaultListSelectionModel();
 
-    public AddDialog(final HashListModel<CharacterModel> source, final Frame owner) {
+    public AddDialog(final SortedList<CharacterItem> source, final Frame owner) {
         super(
                 owner,
                 Resources.get().getString("kerningPairsAddDialogTitle"),
@@ -29,8 +29,8 @@ public class AddDialog extends JDialog {
 
         final var res = Resources.get();
 
-        final var listModel = new FilteredListModel<>(source);
-        final JList<CharacterModel> list = new JList<>();
+        final var listModel = new FilteredList<>(source);
+        final JList<CharacterItem> list = new JList<>();
         list.setModel(listModel);
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setSelectionModel(selectionModel);
@@ -61,7 +61,7 @@ public class AddDialog extends JDialog {
         addButton.setEnabled(false);
         addButton.addActionListener(event -> {
             if (left != null && right != null) {
-                result = new KerningPairModel(left, right, 0);
+                result = new KerningPair(left, right, 0);
             }
             setVisible(false);
         });
@@ -71,7 +71,7 @@ public class AddDialog extends JDialog {
         setLeftButton.setEnabled(false);
         setLeftButton.addActionListener(event -> {
             if (selectionModel.getMinSelectionIndex() >= 0) {
-                left = source.getElementAt(selectionModel.getMinSelectionIndex());
+                left = listModel.getElementAt(selectionModel.getMinSelectionIndex());
                 leftView.set(left, Integer.MAX_VALUE);
                 addButton.setEnabled(right != null);
             }
@@ -82,7 +82,7 @@ public class AddDialog extends JDialog {
         setRightButton.setEnabled(false);
         setRightButton.addActionListener(event -> {
             if (selectionModel.getMinSelectionIndex() >= 0) {
-                right = source.getElementAt(selectionModel.getMinSelectionIndex());
+                right = listModel.getElementAt(selectionModel.getMinSelectionIndex());
                 rightView.set(right, Integer.MAX_VALUE);
                 addButton.setEnabled(right != null);
             }
@@ -154,7 +154,7 @@ public class AddDialog extends JDialog {
         setResizable(true);
     }
 
-    public KerningPairModel getResult() {
+    public KerningPair getResult() {
         return result;
     }
 

@@ -19,9 +19,9 @@ import io.github.mimoguz.pixelj.controls.GlyphPainter;
 import io.github.mimoguz.pixelj.controls.Line;
 import io.github.mimoguz.pixelj.controls.Orientation;
 import io.github.mimoguz.pixelj.graphics.Snapshot;
-import io.github.mimoguz.pixelj.models.CharacterModel;
+import io.github.mimoguz.pixelj.models.CharacterItem;
 import io.github.mimoguz.pixelj.models.Metrics;
-import io.github.mimoguz.pixelj.models.ProjectModel;
+import io.github.mimoguz.pixelj.models.Project;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.util.Detachable;
 import io.github.mimoguz.pixelj.views.shared.Borders;
@@ -44,7 +44,7 @@ public class PainterPanel extends JPanel implements Detachable {
     private final ArrayList<Snapshot> undoBuffer = new ArrayList<>();
     private final JSlider zoomSlider;
 
-    public PainterPanel(final ProjectModel project, final JComponent root) {
+    public PainterPanel(final Project project, final JComponent root) {
         painter = new GlyphPainter(Resources.get().colors.disabledIcon());
         painter.setZoom(INITIAL_ZOOM);
         painter.setOverlayVisible(true);
@@ -193,7 +193,7 @@ public class PainterPanel extends JPanel implements Detachable {
         painter.detach();
     }
 
-    public CharacterModel getModel() {
+    public CharacterItem getModel() {
         return painter.getModel();
     }
 
@@ -246,7 +246,7 @@ public class PainterPanel extends JPanel implements Detachable {
     /**
      * @param value May be null
      */
-    public void setModel(final CharacterModel value) {
+    public void setModel(final CharacterItem value) {
         painter.setModel(value);
         infoPanel.setModel(value);
 

@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 
 import io.github.mimoguz.pixelj.controls.painter.*;
 import io.github.mimoguz.pixelj.graphics.Snapshot;
-import io.github.mimoguz.pixelj.models.CharacterModel;
+import io.github.mimoguz.pixelj.models.CharacterItem;
 import io.github.mimoguz.pixelj.models.IntValueChangeListener;
 
 public class GlyphPainter extends GlyphView
@@ -42,7 +42,7 @@ public class GlyphPainter extends GlyphView
     }
 
     @Override
-    public void setModel(final CharacterModel value) {
+    public void setModel(final CharacterItem value) {
         final var current = getModel();
         if (current != null) {
             current.removeChangeListener(characterWidthChangeListener);

@@ -14,9 +14,9 @@ import javax.swing.JTextArea;
 import javax.swing.text.BadLocationException;
 
 import io.github.mimoguz.pixelj.controls.StringView;
-import io.github.mimoguz.pixelj.models.CharacterModel;
-import io.github.mimoguz.pixelj.models.KerningPairModel;
-import io.github.mimoguz.pixelj.models.ProjectModel;
+import io.github.mimoguz.pixelj.models.CharacterItem;
+import io.github.mimoguz.pixelj.models.KerningPair;
+import io.github.mimoguz.pixelj.models.Project;
 
 public class PreviewScreenActions {
     private static final int SPACE = 32;
@@ -26,10 +26,10 @@ public class PreviewScreenActions {
     public final ApplicationAction refreshAction;
     private final JPanel container;
     private final JTextArea input;
-    private final ProjectModel project;
+    private final Project project;
     private int zoom = 1;
 
-    public PreviewScreenActions(final ProjectModel project, final JTextArea input, final JPanel container) {
+    public PreviewScreenActions(final Project project, final JTextArea input, final JPanel container) {
         this.project = project;
         this.input = input;
         this.container = container;
@@ -69,15 +69,15 @@ public class PreviewScreenActions {
         input.setText(null);
     }
 
-    private List<CharacterModel> getCharactersOfLine(String line) {
+    private List<CharacterItem> getCharactersOfLine(String line) {
         final var characters = project.getCharacters();
         return line.codePoints()
-                .mapToObj(cp -> cp == SPACE ? new CharacterModel(SPACE, 0, null) : characters.findHash(cp))
+                .mapToObj(cp -> cp == SPACE ? new CharacterItem(SPACE, 0, null) : characters.findHash(cp))
                 .filter(Objects::nonNull)
                 .toList();
     }
 
-    private List<Integer> getSpaces(List<CharacterModel> characters) {
+    private List<Integer> getSpaces(List<CharacterItem> characters) {
         if (characters.isEmpty()) {
             return java.util.Collections.emptyList();
         }
@@ -99,7 +99,7 @@ public class PreviewScreenActions {
                 continue;
             }
 
-            final var pair = kerningPairs.findHash(KerningPairModel.getHash(left, right));
+            final var pair = kerningPairs.findHash(KerningPair.getHash(left, right));
             spaces.add(pair == null ? spacing : spacing + pair.getKerningValue());
         }
         return spaces;

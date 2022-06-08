@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Test;
 import io.github.mimoguz.pixelj.graphics.BinaryImage;
 
 public class CharacterModelTests {
-    private final CharacterModel capitalA = new CharacterModel(65, 10, BinaryImage.of(16, 16));
-    private final CharacterModel capitalA2 = new CharacterModel(65, 11, BinaryImage.of(16, 16));
-    private final CharacterModel capitalB = new CharacterModel(66, 9, BinaryImage.of(16, 16));
-    private final CharacterModel capitalC = new CharacterModel(67, 8, BinaryImage.of(16, 16));
+    private final CharacterItem capitalA = new CharacterItem(65, 10, BinaryImage.of(16, 16));
+    private final CharacterItem capitalA2 = new CharacterItem(65, 11, BinaryImage.of(16, 16));
+    private final CharacterItem capitalB = new CharacterItem(66, 9, BinaryImage.of(16, 16));
+    private final CharacterItem capitalC = new CharacterItem(67, 8, BinaryImage.of(16, 16));
 
     @Test
     public void capitalAEqualsCapitalA() {

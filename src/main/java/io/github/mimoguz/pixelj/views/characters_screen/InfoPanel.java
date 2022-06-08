@@ -16,9 +16,9 @@ import javax.swing.SpinnerNumberModel;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
-import io.github.mimoguz.pixelj.models.CharacterModel;
+import io.github.mimoguz.pixelj.models.CharacterItem;
 import io.github.mimoguz.pixelj.models.Metrics;
-import io.github.mimoguz.pixelj.models.ProjectModel;
+import io.github.mimoguz.pixelj.models.Project;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
@@ -32,12 +32,12 @@ public class InfoPanel extends JPanel {
     private final JLabel codePointLabel;
     private final JLabel blockNamePanel;
     private final JLabel glyphLabel;
-    private transient CharacterModel model;
+    private transient CharacterItem model;
     private final JLabel nameLabel;
     private final JCheckBox showGridCheckBox;
     private final JCheckBox showLinesCheckBox;
 
-    public InfoPanel(final ProjectModel project) {
+    public InfoPanel(final Project project) {
         final var res = Resources.get();
 
         glyphLabel = new JLabel(" ");
@@ -136,7 +136,7 @@ public class InfoPanel extends JPanel {
         setMetrics(project.getMetrics());
     }
 
-    public CharacterModel getModel() {
+    public CharacterItem getModel() {
         return model;
     }
 
@@ -159,7 +159,7 @@ public class InfoPanel extends JPanel {
         );
     }
 
-    public void setModel(final CharacterModel value) {
+    public void setModel(final CharacterItem value) {
         this.model = value;
         if (value != null) {
             final var res = Resources.get();

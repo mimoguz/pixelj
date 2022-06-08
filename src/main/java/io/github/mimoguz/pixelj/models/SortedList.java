@@ -18,15 +18,15 @@ import org.eclipse.collections.impl.map.mutable.primitive.IntObjectHashMap;
  * It's Intended to be used for CharacterModels and KerningPairModels, and uses
  * a IntObjectHashMap for backing collection (so assumes no hash collisions).
  */
-public class HashListModel<E extends Comparable<E>> implements ListModel<E> {
+public class SortedList<E extends Comparable<E>> implements ListModel<E> {
     protected final ArrayList<E> display = new ArrayList<>();
     protected final EventListenerList listeners = new EventListenerList();
     protected final IntObjectHashMap<E> source = new IntObjectHashMap<>();
 
-    public HashListModel() {
+    public SortedList() {
     }
 
-    public HashListModel(final Collection<E> elements) {
+    public SortedList(final Collection<E> elements) {
         for (final var elem : elements) {
             if (elem == null) {
                 continue;

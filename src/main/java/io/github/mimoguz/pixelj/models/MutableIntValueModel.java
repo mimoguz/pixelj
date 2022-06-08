@@ -5,8 +5,8 @@ import javax.swing.event.EventListenerList;
 import io.github.mimoguz.pixelj.util.Changeable;
 
 /**
- * CharacterModel and KerningPairModel both have a single integer value that can
- * be observed. This is the base class for them.
+ * CharacterItem and KerningPair both have a single integer value that can be
+ * observed. This is the base class for them.
  */
 public class MutableIntValueModel
         implements

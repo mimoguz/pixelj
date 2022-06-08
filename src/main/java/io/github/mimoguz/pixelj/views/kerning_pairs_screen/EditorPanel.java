@@ -9,7 +9,7 @@ import javax.swing.*;
 import com.formdev.flatlaf.FlatClientProperties;
 
 import io.github.mimoguz.pixelj.controls.StringView;
-import io.github.mimoguz.pixelj.models.KerningPairModel;
+import io.github.mimoguz.pixelj.models.KerningPair;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.util.Detachable;
 import io.github.mimoguz.pixelj.views.shared.Borders;
@@ -20,7 +20,7 @@ public class EditorPanel extends JPanel implements Detachable {
     private static final int INITIAL_ZOOM = 4;
     private static final long serialVersionUID = -7463105184228298933L;
 
-    private transient KerningPairModel model;
+    private transient KerningPair model;
     private final StringView preview;
     private final JLabel pxLabel;
     private final ArrayList<Integer> spaces = new ArrayList<>(java.util.List.of(0));
@@ -150,7 +150,7 @@ public class EditorPanel extends JPanel implements Detachable {
     /**
      * @param value May be null.
      */
-    public void setModel(final KerningPairModel value) {
+    public void setModel(final KerningPair value) {
         if (model == value) {
             return;
         }

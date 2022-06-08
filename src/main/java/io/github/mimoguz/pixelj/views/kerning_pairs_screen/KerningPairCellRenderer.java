@@ -7,10 +7,10 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 
-import io.github.mimoguz.pixelj.models.KerningPairModel;
+import io.github.mimoguz.pixelj.models.KerningPair;
 import io.github.mimoguz.pixelj.views.shared.CharacterModelCell;
 
-public class KerningPairCellRenderer implements ListCellRenderer<KerningPairModel> {
+public class KerningPairCellRenderer implements ListCellRenderer<KerningPair> {
     private final JPanel component = new JPanel(new GridLayout(1, 2));
     private final CharacterModelCell left;
     private final CharacterModelCell right;
@@ -25,8 +25,8 @@ public class KerningPairCellRenderer implements ListCellRenderer<KerningPairMode
 
     @Override
     public Component getListCellRendererComponent(
-            final JList<? extends KerningPairModel> list,
-            final KerningPairModel value,
+            final JList<? extends KerningPair> list,
+            final KerningPair value,
             final int index,
             final boolean isSelected,
             final boolean cellHasFocus

@@ -10,9 +10,9 @@ import javax.swing.event.ListDataListener;
 import io.github.mimoguz.pixelj.util.ChangeListener;
 import io.github.mimoguz.pixelj.util.Changeable;
 
-public class ProjectModel
+public class Project
         implements
-        Changeable<ProjectModel, ProjectModel.ProjectChangeEvent, ProjectModel.ProjectChangeListener> {
+        Changeable<Project, Project.ProjectChangeEvent, Project.ProjectChangeListener> {
 
     public sealed interface ProjectChangeEvent permits ProjectChangeEvent.MetricsChanged, ProjectChangeEvent.TitleChanged {
         record MetricsChanged(Metrics metrics) implements ProjectChangeEvent {
@@ -24,13 +24,13 @@ public class ProjectModel
         }
     }
 
-    public interface ProjectChangeListener extends ChangeListener<ProjectModel, ProjectChangeEvent> {
+    public interface ProjectChangeListener extends ChangeListener<Project, ProjectChangeEvent> {
         // Empty
     }
 
-    private final HashListModel<CharacterModel> characters;
+    private final SortedList<CharacterItem> characters;
     private final ListDataListener kerningPairRemover;
-    private final HashListModel<KerningPairModel> kerningPairs;
+    private final SortedList<KerningPair> kerningPairs;
 
     private final EventListenerList listeners = new EventListenerList();
 
@@ -38,10 +38,10 @@ public class ProjectModel
 
     private String title;
 
-    public ProjectModel(
+    public Project(
             final String title,
-            final HashListModel<CharacterModel> characters,
-            final HashListModel<KerningPairModel> kerningPairs,
+            final SortedList<CharacterItem> characters,
+            final SortedList<KerningPair> kerningPairs,
             final Metrics metrics
     ) {
         this.title = title;
@@ -71,7 +71,7 @@ public class ProjectModel
                 }
 
                 // Kerning pairs which depend on non-existing characters
-                final var marked = new ArrayList<KerningPairModel>();
+                final var marked = new ArrayList<KerningPair>();
                 for (var index = 0; index < kerningPairs.getSize(); index++) {
                     final var model = kerningPairs.getElementAt(index);
                     if (
@@ -89,19 +89,19 @@ public class ProjectModel
         characters.addListDataListener(kerningPairRemover);
     }
 
-    public int countDependent(final CharacterModel model) {
+    public int countDependent(final CharacterItem model) {
         return kerningPairs.countWhere(p -> p.getLeft().equals(model) || p.getRight().equals(model));
     }
 
-    public List<KerningPairModel> findDependent(final CharacterModel model) {
+    public List<KerningPair> findDependent(final CharacterItem model) {
         return kerningPairs.find(p -> p.getLeft().equals(model) || p.getRight().equals(model));
     }
 
-    public HashListModel<CharacterModel> getCharacters() {
+    public SortedList<CharacterItem> getCharacters() {
         return characters;
     }
 
-    public HashListModel<KerningPairModel> getKerningPairs() {
+    public SortedList<KerningPair> getKerningPairs() {
         return kerningPairs;
     }
 

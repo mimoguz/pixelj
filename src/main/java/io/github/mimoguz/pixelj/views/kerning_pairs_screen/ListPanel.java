@@ -24,17 +24,17 @@ public class ListPanel extends JPanel implements Detachable {
 
     private final transient KerningPairListActions actions;
     private final JButton addButton;
-    private Predicate<KerningPairModel> filterLeft = model -> true;
-    private final Predicate<KerningPairModel> filterRight = model -> true;
+    private Predicate<KerningPair> filterLeft = model -> true;
+    private final Predicate<KerningPair> filterRight = model -> true;
     private final SearchableComboBox<BlockData> leftFilterBox;
-    private final JList<KerningPairModel> list;
-    private final transient FilteredListModel<KerningPairModel> listModel;
+    private final JList<KerningPair> list;
+    private final transient FilteredList<KerningPair> listModel;
     private final JButton removeButton;
     private final SearchableComboBox<BlockData> rightFilterBox;
     private final transient ListSelectionModel selectionModel;
 
     public ListPanel(
-            final ProjectModel project,
+            final Project project,
             final ListSelectionModel selectionModel,
             final JComponent root
     ) {
@@ -54,7 +54,7 @@ public class ListPanel extends JPanel implements Detachable {
         removeButton.setAction(actions.showRemoveDialogAction);
         Components.setFixedSize(removeButton, Dimensions.TEXT_BUTTON_SIZE);
 
-        listModel = new FilteredListModel<>(project.getKerningPairs());
+        listModel = new FilteredList<>(project.getKerningPairs());
         list = new JList<>(listModel);
         list.setSelectionModel(selectionModel);
         list.setCellRenderer(new KerningPairCellRenderer(48));
@@ -117,12 +117,12 @@ public class ListPanel extends JPanel implements Detachable {
         return leftFilterBox;
     }
 
-    public JList<KerningPairModel> getList() {
+    public JList<KerningPair> getList() {
         return list;
     }
 
     @SuppressWarnings("unchecked")
-    public HashListModel<KerningPairModel> getListModel() {
+    public SortedList<KerningPair> getListModel() {
         return listModel;
     }
 

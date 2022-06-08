@@ -21,12 +21,12 @@ public class ListPanel extends JPanel implements Detachable {
     private final transient CharacterListActions actions;
     private final JButton addButton;
     private final SearchableComboBox<BlockData> filterBox;
-    private final JList<CharacterModel> list;
+    private final JList<CharacterItem> list;
     private final JButton removeButton;
     private final transient ListSelectionModel selectionModel;
 
     public ListPanel(
-            final ProjectModel project,
+            final Project project,
             final ListSelectionModel selectionModel,
             final Metrics metrics,
             final JComponent root
@@ -47,7 +47,7 @@ public class ListPanel extends JPanel implements Detachable {
         removeButton.setAction(actions.showRemoveDialogAction);
         Components.setFixedSize(removeButton, Dimensions.TEXT_BUTTON_SIZE);
 
-        final var listModel = new FilteredListModel<>(project.getCharacters());
+        final var listModel = new FilteredList<>(project.getCharacters());
         list = new JList<>(listModel);
         list.setSelectionModel(selectionModel);
         list.setCellRenderer(new CharacterCellRenderer(48));
@@ -113,7 +113,7 @@ public class ListPanel extends JPanel implements Detachable {
         return filterBox;
     }
 
-    public JList<CharacterModel> getList() {
+    public JList<CharacterItem> getList() {
         return list;
     }
 

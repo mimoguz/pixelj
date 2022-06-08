@@ -5,9 +5,9 @@ import java.awt.Component;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
-import io.github.mimoguz.pixelj.models.CharacterModel;
+import io.github.mimoguz.pixelj.models.CharacterItem;
 
-public class CharacterCellRenderer implements ListCellRenderer<CharacterModel> {
+public class CharacterCellRenderer implements ListCellRenderer<CharacterItem> {
     private final CharacterModelCell component;
 
     public CharacterCellRenderer(final int maxPictureSize) {
@@ -16,8 +16,8 @@ public class CharacterCellRenderer implements ListCellRenderer<CharacterModel> {
 
     @Override
     public Component getListCellRendererComponent(
-            final JList<? extends CharacterModel> list,
-            final CharacterModel value,
+            final JList<? extends CharacterItem> list,
+            final CharacterItem value,
             final int index,
             final boolean isSelected,
             final boolean cellHasFocus

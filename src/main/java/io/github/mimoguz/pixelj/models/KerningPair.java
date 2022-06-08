@@ -5,19 +5,19 @@ package io.github.mimoguz.pixelj.models;
  * Hash code of a kerning pair is calculated over its left and right characters
  * using getHash static method.
  */
-public class KerningPairModel extends MutableIntValueModel implements Comparable<KerningPairModel> {
+public class KerningPair extends MutableIntValueModel implements Comparable<KerningPair> {
     private int kerningValue;
-    private final CharacterModel left;
-    private final CharacterModel right;
+    private final CharacterItem left;
+    private final CharacterItem right;
 
-    public KerningPairModel(final CharacterModel left, final CharacterModel right, final int kerningValue) {
+    public KerningPair(final CharacterItem left, final CharacterItem right, final int kerningValue) {
         this.left = left;
         this.right = right;
         this.kerningValue = kerningValue;
     }
 
     @Override
-    public int compareTo(final KerningPairModel that) {
+    public int compareTo(final KerningPair that) {
         final var leftOrder = Integer.compare(left.getCodePoint(), that.left.getCodePoint());
         if (leftOrder == 0) {
             return Integer.compare(right.getCodePoint(), that.right.getCodePoint());
@@ -31,7 +31,7 @@ public class KerningPairModel extends MutableIntValueModel implements Comparable
         if (this == that) {
             return true;
         }
-        if (that instanceof final KerningPairModel other) {
+        if (that instanceof final KerningPair other) {
             return left.equals(other.left) && right.equals(other.right);
         }
         return false;
@@ -41,11 +41,11 @@ public class KerningPairModel extends MutableIntValueModel implements Comparable
         return kerningValue;
     }
 
-    public CharacterModel getLeft() {
+    public CharacterItem getLeft() {
         return left;
     }
 
-    public CharacterModel getRight() {
+    public CharacterItem getRight() {
         return right;
     }
 
@@ -68,7 +68,7 @@ public class KerningPairModel extends MutableIntValueModel implements Comparable
      * creating an instance, then use that hash to search a model in a
      * KerningPairListModel.
      */
-    public static int getHash(final CharacterModel left, final CharacterModel right) {
+    public static int getHash(final CharacterItem left, final CharacterItem right) {
         // >In the Unicode Standard, the codespace consists of the integers from 0 to
         // 10FFFF.<
         // 10FFFF occupies 21 bits, there shouldn't be any collisions here.

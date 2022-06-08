@@ -10,14 +10,14 @@ import java.util.Collection;
 
 import javax.swing.JPanel;
 
-import io.github.mimoguz.pixelj.models.CharacterModel;
+import io.github.mimoguz.pixelj.models.CharacterItem;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 public class StringView extends JPanel {
     private static final long serialVersionUID = 5414891564267425303L;
 
     private final Color backgroundColor;
-    private final ArrayList<CharacterModel> characters = new ArrayList<>();
+    private final ArrayList<CharacterItem> characters = new ArrayList<>();
     private int lineSpacing;
     private int maxY;
     private int padding;
@@ -46,7 +46,7 @@ public class StringView extends JPanel {
         return zoom;
     }
 
-    public void set(Collection<CharacterModel> characters, Collection<Integer> spaces) {
+    public void set(Collection<CharacterItem> characters, Collection<Integer> spaces) {
         this.characters.clear();
         this.characters.addAll(characters);
 
@@ -92,7 +92,7 @@ public class StringView extends JPanel {
 
     private void drawCharacter(
             final BufferedImage target,
-            final CharacterModel character,
+            final CharacterItem character,
             final int x,
             final int y
     ) {
@@ -121,7 +121,7 @@ public class StringView extends JPanel {
             return;
         }
 
-        final var w = characters.stream().mapToInt(CharacterModel::getWidth).sum()
+        final var w = characters.stream().mapToInt(CharacterItem::getWidth).sum()
                 + spaces.stream().mapToInt(i -> i).limit(characters.size()).reduce(0, Integer::sum);
 
         var h = characters.stream()

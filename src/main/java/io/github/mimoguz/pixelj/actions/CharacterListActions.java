@@ -12,10 +12,10 @@ import java.util.List;
 import javax.swing.*;
 
 import io.github.mimoguz.pixelj.graphics.BinaryImage;
-import io.github.mimoguz.pixelj.models.CharacterModel;
-import io.github.mimoguz.pixelj.models.KerningPairModel;
+import io.github.mimoguz.pixelj.models.CharacterItem;
+import io.github.mimoguz.pixelj.models.KerningPair;
 import io.github.mimoguz.pixelj.models.Metrics;
-import io.github.mimoguz.pixelj.models.ProjectModel;
+import io.github.mimoguz.pixelj.models.Project;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.views.characters_screen.AddDialog;
 
@@ -28,12 +28,12 @@ public class CharacterListActions {
     private Dimension canvasSize;
     private int defaultCharacterWidth;
     private boolean enabled = true;
-    private final ProjectModel project;
+    private final Project project;
     private final JComponent root;
     private final ListSelectionModel selectionModel;
 
     public CharacterListActions(
-            final ProjectModel project,
+            final Project project,
             final ListSelectionModel selectionModel,
             final Metrics metrics,
             final JComponent root
@@ -92,7 +92,7 @@ public class CharacterListActions {
         for (final var codePoint : codePoints) {
             project.getCharacters()
                     .add(
-                            new CharacterModel(
+                            new CharacterItem(
                                     codePoint,
                                     defaultCharacterWidth,
                                     BinaryImage.of(canvasSize.width, canvasSize.height)
@@ -101,8 +101,8 @@ public class CharacterListActions {
         }
     }
 
-    private int countAffectedKerningPairs(final Collection<CharacterModel> characters) {
-        final var kerningPairs = new HashSet<KerningPairModel>();
+    private int countAffectedKerningPairs(final Collection<CharacterItem> characters) {
+        final var kerningPairs = new HashSet<KerningPair>();
         for (final var character : characters) {
             kerningPairs.addAll(project.findDependent(character));
         }
@@ -118,7 +118,7 @@ public class CharacterListActions {
         for (final var characterData : result) {
             project.getCharacters()
                     .add(
-                            new CharacterModel(
+                            new CharacterItem(
                                     characterData.codePoint(),
                                     defaultCharacterWidth,
                                     BinaryImage.of(canvasSize.width, canvasSize.height, true)

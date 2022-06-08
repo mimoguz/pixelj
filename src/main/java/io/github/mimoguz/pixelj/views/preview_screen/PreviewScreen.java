@@ -15,7 +15,7 @@ import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.ApplicationAction;
 import io.github.mimoguz.pixelj.actions.PreviewScreenActions;
 import io.github.mimoguz.pixelj.controls.PromptTextArea;
-import io.github.mimoguz.pixelj.models.ProjectModel;
+import io.github.mimoguz.pixelj.models.Project;
 import io.github.mimoguz.pixelj.resources.Icons;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.util.Detachable;
@@ -33,7 +33,7 @@ public class PreviewScreen extends JPanel implements Detachable {
     private final PromptTextArea textInput;
     private final JSlider zoomSlider;
 
-    public PreviewScreen(final ProjectModel project, final JComponent root) {
+    public PreviewScreen(final Project project, final JComponent root) {
         final var res = Resources.get();
 
         textInput = new PromptTextArea();
