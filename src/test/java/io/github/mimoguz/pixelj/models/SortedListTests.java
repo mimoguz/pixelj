@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-public class HashListModelTests {
+public class SortedListTests {
     @Test
     public void addMany() {
         final var model = new SortedList<>(List.of(2, 4, 6, 8));

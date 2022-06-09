@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
-public class FilteredListModelTests {
+public class FilteredListTests {
     @Test
     public void addMany() {
         final var model = new SortedList<>(List.of(2, 4, 6, 8));

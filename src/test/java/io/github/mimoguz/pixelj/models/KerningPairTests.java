@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import io.github.mimoguz.pixelj.graphics.BinaryImage;
 
-public class KerningModelTests {
+public class KerningPairTests {
     private final CharacterItem capitalA = new CharacterItem(65, 10, BinaryImage.of(16, 16));
     private final CharacterItem capitalA2 = new CharacterItem(65, 11, BinaryImage.of(16, 16));
     private final CharacterItem capitalB = new CharacterItem(66, 9, BinaryImage.of(16, 16));
