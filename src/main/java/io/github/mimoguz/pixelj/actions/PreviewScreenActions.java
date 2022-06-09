@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.text.BadLocationException;
 
-import io.github.mimoguz.pixelj.controls.StringView;
+import io.github.mimoguz.pixelj.views.controls.StringView;
 import io.github.mimoguz.pixelj.models.CharacterItem;
 import io.github.mimoguz.pixelj.models.KerningPair;
 import io.github.mimoguz.pixelj.models.Project;

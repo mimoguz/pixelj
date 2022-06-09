@@ -1,22 +1,5 @@
 package io.github.mimoguz.pixelj.views;
 
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Stream;
-
-import javax.swing.*;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
-
-import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.extras.FlatSVGIcon;
-
 import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.ApplicationAction;
 import io.github.mimoguz.pixelj.actions.MainActions;
@@ -31,6 +14,20 @@ import io.github.mimoguz.pixelj.views.preview_screen.PreviewScreen;
 import io.github.mimoguz.pixelj.views.shared.Borders;
 import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
+
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
+
+import javax.swing.*;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Stream;
 
 public class ProjectView extends JFrame {
     private final CharactersScreen charactersScreen;
@@ -48,7 +45,7 @@ public class ProjectView extends JFrame {
         charactersScreen = new CharactersScreen(project, root);
         kerningPairsScreen = new KerningPairsScreen(project, root);
         previewScreen = new PreviewScreen(project, root);
-        MainActions mainActions = new MainActions(project, root);
+        final var mainActions = new MainActions(project, root);
         final var mainMenu = new MainMenu(mainActions);
 
         Actions.registerShortcuts(mainActions.all, root);
@@ -231,7 +228,7 @@ public class ProjectView extends JFrame {
                 }
             }
             case final ProjectChangeEvent.TitleChanged titleChanged ->
-                setTitle(titleChanged.title() + " - " + Resources.get().getString("applicationName"));
+                    setTitle(titleChanged.title() + " - " + Resources.get().getString("applicationName"));
             default -> throw new IllegalArgumentException("Unexpected value: " + event);
         }
     }

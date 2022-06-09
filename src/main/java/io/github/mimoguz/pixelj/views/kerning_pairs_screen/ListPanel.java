@@ -2,10 +2,10 @@ package io.github.mimoguz.pixelj.views.kerning_pairs_screen;
 
 import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.KerningPairListActions;
-import io.github.mimoguz.pixelj.controls.SearchableComboBox;
 import io.github.mimoguz.pixelj.models.*;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.util.Detachable;
+import io.github.mimoguz.pixelj.views.controls.SearchableComboBox;
 import io.github.mimoguz.pixelj.views.shared.Borders;
 import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
@@ -19,13 +19,9 @@ import java.util.function.Predicate;
 
 public class ListPanel extends JPanel implements Detachable {
     private final KerningPairListActions actions;
-    private final JButton addButton;
     private final Predicate<KerningPair> filterRight = model -> true;
-    private final SearchableComboBox<BlockData> leftFilterBox;
     private final JList<KerningPair> list;
     private final FilteredList<KerningPair> listModel;
-    private final JButton removeButton;
-    private final SearchableComboBox<BlockData> rightFilterBox;
     private final ListSelectionModel selectionModel;
     private Predicate<KerningPair> filterLeft = model -> true;
 
@@ -38,11 +34,11 @@ public class ListPanel extends JPanel implements Detachable {
         actions.showRemoveDialogAction.setEnabled(false);
         Actions.registerShortcuts(actions.all, root);
 
-        addButton = new JButton();
+        final var addButton = new JButton();
         addButton.setAction(actions.showAddDialogAction);
         Components.setFixedSize(addButton, Dimensions.TEXT_BUTTON_SIZE);
 
-        removeButton = new JButton();
+        final var removeButton = new JButton();
         removeButton.setAction(actions.showRemoveDialogAction);
         Components.setFixedSize(removeButton, Dimensions.TEXT_BUTTON_SIZE);
 
@@ -53,8 +49,8 @@ public class ListPanel extends JPanel implements Detachable {
         list.setMaximumSize(Dimensions.MAXIMUM);
         setBorder(Borders.EMPTY);
 
-        leftFilterBox = filterBox(this::setFilterLeft);
-        rightFilterBox = filterBox(this::setFilterRight);
+        final var leftFilterBox = filterBox(this::setFilterLeft);
+        final var rightFilterBox = filterBox(this::setFilterRight);
 
         setPreferredSize(new Dimension(520, 100));
         setMinimumSize(new Dimension(220, 100));
@@ -101,28 +97,12 @@ public class ListPanel extends JPanel implements Detachable {
         return actions;
     }
 
-    public JButton getAddButton() {
-        return addButton;
-    }
-
-    public SearchableComboBox<BlockData> getLeftFilterBox() {
-        return leftFilterBox;
-    }
-
     public JList<KerningPair> getList() {
         return list;
     }
 
     public SortedList<KerningPair> getListModel() {
         return listModel;
-    }
-
-    public JButton getRemoveButton() {
-        return removeButton;
-    }
-
-    public SearchableComboBox<BlockData> getRightFilterBox() {
-        return rightFilterBox;
     }
 
     @Override

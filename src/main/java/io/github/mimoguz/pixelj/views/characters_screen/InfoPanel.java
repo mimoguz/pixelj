@@ -1,21 +1,5 @@
 package io.github.mimoguz.pixelj.views.characters_screen;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-
-import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
-
-import com.formdev.flatlaf.FlatClientProperties;
-
 import io.github.mimoguz.pixelj.models.CharacterItem;
 import io.github.mimoguz.pixelj.models.Metrics;
 import io.github.mimoguz.pixelj.models.Project;
@@ -23,45 +7,33 @@ import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
+import com.formdev.flatlaf.FlatClientProperties;
+
+import javax.swing.*;
+import java.awt.*;
+
 public class InfoPanel extends JPanel {
     private static final Color LABEL_FOREGROUND = new Color(50, 55, 65);
 
-    private final JLabel characterWidthLabel;
-    private final JSpinner characterWidthSpinner;
-    private final JLabel codePointLabel;
-    private final JLabel blockNamePanel;
-    private final JLabel glyphLabel;
+    private final JLabel characterWidthLabel = new JLabel(Resources.get().getString("characterWidthSpinnerLabel"));
+    private final JSpinner characterWidthSpinner = new JSpinner();
+    private final JLabel codePointLabel = new JLabel(" ");
+    private final JLabel blockNamePanel = new JLabel(" ");
+    private final JLabel glyphLabel = new JLabel(" ");
     private CharacterItem model;
-    private final JLabel nameLabel;
-    private final JCheckBox showGridCheckBox;
-    private final JCheckBox showLinesCheckBox;
+    private final JLabel nameLabel = new JLabel(" ");
+    private final JCheckBox showGridCheckBox = new JCheckBox(Resources.get().getString("showGrid"));
+    private final JCheckBox showLinesCheckBox = new JCheckBox(Resources.get().getString("showGuides"));
 
     public InfoPanel(final Project project) {
-        final var res = Resources.get();
-
-        glyphLabel = new JLabel(" ");
         glyphLabel.setFont(glyphLabel.getFont().deriveFont(Font.PLAIN, 120));
         glyphLabel.setForeground(LABEL_FOREGROUND);
-
-        nameLabel = new JLabel(" ");
-
-        codePointLabel = new JLabel(" ");
         codePointLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
-
-        blockNamePanel = new JLabel(" ");
         blockNamePanel.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
-
-        characterWidthSpinner = new JSpinner();
         Components.setFixedSize(characterWidthSpinner, Dimensions.SPINNER_SIZE);
         characterWidthSpinner.setEnabled(false);
-
-        characterWidthLabel = new JLabel(res.getString("characterWidthSpinnerLabel"));
         characterWidthLabel.setEnabled(false);
-
-        showGridCheckBox = new JCheckBox(res.getString("showGrid"));
         showGridCheckBox.setSelected(true);
-
-        showLinesCheckBox = new JCheckBox(res.getString("showGuides"));
         showLinesCheckBox.setSelected(true);
 
         characterWidthSpinner.addChangeListener(e -> {

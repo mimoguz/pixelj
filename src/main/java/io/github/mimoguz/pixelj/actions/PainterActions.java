@@ -20,8 +20,8 @@ import javax.swing.Action;
 import javax.swing.JToggleButton;
 import javax.swing.KeyStroke;
 
-import io.github.mimoguz.pixelj.controls.GlyphPainter;
-import io.github.mimoguz.pixelj.controls.painter.Painter;
+import io.github.mimoguz.pixelj.views.controls.GlyphPainter;
+import io.github.mimoguz.pixelj.views.controls.painter.Painter;
 import io.github.mimoguz.pixelj.graphics.Snapshot;
 import io.github.mimoguz.pixelj.resources.Icons;
 import io.github.mimoguz.pixelj.resources.Resources;

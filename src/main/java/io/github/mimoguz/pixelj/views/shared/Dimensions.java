@@ -5,6 +5,7 @@ import java.awt.Dimension;
 public class Dimensions {
     public static final int LARGE_PADDING = 12;
     public static final int MAXIMUM_PREVIEW_SIZE = 48;
+    public static final int MAXIMUM_ZOOM = 48;
     public static final Dimension LARGE_SQUARE = new Dimension(12, 12);
     public static final Dimension LETTER_BOX_SIZE = new Dimension(24, 24);
     public static final Dimension MAXIMUM = new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE);

@@ -2,10 +2,10 @@ package io.github.mimoguz.pixelj.views.characters_screen;
 
 import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.CharacterListActions;
-import io.github.mimoguz.pixelj.controls.SearchableComboBox;
 import io.github.mimoguz.pixelj.models.*;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.util.Detachable;
+import io.github.mimoguz.pixelj.views.controls.SearchableComboBox;
 import io.github.mimoguz.pixelj.views.shared.Borders;
 import io.github.mimoguz.pixelj.views.shared.CharacterCellRenderer;
 import io.github.mimoguz.pixelj.views.shared.Components;
@@ -16,10 +16,8 @@ import java.awt.*;
 
 public class ListPanel extends JPanel implements Detachable {
     private final CharacterListActions actions;
-    private final JButton addButton;
-    private final SearchableComboBox<BlockData> filterBox;
+    private final SearchableComboBox<BlockData> filterBox = new SearchableComboBox<>(Resources.get().getBlocks());
     private final JList<CharacterItem> list;
-    private final JButton removeButton;
     private final ListSelectionModel selectionModel;
 
     public ListPanel(
@@ -36,11 +34,11 @@ public class ListPanel extends JPanel implements Detachable {
         actions.showRemoveDialogAction.setEnabled(false);
         Actions.registerShortcuts(actions.all, root);
 
-        addButton = new JButton();
+        final var addButton = new JButton();
         addButton.setAction(actions.showAddDialogAction);
         Components.setFixedSize(addButton, Dimensions.TEXT_BUTTON_SIZE);
 
-        removeButton = new JButton();
+        final var removeButton = new JButton();
         removeButton.setAction(actions.showRemoveDialogAction);
         Components.setFixedSize(removeButton, Dimensions.TEXT_BUTTON_SIZE);
 
@@ -51,11 +49,9 @@ public class ListPanel extends JPanel implements Detachable {
         list.setMaximumSize(Dimensions.MAXIMUM);
         setBorder(Borders.EMPTY);
 
-        filterBox = new SearchableComboBox<>(res.getBlocks());
         filterBox.setMaximumSize(Dimensions.MAXIMUM_COMBO_BOX_SIZE);
         filterBox.setMinimumSize(Dimensions.MINIMUM_COMBO_BOX_SIZE);
         filterBox.addActionListener(event -> {
-            final var item = filterBox.getSelectedItem();
             if (filterBox.getSelectedItem() instanceof BlockData block) {
                 listModel.setFilter(
                         chr -> chr.getCodePoint() >= block.starts() && chr.getCodePoint() <= block.ends()
@@ -101,20 +97,8 @@ public class ListPanel extends JPanel implements Detachable {
         return actions;
     }
 
-    public JButton getAddButton() {
-        return addButton;
-    }
-
-    public SearchableComboBox<BlockData> getFilterBox() {
-        return filterBox;
-    }
-
     public JList<CharacterItem> getList() {
         return list;
-    }
-
-    public JButton getRemoveButton() {
-        return removeButton;
     }
 
     @Override
