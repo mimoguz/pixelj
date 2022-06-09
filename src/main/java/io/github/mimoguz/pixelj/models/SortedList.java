@@ -149,13 +149,19 @@ public class SortedList<E extends Comparable<E>> implements ListModel<E> {
         var index0 = -1;
         var index1 = -1;
         for (final var element : collection) {
-            if (element == null) {
+            if (element == null || !source.containsKey(element.hashCode())) {
                 continue;
             }
             source.remove(element.hashCode());
             final var index = display.indexOf(element);
-            index0 = Math.min(index0, index);
-            index1 = Math.max(index1, index);
+            if (index0 == -1 || index < index0) {
+                index0 = index;
+            }
+            if (index1 == -1 || index > index1) {
+                index1 = index;
+            } else if (index > index0) {
+                index1 += 1;
+            }
         }
         display.removeAll(collection);
         if (index0 >= 0) {

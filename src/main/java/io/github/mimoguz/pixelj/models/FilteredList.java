@@ -32,9 +32,7 @@ public class FilteredList<E extends Comparable<E>> extends SortedList<E> {
                     final var index = display.indexOf(element);
                     fireContentsChangedEvent(index, index);
                 } else {
-                    clear();
-                    pushAll(delegate.display);
-                    fireContentsChangedEvent(0, display.size());
+                    refresh();
                 }
             }
 
@@ -55,9 +53,14 @@ public class FilteredList<E extends Comparable<E>> extends SortedList<E> {
 
             @Override
             public void intervalRemoved(final ListDataEvent e) {
+                refresh();
+            }
+
+            private void refresh() {
                 clear();
+                final var oldSize = display.size();
                 pushAll(delegate.display);
-                fireContentsChangedEvent(0, display.size());
+                fireContentsChangedEvent(0, Math.max(display.size(), oldSize));
             }
         });
     }
@@ -95,6 +98,16 @@ public class FilteredList<E extends Comparable<E>> extends SortedList<E> {
     @Override
     public int getSourceSize() {
         return delegate.getSourceSize();
+    }
+
+    @Override
+    public E remove(final E element) {
+        return delegate.remove(element);
+    }
+
+    @Override
+    public void removeAll(final Collection<E> elements) {
+        delegate.removeAll(elements);
     }
 
     @Override
