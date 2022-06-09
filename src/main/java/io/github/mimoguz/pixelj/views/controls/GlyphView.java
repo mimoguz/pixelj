@@ -1,4 +1,4 @@
-package io.github.mimoguz.pixelj.controls;
+package io.github.mimoguz.pixelj.views.controls;
 
 import io.github.mimoguz.pixelj.graphics.BinaryImage;
 import io.github.mimoguz.pixelj.models.CharacterItem;

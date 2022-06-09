@@ -1,4 +1,4 @@
-package io.github.mimoguz.pixelj.controls;
+package io.github.mimoguz.pixelj.views.controls;
 
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;

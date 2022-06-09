@@ -1,4 +1,4 @@
-package io.github.mimoguz.pixelj.controls.painter;
+package io.github.mimoguz.pixelj.views.controls.painter;
 
 import io.github.mimoguz.pixelj.models.CharacterItem;
 

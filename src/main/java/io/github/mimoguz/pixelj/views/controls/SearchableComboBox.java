@@ -1,4 +1,4 @@
-package io.github.mimoguz.pixelj.controls;
+package io.github.mimoguz.pixelj.views.controls;
 
 import java.util.Collection;
 import java.util.Vector;

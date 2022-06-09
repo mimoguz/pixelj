@@ -1,6 +1,6 @@
-package io.github.mimoguz.pixelj.controls;
+package io.github.mimoguz.pixelj.views.controls;
 
-import io.github.mimoguz.pixelj.controls.painter.*;
+import io.github.mimoguz.pixelj.views.controls.painter.*;
 import io.github.mimoguz.pixelj.graphics.Snapshot;
 import io.github.mimoguz.pixelj.models.CharacterItem;
 import io.github.mimoguz.pixelj.models.IntValueChangeListener;

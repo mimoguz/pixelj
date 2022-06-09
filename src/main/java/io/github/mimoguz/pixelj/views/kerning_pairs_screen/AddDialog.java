@@ -1,6 +1,6 @@
 package io.github.mimoguz.pixelj.views.kerning_pairs_screen;
 
-import io.github.mimoguz.pixelj.controls.SearchableComboBox;
+import io.github.mimoguz.pixelj.views.controls.SearchableComboBox;
 import io.github.mimoguz.pixelj.models.*;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.views.shared.*;

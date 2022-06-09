@@ -7,7 +7,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
-import io.github.mimoguz.pixelj.controls.GlyphView;
+import io.github.mimoguz.pixelj.views.controls.GlyphView;
 import io.github.mimoguz.pixelj.models.CharacterItem;
 import io.github.mimoguz.pixelj.resources.Resources;
 

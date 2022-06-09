@@ -1,15 +1,12 @@
 package io.github.mimoguz.pixelj.views.characters_screen;
 
-import javax.swing.DefaultListSelectionModel;
-import javax.swing.JComponent;
-import javax.swing.JSplitPane;
-import javax.swing.ListSelectionModel;
-
-import io.github.mimoguz.pixelj.controls.GlyphView;
 import io.github.mimoguz.pixelj.models.Metrics;
 import io.github.mimoguz.pixelj.models.Project;
 import io.github.mimoguz.pixelj.util.Detachable;
+import io.github.mimoguz.pixelj.views.controls.GlyphView;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
+
+import javax.swing.*;
 
 public class CharactersScreen extends JSplitPane implements Detachable {
     private final ListPanel listPanel;
@@ -29,8 +26,8 @@ public class CharactersScreen extends JSplitPane implements Detachable {
         // Connect the listModel to the painter
         selectionModel.addListSelectionListener(e -> {
             if (
-                selectionModel.getMinSelectionIndex() == selectionModel.getMaxSelectionIndex()
-                        && selectionModel.getMinSelectionIndex() >= 0
+                    selectionModel.getMinSelectionIndex() == selectionModel.getMaxSelectionIndex()
+                            && selectionModel.getMinSelectionIndex() >= 0
             ) {
                 painterPanel.setModel(listModel.getElementAt(selectionModel.getMinSelectionIndex()));
             } else {
@@ -59,15 +56,7 @@ public class CharactersScreen extends JSplitPane implements Detachable {
         painterPanel.detach();
         listPanel.detach();
     }
-
-    public ListPanel getListPanel() {
-        return listPanel;
-    }
-
-    public PainterPanel getPainterPanel() {
-        return painterPanel;
-    }
-
+    
     @Override
     public void setEnabled(final boolean value) {
         listPanel.setEnabled(value);

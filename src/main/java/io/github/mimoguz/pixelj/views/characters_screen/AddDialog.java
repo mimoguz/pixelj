@@ -9,7 +9,7 @@ import java.util.Collections;
 
 import javax.swing.*;
 
-import io.github.mimoguz.pixelj.controls.SearchableComboBox;
+import io.github.mimoguz.pixelj.views.controls.SearchableComboBox;
 import io.github.mimoguz.pixelj.models.BlockData;
 import io.github.mimoguz.pixelj.models.CharacterData;
 import io.github.mimoguz.pixelj.resources.Resources;
@@ -20,9 +20,7 @@ import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 public class AddDialog extends JDialog {
     private final DefaultListModel<CharacterData> listModel = new DefaultListModel<>();
-
     private final ArrayList<CharacterData> result = new ArrayList<>();
-
     private final ListSelectionModel selectionModel = new DefaultListSelectionModel();
 
     public AddDialog(final Frame owner) {
