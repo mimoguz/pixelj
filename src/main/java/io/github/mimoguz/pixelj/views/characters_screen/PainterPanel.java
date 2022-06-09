@@ -2,15 +2,16 @@ package io.github.mimoguz.pixelj.views.characters_screen;
 
 import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.PainterActions;
-import io.github.mimoguz.pixelj.controls.GlyphPainter;
-import io.github.mimoguz.pixelj.controls.Line;
-import io.github.mimoguz.pixelj.controls.Orientation;
+import io.github.mimoguz.pixelj.views.controls.GlyphPainter;
+import io.github.mimoguz.pixelj.views.controls.Line;
+import io.github.mimoguz.pixelj.views.controls.Orientation;
 import io.github.mimoguz.pixelj.graphics.Snapshot;
 import io.github.mimoguz.pixelj.models.CharacterItem;
 import io.github.mimoguz.pixelj.models.Metrics;
 import io.github.mimoguz.pixelj.models.Project;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.util.Detachable;
+import io.github.mimoguz.pixelj.views.controls.ZoomStrip;
 import io.github.mimoguz.pixelj.views.shared.Borders;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
@@ -32,15 +33,14 @@ public class PainterPanel extends JPanel implements Detachable {
     private static final int WHITE_SQUARE = 0x30_ff_ff_ff;
     private static final Color X_HEIGHT = CAP_HEIGHT;
 
-    private final PainterActions actions;
+    private final PainterActions actions = new PainterActions();
     private final InfoPanel infoPanel;
-    private final GlyphPainter painter;
+    private final GlyphPainter painter = new GlyphPainter(Resources.get().colors.disabledIcon());
     private final ArrayList<Snapshot> undoBuffer = new ArrayList<>();
-    private final JSlider zoomSlider;
+    private final ZoomStrip zoomStrip = new ZoomStrip(1, 48, 12);
     private BufferedImage overlay;
 
     public PainterPanel(final Project project, final JComponent root) {
-        painter = new GlyphPainter(Resources.get().colors.disabledIcon());
         painter.setZoom(INITIAL_ZOOM);
         painter.setOverlayVisible(true);
         painter.setLinesVisible(true);
@@ -52,7 +52,6 @@ public class PainterPanel extends JPanel implements Detachable {
             }
         });
 
-        actions = new PainterActions();
         actions.setPainter(painter);
         painter.setSnapshotConsumer(actions.snapshotConsumer);
         Actions.registerShortcuts(actions.all, root);
@@ -68,15 +67,13 @@ public class PainterPanel extends JPanel implements Detachable {
             painter.setShaded(visible);
         });
 
-        zoomSlider = new JSlider(1, 48, INITIAL_ZOOM);
-        zoomSlider.setMinimumSize(new Dimension(96, 24));
-        zoomSlider.setMaximumSize(new Dimension(256, 24));
-        zoomSlider.setEnabled(false);
+        final var zoomSlider = zoomStrip.getSlider();
         zoomSlider.addChangeListener(e -> {
             if (zoomSlider.getValueIsAdjusting()) {
                 painter.setZoom(zoomSlider.getValue());
             }
         });
+        zoomStrip.setEnabled(false);
 
         setLayout(new BorderLayout());
 
@@ -109,13 +106,6 @@ public class PainterPanel extends JPanel implements Detachable {
         add(toolBar, BorderLayout.WEST);
 
         // ****************************** CENTER ******************************
-
-        final var zoomPanel = new JPanel();
-        zoomPanel.setBorder(Borders.SMALL_EMPTY_CUP_CENTER);
-        zoomPanel.setLayout(new BoxLayout(zoomPanel, BoxLayout.X_AXIS));
-        zoomPanel.add(Box.createHorizontalGlue());
-        zoomPanel.add(zoomSlider);
-        zoomPanel.add(Box.createHorizontalGlue());
 
         final var title = new JLabel(Resources.get().getString("painterTitle"));
         title.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
@@ -172,7 +162,7 @@ public class PainterPanel extends JPanel implements Detachable {
         editorPanel.add(titlePanel, BorderLayout.NORTH);
         editorPanel.add(toolBar, BorderLayout.WEST);
         editorPanel.add(scrollPanel, BorderLayout.CENTER);
-        editorPanel.add(zoomPanel, BorderLayout.SOUTH);
+        editorPanel.add(zoomStrip, BorderLayout.SOUTH);
         centerPanel.add(editorPanel, BorderLayout.CENTER);
         centerPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Resources.get().colors.divider()));
         add(centerPanel, BorderLayout.CENTER);
@@ -201,7 +191,7 @@ public class PainterPanel extends JPanel implements Detachable {
 
         if (value != null) {
             Actions.setEnabled(actions.all, true);
-            zoomSlider.setEnabled(true);
+            zoomStrip.setEnabled(true);
             if (
                     overlay == null || overlay.getWidth() != value.getGlyph().getWidth()
                             || overlay.getHeight() != value.getGlyph().getHeight()
@@ -211,17 +201,13 @@ public class PainterPanel extends JPanel implements Detachable {
             painter.setOverlay(overlay);
         } else {
             Actions.setEnabled(actions.all, false);
-            zoomSlider.setEnabled(false);
+            zoomStrip.setEnabled(false);
             painter.setOverlay(null);
         }
     }
 
     public GlyphPainter getPainter() {
         return painter;
-    }
-
-    public JSlider getZoomSlider() {
-        return zoomSlider;
     }
 
     @Override

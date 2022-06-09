@@ -1,39 +1,34 @@
 package io.github.mimoguz.pixelj.views.preview_screen;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagLayout;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-
-import javax.swing.*;
-
-import com.formdev.flatlaf.FlatClientProperties;
-
 import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.ApplicationAction;
 import io.github.mimoguz.pixelj.actions.PreviewScreenActions;
-import io.github.mimoguz.pixelj.controls.PromptTextArea;
 import io.github.mimoguz.pixelj.models.Project;
 import io.github.mimoguz.pixelj.resources.Icons;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.util.Detachable;
+import io.github.mimoguz.pixelj.views.controls.PromptTextArea;
+import io.github.mimoguz.pixelj.views.controls.ZoomStrip;
 import io.github.mimoguz.pixelj.views.shared.Borders;
 import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
+import com.formdev.flatlaf.FlatClientProperties;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+
 public class PreviewScreen extends JPanel implements Detachable {
+    private static final int INITIAL_ZOOM = 4;
     private final PreviewScreenActions actions;
-    private final JButton clearButton;
-    private final JButton refreshButton;
-    private final PromptTextArea textInput;
-    private final JSlider zoomSlider;
+    private final PromptTextArea textInput = new PromptTextArea();
+    private final ZoomStrip zoomStrip = new ZoomStrip(1, 48, INITIAL_ZOOM);
 
     public PreviewScreen(final Project project, final JComponent root) {
         final var res = Resources.get();
 
-        textInput = new PromptTextArea();
         textInput.setPromptColor(res.colors.inactive());
         textInput.setMaximumSize(Dimensions.MAXIMUM);
         textInput.setPromptText(res.getString("previewTextInputPrompt"));
@@ -59,7 +54,7 @@ public class PreviewScreen extends JPanel implements Detachable {
         );
         textInput.setComponentPopupMenu(contextMenu);
 
-        JPanel container = new JPanel();
+        final var container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
         container.setBorder(
                 BorderFactory.createMatteBorder(
@@ -71,17 +66,18 @@ public class PreviewScreen extends JPanel implements Detachable {
                 )
         );
         container.setBackground(Color.WHITE);
-        actions = new PreviewScreenActions(project, textInput, container);
 
-        refreshButton = new JButton();
+        actions = new PreviewScreenActions(project, textInput, container);
+        actions.setZoom(INITIAL_ZOOM);
+        Actions.registerShortcuts(actions.all, root);
+
+        final var refreshButton = new JButton();
         refreshButton.setAction(actions.refreshAction);
         Components.setFixedSize(refreshButton, Dimensions.TEXT_BUTTON_SIZE);
 
-        clearButton = new JButton();
+        final var clearButton = new JButton();
         clearButton.setAction(actions.clearAction);
         Components.setFixedSize(clearButton, Dimensions.TEXT_BUTTON_SIZE);
-
-        Actions.registerShortcuts(actions.all, root);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -124,38 +120,18 @@ public class PreviewScreen extends JPanel implements Detachable {
         bottomPanel.add(Box.createHorizontalGlue());
         add(bottomPanel);
 
-        zoomSlider = new JSlider(1, 48, 1);
-        zoomSlider.setMinimumSize(new Dimension(96, 24));
-        zoomSlider.setMaximumSize(new Dimension(256, 24));
+        final var zoomSlider = zoomStrip.getSlider();
         zoomSlider.addChangeListener(e -> {
             if (zoomSlider.getValueIsAdjusting()) {
                 actions.setZoom(zoomSlider.getValue());
             }
         });
-        final var zoomPanel = new JPanel();
-        zoomPanel.setBorder(Borders.SMALL_EMPTY_CUP_CENTER);
-        zoomPanel.setLayout(new BoxLayout(zoomPanel, BoxLayout.X_AXIS));
-        zoomPanel.add(Box.createHorizontalGlue());
-        zoomPanel.add(zoomSlider);
-        zoomPanel.add(Box.createHorizontalGlue());
-        add(zoomPanel);
+        add(zoomStrip);
     }
 
     @Override
     public void detach() {
         // TODO: Remove
-    }
-
-    public JButton getClearButton() {
-        return clearButton;
-    }
-
-    public JButton getRefreshButton() {
-        return refreshButton;
-    }
-
-    public JTextArea getTextInput() {
-        return textInput;
     }
 
     public void refresh() {
@@ -166,6 +142,7 @@ public class PreviewScreen extends JPanel implements Detachable {
     public void setEnabled(final boolean value) {
         super.setEnabled(value);
         textInput.setEnabled(value);
+        zoomStrip.setEnabled(value);
         Actions.setEnabled(actions.all, value);
         if (value) {
             refresh();

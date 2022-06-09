@@ -1,48 +1,44 @@
 package io.github.mimoguz.pixelj.views.kerning_pairs_screen;
 
-import java.awt.Dimension;
-import java.awt.GridBagLayout;
-import java.util.ArrayList;
-
-import javax.swing.*;
-
-import com.formdev.flatlaf.FlatClientProperties;
-
-import io.github.mimoguz.pixelj.controls.StringView;
 import io.github.mimoguz.pixelj.models.KerningPair;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.util.Detachable;
+import io.github.mimoguz.pixelj.views.controls.StringView;
+import io.github.mimoguz.pixelj.views.controls.ZoomStrip;
 import io.github.mimoguz.pixelj.views.shared.Borders;
 import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
+import com.formdev.flatlaf.FlatClientProperties;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+
 public class EditorPanel extends JPanel implements Detachable {
     private static final int INITIAL_ZOOM = 4;
-
-    private KerningPair model;
-    private final StringView preview;
+    private final StringView preview = new StringView(Resources.get().colors.disabledIcon());
     private final JLabel pxLabel;
     private final ArrayList<Integer> spaces = new ArrayList<>(java.util.List.of(0));
-    private int spacing;
     private final JLabel spinnerLabel;
     private final JSpinner valueSpinner;
-    private final JSlider zoomSlider;
+    private final ZoomStrip zoomStrip = new ZoomStrip(1, 48, INITIAL_ZOOM);
+    private KerningPair model;
+    private int spacing;
 
     public EditorPanel() {
         final var res = Resources.get();
 
-        preview = new StringView(res.colors.disabledIcon());
         preview.setPadding(Dimensions.MEDIUM_PADDING);
         preview.setZoom(INITIAL_ZOOM);
 
-        zoomSlider = new JSlider(1, 48, INITIAL_ZOOM);
-        zoomSlider.setMinimumSize(new Dimension(96, 24));
-        zoomSlider.setMaximumSize(new Dimension(256, 24));
+        final var zoomSlider = zoomStrip.getSlider();
         zoomSlider.addChangeListener(e -> {
             if (zoomSlider.getValueIsAdjusting()) {
                 preview.setZoom(zoomSlider.getValue());
             }
         });
+        zoomStrip.setEnabled(false);
 
         valueSpinner = new JSpinner();
         Components.setFixedSize(valueSpinner, Dimensions.SPINNER_SIZE);
@@ -97,13 +93,7 @@ public class EditorPanel extends JPanel implements Detachable {
         spinnerPanel.add(Box.createHorizontalGlue());
         add(spinnerPanel);
 
-        final var zoomPanel = new JPanel();
-        zoomPanel.setBorder(Borders.SMALL_EMPTY_CUP_CENTER);
-        zoomPanel.setLayout(new BoxLayout(zoomPanel, BoxLayout.X_AXIS));
-        zoomPanel.add(Box.createHorizontalGlue());
-        zoomPanel.add(zoomSlider);
-        zoomPanel.add(Box.createHorizontalGlue());
-        add(zoomPanel);
+        add(zoomStrip);
 
         setEnabled(false);
     }
@@ -117,20 +107,25 @@ public class EditorPanel extends JPanel implements Detachable {
         return preview;
     }
 
-    public JLabel getPxLabel() {
-        return pxLabel;
-    }
-
     public int getSpacing() {
         return spacing;
     }
 
-    public JSpinner getValueSpinner() {
-        return valueSpinner;
-    }
-
-    public JSlider getZoomSlider() {
-        return zoomSlider;
+    public void setSpacing(final int value) {
+        spacing = value;
+        if (model == null) {
+            return;
+        }
+        valueSpinner.setModel(
+                new SpinnerNumberModel(
+                        model.getKerningValue(),
+                        -model.getLeft().getWidth() - spacing,
+                        model.getRight().getWidth(),
+                        1
+                )
+        );
+        spaces.set(0, model.getKerningValue() + spacing);
+        preview.setSpaces(spaces);
     }
 
     @Override
@@ -138,7 +133,7 @@ public class EditorPanel extends JPanel implements Detachable {
         super.setEnabled(value);
         final var valueIfNotNull = value && (model != null);
         valueSpinner.setEnabled(valueIfNotNull);
-        zoomSlider.setEnabled(valueIfNotNull);
+        zoomStrip.setEnabled(valueIfNotNull);
         spinnerLabel.setEnabled(valueIfNotNull);
         pxLabel.setEnabled(valueIfNotNull);
         if (value) {
@@ -170,22 +165,5 @@ public class EditorPanel extends JPanel implements Detachable {
             );
             setEnabled(true);
         }
-    }
-
-    public void setSpacing(final int value) {
-        spacing = value;
-        if (model == null) {
-            return;
-        }
-        valueSpinner.setModel(
-                new SpinnerNumberModel(
-                        model.getKerningValue(),
-                        -model.getLeft().getWidth() - spacing,
-                        model.getRight().getWidth(),
-                        1
-                )
-        );
-        spaces.set(0, model.getKerningValue() + spacing);
-        preview.setSpaces(spaces);
     }
 }
