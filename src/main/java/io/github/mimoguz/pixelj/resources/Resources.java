@@ -1,48 +1,29 @@
 package io.github.mimoguz.pixelj.resources;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.GraphicsEnvironment;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import org.eclipse.collections.api.map.primitive.ImmutableIntObjectMap;
-import org.eclipse.collections.impl.map.mutable.primitive.IntObjectHashMap;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.github.mimoguz.pixelj.graphics.FontIcon;
 import io.github.mimoguz.pixelj.models.BlockData;
 import io.github.mimoguz.pixelj.models.CharacterData;
+import org.eclipse.collections.api.map.primitive.ImmutableIntObjectMap;
+import org.eclipse.collections.impl.map.mutable.primitive.IntObjectHashMap;
+
+import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serial;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Resources {
-    public static class ResourceInitializationException extends RuntimeException {
-        private static final long serialVersionUID = -3116843305868695218L;
-
-        public ResourceInitializationException(final String message) {
-            super(message);
-        }
-    }
-
     private static final String BASE = "io/github/mimoguz/pixelj/resources/";
     private static Resources instance = null;
-
     public final Colors colors;
-
     private final Collection<BlockData> blockList;
-
     private final ImmutableIntObjectMap<BlockData> blockMap;
-
     private final ImmutableIntObjectMap<CharacterData> characterMap;
-
     private final ImmutableIntObjectMap<Collection<CharacterData>> charactersInBlock;
-
     private final Font iconFont;
-
     private final Strings strings;
 
     private Resources(final boolean useDarkTheme) {
@@ -75,42 +56,6 @@ public class Resources {
         this.colors = useDarkTheme ? new DarkColors() : new LightColors();
     }
 
-    public String formatString(final String key, final Object... arguments) {
-        return strings.format(key, arguments);
-    }
-
-    public BlockData getBlockData(final int blockId) {
-        return blockMap.get(blockId);
-    }
-
-    public Collection<BlockData> getBlocks() {
-        return blockList;
-    }
-
-    public CharacterData getCharacterData(final int codePoint) {
-        return characterMap.get(codePoint);
-    }
-
-    public Collection<CharacterData> getCharacters(final int blockId) {
-        return charactersInBlock.get(blockId);
-    }
-
-    public FontIcon getIcon(final Icons icon) {
-        return new FontIcon(icon.codePoint, null, null, iconFont);
-    }
-
-    public FontIcon getIcon(final Icons icon, final Color color, final Color disabledColor) {
-        return new FontIcon(icon.codePoint, color, disabledColor, iconFont);
-    }
-
-    public Locale getLocale() {
-        return strings.getLocale();
-    }
-
-    public String getString(final String key) {
-        return strings.get(key);
-    }
-
     public static Resources get() {
         if (instance == null) {
             initialize(true);
@@ -123,13 +68,13 @@ public class Resources {
     }
 
     private static Collection<BlockData> loadBlocks() {
-        return loadCollection("blocks.json", new TypeReference<Collection<BlockData>>() {
+        return loadCollection("blocks.json", new TypeReference<>() {
             // Empty
         });
     }
 
     private static Collection<CharacterData> loadCharacters() {
-        return loadCollection("characterData.json", new TypeReference<Collection<CharacterData>>() {
+        return loadCollection("characterData.json", new TypeReference<>() {
             // Empty
         });
     }
@@ -182,5 +127,47 @@ public class Resources {
             }
         }
         return bundle;
+    }
+
+    public String formatString(final String key, final Object... arguments) {
+        return strings.format(key, arguments);
+    }
+
+    public BlockData getBlockData(final int blockId) {
+        return blockMap.get(blockId);
+    }
+
+    public Collection<BlockData> getBlocks() {
+        return blockList;
+    }
+
+    public CharacterData getCharacterData(final int codePoint) {
+        return characterMap.get(codePoint);
+    }
+
+    public Collection<CharacterData> getCharacters(final int blockId) {
+        return charactersInBlock.get(blockId);
+    }
+
+    public FontIcon getIcon(final Icons icon) {
+        return new FontIcon(icon.codePoint, null, null, iconFont);
+    }
+
+    public FontIcon getIcon(final Icons icon, final Color color, final Color disabledColor) {
+        return new FontIcon(icon.codePoint, color, disabledColor, iconFont);
+    }
+
+    public Locale getLocale() {
+        return strings.getLocale();
+    }
+
+    public String getString(final String key) {
+        return strings.get(key);
+    }
+
+    public static class ResourceInitializationException extends RuntimeException {
+        public ResourceInitializationException(final String message) {
+            super(message);
+        }
     }
 }

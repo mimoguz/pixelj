@@ -41,7 +41,7 @@ public class FilteredListTests {
         final var wrapper = new FilteredList<>(model);
         wrapper.setFilter(i -> i > 3 && i < 7);
         model.removeAll(List.of(1, 4, 5));
-        System.out.println(wrapper.display.stream().map(i -> i.toString()).collect(Collectors.joining(", ")));
+        System.out.println(wrapper.display.stream().map(Object::toString).collect(Collectors.joining(", ")));
         assertArrayEquals(new Integer[] { 6 }, wrapper.display.toArray());
     }
 
@@ -70,7 +70,7 @@ public class FilteredListTests {
         wrapper.setFilter(i -> i > 3 && i < 7);
         model.add(5);
         assertArrayEquals(new Integer[] { 4, 5, 6 }, wrapper.display.toArray());
-        wrapper.setFilter(i -> i > 5 && i < 7);
+        wrapper.setFilter(i -> i > 5 && i < 8);
         assertArrayEquals(new Integer[] { 6 }, wrapper.display.toArray());
     }
 }

@@ -24,11 +24,8 @@ import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 public class PreviewScreen extends JPanel implements Detachable {
-    private static final long serialVersionUID = -4480174487039009081L;
-
-    private final transient PreviewScreenActions actions;
+    private final PreviewScreenActions actions;
     private final JButton clearButton;
-    private final JPanel container;
     private final JButton refreshButton;
     private final PromptTextArea textInput;
     private final JSlider zoomSlider;
@@ -62,7 +59,7 @@ public class PreviewScreen extends JPanel implements Detachable {
         );
         textInput.setComponentPopupMenu(contextMenu);
 
-        container = new JPanel();
+        JPanel container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
         container.setBorder(
                 BorderFactory.createMatteBorder(

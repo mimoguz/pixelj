@@ -14,14 +14,12 @@ import io.github.mimoguz.pixelj.models.CharacterItem;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 public class StringView extends JPanel {
-    private static final long serialVersionUID = 5414891564267425303L;
-
     private final Color backgroundColor;
     private final ArrayList<CharacterItem> characters = new ArrayList<>();
     private int lineSpacing;
     private int maxY;
     private int padding;
-    private transient BufferedImage renderTarget;
+    private BufferedImage renderTarget;
     private final ArrayList<Integer> spaces = new ArrayList<>();
     private int zoom;
 
@@ -90,6 +88,7 @@ public class StringView extends JPanel {
         repaint();
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void drawCharacter(
             final BufferedImage target,
             final CharacterItem character,
@@ -127,7 +126,7 @@ public class StringView extends JPanel {
         var h = characters.stream()
                 .mapToInt(chr -> chr.getGlyph() == null ? 0 : chr.getGlyph().getHeight())
                 .max()
-                .orElseGet(() -> 0);
+                .orElse(0);
 
         if (maxY > 0) {
             h = Math.min(h, maxY);

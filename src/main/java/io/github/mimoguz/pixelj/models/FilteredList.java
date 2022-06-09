@@ -11,7 +11,7 @@ import javax.swing.event.ListDataListener;
  * A wrapper for HashList which adds filtering capability.
  */
 public class FilteredList<E extends Comparable<E>> extends SortedList<E> {
-    private static record Interval(int index0, int index1) {
+    private record Interval(int index0, int index1) {
     }
 
     private final SortedList<E> delegate;

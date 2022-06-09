@@ -12,8 +12,6 @@ import io.github.mimoguz.pixelj.models.CharacterItem;
 import io.github.mimoguz.pixelj.resources.Resources;
 
 public class CharacterModelCell extends JPanel {
-    private static final long serialVersionUID = 5319221937480404986L;
-
     private final CharacterCell characterCell = new CharacterCell();
     private final int maxPictureSize;
     private final GlyphView picture = new GlyphView(Resources.get().colors.disabledIcon());

@@ -54,8 +54,7 @@ public class CharacterListActions {
         ).setTextKey("charactersShowRemoveDialogAction")
                 .setAccelerator(KeyEvent.VK_MINUS, InputEvent.ALT_DOWN_MASK);
 
-        all = java.util.Collections
-                .unmodifiableCollection(List.of(showAddDialogAction, showRemoveDialogAction));
+        all = List.of(showAddDialogAction, showRemoveDialogAction);
 
         canvasSize = new Dimension(metrics.canvasWidth(), metrics.canvasHeight());
         defaultCharacterWidth = metrics.defaultCharacterWidth();

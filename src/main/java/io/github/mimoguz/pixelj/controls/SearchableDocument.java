@@ -26,12 +26,10 @@ class SearchableDocument<E> extends PlainDocument {
         ERROR, HIT, HIT_ON_SELECTION, NO_HIT
     }
 
-    private static final long serialVersionUID = -7793331737675680882L;
-
     private BackspaceState backspaceState = BackspaceState.NO_HIT;
     private final JComboBox<E> comboBox;
     private final JTextComponent editor;
-    private final transient ComboBoxModel<E> model;
+    private final ComboBoxModel<E> model;
 
     private boolean selecting = false;
 
@@ -137,9 +135,7 @@ class SearchableDocument<E> extends PlainDocument {
             }
             case ERROR -> { // Ignore error state
             }
-            default -> {
-                super.remove(offset, length);
-            }
+            default -> super.remove(offset, length);
         }
     }
 

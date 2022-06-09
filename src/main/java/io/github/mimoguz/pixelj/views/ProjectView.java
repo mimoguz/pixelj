@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.List;
@@ -32,16 +33,10 @@ import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 public class ProjectView extends JFrame {
-    private static final long serialVersionUID = -8552411151437621157L;
-
     private final CharactersScreen charactersScreen;
-
     private final KerningPairsScreen kerningPairsScreen;
-
-    private final transient MainActions mainActions;
     private final PreviewScreen previewScreen;
     private final JTabbedPane root;
-    private final Collection<ApplicationAction> tabActions;
 
     public ProjectView(final Project project) {
         super();
@@ -53,7 +48,7 @@ public class ProjectView extends JFrame {
         charactersScreen = new CharactersScreen(project, root);
         kerningPairsScreen = new KerningPairsScreen(project, root);
         previewScreen = new PreviewScreen(project, root);
-        mainActions = new MainActions(project, root);
+        MainActions mainActions = new MainActions(project, root);
         final var mainMenu = new MainMenu(mainActions);
 
         Actions.registerShortcuts(mainActions.all, root);
@@ -102,7 +97,7 @@ public class ProjectView extends JFrame {
                 res.getString("previewScreenTabTooltip")
         );
 
-        tabActions = List.of(
+        Collection<ApplicationAction> tabActions = List.of(
                 new ApplicationAction("projectViewTab0Action", (event, action) -> root.setSelectedIndex(0))
                         .setAccelerator(KeyEvent.VK_1, ActionEvent.ALT_MASK),
                 new ApplicationAction("projectViewTab1Action", (event, action) -> root.setSelectedIndex(1))
@@ -155,7 +150,7 @@ public class ProjectView extends JFrame {
         })
                 .setTooltipWithAccelerator(
                         res.getString("menuButtonAction"),
-                        KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.ALT_MASK)
+                        KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.ALT_DOWN_MASK)
                 )
                 .setIcon(Icons.ELLIPSIS, res.colors.accent(), res.colors.disabledIcon());
 

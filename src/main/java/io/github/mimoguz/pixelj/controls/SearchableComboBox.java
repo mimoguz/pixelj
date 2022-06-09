@@ -12,8 +12,6 @@ import javax.swing.text.JTextComponent;
  * "http://www.orbital-computer.de/JComboBox/">http://www.orbital-computer.de/JComboBox/</a>
  */
 public class SearchableComboBox<E> extends JComboBox<E> {
-    private static final long serialVersionUID = 4325541939040411860L;
-
     public SearchableComboBox() {
         super();
         final var editor = (JTextComponent) getEditor().getEditorComponent();

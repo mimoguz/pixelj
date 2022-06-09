@@ -10,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -40,7 +39,7 @@ public class PainterActions {
         }
 
         @Override
-        public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
+        public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException {
             if (flavor.equals(DataFlavor.imageFlavor)) {
                 return image;
             }

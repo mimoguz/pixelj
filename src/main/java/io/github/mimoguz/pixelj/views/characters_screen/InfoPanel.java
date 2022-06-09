@@ -24,7 +24,6 @@ import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 public class InfoPanel extends JPanel {
-    private static final long serialVersionUID = 1793227912035744053L;
     private static final Color LABEL_FOREGROUND = new Color(50, 55, 65);
 
     private final JLabel characterWidthLabel;
@@ -32,7 +31,7 @@ public class InfoPanel extends JPanel {
     private final JLabel codePointLabel;
     private final JLabel blockNamePanel;
     private final JLabel glyphLabel;
-    private transient CharacterItem model;
+    private CharacterItem model;
     private final JLabel nameLabel;
     private final JCheckBox showGridCheckBox;
     private final JCheckBox showLinesCheckBox;
@@ -91,6 +90,7 @@ public class InfoPanel extends JPanel {
         cons.weighty = 0.0;
         cons.insets = new Insets(pad - focusWidth, pad, pad, pad - divWidth);
         final var glyphBackground = new JPanel(new GridBagLayout());
+        //noinspection SuspiciousNameCombination
         Components.setFixedSize(glyphBackground, new Dimension(innerWidth, innerWidth));
         glyphBackground.add(glyphLabel, new GridBagConstraints());
         glyphBackground.setBackground(Color.WHITE);

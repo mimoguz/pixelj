@@ -22,21 +22,16 @@ import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 public class MetricsDialog extends JDialog {
-    private static final long serialVersionUID = 1185992736696485089L;
-
     private final JButton applyButton;
-
     private final JSpinner ascender;
-
     private final JSpinner canvasHeight;
-
     private final JSpinner canvasWidth;
     private final JSpinner capHeight;
     private final JSpinner defaultCharacterWidth;
     private final JSpinner descender;
     private final JCheckBox isMonospaced;
     private final JSpinner lineSpacing;
-    private transient Metrics result;
+    private Metrics result;
     private final JSpinner spaceSize;
     private final JSpinner spacing;
     private final JSpinner xHeight;

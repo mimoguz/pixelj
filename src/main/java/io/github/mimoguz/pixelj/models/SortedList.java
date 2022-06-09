@@ -131,7 +131,7 @@ public class SortedList<E extends Comparable<E>> implements ListModel<E> {
 
     /**
      * @return If the source collection have had an element with same hash code with
-     *         the parameter, returns that element. Otherwise returns null.
+     *         the parameter, returns that element. Otherwise, returns null.
      */
     public E remove(final E element) {
         if (element == null) {

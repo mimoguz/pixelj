@@ -19,8 +19,6 @@ import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 public class AddDialog extends JDialog {
-    private static final long serialVersionUID = 7882899053849031516L;
-
     private final DefaultListModel<CharacterData> listModel = new DefaultListModel<>();
 
     private final ArrayList<CharacterData> result = new ArrayList<>();
@@ -47,15 +45,13 @@ public class AddDialog extends JDialog {
 
         final var filterBox = new SearchableComboBox<>(res.getBlocks().stream().skip(1).toList());
         filterBox.setSelectedIndex(0);
-        listModel.addAll(res.getCharacters(((BlockData) filterBox.getSelectedItem()).id()));
+        if (filterBox.getSelectedItem() instanceof BlockData block) {
+            listModel.addAll(res.getCharacters(block.id()));
+        }
         filterBox.addActionListener(event -> {
-            final var item = filterBox.getSelectedItem();
-            try {
-                final var block = (BlockData) item;
+            if (filterBox.getSelectedItem() instanceof  BlockData block) {
                 listModel.clear();
                 listModel.addAll(res.getCharacters(block.id()));
-            } catch (final Exception e) {
-                // Ignore
             }
         });
 

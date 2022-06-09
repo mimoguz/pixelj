@@ -11,11 +11,9 @@ import io.github.mimoguz.pixelj.util.Detachable;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 public class KerningPairsScreen extends JSplitPane implements Detachable {
-    private static final long serialVersionUID = -8264436768125439149L;
-
     private final EditorPanel editorPanel;
     private final ListPanel listPanel;
-    private final transient ListSelectionModel selectionModel;
+    private final ListSelectionModel selectionModel;
 
     public KerningPairsScreen(final Project project, final JComponent root) {
         selectionModel = new DefaultListSelectionModel();

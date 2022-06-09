@@ -70,8 +70,8 @@ public class KerningPair extends MutableIntValueModel implements Comparable<Kern
      */
     public static int getHash(final CharacterItem left, final CharacterItem right) {
         // >In the Unicode Standard, the codespace consists of the integers from 0 to
-        // 10FFFF.<
-        // 10FFFF occupies 21 bits, there shouldn't be any collisions here.
+        // 0x10FFFF.<
+        // 0x10FFFF occupies 21 bits, there shouldn't be any collisions here.
         return (left.hashCode() << 24) | right.hashCode();
     }
 }

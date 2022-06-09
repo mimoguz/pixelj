@@ -33,13 +33,12 @@ public class PainterPanel extends JPanel implements Detachable {
     private static final Color CAP_HEIGHT = new Color(41, 191, 18);
     private static final int INITIAL_ZOOM = 12;
     private static final int MAX_UNDO = 64;
-    private static final long serialVersionUID = -2196271415900003483L;
     private static final int WHITE_SQUARE = 0x30_ff_ff_ff;
     private static final Color X_HEIGHT = CAP_HEIGHT;
 
-    private final transient PainterActions actions;
+    private final PainterActions actions;
     private final InfoPanel infoPanel;
-    private transient BufferedImage overlay;
+    private BufferedImage overlay;
     private final GlyphPainter painter;
     private final ArrayList<Snapshot> undoBuffer = new ArrayList<>();
     private final JSlider zoomSlider;
@@ -271,6 +270,7 @@ public class PainterPanel extends JPanel implements Detachable {
         final var image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         for (var y = 0; y < h; y++) {
             for (var x = 0; x < w; x++) {
+                //noinspection SuspiciousNameCombination
                 image.setRGB(
                         x,
                         y,

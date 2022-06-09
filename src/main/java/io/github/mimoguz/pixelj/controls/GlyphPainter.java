@@ -1,12 +1,12 @@
 package io.github.mimoguz.pixelj.controls;
 
-import java.awt.Color;
-import java.util.function.Consumer;
-
 import io.github.mimoguz.pixelj.controls.painter.*;
 import io.github.mimoguz.pixelj.graphics.Snapshot;
 import io.github.mimoguz.pixelj.models.CharacterItem;
 import io.github.mimoguz.pixelj.models.IntValueChangeListener;
+
+import java.awt.*;
+import java.util.function.Consumer;
 
 public class GlyphPainter extends GlyphView
         implements
@@ -15,11 +15,9 @@ public class GlyphPainter extends GlyphView
         CanRotateImage,
         CanTranslateImage {
 
-    private static final long serialVersionUID = 2382126540536314203L;
-
-    private final transient IntValueChangeListener characterWidthChangeListener;
-    private final transient PaintAdapter paintAdapter;
-    private transient Consumer<Snapshot> snapshotConsumer = snapshot -> { // Ignore
+    private final IntValueChangeListener characterWidthChangeListener;
+    private final PaintAdapter paintAdapter;
+    private Consumer<Snapshot> snapshotConsumer = snapshot -> { // Ignore
     };
 
     public GlyphPainter(final Color backgroundColor) {
@@ -41,6 +39,10 @@ public class GlyphPainter extends GlyphView
         return paintAdapter.isSymmetrical();
     }
 
+    public void setSymmetrical(final boolean value) {
+        paintAdapter.setSymmetrical(value);
+    }
+
     @Override
     public void setModel(final CharacterItem value) {
         final var current = getModel();
@@ -56,10 +58,6 @@ public class GlyphPainter extends GlyphView
 
     public void setSnapshotConsumer(final Consumer<Snapshot> value) {
         snapshotConsumer = value;
-    }
-
-    public void setSymmetrical(final boolean value) {
-        paintAdapter.setSymmetrical(value);
     }
 
     @Override

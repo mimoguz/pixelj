@@ -77,17 +77,15 @@ public class MainActions {
                 .setIcon(Icons.SETTINGS, res.colors.icon(), res.colors.disabledIcon())
                 .setAccelerator(KeyEvent.VK_PERIOD, ActionEvent.CTRL_MASK);
 
-        all = java.util.Collections.unmodifiableCollection(
-                List.of(
-                        returnToProjectManagerAction,
-                        exportAction,
-                        quitAction,
-                        saveAction,
-                        saveAsAction,
-                        showHelpAction,
-                        showMetricsAction,
-                        showSettingsAction
-                )
+        all = List.of(
+                returnToProjectManagerAction,
+                exportAction,
+                quitAction,
+                saveAction,
+                saveAsAction,
+                showHelpAction,
+                showMetricsAction,
+                showSettingsAction
         );
     }
 

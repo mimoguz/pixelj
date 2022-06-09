@@ -18,9 +18,8 @@ import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 public class EditorPanel extends JPanel implements Detachable {
     private static final int INITIAL_ZOOM = 4;
-    private static final long serialVersionUID = -7463105184228298933L;
 
-    private transient KerningPair model;
+    private KerningPair model;
     private final StringView preview;
     private final JLabel pxLabel;
     private final ArrayList<Integer> spaces = new ArrayList<>(java.util.List.of(0));

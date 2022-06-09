@@ -48,8 +48,7 @@ public class KerningPairListActions {
                 e -> showRemoveDialogAction.setEnabled(selectionModel.getMinSelectionIndex() >= 0)
         );
 
-        all = java.util.Collections
-                .unmodifiableCollection(List.of(showAddDialogAction, showRemoveDialogAction));
+        all = List.of(showAddDialogAction, showRemoveDialogAction);
     }
 
     private void showAddDialog(final ActionEvent event, final Action action) {

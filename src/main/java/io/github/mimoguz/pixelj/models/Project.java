@@ -29,13 +29,9 @@ public class Project
     }
 
     private final SortedList<CharacterItem> characters;
-    private final ListDataListener kerningPairRemover;
     private final SortedList<KerningPair> kerningPairs;
-
     private final EventListenerList listeners = new EventListenerList();
-
     private Metrics metrics;
-
     private String title;
 
     public Project(
@@ -49,7 +45,9 @@ public class Project
         this.kerningPairs = kerningPairs;
         this.metrics = metrics;
 
-        kerningPairRemover = new ListDataListener() {
+        // Ignore
+        // Kerning pairs which depend on non-existing characters
+        ListDataListener kerningPairRemover = new ListDataListener() {
             @Override
             public void contentsChanged(final ListDataEvent e) {
                 sync();
@@ -75,8 +73,8 @@ public class Project
                 for (var index = 0; index < kerningPairs.getSize(); index++) {
                     final var model = kerningPairs.getElementAt(index);
                     if (
-                        !characters.sourceContains(model.getLeft())
-                                || !characters.sourceContains(model.getRight())
+                            !characters.sourceContains(model.getLeft())
+                                    || !characters.sourceContains(model.getRight())
                     ) {
                         marked.add(model);
                     }

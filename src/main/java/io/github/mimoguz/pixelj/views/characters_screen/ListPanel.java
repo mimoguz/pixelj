@@ -1,9 +1,5 @@
 package io.github.mimoguz.pixelj.views.characters_screen;
 
-import java.awt.Dimension;
-
-import javax.swing.*;
-
 import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.CharacterListActions;
 import io.github.mimoguz.pixelj.controls.SearchableComboBox;
@@ -15,15 +11,16 @@ import io.github.mimoguz.pixelj.views.shared.CharacterCellRenderer;
 import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
-public class ListPanel extends JPanel implements Detachable {
-    private static final long serialVersionUID = 7598472980158047622L;
+import javax.swing.*;
+import java.awt.*;
 
-    private final transient CharacterListActions actions;
+public class ListPanel extends JPanel implements Detachable {
+    private final CharacterListActions actions;
     private final JButton addButton;
     private final SearchableComboBox<BlockData> filterBox;
     private final JList<CharacterItem> list;
     private final JButton removeButton;
-    private final transient ListSelectionModel selectionModel;
+    private final ListSelectionModel selectionModel;
 
     public ListPanel(
             final Project project,
@@ -59,12 +56,11 @@ public class ListPanel extends JPanel implements Detachable {
         filterBox.setMinimumSize(Dimensions.MINIMUM_COMBO_BOX_SIZE);
         filterBox.addActionListener(event -> {
             final var item = filterBox.getSelectedItem();
-            try {
-                final var block = (BlockData) item;
+            if (filterBox.getSelectedItem() instanceof BlockData block) {
                 listModel.setFilter(
                         chr -> chr.getCodePoint() >= block.starts() && chr.getCodePoint() <= block.ends()
                 );
-            } catch (final Exception e) {
+            } else {
                 listModel.setFilter(chr -> true);
             }
         });

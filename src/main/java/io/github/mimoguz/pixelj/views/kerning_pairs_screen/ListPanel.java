@@ -1,14 +1,5 @@
 package io.github.mimoguz.pixelj.views.kerning_pairs_screen;
 
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.util.function.BiConsumer;
-import java.util.function.Predicate;
-
-import javax.swing.*;
-
-import com.formdev.flatlaf.FlatClientProperties;
-
 import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.KerningPairListActions;
 import io.github.mimoguz.pixelj.controls.SearchableComboBox;
@@ -19,19 +10,24 @@ import io.github.mimoguz.pixelj.views.shared.Borders;
 import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
-public class ListPanel extends JPanel implements Detachable {
-    private static final long serialVersionUID = -3269592942325114705L;
+import com.formdev.flatlaf.FlatClientProperties;
 
-    private final transient KerningPairListActions actions;
+import javax.swing.*;
+import java.awt.*;
+import java.util.function.BiConsumer;
+import java.util.function.Predicate;
+
+public class ListPanel extends JPanel implements Detachable {
+    private final KerningPairListActions actions;
     private final JButton addButton;
-    private Predicate<KerningPair> filterLeft = model -> true;
     private final Predicate<KerningPair> filterRight = model -> true;
     private final SearchableComboBox<BlockData> leftFilterBox;
     private final JList<KerningPair> list;
-    private final transient FilteredList<KerningPair> listModel;
+    private final FilteredList<KerningPair> listModel;
     private final JButton removeButton;
     private final SearchableComboBox<BlockData> rightFilterBox;
-    private final transient ListSelectionModel selectionModel;
+    private final ListSelectionModel selectionModel;
+    private Predicate<KerningPair> filterLeft = model -> true;
 
     public ListPanel(final Project project, final ListSelectionModel selectionModel, final JComponent root) {
         this.selectionModel = selectionModel;
@@ -137,15 +133,13 @@ public class ListPanel extends JPanel implements Detachable {
     }
 
     private SearchableComboBox<BlockData> filterBox(final BiConsumer<Integer, Integer> setter) {
-        final var box = new SearchableComboBox<BlockData>(Resources.get().getBlocks());
+        final var box = new SearchableComboBox<>(Resources.get().getBlocks());
         box.setMaximumSize(Dimensions.MAXIMUM_COMBO_BOX_SIZE);
         box.setMinimumSize(Dimensions.MINIMUM_COMBO_BOX_SIZE);
         box.addActionListener(event -> {
-            final var item = box.getSelectedItem();
-            try {
-                final var block = (BlockData) item;
+            if (box.getSelectedItem() instanceof BlockData block) {
                 setter.accept(block.starts(), block.ends());
-            } catch (final Exception e) {
+            } else {
                 setter.accept(0, Integer.MAX_VALUE);
             }
         });

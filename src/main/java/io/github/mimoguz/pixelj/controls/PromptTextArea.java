@@ -8,13 +8,11 @@ import javax.swing.JTextArea;
 /**
  * A text area control that can display a prompt text when it's empty and
  * unfocused.<br />
- * https://stackoverflow.com/questions/16213836/java-swing-jtextfield-set-placeholder
+ * <a href="https://stackoverflow.com/questions/16213836/java-swing-jtextfield-set-placeholder">...</a>
  */
 public class PromptTextArea extends JTextArea {
     private static final Map<?, ?> hints = (Map<?, ?>) Toolkit.getDefaultToolkit()
             .getDesktopProperty("awt.font.desktophints");
-
-    private static final long serialVersionUID = 4432702411987454931L;
 
     private Color promptColor;
     private String promptText;

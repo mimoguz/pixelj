@@ -1,12 +1,5 @@
 package io.github.mimoguz.pixelj.controls;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import javax.swing.JPanel;
-import javax.swing.event.EventListenerList;
-
 import io.github.mimoguz.pixelj.graphics.BinaryImage;
 import io.github.mimoguz.pixelj.models.CharacterItem;
 import io.github.mimoguz.pixelj.models.IntValueChangeListener;
@@ -15,35 +8,35 @@ import io.github.mimoguz.pixelj.util.Changeable;
 import io.github.mimoguz.pixelj.util.Detachable;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
+import javax.swing.*;
+import javax.swing.event.EventListenerList;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class GlyphView extends JPanel
         implements
         Changeable<GlyphView, GlyphView.ViewChangeEvent, GlyphView.ViewChangeListener>,
         Detachable {
-    public enum ViewChangeEvent {
-        GLYPH_MODIFIED, MODEL_LOADED, MODEL_UNLOADED
-    }
-
-    public interface ViewChangeListener extends ChangeListener<GlyphView, ViewChangeEvent> {
-        // Empty
-    }
-
-    private static final long serialVersionUID = 7841183984464270304L;
     private static final Color SHADE = new Color(242, 27, 63, 50);
     private final Color backgroundColor;
-    private final transient IntValueChangeListener characterWidthChangeListener;
-    private boolean drawShade;
-    private final transient BinaryImage.ImageChangeListener imageChangeListener;
+    private final IntValueChangeListener characterWidthChangeListener;
+    private final BinaryImage.ImageChangeListener imageChangeListener;
     private final ArrayList<Line> lines = new ArrayList<>();
     private final EventListenerList listeners = new EventListenerList();
-    /** May be null; */
-    private transient CharacterItem model;
-    /** May be null; */
-    private transient Image overlay;
+    private boolean drawShade;
+    /**
+     * May be null;
+     */
+    private CharacterItem model;
+    /**
+     * May be null;
+     */
+    private Image overlay;
     private boolean showLines = false;
     private boolean showOverlay = false;
     private int top;
     private int zoom = 1;
-
     public GlyphView(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
 
@@ -57,7 +50,6 @@ public class GlyphView extends JPanel
             repaint();
             fireChangeEvent(this, ViewChangeEvent.GLYPH_MODIFIED);
         };
-
     }
 
     public void addLines(Line... lines) {
@@ -93,30 +85,77 @@ public class GlyphView extends JPanel
     }
 
     /**
+     * @param value May be null.
+     */
+    public void setModel(final CharacterItem value) {
+        setModel(value, true);
+    }
+
+    /**
      * @return Overlay image or null
      */
     public Image getOverlay() {
         return overlay;
     }
 
+    /**
+     * @param value May be null
+     */
+    public void setOverlay(Image value) {
+        if (overlay == value) {
+            return;
+        }
+        overlay = value;
+        repaint();
+    }
+
     public int getTop() {
         return top;
+    }
+
+    public void setTop(int top) {
+        this.top = top;
     }
 
     public int getZoom() {
         return zoom;
     }
 
+    public void setZoom(int value) {
+        zoom = value;
+        autoSize();
+    }
+
     public boolean isLinesVisible() {
         return showLines;
+    }
+
+    public void setLinesVisible(boolean value) {
+        if (value == showLines) {
+            return;
+        }
+        this.showLines = value;
+        repaint();
     }
 
     public boolean isOverlayVisible() {
         return showOverlay;
     }
 
+    public void setOverlayVisible(boolean value) {
+        if (value == showOverlay) {
+            return;
+        }
+        this.showOverlay = value;
+        repaint();
+    }
+
     public boolean isShaded() {
         return drawShade;
+    }
+
+    public void setShaded(boolean value) {
+        this.drawShade = value;
     }
 
     @Override
@@ -148,21 +187,6 @@ public class GlyphView extends JPanel
         repaint();
     }
 
-    public void setLinesVisible(boolean value) {
-        if (value == showLines) {
-            return;
-        }
-        this.showLines = value;
-        repaint();
-    }
-
-    /**
-     * @param value May be null.
-     */
-    public void setModel(final CharacterItem value) {
-        setModel(value, true);
-    }
-
     /**
      * @param value  May be null.
      * @param listen If true, the view will add an imageChangeListener to the glyph.
@@ -190,38 +214,6 @@ public class GlyphView extends JPanel
             fireChangeEvent(this, ViewChangeEvent.MODEL_LOADED);
         }
 
-        autoSize();
-    }
-
-    /**
-     * @param value May be null
-     */
-    public void setOverlay(Image value) {
-        if (overlay == value) {
-            return;
-        }
-        overlay = value;
-        repaint();
-    }
-
-    public void setOverlayVisible(boolean value) {
-        if (value == showOverlay) {
-            return;
-        }
-        this.showOverlay = value;
-        repaint();
-    }
-
-    public void setShaded(boolean value) {
-        this.drawShade = value;
-    }
-
-    public void setTop(int top) {
-        this.top = top;
-    }
-
-    public void setZoom(int value) {
-        zoom = value;
         autoSize();
     }
 
@@ -283,5 +275,13 @@ public class GlyphView extends JPanel
                 (((double) getHeight()) / model.getGlyph().getHeight()) * (model.getGlyph().getHeight() - top)
         );
         g.fillRect(0, 0, x, y);
+    }
+
+    public enum ViewChangeEvent {
+        GLYPH_MODIFIED, MODEL_LOADED, MODEL_UNLOADED
+    }
+
+    public interface ViewChangeListener extends ChangeListener<GlyphView, ViewChangeEvent> {
+        // Empty
     }
 }

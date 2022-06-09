@@ -1,23 +1,18 @@
 package io.github.mimoguz.pixelj.views.kerning_pairs_screen;
 
-import java.awt.BorderLayout;
-import java.awt.Dialog;
-import java.awt.Frame;
-
-import javax.swing.*;
-
 import io.github.mimoguz.pixelj.controls.SearchableComboBox;
 import io.github.mimoguz.pixelj.models.*;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.views.shared.*;
 
-public class AddDialog extends JDialog {
-    private static final long serialVersionUID = -2069391980463198716L;
+import javax.swing.*;
+import java.awt.*;
 
-    private transient CharacterItem left;
-    private transient KerningPair result;
-    private transient CharacterItem right;
+public class AddDialog extends JDialog {
     private final ListSelectionModel selectionModel = new DefaultListSelectionModel();
+    private CharacterItem left;
+    private KerningPair result;
+    private CharacterItem right;
 
     public AddDialog(final SortedList<CharacterItem> source, final Frame owner) {
         super(
@@ -41,14 +36,10 @@ public class AddDialog extends JDialog {
         final var filterBox = new SearchableComboBox<>(res.getBlocks());
         filterBox.setSelectedIndex(0);
         filterBox.addActionListener(event -> {
-            final var item = filterBox.getSelectedItem();
-            try {
-                final var block = (BlockData) item;
+            if (filterBox.getSelectedItem() instanceof BlockData block) {
                 listModel.setFilter(
                         chr -> chr.getCodePoint() >= block.starts() && chr.getCodePoint() <= block.ends()
                 );
-            } catch (final Exception e) {
-                // Ignore
             }
         });
 
