@@ -22,6 +22,7 @@ public enum Icons {
     HISTORY_REDO(0xe90d),
     HISTORY_UNDO(0xe90e),
     KERNING(0xe91b),
+    KERNING_WIDE(0xe920),
     LIST(0xe91a),
     METRICS(0xe90f),
     MOVE_DOWN(0xe911),
@@ -32,7 +33,11 @@ public enum Icons {
     ROTATE_LEFT(0xe915),
     ROTATE_RIGHT(0xe916),
     SETTINGS(0xe917),
-    SYMMETRY(0xe918);
+    SYMMETRY(0xe918),
+    ZOOM_IN(0xe921),
+    ZOOM_IN_FILLED(0xe922),
+    ZOOM_OUT(0xe923),
+    ZOOM_OUT_FILLED(0xe924);
 
     public final int codePoint;
 
