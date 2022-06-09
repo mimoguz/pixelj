@@ -1,18 +1,5 @@
 package io.github.mimoguz.pixelj.views.characters_screen;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagLayout;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-
-import javax.swing.*;
-
-import com.formdev.flatlaf.FlatClientProperties;
-
 import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.PainterActions;
 import io.github.mimoguz.pixelj.controls.GlyphPainter;
@@ -27,6 +14,15 @@ import io.github.mimoguz.pixelj.util.Detachable;
 import io.github.mimoguz.pixelj.views.shared.Borders;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
+import com.formdev.flatlaf.FlatClientProperties;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+
 public class PainterPanel extends JPanel implements Detachable {
     private static final Color BASELINE = new Color(45, 147, 173);
     private static final int BLACK_SQUARE = 0x10_00_00_00;
@@ -38,10 +34,10 @@ public class PainterPanel extends JPanel implements Detachable {
 
     private final PainterActions actions;
     private final InfoPanel infoPanel;
-    private BufferedImage overlay;
     private final GlyphPainter painter;
     private final ArrayList<Snapshot> undoBuffer = new ArrayList<>();
     private final JSlider zoomSlider;
+    private BufferedImage overlay;
 
     public PainterPanel(final Project project, final JComponent root) {
         painter = new GlyphPainter(Resources.get().colors.disabledIcon());
@@ -196,6 +192,30 @@ public class PainterPanel extends JPanel implements Detachable {
         return painter.getModel();
     }
 
+    /**
+     * @param value May be null
+     */
+    public void setModel(final CharacterItem value) {
+        painter.setModel(value);
+        infoPanel.setModel(value);
+
+        if (value != null) {
+            Actions.setEnabled(actions.all, true);
+            zoomSlider.setEnabled(true);
+            if (
+                    overlay == null || overlay.getWidth() != value.getGlyph().getWidth()
+                            || overlay.getHeight() != value.getGlyph().getHeight()
+            ) {
+                overlay = checkerBoard(value.getGlyph().getWidth(), value.getGlyph().getHeight());
+            }
+            painter.setOverlay(overlay);
+        } else {
+            Actions.setEnabled(actions.all, false);
+            zoomSlider.setEnabled(false);
+            painter.setOverlay(null);
+        }
+    }
+
     public GlyphPainter getPainter() {
         return painter;
     }
@@ -240,30 +260,6 @@ public class PainterPanel extends JPanel implements Detachable {
                 // Baseline
                 new Line(Orientation.HORIZONTAL, metrics.canvasHeight() - metrics.descender(), BASELINE)
         );
-    }
-
-    /**
-     * @param value May be null
-     */
-    public void setModel(final CharacterItem value) {
-        painter.setModel(value);
-        infoPanel.setModel(value);
-
-        if (value != null) {
-            Actions.setEnabled(actions.all, true);
-            zoomSlider.setEnabled(true);
-            if (
-                overlay == null || overlay.getWidth() != value.getGlyph().getWidth()
-                        || overlay.getHeight() != value.getGlyph().getHeight()
-            ) {
-                overlay = checkerBoard(value.getGlyph().getWidth(), value.getGlyph().getHeight());
-            }
-            painter.setOverlay(overlay);
-        } else {
-            Actions.setEnabled(actions.all, false);
-            zoomSlider.setEnabled(false);
-            painter.setOverlay(null);
-        }
     }
 
     private static BufferedImage checkerBoard(int w, int h) {
