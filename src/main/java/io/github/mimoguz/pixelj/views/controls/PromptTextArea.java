@@ -22,6 +22,7 @@ public class PromptTextArea extends JTextArea {
 
     public void setPromptColor(final Color promptColor) {
         this.promptColor = promptColor;
+        repaint();
     }
 
     public String getPromptText() {
@@ -30,6 +31,7 @@ public class PromptTextArea extends JTextArea {
 
     public void setPromptText(final String promptText) {
         this.promptText = promptText;
+        repaint();
     }
 
     @Override
