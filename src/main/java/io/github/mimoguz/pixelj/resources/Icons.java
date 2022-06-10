@@ -13,6 +13,7 @@ public enum Icons {
     FILE_EXPORT(0xe905),
     FILE_NEW(0xe906),
     FILE_OPEN(0xe907),
+    FILE_OPEN_SELECTED(0xe925),
     FILE_SAVE(0xe908),
     FILE_SAVE_AS(0xe909),
     FILTER(0xe91d),

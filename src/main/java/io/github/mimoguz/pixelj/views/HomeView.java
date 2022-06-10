@@ -11,6 +11,8 @@ import com.formdev.flatlaf.FlatClientProperties;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Vector;
 
 public class HomeView extends JFrame {
@@ -21,7 +23,7 @@ public class HomeView extends JFrame {
         final var actions = new HomeActions(root);
 
         final var newProjectButton = makeButton(actions.newProjectAction);
-        final var openProjectButton = makeButton(actions.openProjectAction);
+        final var openProjectButton = makeButton(actions.openSelectedProjectAction);
         final var showOpenDialogButton = makeButton(actions.showOpenDialogAction);
 
         final var top = new JPanel(new BorderLayout());
@@ -55,12 +57,34 @@ public class HomeView extends JFrame {
         root.add(scrollPanel, BorderLayout.CENTER);
 
         final var contextMenu = new JPopupMenu();
-        contextMenu.add(actions.removeRecentItemAction);
-        contextMenu.add(actions.openContainigFolderAction);
-        recentList.setComponentPopupMenu(contextMenu);
+        final var removeRecent = new JMenuItem(actions.removeRecentItemAction);
+        final var openContainingFolder = new JMenuItem(actions.openContainingFolderAction);
+        if (actions.removeRecentItemAction.getValue(Action.SMALL_ICON) == null
+                || actions.openContainingFolderAction.getValue(Action.SMALL_ICON) == null) {
+            removeRecent.setIconTextGap(0);
+            openContainingFolder.setIconTextGap(0);
+        }
+        contextMenu.add(removeRecent);
+        contextMenu.add(openContainingFolder);
+
+        // https://stackoverflow.com/a/28954204
+        recentList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(final MouseEvent e) {
+                if (!SwingUtilities.isRightMouseButton(e)) {
+                    return;
+                }
+                final var index = recentList.locationToIndex(e.getPoint());
+                recentList.setSelectedIndex(index);
+                if (index >= 0) {
+                    contextMenu.show(recentList, e.getX(), e.getY());
+                }
+            }
+        });
 
         setContentPane(root);
         pack();
+        recentList.requestFocusInWindow();
         setSize(new Dimension(600, 600));
         setTitle(res.getString("applicationName"));
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);

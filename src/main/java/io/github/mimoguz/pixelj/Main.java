@@ -8,7 +8,7 @@ import io.github.mimoguz.pixelj.views.HomeView;
 import javax.swing.*;
 
 public class Main {
-    private static final boolean USE_DARK_THEME = true;
+    private static final boolean USE_DARK_THEME = false;
 
     public static void main(final String[] args) {
         if (USE_DARK_THEME) {

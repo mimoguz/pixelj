@@ -16,8 +16,8 @@ import java.util.logging.Logger;
 public class HomeActions {
     public final Collection<ApplicationAction> all;
     public final ApplicationAction newProjectAction;
-    public final ApplicationAction openContainigFolderAction;
-    public final ApplicationAction openProjectAction;
+    public final ApplicationAction openContainingFolderAction;
+    public final ApplicationAction openSelectedProjectAction;
     public final ApplicationAction quitAction;
     public final ApplicationAction removeRecentItemAction;
     public final ApplicationAction showOpenDialogAction;
@@ -38,9 +38,9 @@ public class HomeActions {
                 .setTextKey("newProjectAction")
                 .setIcon(Icons.FILE_NEW, res.colors.icon(), res.colors.disabledIcon());
 
-        openProjectAction = new ApplicationAction("openProjectAction", this::openProject)
-                .setTextKey("openProjectAction")
-                .setIcon(Icons.FILE_OPEN, res.colors.icon(), res.colors.disabledIcon());
+        openSelectedProjectAction = new ApplicationAction("openSelectedProjectAction", this::openSelectedProject)
+                .setTextKey("openSelectedProjectAction")
+                .setIcon(Icons.FILE_OPEN_SELECTED, res.colors.icon(), res.colors.disabledIcon());
 
         quitAction = new ApplicationAction("quitAction", this::quit)
                 .setTooltip(res.getString("quitActionTooltip"))
@@ -57,12 +57,12 @@ public class HomeActions {
         removeRecentItemAction = new ApplicationAction("removeRecentItemAction", this::showOptionsDialog)
                 .setTextKey("removeRecentItemAction");
 
-        openContainigFolderAction = new ApplicationAction("openContainigFolderAction", this::showOptionsDialog)
-                .setTextKey("openContainigFolderAction");
+        openContainingFolderAction = new ApplicationAction("openContainingFolderAction", this::showOptionsDialog)
+                .setTextKey("openContainingFolderAction");
 
         all = List.of(
                 newProjectAction,
-                openProjectAction,
+                openSelectedProjectAction,
                 quitAction,
                 showOpenDialogAction,
                 showOptionsDialogAction
@@ -85,7 +85,7 @@ public class HomeActions {
         log(action);
     }
 
-    private void openProject(final ActionEvent event, final Action action) {
+    private void openSelectedProject(final ActionEvent event, final Action action) {
         final var frame = ((JFrame) SwingUtilities.getWindowAncestor(root));
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         final var projectView = new ProjectView(ExampleData.createProject());
