@@ -11,47 +11,53 @@ import com.formdev.flatlaf.FlatClientProperties;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Vector;
 
 public class HomeView extends JFrame {
-    private final HomeActions actions;
-
     public HomeView() {
         super();
         final var res = Resources.get();
         final var root = new JPanel(new BorderLayout());
-
-        actions = new HomeActions(root);
+        final var actions = new HomeActions(root);
 
         final var newProjectButton = makeButton(actions.newProjectAction);
         final var openProjectButton = makeButton(actions.openProjectAction);
         final var showOpenDialogButton = makeButton(actions.showOpenDialogAction);
 
-        final var left = new JPanel(new BorderLayout());
-        left.setBorder(Borders.SMALL_EMPTY_CUP);
+        final var top = new JPanel(new BorderLayout());
+        top.setBorder(Borders.MEDIUM_EMPTY);
 
         final var buttonBox = new JPanel();
-        buttonBox.setLayout(new BoxLayout(buttonBox, BoxLayout.Y_AXIS));
+        buttonBox.setLayout(new BoxLayout(buttonBox, BoxLayout.X_AXIS));
         buttonBox.add(newProjectButton);
-        buttonBox.add(Box.createVerticalStrut(Dimensions.SMALL_PADDING));
+        buttonBox.add(Box.createHorizontalStrut(Dimensions.SMALL_PADDING));
         buttonBox.add(openProjectButton);
-        buttonBox.add(Box.createVerticalStrut(Dimensions.SMALL_PADDING));
+        buttonBox.add(Box.createHorizontalStrut(Dimensions.SMALL_PADDING));
         buttonBox.add(showOpenDialogButton);
-        buttonBox.add(Box.createVerticalGlue());
-        left.add(buttonBox, BorderLayout.NORTH);
+        buttonBox.add(Box.createHorizontalStrut(Dimensions.SMALL_PADDING));
+        top.add(buttonBox, BorderLayout.WEST);
 
         final var toolBar = new JToolBar();
         toolBar.add(actions.showOptionsDialogAction);
-        toolBar.addSeparator();
         toolBar.add(actions.quitAction);
-        left.add(toolBar, BorderLayout.SOUTH);
+        top.add(toolBar, BorderLayout.EAST);
 
-        root.add(left, BorderLayout.WEST);
+        root.add(top, BorderLayout.NORTH);
 
-        final var recentList = new JList<String>();
+        final var recentList = new JList<>(new Vector<>(java.util.List.of(
+                new RecentItem("Project Panama", "c:\\path\\to\\panama.ext"),
+                new RecentItem("Project Valhalla", "c:\\path\\to\\valhalla.ext")
+        )));
+        recentList.setCellRenderer(new RecentItemCellRenderer());
         recentList.setBorder(Borders.EMPTY);
         final var scrollPanel = new JScrollPane(recentList);
         scrollPanel.setBorder(Borders.EMPTY);
         root.add(scrollPanel, BorderLayout.CENTER);
+
+        final var contextMenu = new JPopupMenu();
+        contextMenu.add(actions.removeRecentItemAction);
+        contextMenu.add(actions.openContainigFolderAction);
+        recentList.setComponentPopupMenu(contextMenu);
 
         setContentPane(root);
         pack();
@@ -63,7 +69,7 @@ public class HomeView extends JFrame {
 
     private static JButton makeButton(ApplicationAction action) {
         final var button = new JButton();
-        button.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_BORDERLESS);
+//        button.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_BORDERLESS);
         Components.setFixedSize(button, Dimensions.HOME_BUTTON_SIZE);
         button.setAction(action);
         button.setIcon(null);
@@ -81,11 +87,58 @@ public class HomeView extends JFrame {
                     0,
                     Dimensions.MEDIUM_PADDING,
                     0,
-                    0
+                    Dimensions.MEDIUM_PADDING
             ));
+            label.setHorizontalAlignment(SwingConstants.CENTER);
             content.add(label, BorderLayout.CENTER);
         }
         button.add(content);
         return button;
+    }
+
+    private record RecentItem(String title, String path) {
+    }
+
+    private static class RecentItemCellRenderer implements ListCellRenderer<RecentItem> {
+        private final JPanel component = new JPanel(new BorderLayout());
+        private final JLabel path = new JLabel(" ");
+        private final JLabel title = new JLabel(" ");
+
+        public RecentItemCellRenderer() {
+            component.add(title, BorderLayout.NORTH);
+            path.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
+            component.add(path, BorderLayout.SOUTH);
+            component.setBorder(BorderFactory.createEmptyBorder(
+                    Dimensions.MEDIUM_PADDING,
+                    Dimensions.LARGE_PADDING,
+                    Dimensions.MEDIUM_PADDING,
+                    Dimensions.LARGE_PADDING
+            ));
+        }
+
+        @Override
+        public Component getListCellRendererComponent(
+                final JList<? extends RecentItem> list,
+                final RecentItem value,
+                final int index,
+                final boolean isSelected,
+                final boolean cellHasFocus
+        ) {
+            if (value == null) {
+                return null;
+            }
+            title.setText(value.title);
+            path.setText(value.path);
+            if (isSelected) {
+                title.setForeground(list.getSelectionForeground());
+                path.setForeground(list.getSelectionForeground());
+                component.setBackground(list.getSelectionBackground());
+            } else {
+                title.setForeground(list.getForeground());
+                path.setForeground(list.getForeground());
+                component.setBackground(list.getBackground());
+            }
+            return component;
+        }
     }
 }

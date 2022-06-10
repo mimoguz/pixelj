@@ -16,8 +16,10 @@ import java.util.logging.Logger;
 public class HomeActions {
     public final Collection<ApplicationAction> all;
     public final ApplicationAction newProjectAction;
+    public final ApplicationAction openContainigFolderAction;
     public final ApplicationAction openProjectAction;
     public final ApplicationAction quitAction;
+    public final ApplicationAction removeRecentItemAction;
     public final ApplicationAction showOpenDialogAction;
     public final ApplicationAction showOptionsDialogAction;
     private final Logger logger;
@@ -51,6 +53,12 @@ public class HomeActions {
         showOptionsDialogAction = new ApplicationAction("showOptionsDialogAction", this::showOptionsDialog)
                 .setTooltip(res.getString("showOptionsDialogActionTooltip"))
                 .setIcon(Icons.SETTINGS, res.colors.icon(), res.colors.disabledIcon());
+
+        removeRecentItemAction = new ApplicationAction("removeRecentItemAction", this::showOptionsDialog)
+                .setTextKey("removeRecentItemAction");
+
+        openContainigFolderAction = new ApplicationAction("openContainigFolderAction", this::showOptionsDialog)
+                .setTextKey("openContainigFolderAction");
 
         all = List.of(
                 newProjectAction,
