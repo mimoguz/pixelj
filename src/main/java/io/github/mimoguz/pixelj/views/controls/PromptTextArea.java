@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * A text area control that can display a prompt text when it's empty and
  * unfocused.<br />
- * <a href="https://stackoverflow.com/questions/16213836/java-swing-jtextfield-set-placeholder">...</a>
+ * <a href="https://stackoverflow.com/questions/16213836/java-swing-jtextfield-set-placeholder">Stackoverflow thread</a>
  */
 public class PromptTextArea extends JTextArea {
     private static final Map<?, ?> hints = (Map<?, ?>) Toolkit.getDefaultToolkit()
