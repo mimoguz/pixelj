@@ -1,11 +1,12 @@
 package io.github.mimoguz.pixelj.actions;
 
+import io.github.mimoguz.pixelj.models.ExampleData;
 import io.github.mimoguz.pixelj.resources.Icons;
 import io.github.mimoguz.pixelj.resources.Resources;
+import io.github.mimoguz.pixelj.views.ProjectView;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
@@ -18,65 +19,82 @@ public class HomeActions {
     public final ApplicationAction openProjectAction;
     public final ApplicationAction quitAction;
     public final ApplicationAction showOpenDialogAction;
+    public final ApplicationAction showOptionsDialogAction;
     private final Logger logger;
-    private boolean enabled = true;
+
+    private final JComponent root;
 
     public HomeActions(final JComponent root) {
 
         logger = Logger.getLogger(this.getClass().getName());
         logger.addHandler(new ConsoleHandler());
+        this.root = root;
 
         final var res = Resources.get();
 
-        newProjectAction = new ApplicationAction("newProjectAction", this::export)
+        newProjectAction = new ApplicationAction("newProjectAction", this::newProject)
                 .setTextKey("newProjectAction")
                 .setIcon(Icons.FILE_NEW, res.colors.icon(), res.colors.disabledIcon());
 
-        openProjectAction = new ApplicationAction("openProjectAction", this::export).setTextKey("openProjectAction")
+        openProjectAction = new ApplicationAction("openProjectAction", this::openProject)
+                .setTextKey("openProjectAction")
                 .setIcon(Icons.FILE_OPEN, res.colors.icon(), res.colors.disabledIcon());
 
-        quitAction = new ApplicationAction("quitAction", this::quit).setTextKey("quitAction")
-                .setIcon(Icons.EXIT, res.colors.icon(), res.colors.disabledIcon())
-                .setAccelerator(KeyEvent.VK_Q, ActionEvent.CTRL_MASK);
+        quitAction = new ApplicationAction("quitAction", this::quit)
+                .setTooltip(res.getString("quitActionTooltip"))
+                .setIcon(Icons.EXIT, res.colors.icon(), res.colors.disabledIcon());
 
-        showOpenDialogAction = new ApplicationAction("showOpenDialogAction", this::export).setTextKey(
-                        "showOpenDialogAction")
+        showOpenDialogAction = new ApplicationAction("showOpenDialogAction", this::showOpenDialog)
+                .setTextKey("showOpenDialogAction")
                 .setIcon(Icons.FILE_OPEN, res.colors.icon(), res.colors.disabledIcon());
+
+        showOptionsDialogAction = new ApplicationAction("showOptionsDialogAction", this::showOptionsDialog)
+                .setTooltip(res.getString("showOptionsDialogActionTooltip"))
+                .setIcon(Icons.SETTINGS, res.colors.icon(), res.colors.disabledIcon());
 
         all = List.of(
                 newProjectAction,
                 openProjectAction,
                 quitAction,
-                showOpenDialogAction
+                showOpenDialogAction,
+                showOptionsDialogAction
         );
     }
 
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(final boolean value) {
-        enabled = value;
-        Actions.setEnabled(all, enabled);
-    }
-
-    private void export(final ActionEvent event, final Action action) {
-        logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
+    private void log(final Action action) {
+        final var name = action.getValue(Action.NAME);
+        final var toolTip = action.getValue(Action.SHORT_DESCRIPTION);
+        logger.log(
+                Level.INFO,
+                "{0}",
+                name == null
+                        ? (toolTip == null ? action : toolTip)
+                        : name
+        );
     }
 
     private void newProject(final ActionEvent event, final Action action) {
-        logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
+        log(action);
     }
 
     private void openProject(final ActionEvent event, final Action action) {
-        logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
+        final var frame = ((JFrame) SwingUtilities.getWindowAncestor(root));
+        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        final var projectView = new ProjectView(ExampleData.createProject());
+        projectView.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        projectView.setVisible(true);
+        frame.setVisible(false);
     }
 
     private void quit(final ActionEvent event, final Action action) {
-        logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
+        log(action);
     }
 
     private void showOpenDialog(final ActionEvent event, final Action action) {
-        logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
+        log(action);
+    }
+
+    private void showOptionsDialog(final ActionEvent event, final Action action) {
+        log(action);
     }
 }

@@ -25,23 +25,31 @@ public class HomeView extends JFrame {
         final var newProjectButton = makeButton(actions.newProjectAction);
         final var openProjectButton = makeButton(actions.openProjectAction);
         final var showOpenDialogButton = makeButton(actions.showOpenDialogAction);
-        final var quitButton = makeButton(actions.quitAction);
 
-        final var left = new JPanel();
+        final var left = new JPanel(new BorderLayout());
         left.setBorder(Borders.SMALL_EMPTY_CUP);
-        left.setLayout(new BoxLayout(left, BoxLayout.Y_AXIS));
-        left.add(newProjectButton);
-        left.add(Box.createVerticalStrut(Dimensions.SMALL_PADDING));
-        left.add(openProjectButton);
-        left.add(Box.createVerticalStrut(Dimensions.SMALL_PADDING));
-        left.add(showOpenDialogButton);
-        left.add(Box.createVerticalGlue());
-        left.add(quitButton);
+
+        final var buttonBox = new JPanel();
+        buttonBox.setLayout(new BoxLayout(buttonBox, BoxLayout.Y_AXIS));
+        buttonBox.add(newProjectButton);
+        buttonBox.add(Box.createVerticalStrut(Dimensions.SMALL_PADDING));
+        buttonBox.add(openProjectButton);
+        buttonBox.add(Box.createVerticalStrut(Dimensions.SMALL_PADDING));
+        buttonBox.add(showOpenDialogButton);
+        buttonBox.add(Box.createVerticalGlue());
+        left.add(buttonBox, BorderLayout.NORTH);
+
+        final var toolBar = new JToolBar();
+        toolBar.add(actions.showOptionsDialogAction);
+        toolBar.addSeparator();
+        toolBar.add(actions.quitAction);
+        left.add(toolBar, BorderLayout.SOUTH);
+
         root.add(left, BorderLayout.WEST);
 
-        final var recentsList = new JList<String>();
-        recentsList.setBorder(Borders.EMPTY);
-        final var scrollPanel = new JScrollPane(recentsList);
+        final var recentList = new JList<String>();
+        recentList.setBorder(Borders.EMPTY);
+        final var scrollPanel = new JScrollPane(recentList);
         scrollPanel.setBorder(Borders.EMPTY);
         root.add(scrollPanel, BorderLayout.CENTER);
 
@@ -55,6 +63,7 @@ public class HomeView extends JFrame {
 
     private static JButton makeButton(ApplicationAction action) {
         final var button = new JButton();
+        button.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_BORDERLESS);
         Components.setFixedSize(button, Dimensions.HOME_BUTTON_SIZE);
         button.setAction(action);
         button.setIcon(null);
