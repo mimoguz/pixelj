@@ -1,15 +1,16 @@
 package io.github.mimoguz.pixelj.views.shared;
 
-import java.awt.Dimension;
+import java.awt.*;
 
 public class Dimensions {
+    public static final Dimension HOME_BUTTON_SIZE = new Dimension(180, 40);
     public static final int LARGE_PADDING = 12;
-    public static final int MAXIMUM_PREVIEW_SIZE = 48;
-    public static final int MAXIMUM_ZOOM = 48;
     public static final Dimension LARGE_SQUARE = new Dimension(12, 12);
     public static final Dimension LETTER_BOX_SIZE = new Dimension(24, 24);
     public static final Dimension MAXIMUM = new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE);
     public static final Dimension MAXIMUM_COMBO_BOX_SIZE = new Dimension(Integer.MAX_VALUE, 48);
+    public static final int MAXIMUM_PREVIEW_SIZE = 48;
+    public static final int MAXIMUM_ZOOM = 48;
     public static final int MEDIUM_PADDING = 8;
     public static final Dimension MEDIUM_SQUARE = new Dimension(8, 8);
     public static final Dimension MINIMUM_COMBO_BOX_SIZE = new Dimension(64, 48);

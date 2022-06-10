@@ -1,10 +1,9 @@
 package io.github.mimoguz.pixelj;
 
-import io.github.mimoguz.pixelj.models.ExampleData;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.themes.PixeljDark;
 import io.github.mimoguz.pixelj.themes.PixeljLight;
-import io.github.mimoguz.pixelj.views.ProjectView;
+import io.github.mimoguz.pixelj.views.HomeView;
 
 import javax.swing.*;
 
@@ -19,7 +18,8 @@ public class Main {
         }
         Resources.initialize(USE_DARK_THEME);
 
-        final var view = new ProjectView(ExampleData.createProject());
+//        final var view = new ProjectView(ExampleData.createProject());
+        final var view = new HomeView();
         view.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         view.setVisible(true);
     }
