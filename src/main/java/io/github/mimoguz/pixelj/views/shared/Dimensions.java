@@ -3,7 +3,7 @@ package io.github.mimoguz.pixelj.views.shared;
 import java.awt.*;
 
 public class Dimensions {
-    public static final Dimension HOME_BUTTON_SIZE = new Dimension(152, 40);
+    public static final Dimension HOME_BUTTON_SIZE = new Dimension(180, 40);
     public static final int LARGE_PADDING = 12;
     public static final Dimension LARGE_SQUARE = new Dimension(12, 12);
     public static final Dimension LETTER_BOX_SIZE = new Dimension(24, 24);
@@ -17,7 +17,7 @@ public class Dimensions {
     public static final int SMALL_PADDING = 4;
     public static final Dimension SMALL_SQUARE = new Dimension(4, 4);
     public static final Dimension SPINNER_SIZE = new Dimension(90, 30);
-    public static final Dimension TEXT_BUTTON_SIZE = new Dimension(90, 25);
+    public static final Dimension TEXT_BUTTON_SIZE = new Dimension(100, 25);
 
     private Dimensions() {
     }
