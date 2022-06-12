@@ -82,7 +82,7 @@ public class ProjectView extends JFrame {
 
         root.addTab(
                 null,
-                res.getIcon(Icons.KERNING, res.colors.inactive(), null),
+                res.getIcon(Icons.KERNING_WIDE, res.colors.inactive(), null),
                 kerningPairsScreen,
                 res.getString("kerningPairsScreenTabTooltip")
         );
@@ -153,7 +153,7 @@ public class ProjectView extends JFrame {
 
         mainMenu.addPopupMenuListener(new PopupMenuListener() {
             @Override
-            public void popupMenuCanceled(final PopupMenuEvent e) {
+            public void popupMenuWillBecomeVisible(final PopupMenuEvent e) {
                 // Ignored
             }
 
@@ -163,7 +163,7 @@ public class ProjectView extends JFrame {
             }
 
             @Override
-            public void popupMenuWillBecomeVisible(final PopupMenuEvent e) {
+            public void popupMenuCanceled(final PopupMenuEvent e) {
                 // Ignored
             }
         });
