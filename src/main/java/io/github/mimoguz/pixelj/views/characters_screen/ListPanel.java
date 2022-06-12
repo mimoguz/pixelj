@@ -18,6 +18,7 @@ public class ListPanel extends JPanel implements Detachable {
     private final CharacterListActions actions;
     private final SearchableComboBox<BlockData> filterBox = new SearchableComboBox<>(Resources.get().getBlocks());
     private final JList<CharacterItem> list;
+    private final SortedList<CharacterItem> listModel;
     private final ListSelectionModel selectionModel;
 
     public ListPanel(
@@ -61,6 +62,8 @@ public class ListPanel extends JPanel implements Detachable {
             }
         });
 
+        this.listModel = listModel;
+
         setPreferredSize(new Dimension(300, 100));
         setMinimumSize(new Dimension(220, 100));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -99,6 +102,10 @@ public class ListPanel extends JPanel implements Detachable {
 
     public JList<CharacterItem> getList() {
         return list;
+    }
+
+    public SortedList<CharacterItem> getListModel() {
+        return listModel;
     }
 
     @Override

@@ -17,7 +17,6 @@ public class CharactersScreen extends JSplitPane implements Detachable {
         selectionModel = new DefaultListSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-        final var listModel = project.getCharacters();
         listPanel = new ListPanel(project, selectionModel, project.getMetrics(), root);
 
         painterPanel = new PainterPanel(project, root);
@@ -29,7 +28,7 @@ public class CharactersScreen extends JSplitPane implements Detachable {
                     selectionModel.getMinSelectionIndex() == selectionModel.getMaxSelectionIndex()
                             && selectionModel.getMinSelectionIndex() >= 0
             ) {
-                painterPanel.setModel(listModel.getElementAt(selectionModel.getMinSelectionIndex()));
+                painterPanel.setModel(listPanel.getListModel().getElementAt(selectionModel.getMinSelectionIndex()));
             } else {
                 painterPanel.setModel(null);
             }
@@ -39,8 +38,8 @@ public class CharactersScreen extends JSplitPane implements Detachable {
         painterPanel.getPainter().addChangeListener((sender, event) -> {
             if (event == GlyphView.ViewChangeEvent.GLYPH_MODIFIED) {
                 final var index = selectionModel.getMinSelectionIndex();
-                if (index >= 0 && painterPanel.getModel() == project.getCharacters().getElementAt(index)) {
-                    listModel.requestEvent(index);
+                if (index >= 0 && painterPanel.getModel() == listPanel.getListModel().getElementAt(index)) {
+                    listPanel.getListModel().requestEvent(index);
                 }
             }
         });
@@ -56,7 +55,7 @@ public class CharactersScreen extends JSplitPane implements Detachable {
         painterPanel.detach();
         listPanel.detach();
     }
-    
+
     @Override
     public void setEnabled(final boolean value) {
         listPanel.setEnabled(value);
