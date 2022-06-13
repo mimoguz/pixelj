@@ -75,7 +75,12 @@ public class NewProjectDialog extends JDialog {
             }
 
             private void check() {
-                createButton.setEnabled(metricsPanel.isValid() && !titleArea.getText().trim().isBlank());
+                final var notEmpty = !titleArea.getText().trim().isBlank();
+                createButton.setEnabled(metricsPanel.isValid() && notEmpty);
+                titleArea.putClientProperty(
+                        FlatClientProperties.OUTLINE,
+                        notEmpty ? null : FlatClientProperties.OUTLINE_ERROR
+                );
             }
         });
 
@@ -90,12 +95,16 @@ public class NewProjectDialog extends JDialog {
         content.setBorder(Borders.MEDIUM_EMPTY);
 
         final var titlePanel = new JPanel(new BorderLayout(0, Dimensions.MEDIUM_PADDING));
-        titlePanel.add(new JLabel(res.getString("projectTitlePrompt")), BorderLayout.NORTH);
+        final var titleLabel = new JLabel(res.getString("projectTitlePrompt"));
+        titleLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "h4");
+        titlePanel.add(titleLabel, BorderLayout.NORTH);
         titlePanel.add(titleArea, BorderLayout.CENTER);
         content.add(titlePanel, BorderLayout.NORTH);
 
         final var centerPanel = new JPanel(new BorderLayout());
-        centerPanel.add(new JLabel(res.getString("metrics")), BorderLayout.NORTH);
+        final var metricsLabel = new JLabel(res.getString("metrics"));
+        metricsLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "h4");
+        centerPanel.add(metricsLabel, BorderLayout.NORTH);
         final var scroll = new JScrollPane(metricsPanel);
         scroll.setBorder(Borders.EMPTY);
         centerPanel.add(scroll, BorderLayout.CENTER);
@@ -131,6 +140,7 @@ public class NewProjectDialog extends JDialog {
         if (value) {
             project = null;
             titleArea.setText("");
+            titleArea.putClientProperty(FlatClientProperties.OUTLINE, FlatClientProperties.OUTLINE_ERROR);
             createButton.setEnabled(false);
         }
         super.setVisible(value);
