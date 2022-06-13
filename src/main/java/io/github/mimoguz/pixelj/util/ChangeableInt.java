@@ -19,8 +19,8 @@ public class ChangeableInt {
         return binaryOp(that, Integer::sum);
     }
 
-    public void addChangeListener(final IntChangeListener listener) {
-        listeners.add(IntChangeListener.class, listener);
+    public void addChangeListener(final Listener listener) {
+        listeners.add(Listener.class, listener);
     }
 
     public ChangeableInt divide(ChangeableInt that) {
@@ -42,13 +42,13 @@ public class ChangeableInt {
 
     public ChangeableInt negate() {
         final var result = new ChangeableInt();
-        final IntChangeListener listener = (sender, a) -> result.setValue(-a);
+        final Listener listener = (sender, a) -> result.setValue(-a);
         addChangeListener(listener);
         return result;
     }
 
-    public void removeChangeListener(final IntChangeListener listener) {
-        listeners.remove(IntChangeListener.class, listener);
+    public void removeChangeListener(final Listener listener) {
+        listeners.remove(Listener.class, listener);
     }
 
     public ChangeableInt subtract(ChangeableInt that) {
@@ -57,15 +57,15 @@ public class ChangeableInt {
 
     private ChangeableInt binaryOp(ChangeableInt that, BinaryOperator operator) {
         final var result = new ChangeableInt();
-        final IntChangeListener listenerThis = (sender, a) -> result.setValue(operator.op(a, that.value));
-        final IntChangeListener listenerThat = (sender, b) -> result.setValue(operator.op(value, b));
+        final Listener listenerThis = (sender, a) -> result.setValue(operator.op(a, that.value));
+        final Listener listenerThat = (sender, b) -> result.setValue(operator.op(value, b));
         this.addChangeListener(listenerThis);
         that.addChangeListener(listenerThat);
         return result;
     }
 
     private void fireChangeEvent() {
-        final var lst = listeners.getListeners(IntChangeListener.class).clone();
+        final var lst = listeners.getListeners(Listener.class).clone();
         for (var i = lst.length - 1; i >= 0; i--) {
             lst[i].onChange(this, value);
         }
@@ -75,7 +75,7 @@ public class ChangeableInt {
         int op(int a, int b);
     }
 
-    public interface IntChangeListener extends EventListener {
+    public interface Listener extends EventListener {
         void onChange(ChangeableInt sender, int value);
     }
 }

@@ -2,18 +2,18 @@ package io.github.mimoguz.pixelj.util;
 
 import javax.swing.event.EventListenerList;
 
-public class ChangeableValue<T> implements Changeable<ChangeableValue<T>, T, ChangeableValue.ValueChangeListener<T>> {
-    private final Class<ValueChangeListener<T>> cls;
+public class ChangeableValue<T> implements Changeable<ChangeableValue<T>, T, ChangeableValue.Listener<T>> {
+    private final Class<Listener<T>> cls;
     private final EventListenerList listeners = new EventListenerList();
     private T value;
 
     @SuppressWarnings("unchecked")
-    public <U extends ValueChangeListener<T>> ChangeableValue(Class<U> cls) {
-        this.cls = (Class<ValueChangeListener<T>>) cls;
+    public <U extends Listener<T>> ChangeableValue(Class<U> cls) {
+        this.cls = (Class<Listener<T>>) cls;
     }
 
     @Override
-    public Class<ValueChangeListener<T>> getListenerClass() {
+    public Class<Listener<T>> getListenerClass() {
         return cls;
     }
 
@@ -32,7 +32,7 @@ public class ChangeableValue<T> implements Changeable<ChangeableValue<T>, T, Cha
         fireChangeEvent(this, value);
     }
 
-    public interface ValueChangeListener<T> extends ChangeListener<ChangeableValue<T>, T> {
+    public interface Listener<T> extends ChangeListener<ChangeableValue<T>, T> {
         // Empty
     }
 }

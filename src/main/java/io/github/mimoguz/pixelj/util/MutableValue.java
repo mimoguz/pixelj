@@ -2,18 +2,19 @@ package io.github.mimoguz.pixelj.util;
 
 import javax.swing.event.EventListenerList;
 
-public class MutableValue<T> implements Changeable<MutableValue<T>, MutableValue.ValueChangeArgs<T>, MutableValue.ValueChangeListener<T>> {
-    private final Class<ValueChangeListener<T>> cls;
+public class MutableValue<T> implements Changeable<MutableValue<T>, T, MutableValue.Listener<T>> {
+    private final Class<Listener<T>> cls;
     private final EventListenerList listeners = new EventListenerList();
-    private T value;
+    private final T value;
 
     @SuppressWarnings("unchecked")
-    public <U extends ValueChangeListener<T>> MutableValue(Class<U> cls) {
-        this.cls = (Class<ValueChangeListener<T>>) cls;
+    public <U extends Listener<T>> MutableValue(Class<U> cls, T value) {
+        this.cls = (Class<Listener<T>>) cls;
+        this.value = value;
     }
 
     @Override
-    public Class<ValueChangeListener<T>> getListenerClass() {
+    public Class<Listener<T>> getListenerClass() {
         return cls;
     }
 
@@ -26,26 +27,11 @@ public class MutableValue<T> implements Changeable<MutableValue<T>, MutableValue
         return value;
     }
 
-    public void setValue(final T value) {
-        final var oldValue = this.value;
-        this.value = value;
-        fireChangeEvent(this, new ValueChangeArgs.Changed<T>(value));
-    }
-
     public void informMutation() {
-        fireChangeEvent(this, new ValueChangeArgs.Mutated<T>());
+        fireChangeEvent(this, value);
     }
 
-    public sealed interface ValueChangeArgs<U> permits ValueChangeArgs.Mutated, ValueChangeArgs.Changed {
-
-        record Changed<U>(U value) implements ValueChangeArgs<U> {
-        }
-
-        record Mutated<U>() implements ValueChangeArgs<U> {
-        }
-    }
-
-    public interface ValueChangeListener<T> extends ChangeListener<MutableValue<T>, MutableValue.ValueChangeArgs<T>> {
+    public interface Listener<T> extends ChangeListener<MutableValue<T>, T> {
         // Empty
     }
 }
