@@ -1,17 +1,5 @@
 package io.github.mimoguz.pixelj.views;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-
-import com.formdev.flatlaf.FlatClientProperties;
-
 import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.ApplicationAction;
 import io.github.mimoguz.pixelj.models.Metrics;
@@ -20,6 +8,17 @@ import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.views.shared.Borders;
 import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
+
+import com.formdev.flatlaf.FlatClientProperties;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MetricsDialog extends JDialog {
     private final JButton applyButton;
@@ -31,10 +30,10 @@ public class MetricsDialog extends JDialog {
     private final JSpinner descender;
     private final JCheckBox isMonospaced;
     private final JSpinner lineSpacing;
-    private Metrics result;
     private final JSpinner spaceSize;
     private final JSpinner spacing;
     private final JSpinner xHeight;
+    private Metrics result;
 
     public MetricsDialog(final Frame owner) {
         super(owner, Resources.get().getString("metricsDialogTitle"), Dialog.ModalityType.APPLICATION_MODAL);
@@ -85,6 +84,7 @@ public class MetricsDialog extends JDialog {
         inputPanel.add(new JLabel(res.getString("metricsDescender")), cons);
         cons.gridx = 1;
         descender = getSpinner();
+        descender.addChangeListener(this::onSpinnerChanged);
         inputPanel.add(descender, cons);
 
         cons.gridx = 0;
@@ -214,6 +214,20 @@ public class MetricsDialog extends JDialog {
         super.setVisible(visible);
     }
 
+    private static JSpinner getSpinner() {
+        return getSpinner(1);
+    }
+
+    private static JSpinner getSpinner(final int minimum) {
+        final var spinner = new JSpinner(new SpinnerNumberModel(minimum, minimum, 512, 1));
+        Components.setFixedSize(spinner, Dimensions.SPINNER_SIZE);
+        return spinner;
+    }
+
+    private static int getValue(final JSpinner spinner) {
+        return ((SpinnerNumberModel) spinner.getModel()).getNumber().intValue();
+    }
+
     private void onApply(final ActionEvent e) {
         result = Metrics.Builder.getDefault()
                 .setAscender(getValue(ascender))
@@ -229,7 +243,7 @@ public class MetricsDialog extends JDialog {
         setVisible(false);
     }
 
-    @SuppressWarnings({ "java:S2178" })
+    @SuppressWarnings({"java:S2178"})
     private void onSpinnerChanged(final ChangeEvent e) {
         // Do not short-circuit
         final var valid = validateAscender() & validateDescender() & validateCapHeight() & validateXHeight()
@@ -285,19 +299,5 @@ public class MetricsDialog extends JDialog {
                 validXHeight ? null : FlatClientProperties.OUTLINE_ERROR
         );
         return validXHeight;
-    }
-
-    private static JSpinner getSpinner() {
-        return getSpinner(1);
-    }
-
-    private static JSpinner getSpinner(final int minimum) {
-        final var spinner = new JSpinner(new SpinnerNumberModel(minimum, minimum, 512, 1));
-        Components.setFixedSize(spinner, Dimensions.SPINNER_SIZE);
-        return spinner;
-    }
-
-    private static int getValue(final JSpinner spinner) {
-        return ((SpinnerNumberModel) spinner.getModel()).getNumber().intValue();
     }
 }
