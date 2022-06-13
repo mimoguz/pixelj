@@ -7,6 +7,7 @@ import io.github.mimoguz.pixelj.models.Project;
 import io.github.mimoguz.pixelj.models.SortedList;
 import io.github.mimoguz.pixelj.resources.Icons;
 import io.github.mimoguz.pixelj.resources.Resources;
+import io.github.mimoguz.pixelj.util.ChangeableBoolean;
 import io.github.mimoguz.pixelj.views.shared.Borders;
 import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
@@ -22,7 +23,7 @@ import java.awt.event.KeyEvent;
 
 public class NewProjectDialog extends JDialog {
     private final JButton createButton = new JButton(Resources.get().getString("create"));
-    private final JTextArea titleArea = new JTextArea();
+    private final JTextField titleField = new JTextField();
     private Project project;
 
     public NewProjectDialog(final Frame owner) {
@@ -33,9 +34,19 @@ public class NewProjectDialog extends JDialog {
         );
 
         final var res = Resources.get();
-        final var content = new JPanel(new BorderLayout(Dimensions.SMALL_PADDING, Dimensions.LARGE_PADDING));
+        final var content = new JPanel(new BorderLayout(Dimensions.SMALL_PADDING, Dimensions.LARGE_PADDING * 2));
         final var metricsPanel = new MetricsPanel(Metrics.Builder.getDefault().build(), true);
         final var cancelButton = new JButton(res.getString("cancel"));
+
+        final var validTitle = new ChangeableBoolean(false);
+        final ChangeableBoolean.Listener validTitleListener = (sender, valid) -> titleField.putClientProperty(
+                FlatClientProperties.OUTLINE,
+                valid ? null : FlatClientProperties.OUTLINE_ERROR
+        );
+        validTitle.addChangeListener(validTitleListener);
+
+        final var canCreate = metricsPanel.validProperty().and(validTitle);
+        canCreate.addChangeListener((sender, valid) -> createButton.setEnabled(valid));
 
         final var helpAction = new ApplicationAction(
                 "metricsDialogHelpAction",
@@ -45,20 +56,20 @@ public class NewProjectDialog extends JDialog {
         final var helpButton = new JButton(helpAction);
 
         createButton.addActionListener(e -> {
-            final var title = titleArea.getText().trim();
-            if (metricsPanel.isValid() && !title.isBlank()) {
+            final var title = titleField.getText().trim();
+            if (metricsPanel.isMetricsValid() && !title.isBlank()) {
                 project = new Project(title, new SortedList<>(), new SortedList<>(), metricsPanel.getMetrics());
             }
             setVisible(false);
         });
 
         final MetricsPanel.InputChangeListener metricsChangeListener = (MetricsPanel sender, Boolean valid) -> {
-            createButton.setEnabled(valid && !titleArea.getText().trim().isBlank());
+            createButton.setEnabled(valid && !titleField.getText().trim().isBlank());
         };
 
         metricsPanel.addChangeListener(metricsChangeListener);
         cancelButton.addActionListener(e -> setVisible(false));
-        titleArea.getDocument().addDocumentListener(new DocumentListener() {
+        titleField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(final DocumentEvent e) {
                 check();
@@ -75,12 +86,7 @@ public class NewProjectDialog extends JDialog {
             }
 
             private void check() {
-                final var notEmpty = !titleArea.getText().trim().isBlank();
-                createButton.setEnabled(metricsPanel.isValid() && notEmpty);
-                titleArea.putClientProperty(
-                        FlatClientProperties.OUTLINE,
-                        notEmpty ? null : FlatClientProperties.OUTLINE_ERROR
-                );
+                validTitle.setValue(!titleField.getText().trim().isBlank());
             }
         });
 
@@ -96,13 +102,15 @@ public class NewProjectDialog extends JDialog {
 
         final var titlePanel = new JPanel(new BorderLayout(0, Dimensions.MEDIUM_PADDING));
         final var titleLabel = new JLabel(res.getString("projectTitlePrompt"));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, Dimensions.SMALL_PADDING, 0));
         titleLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "h4");
         titlePanel.add(titleLabel, BorderLayout.NORTH);
-        titlePanel.add(titleArea, BorderLayout.CENTER);
+        titlePanel.add(titleField, BorderLayout.CENTER);
         content.add(titlePanel, BorderLayout.NORTH);
 
         final var centerPanel = new JPanel(new BorderLayout());
-        final var metricsLabel = new JLabel(res.getString("metrics"));
+        final var metricsLabel = new JLabel(res.getString("metricsPanelTitle"));
+        metricsLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, Dimensions.SMALL_PADDING, 0));
         metricsLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "h4");
         centerPanel.add(metricsLabel, BorderLayout.NORTH);
         final var scroll = new JScrollPane(metricsPanel);
@@ -113,11 +121,12 @@ public class NewProjectDialog extends JDialog {
         final var buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
         buttonPanel.add(helpButton);
+        buttonPanel.add(Box.createRigidArea(Dimensions.MEDIUM_SQUARE));
         buttonPanel.add(Box.createHorizontalGlue());
         buttonPanel.add(createButton);
         buttonPanel.add(Box.createRigidArea(Dimensions.MEDIUM_SQUARE));
         buttonPanel.add(cancelButton);
-        buttonPanel.setBorder(Borders.SMALL_EMPTY);
+        buttonPanel.setBorder(Borders.EMPTY);
         content.add(buttonPanel, BorderLayout.SOUTH);
 
         setContentPane(content);
@@ -125,7 +134,7 @@ public class NewProjectDialog extends JDialog {
         cancelButton.requestFocus();
 
         pack();
-        setSize(new Dimension(300, 552));
+//        setSize(new Dimension(300, 600));
         metricsPanel.doLayout();
         setResizable(false);
         setLocationRelativeTo(owner);
@@ -139,8 +148,8 @@ public class NewProjectDialog extends JDialog {
     public void setVisible(final boolean value) {
         if (value) {
             project = null;
-            titleArea.setText("");
-            titleArea.putClientProperty(FlatClientProperties.OUTLINE, FlatClientProperties.OUTLINE_ERROR);
+            titleField.setText("");
+            titleField.putClientProperty(FlatClientProperties.OUTLINE, FlatClientProperties.OUTLINE_ERROR);
             createButton.setEnabled(false);
         }
         super.setVisible(value);

@@ -1,5 +1,7 @@
 package io.github.mimoguz.pixelj.util;
 
+import io.github.mimoguz.pixelj.views.shared.ReadOnlyBoolean;
+
 import javax.swing.event.EventListenerList;
 import java.util.EventListener;
 
@@ -19,7 +21,7 @@ public class ChangeableBoolean {
         listeners.add(Listener.class, listener);
     }
 
-    public ChangeableBoolean and(ChangeableBoolean that) {
+    public ReadOnlyBoolean and(ChangeableBoolean that) {
         return binaryOp(that, (a, b) -> a && b);
     }
 
@@ -32,14 +34,14 @@ public class ChangeableBoolean {
         fireChangeEvent();
     }
 
-    public ChangeableBoolean not() {
+    public ReadOnlyBoolean not() {
         final var result = new ChangeableBoolean();
         final Listener listener = (sender, a) -> result.setValue(!a);
         addChangeListener(listener);
-        return result;
+        return new ReadOnlyBoolean(result);
     }
 
-    public ChangeableBoolean or(ChangeableBoolean that) {
+    public ReadOnlyBoolean or(ChangeableBoolean that) {
         return binaryOp(that, (a, b) -> a || b);
     }
 
@@ -47,13 +49,13 @@ public class ChangeableBoolean {
         listeners.remove(Listener.class, listener);
     }
 
-    private ChangeableBoolean binaryOp(ChangeableBoolean that, BinaryOperator operator) {
+    private ReadOnlyBoolean binaryOp(ChangeableBoolean that, BinaryOperator operator) {
         final var result = new ChangeableBoolean();
         final Listener listenerThis = (sender, a) -> result.setValue(operator.op(a, that.value));
         final Listener listenerThat = (sender, b) -> result.setValue(operator.op(value, b));
         this.addChangeListener(listenerThis);
         that.addChangeListener(listenerThat);
-        return result;
+        return new ReadOnlyBoolean(result);
     }
 
     private void fireChangeEvent() {

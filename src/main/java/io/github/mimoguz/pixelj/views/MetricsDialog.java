@@ -5,6 +5,7 @@ import io.github.mimoguz.pixelj.actions.ApplicationAction;
 import io.github.mimoguz.pixelj.models.Metrics;
 import io.github.mimoguz.pixelj.resources.Icons;
 import io.github.mimoguz.pixelj.resources.Resources;
+import io.github.mimoguz.pixelj.util.ChangeableBoolean;
 import io.github.mimoguz.pixelj.views.shared.Borders;
 import io.github.mimoguz.pixelj.views.shared.Components;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
@@ -22,12 +23,7 @@ import java.util.logging.Logger;
 
 public class MetricsDialog extends JDialog {
     private final JButton applyButton;
-    private final MetricsPanel.InputChangeListener inputChangeListener = new MetricsPanel.InputChangeListener() {
-        @Override
-        public void onChange(final MetricsPanel sender, final Boolean args) {
-            applyButton.setEnabled(args);
-        }
-    };
+
     private final MetricsPanel inputPanel;
     private Metrics result;
 
@@ -38,20 +34,21 @@ public class MetricsDialog extends JDialog {
         logger.addHandler(new ConsoleHandler());
 
         inputPanel = new MetricsPanel(Metrics.Builder.getDefault().build(), false);
-        inputPanel.addChangeListener(inputChangeListener);
 
         final var res = Resources.get();
 
         applyButton = new JButton(res.getString("apply"));
         Components.setFixedSize(applyButton, Dimensions.TEXT_BUTTON_SIZE);
         applyButton.addActionListener(this::onApply);
+        final ChangeableBoolean.Listener validationListener = (sender, args) -> applyButton.setEnabled(args);
+        inputPanel.validProperty().addChangeListener(validationListener);
 
         final var cancelButton = new JButton(res.getString("cancel"));
         Components.setFixedSize(cancelButton, Dimensions.TEXT_BUTTON_SIZE);
         cancelButton.addActionListener(e -> setVisible(false));
 
         final var content = new JPanel();
-        final var contentLayout = new BorderLayout(8, 8);
+        final var contentLayout = new BorderLayout(Dimensions.MEDIUM_PADDING, Dimensions.LARGE_PADDING * 2);
         content.setLayout(contentLayout);
         content.setBorder(Borders.MEDIUM_EMPTY);
 
@@ -74,18 +71,19 @@ public class MetricsDialog extends JDialog {
         final var buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
         buttonPanel.add(helpButton);
+        buttonPanel.add(Box.createRigidArea(Dimensions.MEDIUM_SQUARE));
         buttonPanel.add(Box.createHorizontalGlue());
         buttonPanel.add(applyButton);
         buttonPanel.add(Box.createRigidArea(Dimensions.MEDIUM_SQUARE));
         buttonPanel.add(cancelButton);
-        buttonPanel.setBorder(Borders.SMALL_EMPTY);
+        buttonPanel.setBorder(Borders.EMPTY);
         content.add(buttonPanel, BorderLayout.SOUTH);
 
         setContentPane(content);
         getRootPane().setDefaultButton(cancelButton);
 
         pack();
-        setSize(300, 564);
+//        setSize(300, 500);
         inputPanel.doLayout();
         setResizable(false);
         setLocationRelativeTo(owner);
@@ -109,7 +107,7 @@ public class MetricsDialog extends JDialog {
     }
 
     private void onApply(final ActionEvent e) {
-        result = inputPanel.isValid() ? inputPanel.getMetrics() : null;
+        result = inputPanel.isMetricsValid() ? inputPanel.getMetrics() : null;
         setVisible(false);
     }
 }
