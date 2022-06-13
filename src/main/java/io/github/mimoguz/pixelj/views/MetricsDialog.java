@@ -24,8 +24,8 @@ public class MetricsDialog extends JDialog {
     private final JButton applyButton;
     private final MetricsPanel.InputChangeListener inputChangeListener = new MetricsPanel.InputChangeListener() {
         @Override
-        public void onChange(final MetricsPanel sender, final Boolean isValid) {
-            applyButton.setEnabled(isValid);
+        public void onChange(final MetricsPanel sender, final Boolean args) {
+            applyButton.setEnabled(args);
         }
     };
     private final MetricsPanel inputPanel;

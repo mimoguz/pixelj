@@ -7,6 +7,7 @@ public class ChangeableValue<T> implements Changeable<ChangeableValue<T>, T, Cha
     private final EventListenerList listeners = new EventListenerList();
     private T value;
 
+    @SuppressWarnings("unchecked")
     public <U extends ValueChangeListener<T>> ChangeableValue(Class<U> cls) {
         this.cls = (Class<ValueChangeListener<T>>) cls;
     }
