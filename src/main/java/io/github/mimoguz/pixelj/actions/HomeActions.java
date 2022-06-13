@@ -1,11 +1,14 @@
 package io.github.mimoguz.pixelj.actions;
 
 import io.github.mimoguz.pixelj.models.ExampleData;
+import io.github.mimoguz.pixelj.models.Project;
 import io.github.mimoguz.pixelj.resources.Icons;
 import io.github.mimoguz.pixelj.resources.Resources;
+import io.github.mimoguz.pixelj.views.NewProjectDialog;
 import io.github.mimoguz.pixelj.views.ProjectView;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Collection;
 import java.util.List;
@@ -15,11 +18,11 @@ import java.util.logging.Logger;
 
 public class HomeActions {
     public final Collection<ApplicationAction> all;
-    public final ApplicationAction newProjectAction;
     public final ApplicationAction openContainingFolderAction;
     public final ApplicationAction openSelectedProjectAction;
     public final ApplicationAction quitAction;
     public final ApplicationAction removeRecentItemAction;
+    public final ApplicationAction showNewProjectDialogAction;
     public final ApplicationAction showOpenDialogAction;
     public final ApplicationAction showOptionsDialogAction;
     private final Logger logger;
@@ -34,8 +37,8 @@ public class HomeActions {
 
         final var res = Resources.get();
 
-        newProjectAction = new ApplicationAction("newProjectAction", this::newProject)
-                .setTextKey("newProjectAction")
+        showNewProjectDialogAction = new ApplicationAction("showNewProjectDialogAction", this::showNewProjectDialog)
+                .setTextKey("showNewProjectDialogAction")
                 .setIcon(Icons.FILE_NEW, res.colors.icon(), res.colors.disabledIcon());
 
         openSelectedProjectAction = new ApplicationAction("openSelectedProjectAction", this::openSelectedProject)
@@ -61,7 +64,7 @@ public class HomeActions {
                 .setTextKey("openContainingFolderAction");
 
         all = List.of(
-                newProjectAction,
+                showNewProjectDialogAction,
                 openSelectedProjectAction,
                 quitAction,
                 showOpenDialogAction,
@@ -81,21 +84,21 @@ public class HomeActions {
         );
     }
 
-    private void newProject(final ActionEvent event, final Action action) {
-        log(action);
-    }
-
     private void openSelectedProject(final ActionEvent event, final Action action) {
-        final var frame = ((JFrame) SwingUtilities.getWindowAncestor(root));
-        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        final var projectView = new ProjectView(ExampleData.createProject());
-        projectView.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        projectView.setVisible(true);
-        frame.setVisible(false);
+        showProject(ExampleData.createProject());
     }
 
     private void quit(final ActionEvent event, final Action action) {
         log(action);
+    }
+
+    private void showNewProjectDialog(final ActionEvent event, final Action action) {
+        final var dialog = new NewProjectDialog((Frame) SwingUtilities.getWindowAncestor(root));
+        dialog.setVisible(true);
+        final var project = dialog.getProject();
+        if (project != null) {
+            showProject(project);
+        }
     }
 
     private void showOpenDialog(final ActionEvent event, final Action action) {
@@ -104,5 +107,14 @@ public class HomeActions {
 
     private void showOptionsDialog(final ActionEvent event, final Action action) {
         log(action);
+    }
+
+    private void showProject(final Project project) {
+        final var frame = ((JFrame) SwingUtilities.getWindowAncestor(root));
+        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        final var projectView = new ProjectView(project);
+        projectView.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        projectView.setVisible(true);
+        frame.setVisible(false);
     }
 }

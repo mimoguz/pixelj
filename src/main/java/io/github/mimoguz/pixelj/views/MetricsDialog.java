@@ -85,7 +85,6 @@ public class MetricsDialog extends JDialog {
         getRootPane().setDefaultButton(cancelButton);
 
         pack();
-//        contentLayout.layoutContainer(inputPanel);
         setSize(300, 564);
         inputPanel.doLayout();
         setResizable(false);

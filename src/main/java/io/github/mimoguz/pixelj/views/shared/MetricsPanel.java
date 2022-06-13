@@ -92,6 +92,8 @@ public class MetricsPanel extends JPanel implements Changeable<MetricsPanel, Boo
 
     public Metrics getMetrics() {
         return Metrics.Builder.getDefault()
+                .setCanvasWidth(getValue(canvasWidth))
+                .setCanvasHeight(getValue(canvasHeight))
                 .setAscender(getValue(ascender))
                 .setDescender(getValue(descender))
                 .setCapHeight(getValue(capHeight))

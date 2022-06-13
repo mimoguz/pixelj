@@ -22,7 +22,7 @@ public class HomeView extends JFrame {
         final var root = new JPanel(new BorderLayout());
         final var actions = new HomeActions(root);
 
-        final var newProjectButton = makeButton(actions.newProjectAction);
+        final var newProjectButton = makeButton(actions.showNewProjectDialogAction);
         final var openProjectButton = makeButton(actions.openSelectedProjectAction);
         final var showOpenDialogButton = makeButton(actions.showOpenDialogAction);
 
