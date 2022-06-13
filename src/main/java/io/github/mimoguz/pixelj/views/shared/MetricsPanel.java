@@ -12,140 +12,86 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.EventListenerList;
 import java.awt.*;
 
-import static javax.swing.GroupLayout.DEFAULT_SIZE;
-import static javax.swing.GroupLayout.PREFERRED_SIZE;
-
-public class MetricsPanel extends JPanel implements Changeable<MetricsPanel, Boolean, MetricsPanel.MetricsChangeListener> {
-    private final JSpinner ascender;
-    private final JSpinner canvasHeight;
-    private final JSpinner canvasWidth;
-    private final JSpinner capHeight;
-    private final JSpinner defaultCharacterWidth;
-    private final JSpinner descender;
-    private final JCheckBox isMonospaced;
-    private final JSpinner lineSpacing;
+public class MetricsPanel extends JPanel implements Changeable<MetricsPanel, Boolean, MetricsPanel.InputChangeListener> {
+    private final JSpinner ascender = getSpinner();
+    private final JSpinner canvasHeight = getSpinner();
+    private final JSpinner canvasWidth = getSpinner();
+    private final JSpinner capHeight = getSpinner();
+    private final JSpinner defaultCharacterWidth = getSpinner();
+    private final JSpinner descender = getSpinner();
+    private final JCheckBox isMonospaced = new JCheckBox();
+    private final JSpinner lineSpacing = getSpinner();
     private final EventListenerList listeners = new EventListenerList();
-    private final JSpinner spaceSize;
-    private final JSpinner spacing;
-    private final JSpinner xHeight;
+    private final JSpinner spaceSize = getSpinner(0);
+    private final JSpinner spacing = getSpinner(0);
+    private final JSpinner xHeight = getSpinner(0);
     private boolean valid;
 
-    public MetricsPanel(final Metrics init) {
-        setLayout(new BorderLayout());
+    public MetricsPanel(final Metrics init, final boolean canEditCanvasSize) {
+        canvasHeight.addChangeListener(this::onSpinnerChanged);
+        canvasWidth.addChangeListener(this::onSpinnerChanged);
+        ascender.addChangeListener(this::onSpinnerChanged);
+        descender.addChangeListener(this::onSpinnerChanged);
+        capHeight.addChangeListener(this::onSpinnerChanged);
+        xHeight.addChangeListener(this::onSpinnerChanged);
+        defaultCharacterWidth.addChangeListener(this::onSpinnerChanged);
 
         final var res = Resources.get();
 
-        canvasHeight = getSpinner();
-        canvasWidth = getSpinner();
-        ascender = getSpinner();
-        ascender.addChangeListener(this::onSpinnerChanged);
-        descender = getSpinner();
-        descender.addChangeListener(this::onSpinnerChanged);
-        capHeight = getSpinner();
-        capHeight.addChangeListener(this::onSpinnerChanged);
-        xHeight = getSpinner();
-        xHeight.addChangeListener(this::onSpinnerChanged);
-        defaultCharacterWidth = getSpinner();
-        defaultCharacterWidth.addChangeListener(this::onSpinnerChanged);
-        spacing = getSpinner(0);
-        spaceSize = getSpinner(0);
-        lineSpacing = getSpinner(0);
-        isMonospaced = new JCheckBox();
+        setLayout(new GridBagLayout());
+        final var cons = new GridBagConstraints();
+        cons.insets = new Insets(0, 4, 4, 4);
 
-        final var canvasWidthLabel = new JLabel(res.getString("metricsCanvasWidth"));
-        final var canvasHeightLabel = new JLabel(res.getString("metricsCanvasHeight"));
-        final var ascenderLabel = new JLabel(res.getString("metricsAscender"));
-        final var descenderLabel = new JLabel(res.getString("metricsDescender"));
-        final var capHeightLabel = new JLabel(res.getString("metricsCapHeight"));
-        final var xHeightLabel = new JLabel(res.getString("metricsXHeight"));
-        final var characterWidthLabel = new JLabel(res.getString("metricsDefaultCharacterWidth"));
-        final var spacingLabel = new JLabel(res.getString("metricsCharacterSpacing"));
-        final var spaceSizeLabel = new JLabel(res.getString("metricsSpaceSize"));
-        final var lineSpacingLabel = new JLabel(res.getString("metricsLineSpacing"));
-        final var isMonospacedLabel = new JLabel(res.getString("metricsIsMonospaced"));
+        cons.gridx = 0;
+        cons.gridy = 0;
+        cons.weightx = 1.0;
+        cons.anchor = GridBagConstraints.LINE_START;
+        add(new JLabel(res.getString("metricsCanvasWidth")), cons);
+        cons.gridy = GridBagConstraints.RELATIVE;
+        add(new JLabel(res.getString("metricsCanvasHeight")), cons);
+        add(new JLabel(res.getString("metricsAscender")), cons);
+        add(new JLabel(res.getString("metricsDescender")), cons);
+        add(new JLabel(res.getString("metricsCapHeight")), cons);
+        add(new JLabel(res.getString("metricsXHeight")), cons);
+        add(new JLabel(res.getString("metricsDefaultCharacterWidth")), cons);
+        add(new JLabel(res.getString("metricsCharacterSpacing")), cons);
+        add(new JLabel(res.getString("metricsSpaceSize")), cons);
+        add(new JLabel(res.getString("metricsLineSpacing")), cons);
+        add(new JLabel(res.getString("metricsIsMonospaced")), cons);
 
-        final var inputPanel = new JPanel();
-        final var layout = new GroupLayout(inputPanel);
-        final var sw = Dimensions.SPINNER_SIZE.width;
-        final var sh = Dimensions.SPINNER_SIZE.height;
-        inputPanel.setLayout(layout);
-        layout.setHorizontalGroup(
-                layout.createSequentialGroup()
-                        .addGroup(
-                                layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(canvasWidthLabel, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
-                                        .addComponent(canvasHeightLabel, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
-                                        .addComponent(ascenderLabel, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
-                                        .addComponent(descenderLabel, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
-                                        .addComponent(capHeightLabel, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
-                                        .addComponent(xHeightLabel, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
-                                        .addComponent(characterWidthLabel, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
-                                        .addComponent(spacingLabel, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
-                                        .addComponent(spaceSizeLabel, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
-                                        .addComponent(lineSpacingLabel, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
-                                        .addComponent(isMonospacedLabel, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
-                        )
-                        .addGroup(
-                                layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(canvasHeight, sw, DEFAULT_SIZE, PREFERRED_SIZE)
-                                        .addComponent(canvasWidth, sw, DEFAULT_SIZE, PREFERRED_SIZE)
-                                        .addComponent(ascender, sw, DEFAULT_SIZE, PREFERRED_SIZE)
-                                        .addComponent(descender, sw, DEFAULT_SIZE, PREFERRED_SIZE)
-                                        .addComponent(capHeight, sw, DEFAULT_SIZE, PREFERRED_SIZE)
-                                        .addComponent(xHeight, sw, DEFAULT_SIZE, PREFERRED_SIZE)
-                                        .addComponent(defaultCharacterWidth, sw, DEFAULT_SIZE, PREFERRED_SIZE)
-                                        .addComponent(spacing, sw, DEFAULT_SIZE, PREFERRED_SIZE)
-                                        .addComponent(spaceSize, sw, DEFAULT_SIZE, PREFERRED_SIZE)
-                                        .addComponent(lineSpacing, sw, DEFAULT_SIZE, PREFERRED_SIZE)
-                                        .addComponent(isMonospaced, sw, DEFAULT_SIZE, PREFERRED_SIZE)
-                        )
-        );
-        layout.setVerticalGroup(
-                layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER, false)
-                                .addComponent(capHeightLabel, sh, DEFAULT_SIZE, PREFERRED_SIZE)
-                                .addComponent(canvasHeight, sh, DEFAULT_SIZE, PREFERRED_SIZE))
-                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER, false)
-                                .addComponent(canvasWidthLabel, sh, DEFAULT_SIZE, PREFERRED_SIZE)
-                                .addComponent(canvasWidth, sh, DEFAULT_SIZE, PREFERRED_SIZE))
-                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER, false)
-                                .addComponent(ascenderLabel, sh, DEFAULT_SIZE, PREFERRED_SIZE)
-                                .addComponent(ascender, sh, DEFAULT_SIZE, PREFERRED_SIZE))
-                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER, false)
-                                .addComponent(descenderLabel, sh, DEFAULT_SIZE, PREFERRED_SIZE)
-                                .addComponent(descender, sh, DEFAULT_SIZE, PREFERRED_SIZE))
-                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER, false)
-                                .addComponent(capHeightLabel, sh, DEFAULT_SIZE, PREFERRED_SIZE)
-                                .addComponent(canvasHeight, sh, DEFAULT_SIZE, PREFERRED_SIZE))
-                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER, false)
-                                .addComponent(xHeightLabel, sh, DEFAULT_SIZE, PREFERRED_SIZE)
-                                .addComponent(xHeight, sh, DEFAULT_SIZE, PREFERRED_SIZE))
-                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER, false)
-                                .addComponent(characterWidthLabel, sh, DEFAULT_SIZE, PREFERRED_SIZE)
-                                .addComponent(defaultCharacterWidth, sh, DEFAULT_SIZE, PREFERRED_SIZE))
-                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER, false)
-                                .addComponent(spacingLabel, sh, DEFAULT_SIZE, PREFERRED_SIZE)
-                                .addComponent(spacing, sh, DEFAULT_SIZE, PREFERRED_SIZE))
-                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER, false)
-                                .addComponent(spaceSizeLabel, sh, DEFAULT_SIZE, PREFERRED_SIZE)
-                                .addComponent(spaceSize, sh, DEFAULT_SIZE, PREFERRED_SIZE))
-                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER, false)
-                                .addComponent(lineSpacingLabel, sh, DEFAULT_SIZE, PREFERRED_SIZE)
-                                .addComponent(lineSpacing, sh, DEFAULT_SIZE, PREFERRED_SIZE))
-                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER, false)
-                                .addComponent(isMonospacedLabel, sh, DEFAULT_SIZE, PREFERRED_SIZE)
-                                .addComponent(isMonospaced, sh, DEFAULT_SIZE, PREFERRED_SIZE))
-        );
+        cons.gridx = 1;
+        cons.gridy = 0;
+        cons.weightx = 0.0;
+        cons.fill = GridBagConstraints.NONE;
+        cons.anchor = GridBagConstraints.LINE_END;
+        add(canvasWidth, cons);
+        cons.gridy = GridBagConstraints.RELATIVE;
+        add(canvasHeight, cons);
+        add(ascender, cons);
+        add(descender, cons);
+        add(capHeight, cons);
+        add(xHeight, cons);
+        add(defaultCharacterWidth, cons);
+        add(spacing, cons);
+        add(spaceSize, cons);
+        add(lineSpacing, cons);
+        add(isMonospaced, cons);
 
-        final var scroll = new JScrollPane(inputPanel);
-        scroll.setBorder(Borders.EMPTY);
-        add(scroll, BorderLayout.CENTER);
-
-        set(init);
+        setMetrics(init, canEditCanvasSize);
     }
 
-    public void get() {
-        Metrics.Builder.getDefault()
+    @Override
+    public Class<InputChangeListener> getListenerClass() {
+        return InputChangeListener.class;
+    }
+
+    @Override
+    public EventListenerList getListenerList() {
+        return listeners;
+    }
+
+    public Metrics getMetrics() {
+        return Metrics.Builder.getDefault()
                 .setAscender(getValue(ascender))
                 .setDescender(getValue(descender))
                 .setCapHeight(getValue(capHeight))
@@ -159,21 +105,11 @@ public class MetricsPanel extends JPanel implements Changeable<MetricsPanel, Boo
     }
 
     @Override
-    public Class<MetricsChangeListener> getListenerClass() {
-        return MetricsChangeListener.class;
-    }
-
-    @Override
-    public EventListenerList getListenerList() {
-        return listeners;
-    }
-
-    @Override
     public boolean isValid() {
         return valid;
     }
 
-    public void set(final Metrics metrics) {
+    public void setMetrics(final Metrics metrics, boolean canEditCanvasSize) {
         canvasWidth.setValue(metrics.canvasWidth());
         canvasHeight.setValue(metrics.canvasHeight());
         ascender.setValue(metrics.ascender());
@@ -185,8 +121,13 @@ public class MetricsPanel extends JPanel implements Changeable<MetricsPanel, Boo
         spaceSize.setValue(metrics.spaceSize());
         lineSpacing.setValue(metrics.lineSpacing());
         isMonospaced.setSelected(metrics.isMonospaced());
+
+        canvasHeight.setEnabled(canEditCanvasSize);
+        canvasWidth.setEnabled(canEditCanvasSize);
+
         valid = validateAscender() & validateDescender() & validateCapHeight() & validateXHeight()
                 & validateDefaultWidth();
+
         fireChangeEvent(this, valid);
     }
 
@@ -195,7 +136,9 @@ public class MetricsPanel extends JPanel implements Changeable<MetricsPanel, Boo
     }
 
     private static JSpinner getSpinner(final int minimum) {
-        return new JSpinner(new SpinnerNumberModel(minimum, minimum, 512, 1));
+        final var spinner = new JSpinner(new SpinnerNumberModel(minimum, minimum, 512, 1));
+        Components.setFixedSize(spinner, Dimensions.SPINNER_SIZE);
+        return spinner;
     }
 
     private static int getValue(final JSpinner spinner) {
@@ -260,7 +203,7 @@ public class MetricsPanel extends JPanel implements Changeable<MetricsPanel, Boo
         return validXHeight;
     }
 
-    public interface MetricsChangeListener extends ChangeListener<MetricsPanel, Boolean> {
+    public interface InputChangeListener extends ChangeListener<MetricsPanel, Boolean> {
         // Empty
     }
 }
