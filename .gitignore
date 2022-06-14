@@ -2,8 +2,6 @@ target/
 build/
 out/
 .settings/
-.project
-.classpath
 *.iml
 *.ipr
 *.iws
