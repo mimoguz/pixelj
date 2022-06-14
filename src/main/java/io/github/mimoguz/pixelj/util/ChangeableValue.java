@@ -1,12 +1,13 @@
 package io.github.mimoguz.pixelj.util;
 
-import java.util.WeakHashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
 public class ChangeableValue<T> implements Changeable<ChangeableValue<T>, T, ChangeableValue.Listener<T>> {
-    private final WeakHashMap<Listener<T>, Void> listeners = new WeakHashMap<>();
+    private final Set<Listener<T>> listeners = new HashSet<>();
     private T value;
 
     public ChangeableValue(T value) {
@@ -14,7 +15,7 @@ public class ChangeableValue<T> implements Changeable<ChangeableValue<T>, T, Cha
     }
 
     @Override
-    public WeakHashMap<Listener<T>, Void> getListeners() {
+    public Set<Listener<T>> getListeners() {
         return listeners;
     }
 

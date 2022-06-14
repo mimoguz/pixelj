@@ -12,7 +12,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.WeakHashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class GlyphView extends JPanel
         implements
@@ -23,7 +24,7 @@ public class GlyphView extends JPanel
     private final ChangeableInt.Listener characterWidthChangeListener;
     private final BinaryImage.ImageListener imageChangeListener;
     private final ArrayList<Line> lines = new ArrayList<>();
-    private final WeakHashMap<ViewChangeListener, Void> listeners = new WeakHashMap<>();
+    private final Set<ViewChangeListener> listeners = new HashSet<>();
     private boolean drawShade;
     /**
      * May be null;
@@ -69,7 +70,7 @@ public class GlyphView extends JPanel
     }
 
     @Override
-    public WeakHashMap<ViewChangeListener, Void> getListeners() {
+    public Set<ViewChangeListener> getListeners() {
         return listeners;
     }
 

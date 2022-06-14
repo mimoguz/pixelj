@@ -6,7 +6,8 @@ import io.github.mimoguz.pixelj.util.Changeable;
 import java.awt.*;
 import java.awt.image.*;
 import java.util.Arrays;
-import java.util.WeakHashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class BinaryImage extends Image
         implements
@@ -14,7 +15,7 @@ public class BinaryImage extends Image
     private static final byte BYTE_0 = 0;
     private static final byte BYTE_1 = 1;
     protected final BufferedImage image;
-    private final WeakHashMap<ImageListener, Void> listeners = new WeakHashMap<>();
+    private final Set<ImageListener> listeners = new HashSet<>();
     private final byte[] pixelBuffer = new byte[1];
     private final WritableRaster raster;
 
@@ -107,7 +108,7 @@ public class BinaryImage extends Image
     }
 
     @Override
-    public WeakHashMap<ImageListener, Void> getListeners() {
+    public Set<ImageListener> getListeners() {
         return listeners;
     }
 

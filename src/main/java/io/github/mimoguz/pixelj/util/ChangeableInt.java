@@ -1,10 +1,11 @@
 package io.github.mimoguz.pixelj.util;
 
 import java.util.EventListener;
-import java.util.WeakHashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ChangeableInt {
-    private final WeakHashMap<Listener, Void> listeners = new WeakHashMap<>();
+    private final Set<Listener> listeners = new HashSet<>();
     private int value;
 
     public ChangeableInt() {
@@ -20,7 +21,9 @@ public class ChangeableInt {
     }
 
     public void addChangeListener(final Listener listener) {
-        listeners.put(listener, null);
+        if (listener != null) {
+            listeners.add(listener);
+        }
     }
 
     public ReadOnlyInt divide(ChangeableInt that) {
@@ -48,7 +51,9 @@ public class ChangeableInt {
     }
 
     public void removeChangeListener(final Listener listener) {
-        listeners.remove(listener);
+        if (listener != null) {
+            listeners.remove(listener);
+        }
     }
 
     public ReadOnlyInt subtract(ChangeableInt that) {
@@ -65,7 +70,7 @@ public class ChangeableInt {
     }
 
     private void fireChangeEvent() {
-        final var lst = listeners.keySet();
+        final var lst = listeners.stream().toList();
         for (var listener : lst) {
             listener.onChange(this, value);
         }

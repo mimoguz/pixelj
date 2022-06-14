@@ -1,6 +1,6 @@
 package io.github.mimoguz.pixelj.util;
 
-import java.util.WeakHashMap;
+import java.util.Set;
 import java.util.function.Function;
 
 public class ReadOnlyValue<T> implements Changeable<ChangeableValue<T>, T, ChangeableValue.Listener<T>> {
@@ -11,7 +11,7 @@ public class ReadOnlyValue<T> implements Changeable<ChangeableValue<T>, T, Chang
     }
 
     @Override
-    public WeakHashMap<ChangeableValue.Listener<T>, Void> getListeners() {
+    public Set<ChangeableValue.Listener<T>> getListeners() {
         return delegate.getListeners();
     }
 
