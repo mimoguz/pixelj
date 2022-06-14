@@ -4,10 +4,11 @@ import io.github.mimoguz.pixelj.actions.Actions;
 import io.github.mimoguz.pixelj.actions.ApplicationAction;
 import io.github.mimoguz.pixelj.actions.MainActions;
 import io.github.mimoguz.pixelj.graphics.FontIcon;
+import io.github.mimoguz.pixelj.models.Metrics;
 import io.github.mimoguz.pixelj.models.Project;
-import io.github.mimoguz.pixelj.models.Project.ProjectChangeEventArgs;
 import io.github.mimoguz.pixelj.resources.Icons;
 import io.github.mimoguz.pixelj.resources.Resources;
+import io.github.mimoguz.pixelj.util.ChangeableValue;
 import io.github.mimoguz.pixelj.views.characters_screen.CharactersScreen;
 import io.github.mimoguz.pixelj.views.kerning_pairs_screen.KerningPairsScreen;
 import io.github.mimoguz.pixelj.views.preview_screen.PreviewScreen;
@@ -66,7 +67,11 @@ public class ProjectView extends JFrame {
                         .toList()
         );
 
-        project.addChangeListener(this::onChange);
+        final ChangeableValue.Listener<Metrics> metricsListener = (sender, value) -> metricsChanged(value);
+        project.metricsProperty.addChangeListener(metricsListener);
+
+        final ChangeableValue.Listener<String> titleListener = (sender, value) -> titleChanged(value);
+        project.titleProperty.addChangeListener(titleListener);
 
         root.putClientProperty(
                 FlatClientProperties.TABBED_PANE_TAB_TYPE,
@@ -153,7 +158,7 @@ public class ProjectView extends JFrame {
 
         mainMenu.addPopupMenuListener(new PopupMenuListener() {
             @Override
-            public void popupMenuWillBecomeVisible(final PopupMenuEvent e) {
+            public void popupMenuCanceled(final PopupMenuEvent e) {
                 // Ignored
             }
 
@@ -163,7 +168,7 @@ public class ProjectView extends JFrame {
             }
 
             @Override
-            public void popupMenuCanceled(final PopupMenuEvent e) {
+            public void popupMenuWillBecomeVisible(final PopupMenuEvent e) {
                 // Ignored
             }
         });
@@ -218,18 +223,11 @@ public class ProjectView extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    private void onChange(final Project source, final ProjectChangeEventArgs event) {
-        switch (event) {
-            case final ProjectChangeEventArgs.MetricsChanged metricsChanged -> {
-                charactersScreen.updateMetrics(metricsChanged.metrics());
-                kerningPairsScreen.updateMetrics(metricsChanged.metrics());
-                if (previewScreen.isEnabled()) {
-                    previewScreen.refresh();
-                }
-            }
-            case final ProjectChangeEventArgs.TitleChanged titleChanged ->
-                    setTitle(titleChanged.title() + " - " + Resources.get().getString("applicationName"));
-            default -> throw new IllegalArgumentException("Unexpected value: " + event);
+    private void metricsChanged(Metrics newValue) {
+        charactersScreen.updateMetrics(newValue);
+        kerningPairsScreen.updateMetrics(newValue);
+        if (previewScreen.isEnabled()) {
+            previewScreen.refresh();
         }
     }
 
@@ -251,5 +249,9 @@ public class ProjectView extends JFrame {
         button.setFocusable(false);
         Components.setFixedSize(button, size);
         return button;
+    }
+
+    private void titleChanged(String newValue) {
+        setTitle(newValue + " - " + Resources.get().getString("applicationName"));
     }
 }

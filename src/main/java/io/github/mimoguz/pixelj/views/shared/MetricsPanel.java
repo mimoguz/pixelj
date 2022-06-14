@@ -2,8 +2,6 @@ package io.github.mimoguz.pixelj.views.shared;
 
 import io.github.mimoguz.pixelj.models.Metrics;
 import io.github.mimoguz.pixelj.resources.Resources;
-import io.github.mimoguz.pixelj.util.ChangeListener;
-import io.github.mimoguz.pixelj.util.Changeable;
 import io.github.mimoguz.pixelj.util.ChangeableBoolean;
 import io.github.mimoguz.pixelj.util.ReadOnlyBoolean;
 
@@ -15,7 +13,7 @@ import javax.swing.event.EventListenerList;
 import java.awt.*;
 import java.util.function.BooleanSupplier;
 
-public class MetricsPanel extends JPanel implements Changeable<MetricsPanel, Boolean, MetricsPanel.InputChangeListener> {
+public class MetricsPanel extends JPanel {
     private final JSpinner ascender = getSpinner();
     private final JSpinner canvasHeight = getSpinner();
     private final JSpinner canvasWidth = getSpinner();
@@ -32,7 +30,7 @@ public class MetricsPanel extends JPanel implements Changeable<MetricsPanel, Boo
     private final ChangeableBoolean validDefaultCharacterWidth = new ChangeableBoolean();
     private final ChangeableBoolean validDescender = new ChangeableBoolean();
     private final ChangeableBoolean validXHeight = new ChangeableBoolean();
-    private final ReadOnlyBoolean valid = new ReadOnlyBoolean(validAscender).and(validDescender)
+    public final ReadOnlyBoolean validProperty = validAscender.and(validDescender)
             .and(validCapHeight)
             .and(validXHeight)
             .and(validDefaultCharacterWidth);
@@ -47,8 +45,6 @@ public class MetricsPanel extends JPanel implements Changeable<MetricsPanel, Boo
         capHeight.addChangeListener(this::onSpinnerChanged);
         xHeight.addChangeListener(this::onSpinnerChanged);
         defaultCharacterWidth.addChangeListener(this::onSpinnerChanged);
-
-        valid.addChangeListener((sender, value) -> fireChangeEvent(this, value));
 
         final var res = Resources.get();
 
@@ -98,16 +94,6 @@ public class MetricsPanel extends JPanel implements Changeable<MetricsPanel, Boo
         setMetrics(init, canEditCanvasSize);
     }
 
-    @Override
-    public Class<InputChangeListener> getListenerClass() {
-        return InputChangeListener.class;
-    }
-
-    @Override
-    public EventListenerList getListeners() {
-        return listeners;
-    }
-
     public Metrics getMetrics() {
         return Metrics.Builder.getDefault()
                 .setCanvasWidth(getValue(canvasWidth))
@@ -125,7 +111,7 @@ public class MetricsPanel extends JPanel implements Changeable<MetricsPanel, Boo
     }
 
     public boolean isMetricsValid() {
-        return valid.getValue();
+        return validProperty.getValue();
     }
 
     public void setMetrics(final Metrics metrics, boolean canEditCanvasSize) {
@@ -145,10 +131,6 @@ public class MetricsPanel extends JPanel implements Changeable<MetricsPanel, Boo
         canvasWidth.setEnabled(canEditCanvasSize);
     }
 
-    public ReadOnlyBoolean validProperty() {
-        return valid;
-    }
-
     private static JSpinner getSpinner() {
         return getSpinner(1);
     }
@@ -163,9 +145,7 @@ public class MetricsPanel extends JPanel implements Changeable<MetricsPanel, Boo
         return ((SpinnerNumberModel) spinner.getModel()).getNumber().intValue();
     }
 
-    @SuppressWarnings({"java:S2178"})
     private void onSpinnerChanged(final ChangeEvent e) {
-        // Do not short-circuit
         validateAscender();
         validateDescender();
         validateCapHeight();
@@ -211,9 +191,5 @@ public class MetricsPanel extends JPanel implements Changeable<MetricsPanel, Boo
     private void validateXHeight() {
         // xHeight <= capHeight
         validate(() -> getValue(xHeight) <= getValue(capHeight), validXHeight, xHeight);
-    }
-
-    public interface InputChangeListener extends ChangeListener<MetricsPanel, Boolean> {
-        // Empty
     }
 }

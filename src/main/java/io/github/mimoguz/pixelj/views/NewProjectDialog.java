@@ -39,13 +39,13 @@ public class NewProjectDialog extends JDialog {
         final var cancelButton = new JButton(res.getString("cancel"));
 
         final var validTitle = new ChangeableBoolean(false);
-        final ChangeableBoolean.Listener validTitleListener = (sender, valid) -> titleField.putClientProperty(
+        final ChangeableBoolean.Listener titleValidationListener = (sender, valid) -> titleField.putClientProperty(
                 FlatClientProperties.OUTLINE,
                 valid ? null : FlatClientProperties.OUTLINE_ERROR
         );
-        validTitle.addChangeListener(validTitleListener);
+        validTitle.addChangeListener(titleValidationListener);
 
-        final var canCreate = metricsPanel.validProperty().and(validTitle);
+        final var canCreate = metricsPanel.validProperty.and(validTitle);
         canCreate.addChangeListener((sender, valid) -> createButton.setEnabled(valid));
 
         final var helpAction = new ApplicationAction(
@@ -63,13 +63,13 @@ public class NewProjectDialog extends JDialog {
             setVisible(false);
         });
 
-        final MetricsPanel.InputChangeListener metricsChangeListener = (MetricsPanel sender, Boolean valid) -> {
-            createButton.setEnabled(valid && !titleField.getText().trim().isBlank());
-        };
-
-        metricsPanel.addChangeListener(metricsChangeListener);
         cancelButton.addActionListener(e -> setVisible(false));
         titleField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(final DocumentEvent e) {
+                check();
+            }
+
             @Override
             public void insertUpdate(final DocumentEvent e) {
                 check();
@@ -77,11 +77,6 @@ public class NewProjectDialog extends JDialog {
 
             @Override
             public void removeUpdate(final DocumentEvent e) {
-                check();
-            }
-
-            @Override
-            public void changedUpdate(final DocumentEvent e) {
                 check();
             }
 

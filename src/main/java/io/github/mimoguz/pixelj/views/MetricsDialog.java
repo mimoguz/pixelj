@@ -41,7 +41,7 @@ public class MetricsDialog extends JDialog {
         Components.setFixedSize(applyButton, Dimensions.TEXT_BUTTON_SIZE);
         applyButton.addActionListener(this::onApply);
         final ChangeableBoolean.Listener validationListener = (sender, args) -> applyButton.setEnabled(args);
-        inputPanel.validProperty().addChangeListener(validationListener);
+        inputPanel.validProperty.addChangeListener(validationListener);
 
         final var cancelButton = new JButton(res.getString("cancel"));
         Components.setFixedSize(cancelButton, Dimensions.TEXT_BUTTON_SIZE);
