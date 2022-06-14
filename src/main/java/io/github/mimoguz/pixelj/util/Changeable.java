@@ -14,7 +14,7 @@ public interface Changeable<S, A, L extends ChangeListener<S, A>> {
         }
     }
 
-    WeakHashMap<L, Object> getListeners();
+    WeakHashMap<L, Void> getListeners();
 
     default void removeChangeListener(final L listener) {
         getListeners().remove(listener);

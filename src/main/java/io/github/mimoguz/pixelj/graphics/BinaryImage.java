@@ -10,11 +10,11 @@ import java.util.WeakHashMap;
 
 public class BinaryImage extends Image
         implements
-        Changeable<BinaryImage, BinaryImage.ImageChangeEventArgs, BinaryImage.ImageChangeListener> {
+        Changeable<BinaryImage, Void, BinaryImage.ImageListener> {
     private static final byte BYTE_0 = 0;
     private static final byte BYTE_1 = 1;
     protected final BufferedImage image;
-    private final WeakHashMap<ImageChangeListener, Object> listeners = new WeakHashMap<>();
+    private final WeakHashMap<ImageListener, Void> listeners = new WeakHashMap<>();
     private final byte[] pixelBuffer = new byte[1];
     private final WritableRaster raster;
 
@@ -41,7 +41,7 @@ public class BinaryImage extends Image
             raster.setDataElements(0, y, image.getWidth(), 1, lineBuffer);
         }
         if (notify) {
-            fireChangeEvent(this, ImageChangeEventArgs.IMAGE_MODIFIED);
+            fireChangeEvent(this, null);
         }
     }
 
@@ -107,7 +107,7 @@ public class BinaryImage extends Image
     }
 
     @Override
-    public WeakHashMap<ImageChangeListener, Object> getListeners() {
+    public WeakHashMap<ImageListener, Void> getListeners() {
         return listeners;
     }
 
@@ -156,12 +156,12 @@ public class BinaryImage extends Image
     public void invert(final int x, final int y, final boolean notify) {
         set(x, y, !get(x, y));
         if (notify) {
-            fireChangeEvent(this, ImageChangeEventArgs.IMAGE_MODIFIED);
+            fireChangeEvent(this, null);
         }
     }
 
     public void requestUpdate() {
-        fireChangeEvent(this, ImageChangeEventArgs.IMAGE_MODIFIED);
+        fireChangeEvent(this, null);
     }
 
     public void set(final int x, final int y, final boolean value) {
@@ -172,7 +172,7 @@ public class BinaryImage extends Image
         pixelBuffer[0] = value ? BYTE_1 : BYTE_0;
         raster.setDataElements(x, y, pixelBuffer);
         if (notify) {
-            fireChangeEvent(this, ImageChangeEventArgs.IMAGE_MODIFIED);
+            fireChangeEvent(this, null);
         }
     }
 
@@ -196,7 +196,7 @@ public class BinaryImage extends Image
     ) {
         raster.setDataElements(x, y, width, height, source);
         if (notify) {
-            fireChangeEvent(this, ImageChangeEventArgs.IMAGE_MODIFIED);
+            fireChangeEvent(this, null);
         }
     }
 
@@ -230,11 +230,7 @@ public class BinaryImage extends Image
         return binaryImage;
     }
 
-    public enum ImageChangeEventArgs {
-        IMAGE_MODIFIED
-    }
-
-    public interface ImageChangeListener extends ChangeListener<BinaryImage, ImageChangeEventArgs> {
+    public interface ImageListener extends ChangeListener<BinaryImage, Void> {
         // Empty
     }
 }

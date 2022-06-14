@@ -21,9 +21,9 @@ public class GlyphView extends JPanel
     private static final Color SHADE = new Color(242, 27, 63, 50);
     private final Color backgroundColor;
     private final ChangeableInt.Listener characterWidthChangeListener;
-    private final BinaryImage.ImageChangeListener imageChangeListener;
+    private final BinaryImage.ImageListener imageChangeListener;
     private final ArrayList<Line> lines = new ArrayList<>();
-    private final WeakHashMap<ViewChangeListener, Object> listeners = new WeakHashMap<>();
+    private final WeakHashMap<ViewChangeListener, Void> listeners = new WeakHashMap<>();
     private boolean drawShade;
     /**
      * May be null;
@@ -69,7 +69,7 @@ public class GlyphView extends JPanel
     }
 
     @Override
-    public WeakHashMap<ViewChangeListener, Object> getListeners() {
+    public WeakHashMap<ViewChangeListener, Void> getListeners() {
         return listeners;
     }
 

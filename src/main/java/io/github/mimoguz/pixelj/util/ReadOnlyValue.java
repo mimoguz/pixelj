@@ -11,7 +11,7 @@ public class ReadOnlyValue<T> implements Changeable<ChangeableValue<T>, T, Chang
     }
 
     @Override
-    public WeakHashMap<ChangeableValue.Listener<T>, Object> getListeners() {
+    public WeakHashMap<ChangeableValue.Listener<T>, Void> getListeners() {
         return delegate.getListeners();
     }
 

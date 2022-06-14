@@ -6,7 +6,7 @@ import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
 public class ChangeableValue<T> implements Changeable<ChangeableValue<T>, T, ChangeableValue.Listener<T>> {
-    private final WeakHashMap<Listener<T>, Object> listeners = new WeakHashMap<>();
+    private final WeakHashMap<Listener<T>, Void> listeners = new WeakHashMap<>();
     private T value;
 
     public ChangeableValue(T value) {
@@ -14,7 +14,7 @@ public class ChangeableValue<T> implements Changeable<ChangeableValue<T>, T, Cha
     }
 
     @Override
-    public WeakHashMap<Listener<T>, Object> getListeners() {
+    public WeakHashMap<Listener<T>, Void> getListeners() {
         return listeners;
     }
 
