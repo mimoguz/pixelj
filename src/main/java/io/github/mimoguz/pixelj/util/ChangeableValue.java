@@ -1,24 +1,20 @@
 package io.github.mimoguz.pixelj.util;
 
-import javax.swing.event.EventListenerList;
+import java.util.WeakHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.ToIntFunction;
 
 public class ChangeableValue<T> implements Changeable<ChangeableValue<T>, T, ChangeableValue.Listener<T>> {
-    private final Class<Listener<T>> cls;
-    private final EventListenerList listeners = new EventListenerList();
+    private final WeakHashMap<Listener<T>, Object> listeners = new WeakHashMap<>();
     private T value;
 
-    @SuppressWarnings("unchecked")
-    public <U extends Listener<T>> ChangeableValue(Class<U> cls) {
-        this.cls = (Class<Listener<T>>) cls;
+    public ChangeableValue(T value) {
+        this.value = value;
     }
 
     @Override
-    public Class<Listener<T>> getListenerClass() {
-        return cls;
-    }
-
-    @Override
-    public EventListenerList getListenerList() {
+    public WeakHashMap<Listener<T>, Object> getListeners() {
         return listeners;
     }
 
@@ -27,9 +23,23 @@ public class ChangeableValue<T> implements Changeable<ChangeableValue<T>, T, Cha
     }
 
     public void setValue(final T value) {
-        final var oldValue = this.value;
         this.value = value;
         fireChangeEvent(this, value);
+    }
+
+    public <U> ReadOnlyValue<U> map(Function<T, U> function) {
+        final var result = new ChangeableValue<>(function.apply(value));
+        return new ReadOnlyValue<>(result);
+    }
+
+    public <U> ReadOnlyBoolean mapToBoolean(Predicate<T> function) {
+        final var result = new ChangeableBoolean(function.test(value));
+        return new ReadOnlyBoolean(result);
+    }
+
+    public <U> ReadOnlyInt mapToInt(ToIntFunction<T> function) {
+        final var result = new ChangeableInt(function.applyAsInt(value));
+        return new ReadOnlyInt(result);
     }
 
     public interface Listener<T> extends ChangeListener<ChangeableValue<T>, T> {

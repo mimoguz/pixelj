@@ -1,24 +1,22 @@
 package io.github.mimoguz.pixelj.util;
 
-import javax.swing.event.EventListenerList;
+import java.util.WeakHashMap;
 
 public interface Changeable<S, A, L extends ChangeListener<S, A>> {
     default void addChangeListener(final L listener) {
-        getListenerList().add(getListenerClass(), listener);
+        getListeners().put(listener, null);
     }
 
     default void fireChangeEvent(final S sender, final A args) {
-        final var listeners = getListenerList().getListeners(getListenerClass()).clone();
-        for (var i = listeners.length - 1; i >= 0; i--) {
-            listeners[i].onChange(sender, args);
+        final var listeners = getListeners().keySet();
+        for (var listener : listeners) {
+            listener.onChange(sender, args);
         }
     }
 
-    Class<L> getListenerClass();
-
-    EventListenerList getListenerList();
+    WeakHashMap<L, Object> getListeners();
 
     default void removeChangeListener(final L listener) {
-        getListenerList().remove(getListenerClass(), listener);
+        getListeners().remove(listener);
     }
 }

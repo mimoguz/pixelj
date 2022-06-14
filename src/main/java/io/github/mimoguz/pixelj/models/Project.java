@@ -1,38 +1,18 @@
 package io.github.mimoguz.pixelj.models;
 
+import io.github.mimoguz.pixelj.util.ChangeableValue;
+
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.event.EventListenerList;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
+public class Project {
 
-import io.github.mimoguz.pixelj.util.ChangeListener;
-import io.github.mimoguz.pixelj.util.Changeable;
-
-public class Project
-        implements
-        Changeable<Project, Project.ProjectChangeEvent, Project.ProjectChangeListener> {
-
-    public sealed interface ProjectChangeEvent permits ProjectChangeEvent.MetricsChanged, ProjectChangeEvent.TitleChanged {
-        record MetricsChanged(Metrics metrics) implements ProjectChangeEvent {
-            // Empty
-        }
-
-        record TitleChanged(String title) implements ProjectChangeEvent {
-            // Empty
-        }
-    }
-
-    public interface ProjectChangeListener extends ChangeListener<Project, ProjectChangeEvent> {
-        // Empty
-    }
-
+    public final ChangeableValue<Metrics> metricsProperty;
+    public final ChangeableValue<String> titleProperty;
     private final SortedList<CharacterItem> characters;
     private final SortedList<KerningPair> kerningPairs;
-    private final EventListenerList listeners = new EventListenerList();
-    private Metrics metrics;
-    private String title;
 
     public Project(
             final String title,
@@ -40,25 +20,25 @@ public class Project
             final SortedList<KerningPair> kerningPairs,
             final Metrics metrics
     ) {
-        this.title = title;
+        titleProperty = new ChangeableValue<>(title);
         this.characters = characters;
         this.kerningPairs = kerningPairs;
-        this.metrics = metrics;
+        metricsProperty = new ChangeableValue<>(metrics);
 
         // Ignore
         // Kerning pairs which depend on non-existing characters
         ListDataListener kerningPairRemover = new ListDataListener() {
-            @Override
-            public void contentsChanged(final ListDataEvent e) {
-                sync();
-            }
-
             @Override
             public void intervalAdded(final ListDataEvent e) { // Ignore
             }
 
             @Override
             public void intervalRemoved(final ListDataEvent e) {
+                sync();
+            }
+
+            @Override
+            public void contentsChanged(final ListDataEvent e) {
                 sync();
             }
 
@@ -103,31 +83,19 @@ public class Project
         return kerningPairs;
     }
 
-    @Override
-    public Class<ProjectChangeListener> getListenerClass() {
-        return ProjectChangeListener.class;
-    }
-
-    @Override
-    public EventListenerList getListenerList() {
-        return listeners;
-    }
-
     public Metrics getMetrics() {
-        return metrics;
-    }
-
-    public String getTitle() {
-        return title;
+        return metricsProperty.getValue();
     }
 
     public void setMetrics(final Metrics value) {
-        metrics = value;
-        fireChangeEvent(this, new ProjectChangeEvent.MetricsChanged(value));
+        metricsProperty.setValue(value);
+    }
+
+    public String getTitle() {
+        return titleProperty.getValue();
     }
 
     public void setTitle(final String value) {
-        title = value;
-        fireChangeEvent(this, new ProjectChangeEvent.TitleChanged(value));
+        titleProperty.setValue(value);
     }
 }

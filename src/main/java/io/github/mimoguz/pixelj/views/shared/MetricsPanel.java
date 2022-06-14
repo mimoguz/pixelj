@@ -5,6 +5,7 @@ import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.util.ChangeListener;
 import io.github.mimoguz.pixelj.util.Changeable;
 import io.github.mimoguz.pixelj.util.ChangeableBoolean;
+import io.github.mimoguz.pixelj.util.ReadOnlyBoolean;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
@@ -103,7 +104,7 @@ public class MetricsPanel extends JPanel implements Changeable<MetricsPanel, Boo
     }
 
     @Override
-    public EventListenerList getListenerList() {
+    public EventListenerList getListeners() {
         return listeners;
     }
 

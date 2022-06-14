@@ -5,7 +5,7 @@ import io.github.mimoguz.pixelj.actions.ApplicationAction;
 import io.github.mimoguz.pixelj.actions.MainActions;
 import io.github.mimoguz.pixelj.graphics.FontIcon;
 import io.github.mimoguz.pixelj.models.Project;
-import io.github.mimoguz.pixelj.models.Project.ProjectChangeEvent;
+import io.github.mimoguz.pixelj.models.Project.ProjectChangeEventArgs;
 import io.github.mimoguz.pixelj.resources.Icons;
 import io.github.mimoguz.pixelj.resources.Resources;
 import io.github.mimoguz.pixelj.views.characters_screen.CharactersScreen;
@@ -218,16 +218,16 @@ public class ProjectView extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    private void onChange(final Project source, final ProjectChangeEvent event) {
+    private void onChange(final Project source, final ProjectChangeEventArgs event) {
         switch (event) {
-            case final ProjectChangeEvent.MetricsChanged metricsChanged -> {
+            case final ProjectChangeEventArgs.MetricsChanged metricsChanged -> {
                 charactersScreen.updateMetrics(metricsChanged.metrics());
                 kerningPairsScreen.updateMetrics(metricsChanged.metrics());
                 if (previewScreen.isEnabled()) {
                     previewScreen.refresh();
                 }
             }
-            case final ProjectChangeEvent.TitleChanged titleChanged ->
+            case final ProjectChangeEventArgs.TitleChanged titleChanged ->
                     setTitle(titleChanged.title() + " - " + Resources.get().getString("applicationName"));
             default -> throw new IllegalArgumentException("Unexpected value: " + event);
         }

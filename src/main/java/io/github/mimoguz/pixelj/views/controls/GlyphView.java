@@ -2,17 +2,17 @@ package io.github.mimoguz.pixelj.views.controls;
 
 import io.github.mimoguz.pixelj.graphics.BinaryImage;
 import io.github.mimoguz.pixelj.models.CharacterItem;
-import io.github.mimoguz.pixelj.models.IntValueChangeListener;
 import io.github.mimoguz.pixelj.util.ChangeListener;
 import io.github.mimoguz.pixelj.util.Changeable;
+import io.github.mimoguz.pixelj.util.ChangeableInt;
 import io.github.mimoguz.pixelj.util.Detachable;
 import io.github.mimoguz.pixelj.views.shared.Dimensions;
 
 import javax.swing.*;
-import javax.swing.event.EventListenerList;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.WeakHashMap;
 
 public class GlyphView extends JPanel
         implements
@@ -20,10 +20,10 @@ public class GlyphView extends JPanel
         Detachable {
     private static final Color SHADE = new Color(242, 27, 63, 50);
     private final Color backgroundColor;
-    private final IntValueChangeListener characterWidthChangeListener;
+    private final ChangeableInt.Listener characterWidthChangeListener;
     private final BinaryImage.ImageChangeListener imageChangeListener;
     private final ArrayList<Line> lines = new ArrayList<>();
-    private final EventListenerList listeners = new EventListenerList();
+    private final WeakHashMap<ViewChangeListener, Object> listeners = new WeakHashMap<>();
     private boolean drawShade;
     /**
      * May be null;
@@ -37,6 +37,7 @@ public class GlyphView extends JPanel
     private boolean showOverlay = false;
     private int top;
     private int zoom = 1;
+
     public GlyphView(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
 
@@ -68,12 +69,7 @@ public class GlyphView extends JPanel
     }
 
     @Override
-    public Class<ViewChangeListener> getListenerClass() {
-        return ViewChangeListener.class;
-    }
-
-    @Override
-    public EventListenerList getListenerList() {
+    public WeakHashMap<ViewChangeListener, Object> getListeners() {
         return listeners;
     }
 
@@ -197,7 +193,7 @@ public class GlyphView extends JPanel
         }
         if (model != null) {
             model.getGlyph().removeChangeListener(imageChangeListener);
-            model.removeChangeListener(characterWidthChangeListener);
+            model.widthProperty.removeChangeListener(characterWidthChangeListener);
             fireChangeEvent(this, ViewChangeEvent.MODEL_UNLOADED);
             if (top <= 0) {
                 top = model.getGlyph().getHeight();
@@ -209,7 +205,7 @@ public class GlyphView extends JPanel
         if (value != null) {
             if (listen) {
                 value.getGlyph().addChangeListener(imageChangeListener);
-                value.addChangeListener(characterWidthChangeListener);
+                value.widthProperty.addChangeListener(characterWidthChangeListener);
             }
             fireChangeEvent(this, ViewChangeEvent.MODEL_LOADED);
         }

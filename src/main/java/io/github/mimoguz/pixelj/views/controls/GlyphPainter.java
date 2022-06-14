@@ -1,9 +1,9 @@
 package io.github.mimoguz.pixelj.views.controls;
 
-import io.github.mimoguz.pixelj.views.controls.painter.*;
 import io.github.mimoguz.pixelj.graphics.Snapshot;
 import io.github.mimoguz.pixelj.models.CharacterItem;
-import io.github.mimoguz.pixelj.models.IntValueChangeListener;
+import io.github.mimoguz.pixelj.util.ChangeableInt;
+import io.github.mimoguz.pixelj.views.controls.painter.*;
 
 import java.awt.*;
 import java.util.function.Consumer;
@@ -15,7 +15,7 @@ public class GlyphPainter extends GlyphView
         CanRotateImage,
         CanTranslateImage {
 
-    private final IntValueChangeListener characterWidthChangeListener;
+    private final ChangeableInt.Listener characterWidthChangeListener;
     private final PaintAdapter paintAdapter;
     private Consumer<Snapshot> snapshotConsumer = snapshot -> { // Ignore
     };
@@ -25,7 +25,7 @@ public class GlyphPainter extends GlyphView
         paintAdapter = new PaintAdapter(this);
         addMouseListener(paintAdapter);
         addMouseMotionListener(paintAdapter);
-        characterWidthChangeListener = (sender, event) -> paintAdapter.setExtent(event.newValue());
+        characterWidthChangeListener = (sender, value) -> paintAdapter.setExtent(value);
     }
 
     public void erase() {
@@ -47,11 +47,11 @@ public class GlyphPainter extends GlyphView
     public void setModel(final CharacterItem value) {
         final var current = getModel();
         if (current != null) {
-            current.removeChangeListener(characterWidthChangeListener);
+            current.widthProperty.removeChangeListener(characterWidthChangeListener);
         }
         if (value != null) {
             paintAdapter.setExtent(value.getWidth());
-            value.addChangeListener(characterWidthChangeListener);
+            value.widthProperty.addChangeListener(characterWidthChangeListener);
         }
         super.setModel(value);
     }

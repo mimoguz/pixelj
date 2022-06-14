@@ -1,19 +1,21 @@
 package io.github.mimoguz.pixelj.models;
 
+import io.github.mimoguz.pixelj.util.ChangeableInt;
+
 /**
  * Two kerning pairs are equal if their left and right characters are equal.
  * Hash code of a kerning pair is calculated over its left and right characters
  * using getHash static method.
  */
-public class KerningPair extends MutableIntValueModel implements Comparable<KerningPair> {
-    private int kerningValue;
+public class KerningPair implements Comparable<KerningPair> {
     private final CharacterItem left;
     private final CharacterItem right;
+    public ChangeableInt kerningValueProperty;
 
     public KerningPair(final CharacterItem left, final CharacterItem right, final int kerningValue) {
         this.left = left;
         this.right = right;
-        this.kerningValue = kerningValue;
+        kerningValueProperty = new ChangeableInt(kerningValue);
     }
 
     @Override
@@ -26,19 +28,12 @@ public class KerningPair extends MutableIntValueModel implements Comparable<Kern
         }
     }
 
-    @Override
-    public boolean equals(final Object that) {
-        if (this == that) {
-            return true;
-        }
-        if (that instanceof final KerningPair other) {
-            return left.equals(other.left) && right.equals(other.right);
-        }
-        return false;
+    public int getKerningValue() {
+        return kerningValueProperty.getValue();
     }
 
-    public int getKerningValue() {
-        return kerningValue;
+    public void setKerningValue(final int value) {
+        kerningValueProperty.setValue(value);
     }
 
     public CharacterItem getLeft() {
@@ -54,13 +49,15 @@ public class KerningPair extends MutableIntValueModel implements Comparable<Kern
         return getHash(left, right);
     }
 
-    public void setKerningValue(final int value) {
-        if (value == kerningValue) {
-            return;
+    @Override
+    public boolean equals(final Object that) {
+        if (this == that) {
+            return true;
         }
-        final var event = new IntValueChangeEvent(kerningValue, value);
-        kerningValue = value;
-        fireChangeEvent(this, event);
+        if (that instanceof final KerningPair other) {
+            return left.equals(other.left) && right.equals(other.right);
+        }
+        return false;
     }
 
     /**

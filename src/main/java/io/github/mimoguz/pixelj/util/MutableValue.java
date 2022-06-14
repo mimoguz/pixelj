@@ -1,25 +1,17 @@
 package io.github.mimoguz.pixelj.util;
 
-import javax.swing.event.EventListenerList;
+import java.util.WeakHashMap;
 
 public class MutableValue<T> implements Changeable<MutableValue<T>, T, MutableValue.Listener<T>> {
-    private final Class<Listener<T>> cls;
-    private final EventListenerList listeners = new EventListenerList();
+    private final WeakHashMap<Listener<T>, Object> listeners = new WeakHashMap<>();
     private final T value;
 
-    @SuppressWarnings("unchecked")
-    public <U extends Listener<T>> MutableValue(Class<U> cls, T value) {
-        this.cls = (Class<Listener<T>>) cls;
+    public <U extends Listener<T>> MutableValue(T value) {
         this.value = value;
     }
 
     @Override
-    public Class<Listener<T>> getListenerClass() {
-        return cls;
-    }
-
-    @Override
-    public EventListenerList getListenerList() {
+    public WeakHashMap<Listener<T>, Object> getListeners() {
         return listeners;
     }
 

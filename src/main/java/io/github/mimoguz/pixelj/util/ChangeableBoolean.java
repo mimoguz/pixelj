@@ -1,12 +1,10 @@
 package io.github.mimoguz.pixelj.util;
 
-import io.github.mimoguz.pixelj.views.shared.ReadOnlyBoolean;
-
-import javax.swing.event.EventListenerList;
 import java.util.EventListener;
+import java.util.WeakHashMap;
 
 public class ChangeableBoolean {
-    private final EventListenerList listeners = new EventListenerList();
+    private final WeakHashMap<Listener, Object> listeners = new WeakHashMap<>();
     private boolean value;
 
     public ChangeableBoolean() {
@@ -18,7 +16,7 @@ public class ChangeableBoolean {
     }
 
     public void addChangeListener(final Listener listener) {
-        listeners.add(Listener.class, listener);
+        listeners.put(listener, null);
     }
 
     public ReadOnlyBoolean and(ChangeableBoolean that) {
@@ -46,7 +44,7 @@ public class ChangeableBoolean {
     }
 
     public void removeChangeListener(final Listener listener) {
-        listeners.remove(Listener.class, listener);
+        listeners.remove(listener);
     }
 
     private ReadOnlyBoolean binaryOp(ChangeableBoolean that, BinaryOperator operator) {
@@ -59,9 +57,9 @@ public class ChangeableBoolean {
     }
 
     private void fireChangeEvent() {
-        final var lst = listeners.getListeners(Listener.class).clone();
-        for (var i = lst.length - 1; i >= 0; i--) {
-            lst[i].onChange(this, value);
+        final var lst = listeners.keySet();
+        for (var listener : lst) {
+            listener.onChange(this, value);
         }
     }
 

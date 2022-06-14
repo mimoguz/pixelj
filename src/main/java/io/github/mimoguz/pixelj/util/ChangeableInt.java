@@ -1,10 +1,10 @@
 package io.github.mimoguz.pixelj.util;
 
-import javax.swing.event.EventListenerList;
 import java.util.EventListener;
+import java.util.WeakHashMap;
 
 public class ChangeableInt {
-    private final EventListenerList listeners = new EventListenerList();
+    private final WeakHashMap<Listener, Object> listeners = new WeakHashMap<>();
     private int value;
 
     public ChangeableInt() {
@@ -15,15 +15,15 @@ public class ChangeableInt {
         this.value = value;
     }
 
-    public ChangeableInt add(ChangeableInt that) {
+    public ReadOnlyInt add(ChangeableInt that) {
         return binaryOp(that, Integer::sum);
     }
 
     public void addChangeListener(final Listener listener) {
-        listeners.add(Listener.class, listener);
+        listeners.put(listener, null);
     }
 
-    public ChangeableInt divide(ChangeableInt that) {
+    public ReadOnlyInt divide(ChangeableInt that) {
         return binaryOp(that, (a, b) -> a / b);
     }
 
@@ -36,38 +36,38 @@ public class ChangeableInt {
         fireChangeEvent();
     }
 
-    public ChangeableInt multiply(ChangeableInt that) {
+    public ReadOnlyInt multiply(ChangeableInt that) {
         return binaryOp(that, (a, b) -> a * b);
     }
 
-    public ChangeableInt negate() {
+    public ReadOnlyInt negate() {
         final var result = new ChangeableInt();
         final Listener listener = (sender, a) -> result.setValue(-a);
         addChangeListener(listener);
-        return result;
+        return new ReadOnlyInt(result);
     }
 
     public void removeChangeListener(final Listener listener) {
-        listeners.remove(Listener.class, listener);
+        listeners.remove(listener);
     }
 
-    public ChangeableInt subtract(ChangeableInt that) {
+    public ReadOnlyInt subtract(ChangeableInt that) {
         return binaryOp(that, (a, b) -> a - b);
     }
 
-    private ChangeableInt binaryOp(ChangeableInt that, BinaryOperator operator) {
+    private ReadOnlyInt binaryOp(ChangeableInt that, BinaryOperator operator) {
         final var result = new ChangeableInt();
         final Listener listenerThis = (sender, a) -> result.setValue(operator.op(a, that.value));
         final Listener listenerThat = (sender, b) -> result.setValue(operator.op(value, b));
         this.addChangeListener(listenerThis);
         that.addChangeListener(listenerThat);
-        return result;
+        return new ReadOnlyInt(result);
     }
 
     private void fireChangeEvent() {
-        final var lst = listeners.getListeners(Listener.class).clone();
-        for (var i = lst.length - 1; i >= 0; i--) {
-            lst[i].onChange(this, value);
+        final var lst = listeners.keySet();
+        for (var listener : lst) {
+            listener.onChange(this, value);
         }
     }
 

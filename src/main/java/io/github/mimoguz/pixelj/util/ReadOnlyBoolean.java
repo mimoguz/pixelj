@@ -1,6 +1,4 @@
-package io.github.mimoguz.pixelj.views.shared;
-
-import io.github.mimoguz.pixelj.util.ChangeableBoolean;
+package io.github.mimoguz.pixelj.util;
 
 public class ReadOnlyBoolean {
     private final ChangeableBoolean delegate;
