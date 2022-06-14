@@ -30,6 +30,10 @@ public class ChangeableInt {
         return binaryOp(that, (a, b) -> a / b);
     }
 
+    public ReadOnlyBoolean ge(ChangeableInt that) {
+        return comparison(that, (a, b) -> a >= b);
+    }
+
     public int getValue() {
         return value;
     }
@@ -37,6 +41,18 @@ public class ChangeableInt {
     public void setValue(final int value) {
         this.value = value;
         fireChangeEvent();
+    }
+
+    public ReadOnlyBoolean gt(ChangeableInt that) {
+        return comparison(that, (a, b) -> a > b);
+    }
+
+    public ReadOnlyBoolean le(ChangeableInt that) {
+        return comparison(that, (a, b) -> a <= b);
+    }
+
+    public ReadOnlyBoolean lt(ChangeableInt that) {
+        return comparison(that, (a, b) -> a < b);
     }
 
     public ReadOnlyInt multiply(ChangeableInt that) {
@@ -47,7 +63,7 @@ public class ChangeableInt {
         final var result = new ChangeableInt();
         final Listener listener = (sender, a) -> result.setValue(-a);
         addChangeListener(listener);
-        return new ReadOnlyInt(result);
+        return new ReadOnlyInt(result, () -> this.removeChangeListener(listener));
     }
 
     public void removeChangeListener(final Listener listener) {
@@ -62,11 +78,26 @@ public class ChangeableInt {
 
     private ReadOnlyInt binaryOp(ChangeableInt that, BinaryOperator operator) {
         final var result = new ChangeableInt();
-        final Listener listenerThis = (sender, a) -> result.setValue(operator.op(a, that.value));
-        final Listener listenerThat = (sender, b) -> result.setValue(operator.op(value, b));
+        final Listener listenerThis = (sender, a) -> result.setValue(operator.calculate(a, that.value));
+        final Listener listenerThat = (sender, b) -> result.setValue(operator.calculate(value, b));
         this.addChangeListener(listenerThis);
         that.addChangeListener(listenerThat);
-        return new ReadOnlyInt(result);
+        return new ReadOnlyInt(result, () -> {
+            this.removeChangeListener(listenerThis);
+            that.removeChangeListener(listenerThat);
+        });
+    }
+
+    private ReadOnlyBoolean comparison(ChangeableInt that, Comparison cmp) {
+        final var result = new ChangeableBoolean();
+        final Listener listenerThis = (sender, a) -> result.setValue(cmp.check(a, that.value));
+        final Listener listenerThat = (sender, b) -> result.setValue(cmp.check(value, b));
+        this.addChangeListener(listenerThis);
+        that.addChangeListener(listenerThat);
+        return new ReadOnlyBoolean(result, () -> {
+            this.removeChangeListener(listenerThis);
+            that.removeChangeListener(listenerThat);
+        });
     }
 
     private void fireChangeEvent() {
@@ -77,7 +108,11 @@ public class ChangeableInt {
     }
 
     private interface BinaryOperator {
-        int op(int a, int b);
+        int calculate(int a, int b);
+    }
+
+    private interface Comparison {
+        boolean check(int a, int b);
     }
 
     public interface Listener extends EventListener {

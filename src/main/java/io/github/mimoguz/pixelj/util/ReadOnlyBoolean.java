@@ -1,10 +1,16 @@
 package io.github.mimoguz.pixelj.util;
 
-public class ReadOnlyBoolean {
+public class ReadOnlyBoolean implements Detachable {
+    private final Runnable cleaner;
     private final ChangeableBoolean delegate;
 
-    public ReadOnlyBoolean(ChangeableBoolean delegate) {
+    public ReadOnlyBoolean(ChangeableBoolean delegate, Runnable cleaner) {
         this.delegate = delegate;
+        this.cleaner = cleaner;
+    }
+
+    public ReadOnlyBoolean(ChangeableBoolean delegate) {
+        this(delegate, null);
     }
 
     public void addChangeListener(ChangeableBoolean.Listener listener) {
@@ -17,6 +23,13 @@ public class ReadOnlyBoolean {
 
     public ReadOnlyBoolean and(ChangeableBoolean that) {
         return delegate.and(that);
+    }
+
+    @Override
+    public void detach() {
+        if (cleaner != null) {
+            cleaner.run();
+        }
     }
 
     public boolean getValue() {

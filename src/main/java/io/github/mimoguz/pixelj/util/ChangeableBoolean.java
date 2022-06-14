@@ -39,7 +39,7 @@ public class ChangeableBoolean {
         final var result = new ChangeableBoolean();
         final Listener listener = (sender, a) -> result.setValue(!a);
         addChangeListener(listener);
-        return new ReadOnlyBoolean(result);
+        return new ReadOnlyBoolean(result, () -> this.removeChangeListener(listener));
     }
 
     public ReadOnlyBoolean or(ChangeableBoolean that) {

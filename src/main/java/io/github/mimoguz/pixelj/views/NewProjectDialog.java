@@ -23,7 +23,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class NewProjectDialog extends JDialog {
-    private static final Metrics DEFAULT_METRICS = Metrics.Builder.getDefault().build();
+    private static final Metrics DEFAULT_METRICS = Metrics.getDefault();
     final MetricsPanel metricsPanel = new MetricsPanel(DEFAULT_METRICS, true);
     private final JButton createButton = new JButton(Resources.get().getString("create"));
     private final JTextField titleField = new JTextField();
@@ -39,7 +39,7 @@ public class NewProjectDialog extends JDialog {
         final var cancelButton = new JButton(Resources.get().getString("cancel"));
         final var helpButton = new JButton();
         final var isTitleValid = getTitleValid();
-        final var areInputsValid = metricsPanel.validProperty.and(isTitleValid);
+        final var areInputsValid = metricsPanel.metricsValidProperty().and(isTitleValid);
 
         final var content = new JPanel(new BorderLayout(Dimensions.SMALL_PADDING, Dimensions.LARGE_PADDING * 2));
         content.setBorder(Borders.LARGE_EMPTY);
@@ -143,8 +143,10 @@ public class NewProjectDialog extends JDialog {
     private void setupCreateButton(final MetricsPanel metricsPanel, ReadOnlyBoolean areInputsValid) {
         createButton.addActionListener(e -> {
             final var title = titleField.getText().trim();
-            if (areInputsValid.getValue()) {
+            try {
                 project = new Project(title, new SortedList<>(), new SortedList<>(), metricsPanel.getMetrics());
+            } catch (Metrics.ValidatedBuilder.InvalidStateException exception) {
+                project = null;
             }
             setVisible(false);
         });

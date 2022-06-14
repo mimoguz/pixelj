@@ -1,15 +1,15 @@
 package io.github.mimoguz.pixelj.models;
 
-import java.util.List;
-
 import io.github.mimoguz.pixelj.graphics.BinaryImage;
+
+import java.util.List;
 
 public class ExampleData {
     private ExampleData() {
     }
 
     public static Project createProject() {
-        final var metrics = Metrics.Builder.getDefault().build();
+        final var metrics = Metrics.getDefault();
 
         final var characters = List.of(
                 new CharacterItem(

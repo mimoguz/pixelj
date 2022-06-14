@@ -1,5 +1,10 @@
 package io.github.mimoguz.pixelj.models;
 
+import io.github.mimoguz.pixelj.util.ChangeableBoolean;
+import io.github.mimoguz.pixelj.util.ChangeableInt;
+import io.github.mimoguz.pixelj.util.ReadOnlyBoolean;
+import io.github.mimoguz.pixelj.util.ReadOnlyInt;
+
 public record Metrics(
         int canvasWidth,
         int canvasHeight,
@@ -13,125 +18,168 @@ public record Metrics(
         int lineSpacing,
         boolean isMonospaced
 ) {
-    public static class Builder {
-        public static Builder from(Metrics metrics) {
-            final var builder = new Builder();
-            builder.ascender = metrics.ascender();
-            builder.canvasHeight = metrics.canvasHeight();
-            builder.canvasWidth = metrics.canvasWidth();
-            builder.capHeight = metrics.capHeight();
-            builder.defaultCharacterWidth = metrics.defaultCharacterWidth();
-            builder.descender = metrics.descender();
-            builder.isMonospaced = metrics.isMonospaced();
-            builder.lineSpacing = metrics.lineSpacing();
-            builder.spaceSize = metrics.spaceSize();
-            builder.spacing = metrics.spacing();
-            builder.xHeight = metrics.xHeight();
-            return builder;
+    public static Metrics getDefault() {
+        return new Metrics(
+                24,
+                24,
+                16,
+                4,
+                11,
+                7,
+                7,
+                1,
+                4,
+                2,
+                false
+        );
+    }
+
+    public static class ValidatedBuilder {
+        private static final ChangeableInt ZERO = new ChangeableInt(0);
+
+        public final ChangeableInt ascender = new ChangeableInt(0);
+        public final ChangeableInt canvasHeight = new ChangeableInt(0);
+        public final ChangeableInt canvasWidth = new ChangeableInt(0);
+        public final ChangeableInt capHeight = new ChangeableInt(0);
+        public final ChangeableInt defaultCharacterWidth = new ChangeableInt(0);
+        public final ChangeableInt descender = new ChangeableInt(0);
+        public final ChangeableBoolean isMonospaced = new ChangeableBoolean(false);
+        public final ChangeableInt lineSpacing = new ChangeableInt(0);
+        public final ChangeableInt spaceSize = new ChangeableInt(0);
+        public final ChangeableInt spacing = new ChangeableInt(0);
+        public final ReadOnlyBoolean validAscender = new ReadOnlyInt(descender)
+                .le(canvasHeight.subtract(ascender))
+                .and(ascender.gt(ZERO));
+        public final ReadOnlyBoolean validCanvasHeight = canvasHeight.gt(ZERO);
+        public final ReadOnlyBoolean validCanvasWidth = canvasWidth.gt(ZERO);
+        public final ReadOnlyBoolean validCapHeight = capHeight.le(ascender).and(capHeight.gt(ZERO));
+        public final ReadOnlyBoolean validDefaultCharacterWidth = defaultCharacterWidth.le(canvasWidth);
+        public final ReadOnlyBoolean validDescender = descender.le(canvasHeight).and(descender.gt(ZERO));
+        public final ReadOnlyBoolean validLineSpacing = lineSpacing.ge(ZERO);
+        public final ReadOnlyBoolean validSpaceSize = spaceSize.ge(ZERO);
+        public final ReadOnlyBoolean validSpacing = spacing.ge(ZERO);
+        private final ChangeableInt xHeight = new ChangeableInt(0);
+        public final ReadOnlyBoolean validXHeight = xHeight.le(capHeight).and(xHeight.gt(ZERO));
+
+        public final ReadOnlyBoolean validAll = validCanvasHeight
+                .and(validCanvasWidth)
+                .and(validAscender)
+                .and(validDescender)
+                .and(validCapHeight)
+                .and(validXHeight)
+                .and(validDefaultCharacterWidth)
+                .and(validSpacing)
+                .and(validLineSpacing)
+                .and(validSpaceSize);
+
+        public ValidatedBuilder() {
         }
 
-        public static Builder getDefault() {
-            final var builder = new Builder();
-            builder.canvasWidth = 24;
-            builder.canvasHeight = 24;
-            builder.ascender = 15;
-            builder.descender = 4;
-            builder.capHeight = 11;
-            builder.xHeight = 7;
-            builder.defaultCharacterWidth = 7;
-            builder.spacing = 1;
-            builder.spaceSize = 4;
-            builder.lineSpacing = 2;
-            builder.isMonospaced = false;
-            return builder;
-        }
-
-        private int ascender;
-        private int canvasHeight;
-        private int canvasWidth;
-        private int capHeight;
-        private int defaultCharacterWidth;
-        private int descender;
-        private boolean isMonospaced;
-        private int lineSpacing;
-        private int spaceSize;
-
-        private int spacing;
-
-        private int xHeight;
-
-        private Builder() {
-        }
-
-        public Metrics build() {
+        public Metrics build() throws InvalidStateException {
+            if (!validAll.getValue()) {
+                throw new InvalidStateException("Not all fields are valid");
+            }
             return new Metrics(
-                    canvasWidth,
-                    canvasHeight,
-                    ascender,
-                    descender,
-                    capHeight,
-                    xHeight,
-                    defaultCharacterWidth,
-                    spacing,
-                    spaceSize,
-                    lineSpacing,
-                    isMonospaced
+                    canvasWidth.getValue(),
+                    canvasHeight.getValue(),
+                    ascender.getValue(),
+                    descender.getValue(),
+                    capHeight.getValue(),
+                    xHeight.getValue(),
+                    defaultCharacterWidth.getValue(),
+                    spacing.getValue(),
+                    spaceSize.getValue(),
+                    lineSpacing.getValue(),
+                    isMonospaced.getValue()
             );
         }
 
-        public Builder setAscender(int value) {
-            ascender = value;
+        public ValidatedBuilder setAscender(int value) {
+            ascender.setValue(value);
             return this;
         }
 
-        public Builder setCanvasHeight(int value) {
-            canvasHeight = value;
+        public ValidatedBuilder setCanvasHeight(int value) {
+            canvasHeight.setValue(value);
             return this;
         }
 
-        public Builder setCanvasWidth(int value) {
-            canvasWidth = value;
+        public ValidatedBuilder setCanvasWidth(int value) {
+            canvasWidth.setValue(value);
             return this;
         }
 
-        public Builder setCapHeight(int value) {
-            capHeight = value;
+        public ValidatedBuilder setCapHeight(int value) {
+            capHeight.setValue(value);
             return this;
         }
 
-        public Builder setDefaultCharacterWidth(int value) {
-            defaultCharacterWidth = value;
+        public ValidatedBuilder setDefaultCharacterWidth(int value) {
+            defaultCharacterWidth.setValue(value);
             return this;
         }
 
-        public Builder setDescender(int value) {
-            descender = value;
+        public ValidatedBuilder setDescender(int value) {
+            descender.setValue(value);
             return this;
         }
 
-        public Builder setLineSpacing(int value) {
-            lineSpacing = value;
+        public ValidatedBuilder setLineSpacing(int value) {
+            lineSpacing.setValue(value);
             return this;
         }
 
-        public Builder setMonospaced(boolean value) {
-            isMonospaced = value;
+        public ValidatedBuilder setMonospaced(boolean value) {
+            isMonospaced.setValue(value);
             return this;
         }
 
-        public Builder setSpaceSize(int value) {
-            spaceSize = value;
+        public ValidatedBuilder setSpaceSize(int value) {
+            spaceSize.setValue(value);
             return this;
         }
 
-        public Builder setSpacing(int value) {
-            spacing = value;
+        public ValidatedBuilder setSpacing(int value) {
+            spacing.setValue(value);
             return this;
         }
 
-        public Builder setXHeight(int value) {
-            xHeight = value;
+        public ValidatedBuilder setXHeight(int value) {
+            xHeight.setValue(value);
             return this;
+        }
+
+        public static ValidatedBuilder from(Metrics metrics) {
+            final var builder = new ValidatedBuilder();
+            builder.ascender.setValue(metrics.ascender());
+            builder.canvasHeight.setValue(metrics.canvasHeight());
+            builder.canvasWidth.setValue(metrics.canvasWidth());
+            builder.capHeight.setValue(metrics.capHeight());
+            builder.defaultCharacterWidth.setValue(metrics.defaultCharacterWidth());
+            builder.descender.setValue(metrics.descender());
+            builder.isMonospaced.setValue(metrics.isMonospaced());
+            builder.lineSpacing.setValue(metrics.lineSpacing());
+            builder.spaceSize.setValue(metrics.spaceSize());
+            builder.spacing.setValue(metrics.spacing());
+            builder.xHeight.setValue(metrics.xHeight());
+            return builder;
+        }
+
+        public static ValidatedBuilder getDefaultBuilder() {
+            return ValidatedBuilder.from(Metrics.getDefault());
+        }
+
+        public static final class InvalidStateException extends Exception {
+            private final String message;
+
+            public InvalidStateException(final String message) {
+                this.message = message;
+            }
+
+            @Override
+            public String getMessage() {
+                return message;
+            }
         }
     }
 }

@@ -2,49 +2,43 @@ package io.github.mimoguz.pixelj.views.shared;
 
 import io.github.mimoguz.pixelj.models.Metrics;
 import io.github.mimoguz.pixelj.resources.Resources;
-import io.github.mimoguz.pixelj.util.ChangeableBoolean;
+import io.github.mimoguz.pixelj.util.ChangeableInt;
 import io.github.mimoguz.pixelj.util.ReadOnlyBoolean;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.EventListenerList;
 import java.awt.*;
-import java.util.function.BooleanSupplier;
 
 public class MetricsPanel extends JPanel {
-    private final JSpinner ascender = getSpinner();
-    private final JSpinner canvasHeight = getSpinner();
-    private final JSpinner canvasWidth = getSpinner();
-    private final JSpinner capHeight = getSpinner();
-    private final JSpinner defaultCharacterWidth = getSpinner();
-    private final JSpinner descender = getSpinner();
-    private final JCheckBox isMonospaced = new JCheckBox();
-    private final JSpinner lineSpacing = getSpinner();
-    private final EventListenerList listeners = new EventListenerList();
-    private final JSpinner spaceSize = getSpinner(0);
-    private final JSpinner spacing = getSpinner(0);
-    private final ChangeableBoolean validAscender = new ChangeableBoolean();
-    private final ChangeableBoolean validCapHeight = new ChangeableBoolean();
-    private final ChangeableBoolean validDefaultCharacterWidth = new ChangeableBoolean();
-    private final ChangeableBoolean validDescender = new ChangeableBoolean();
-    private final ChangeableBoolean validXHeight = new ChangeableBoolean();
-    public final ReadOnlyBoolean validProperty = validAscender.and(validDescender)
-            .and(validCapHeight)
-            .and(validXHeight)
-            .and(validDefaultCharacterWidth);
-    private final JSpinner xHeight = getSpinner(0);
-    ;
+    private final JSpinner ascender;
+    private final Metrics.ValidatedBuilder builder;
+    private final JSpinner canvasHeight;
+    private final JSpinner canvasWidth;
+    private final JSpinner capHeight;
+    private final JSpinner defaultCharacterWidth;
+    private final JSpinner descender;
+    private final JCheckBox isMonospaced;
+    private final JSpinner lineSpacing;
+    private final JSpinner spaceSize;
+    private final JSpinner spacing;
+    private final JSpinner xHeight;
 
     public MetricsPanel(final Metrics init, final boolean canEditCanvasSize) {
-        canvasHeight.addChangeListener(this::onSpinnerChanged);
-        canvasWidth.addChangeListener(this::onSpinnerChanged);
-        ascender.addChangeListener(this::onSpinnerChanged);
-        descender.addChangeListener(this::onSpinnerChanged);
-        capHeight.addChangeListener(this::onSpinnerChanged);
-        xHeight.addChangeListener(this::onSpinnerChanged);
-        defaultCharacterWidth.addChangeListener(this::onSpinnerChanged);
+        builder = Metrics.ValidatedBuilder.from(init);
+        ascender = getSpinner(builder.ascender, builder.validAscender);
+        canvasHeight = getSpinner(builder.canvasHeight, builder.validCanvasHeight);
+        canvasWidth = getSpinner(builder.canvasWidth, builder.validCanvasWidth);
+        capHeight = getSpinner(builder.capHeight, builder.validCapHeight);
+        defaultCharacterWidth = getSpinner(builder.defaultCharacterWidth, builder.validDefaultCharacterWidth);
+        descender = getSpinner(builder.descender, builder.validDescender);
+        lineSpacing = getSpinner(builder.lineSpacing, builder.validLineSpacing);
+        spaceSize = getSpinner(0, builder.spaceSize, builder.validSpaceSize);
+        spacing = getSpinner(0, builder.spacing, builder.validSpacing);
+        xHeight = getSpinner(0, builder.spaceSize, builder.validSpaceSize);
+
+        isMonospaced = new JCheckBox();
+        isMonospaced.addChangeListener(e -> builder.isMonospaced.setValue(isMonospaced.isSelected()));
 
         final var res = Resources.get();
 
@@ -94,24 +88,16 @@ public class MetricsPanel extends JPanel {
         setMetrics(init, canEditCanvasSize);
     }
 
-    public Metrics getMetrics() {
-        return Metrics.Builder.getDefault()
-                .setCanvasWidth(getValue(canvasWidth))
-                .setCanvasHeight(getValue(canvasHeight))
-                .setAscender(getValue(ascender))
-                .setDescender(getValue(descender))
-                .setCapHeight(getValue(capHeight))
-                .setXHeight(getValue(xHeight))
-                .setDefaultCharacterWidth(getValue(defaultCharacterWidth))
-                .setSpacing(getValue(spacing))
-                .setSpaceSize(getValue(spaceSize))
-                .setLineSpacing(getValue(lineSpacing))
-                .setMonospaced(isMonospaced.isSelected())
-                .build();
+    public Metrics getMetrics() throws Metrics.ValidatedBuilder.InvalidStateException {
+        return builder.build();
     }
 
     public boolean isMetricsValid() {
-        return validProperty.getValue();
+        return builder.validAll.getValue();
+    }
+
+    public ReadOnlyBoolean metricsValidProperty() {
+        return builder.validAll;
     }
 
     public void setMetrics(final Metrics metrics, boolean canEditCanvasSize) {
@@ -131,65 +117,23 @@ public class MetricsPanel extends JPanel {
         canvasWidth.setEnabled(canEditCanvasSize);
     }
 
-    private static JSpinner getSpinner() {
-        return getSpinner(1);
+    private static JSpinner getSpinner(ChangeableInt value, ReadOnlyBoolean valid) {
+        return getSpinner(1, value, valid);
     }
 
-    private static JSpinner getSpinner(final int minimum) {
-        final var spinner = new JSpinner(new SpinnerNumberModel(minimum, minimum, 512, 1));
+    private static JSpinner getSpinner(final int minimum, ChangeableInt value, ReadOnlyBoolean valid) {
+        final var numberModel = new SpinnerNumberModel(value.getValue(), minimum, 512, 1);
+        final var spinner = new JSpinner(numberModel);
         Components.setFixedSize(spinner, Dimensions.SPINNER_SIZE);
+        spinner.addChangeListener(e -> value.setValue(numberModel.getNumber().intValue()));
+        valid.addChangeListener((sender, isValid) -> spinner.putClientProperty(
+                FlatClientProperties.OUTLINE,
+                isValid ? null : FlatClientProperties.OUTLINE_ERROR
+        ));
         return spinner;
     }
 
     private static int getValue(final JSpinner spinner) {
         return ((SpinnerNumberModel) spinner.getModel()).getNumber().intValue();
-    }
-
-    private void onSpinnerChanged(final ChangeEvent e) {
-        validateAscender();
-        validateDescender();
-        validateCapHeight();
-        validateXHeight();
-        validateDefaultWidth();
-    }
-
-    private void validate(BooleanSupplier supplier, ChangeableBoolean target, JSpinner control) {
-        final var isValid = supplier.getAsBoolean();
-        if (isValid != target.getValue()) {
-            target.setValue(isValid);
-            control.putClientProperty(
-                    FlatClientProperties.OUTLINE,
-                    isValid ? null : FlatClientProperties.OUTLINE_ERROR
-            );
-        }
-    }
-
-    private void validateAscender() {
-        // ascender <= canvasHeight - descender
-        validate(() -> getValue(descender) <= getValue(canvasWidth) - getValue(ascender), validAscender, ascender);
-    }
-
-    private void validateCapHeight() {
-        // ascender <= canvasHeight - descender
-        validate(() -> getValue(capHeight) <= getValue(ascender), validCapHeight, capHeight);
-    }
-
-    private void validateDefaultWidth() {
-        // defaultWidth <= canvasWidth
-        validate(
-                () -> getValue(defaultCharacterWidth) <= getValue(canvasWidth),
-                validDefaultCharacterWidth,
-                defaultCharacterWidth
-        );
-    }
-
-    private void validateDescender() {
-        // descender <= canvasHeight
-        validate(() -> getValue(descender) <= getValue(canvasWidth), validDescender, descender);
-    }
-
-    private void validateXHeight() {
-        // xHeight <= capHeight
-        validate(() -> getValue(xHeight) <= getValue(capHeight), validXHeight, xHeight);
     }
 }

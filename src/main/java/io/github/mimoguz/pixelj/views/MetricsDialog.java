@@ -33,7 +33,7 @@ public class MetricsDialog extends JDialog {
         final var logger = Logger.getLogger(this.getClass().getName());
         logger.addHandler(new ConsoleHandler());
 
-        inputPanel = new MetricsPanel(Metrics.Builder.getDefault().build(), false);
+        inputPanel = new MetricsPanel(Metrics.getDefault(), false);
 
         final var res = Resources.get();
 
@@ -41,7 +41,7 @@ public class MetricsDialog extends JDialog {
         Components.setFixedSize(applyButton, Dimensions.TEXT_BUTTON_SIZE);
         applyButton.addActionListener(this::onApply);
         final ChangeableBoolean.Listener validationListener = (sender, args) -> applyButton.setEnabled(args);
-        inputPanel.validProperty.addChangeListener(validationListener);
+        inputPanel.metricsValidProperty().addChangeListener(validationListener);
 
         final var cancelButton = new JButton(res.getString("cancel"));
         Components.setFixedSize(cancelButton, Dimensions.TEXT_BUTTON_SIZE);
@@ -106,7 +106,11 @@ public class MetricsDialog extends JDialog {
     }
 
     private void onApply(final ActionEvent e) {
-        result = inputPanel.isMetricsValid() ? inputPanel.getMetrics() : null;
+        try {
+            result = inputPanel.getMetrics();
+        } catch (Metrics.ValidatedBuilder.InvalidStateException exception) {
+            result = null;
+        }
         setVisible(false);
     }
 }

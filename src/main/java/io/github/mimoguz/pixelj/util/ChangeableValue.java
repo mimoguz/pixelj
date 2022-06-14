@@ -3,8 +3,6 @@ package io.github.mimoguz.pixelj.util;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.ToIntFunction;
 
 public class ChangeableValue<T> implements Changeable<ChangeableValue<T>, T, ChangeableValue.Listener<T>> {
     private final Set<Listener<T>> listeners = new HashSet<>();
@@ -30,17 +28,8 @@ public class ChangeableValue<T> implements Changeable<ChangeableValue<T>, T, Cha
 
     public <U> ReadOnlyValue<U> map(Function<T, U> function) {
         final var result = new ChangeableValue<>(function.apply(value));
-        return new ReadOnlyValue<>(result);
-    }
-
-    public <U> ReadOnlyBoolean mapToBoolean(Predicate<T> function) {
-        final var result = new ChangeableBoolean(function.test(value));
-        return new ReadOnlyBoolean(result);
-    }
-
-    public <U> ReadOnlyInt mapToInt(ToIntFunction<T> function) {
-        final var result = new ChangeableInt(function.applyAsInt(value));
-        return new ReadOnlyInt(result);
+        final ChangeableValue.Listener<T> listener = (sender, value) -> result.setValue(function.apply(value));
+        return new ReadOnlyValue<>(result, () -> removeChangeListener(listener));
     }
 
     public interface Listener<T> extends ChangeListener<ChangeableValue<T>, T> {
