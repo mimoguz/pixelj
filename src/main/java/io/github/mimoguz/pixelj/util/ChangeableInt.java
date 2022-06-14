@@ -4,7 +4,7 @@ import java.util.EventListener;
 import java.util.WeakHashMap;
 
 public class ChangeableInt {
-    private final WeakHashMap<Listener, Object> listeners = new WeakHashMap<>();
+    private final WeakHashMap<Listener, Void> listeners = new WeakHashMap<>();
     private int value;
 
     public ChangeableInt() {

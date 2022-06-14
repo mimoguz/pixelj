@@ -4,7 +4,7 @@ import java.util.EventListener;
 import java.util.WeakHashMap;
 
 public class ChangeableBoolean {
-    private final WeakHashMap<Listener, Object> listeners = new WeakHashMap<>();
+    private final WeakHashMap<Listener, Void> listeners = new WeakHashMap<>();
     private boolean value;
 
     public ChangeableBoolean() {

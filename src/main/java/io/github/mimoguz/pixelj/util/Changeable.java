@@ -3,6 +3,9 @@ package io.github.mimoguz.pixelj.util;
 import java.util.WeakHashMap;
 
 public interface Changeable<S, A, L extends ChangeListener<S, A>> {
+    /**
+     * Changeable interface uses weak references. Make sure you're keeping another reference to your listener.
+     */
     default void addChangeListener(final L listener) {
         getListeners().put(listener, null);
     }
