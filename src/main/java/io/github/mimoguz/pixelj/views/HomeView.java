@@ -27,16 +27,17 @@ public class HomeView extends JFrame {
         final var showOpenDialogButton = makeButton(actions.showOpenDialogAction);
 
         final var top = new JPanel(new BorderLayout());
-        top.setBorder(Borders.MEDIUM_EMPTY);
+        top.setBorder(Borders.LARGE_EMPTY);
 
         final var buttonBox = new JPanel();
         buttonBox.setLayout(new BoxLayout(buttonBox, BoxLayout.X_AXIS));
         buttonBox.add(newProjectButton);
-        buttonBox.add(Box.createHorizontalStrut(Dimensions.SMALL_PADDING));
+        buttonBox.add(Box.createHorizontalStrut(Dimensions.MEDIUM_PADDING));
         buttonBox.add(openProjectButton);
-        buttonBox.add(Box.createHorizontalStrut(Dimensions.SMALL_PADDING));
+        buttonBox.add(Box.createHorizontalStrut(Dimensions.MEDIUM_PADDING));
         buttonBox.add(showOpenDialogButton);
-        buttonBox.add(Box.createHorizontalStrut(Dimensions.SMALL_PADDING));
+        buttonBox.add(Box.createHorizontalStrut(Dimensions.MEDIUM_PADDING));
+        buttonBox.add(Box.createHorizontalStrut(Dimensions.MEDIUM_PADDING));
         top.add(buttonBox, BorderLayout.WEST);
 
         final var toolBar = new JToolBar();
@@ -92,31 +93,9 @@ public class HomeView extends JFrame {
     }
 
     private static JButton makeButton(ApplicationAction action) {
-        final var button = new JButton();
-//        button.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_BORDERLESS);
-        Components.setFixedSize(button, Dimensions.HOME_BUTTON_SIZE);
-        button.setAction(action);
+        final var button = new JButton(action);
         button.setIcon(null);
-        button.setText(null);
-        final var content = new JPanel(new BorderLayout());
-        content.setOpaque(false);
-        if (action.getValue(Action.SMALL_ICON) instanceof Icon icon) {
-            final var iconLabel = new JLabel();
-            iconLabel.setIcon(icon);
-            content.add(iconLabel, BorderLayout.WEST);
-        }
-        if (action.getValue(Action.NAME) instanceof String name) {
-            final var label = new JLabel(name);
-            label.setBorder(BorderFactory.createEmptyBorder(
-                    0,
-                    Dimensions.MEDIUM_PADDING,
-                    0,
-                    Dimensions.MEDIUM_PADDING
-            ));
-            label.setHorizontalAlignment(SwingConstants.CENTER);
-            content.add(label, BorderLayout.CENTER);
-        }
-        button.add(content);
+        Components.setFixedSize(button, Dimensions.HOME_BUTTON_SIZE);
         return button;
     }
 

@@ -96,6 +96,7 @@ public class HomeActions {
         final var dialog = new NewProjectDialog((Frame) SwingUtilities.getWindowAncestor(root));
         dialog.setVisible(true);
         final var project = dialog.getProject();
+        dialog.dispose();
         if (project != null) {
             showProject(project);
         }

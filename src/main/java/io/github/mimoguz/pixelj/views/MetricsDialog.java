@@ -50,7 +50,7 @@ public class MetricsDialog extends JDialog {
         final var content = new JPanel();
         final var contentLayout = new BorderLayout(Dimensions.MEDIUM_PADDING, Dimensions.LARGE_PADDING * 2);
         content.setLayout(contentLayout);
-        content.setBorder(Borders.MEDIUM_EMPTY);
+        content.setBorder(Borders.LARGE_EMPTY);
 
         final var helpAction = new ApplicationAction(
                 "metricsDialogHelpAction",
@@ -83,7 +83,6 @@ public class MetricsDialog extends JDialog {
         getRootPane().setDefaultButton(cancelButton);
 
         pack();
-//        setSize(300, 500);
         inputPanel.doLayout();
         setResizable(false);
         setLocationRelativeTo(owner);
