@@ -8,12 +8,7 @@ import pixelj.views.controls.painter.*;
 import java.awt.*;
 import java.util.function.Consumer;
 
-public class GlyphPainter extends GlyphView
-        implements
-        Painter,
-        CanFlipImage,
-        CanRotateImage,
-        CanTranslateImage {
+public class GlyphPainter extends GlyphView implements CanFlipImage, CanRotateImage, CanTranslateImage {
 
     private final ChangeableInt.Listener characterWidthChangeListener;
     private final PaintAdapter paintAdapter;

@@ -3,7 +3,6 @@ package pixelj.models;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
@@ -41,7 +40,6 @@ public class FilteredListTests {
         final var wrapper = new FilteredList<>(model);
         wrapper.setFilter(i -> i > 3 && i < 7);
         model.removeAll(List.of(1, 4, 5));
-        System.out.println(wrapper.display.stream().map(Object::toString).collect(Collectors.joining(", ")));
         assertArrayEquals(new Integer[] { 6 }, wrapper.display.toArray());
     }
 

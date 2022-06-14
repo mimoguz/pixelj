@@ -126,13 +126,16 @@ public class MetricsPanel extends JPanel {
         final var spinner = new JSpinner(numberModel);
         Components.setFixedSize(spinner, Dimensions.SPINNER_SIZE);
         spinner.addChangeListener(e -> value.setValue(numberModel.getNumber().intValue()));
-        valid.addChangeListener((sender, isValid) -> spinner.putClientProperty(
-                FlatClientProperties.OUTLINE,
-                isValid ? null : FlatClientProperties.OUTLINE_ERROR
-        ));
+        valid.addChangeListener(
+                (sender, isValid) -> spinner.putClientProperty(
+                        FlatClientProperties.OUTLINE,
+                        isValid ? null : FlatClientProperties.OUTLINE_ERROR
+                )
+        );
         return spinner;
     }
 
+    @SuppressWarnings("unused")
     private static int getValue(final JSpinner spinner) {
         return ((SpinnerNumberModel) spinner.getModel()).getNumber().intValue();
     }
