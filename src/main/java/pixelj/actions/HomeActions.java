@@ -1,18 +1,6 @@
 package pixelj.actions;
 
-import pixelj.models.ExampleData;
-import pixelj.models.Project;
-import pixelj.resources.Icons;
-import pixelj.resources.Resources;
-import pixelj.views.NewProjectDialog;
-import pixelj.views.ProjectView;
-
-import javax.swing.*;
-
-import org.lwjgl.system.MemoryUtil;
-import org.lwjgl.util.nfd.NativeFileDialog;
-
-import java.awt.*;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.util.Collection;
 import java.util.List;
@@ -20,20 +8,36 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.Action;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
+
+import org.lwjgl.system.MemoryUtil;
+import org.lwjgl.util.nfd.NativeFileDialog;
+
+import pixelj.models.ExampleData;
+import pixelj.models.Project;
+import pixelj.resources.Icons;
+import pixelj.resources.Resources;
+import pixelj.views.NewProjectDialog;
+import pixelj.views.ProjectView;
+
 public class HomeActions {
     private static final String EXTENSION = "pixj";
 
     public final Collection<ApplicationAction> all;
+    public final ApplicationAction loadProjectAction;
+    private final Logger logger;
+    public final ApplicationAction newProjectAction;
     public final ApplicationAction openContainingFolderAction;
     public final ApplicationAction openSelectedAction;
     public final ApplicationAction quitAction;
     public final ApplicationAction removeRecentItemAction;
-    public final ApplicationAction newProjectAction;
-    public final ApplicationAction loadProjectAction;
-    public final ApplicationAction showOptionsDialogAction;
-    private final Logger logger;
-
     private final JComponent root;
+
+    public final ApplicationAction showOptionsDialogAction;
 
     public HomeActions(final JComponent root) {
 
@@ -86,14 +90,6 @@ public class HomeActions {
         logger.log(Level.INFO, "{0}", name == null ? (toolTip == null ? action : toolTip) : name);
     }
 
-    private void openSelectedProject(final ActionEvent event, final Action action) {
-        showProject(ExampleData.createProject());
-    }
-
-    private void quit(final ActionEvent event, final Action action) {
-        log(action);
-    }
-
     private void newProject(final ActionEvent event, final Action action) {
         final var dialog = new NewProjectDialog((Frame) SwingUtilities.getWindowAncestor(root));
         dialog.setVisible(true);
@@ -119,6 +115,14 @@ public class HomeActions {
                 MemoryUtil.memFree(outPath);
             }
         }
+    }
+
+    private void openSelectedProject(final ActionEvent event, final Action action) {
+        showProject(ExampleData.createProject());
+    }
+
+    private void quit(final ActionEvent event, final Action action) {
+        log(action);
     }
 
     private void showOptionsDialog(final ActionEvent event, final Action action) {

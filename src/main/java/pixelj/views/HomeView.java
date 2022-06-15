@@ -1,5 +1,30 @@
 package pixelj.views;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Vector;
+
+import javax.swing.Action;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JToolBar;
+import javax.swing.ListCellRenderer;
+import javax.swing.SwingUtilities;
+
+import com.formdev.flatlaf.FlatClientProperties;
+
 import pixelj.actions.ApplicationAction;
 import pixelj.actions.HomeActions;
 import pixelj.resources.Resources;
@@ -7,46 +32,27 @@ import pixelj.views.shared.Borders;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 
-import com.formdev.flatlaf.FlatClientProperties;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.Vector;
-
 public class HomeView extends JFrame {
+
     public HomeView() {
         super();
         final var res = Resources.get();
         final var root = new JPanel(new BorderLayout());
         final var actions = new HomeActions(root);
 
-        final var newProjectButton = makeButton(actions.newProjectAction);
-        final var openProjectButton = makeButton(actions.openSelectedAction);
-        final var showOpenDialogButton = makeButton(actions.loadProjectAction);
+        setupNorth(root, actions);
+        setupCenter(root, actions);
 
-        final var top = new JPanel(new BorderLayout());
-        top.setBorder(Borders.LARGE_EMPTY);
+        setContentPane(root);
+        pack();
+        setSize(new Dimension(720, 600));
+        setTitle(res.getString("applicationName"));
+        setIconImages(res.applicationIcons);
+        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
+        setLocationRelativeTo(null);
+    }
 
-        final var buttonBox = new JPanel();
-        buttonBox.setLayout(new BoxLayout(buttonBox, BoxLayout.X_AXIS));
-        buttonBox.add(newProjectButton);
-        buttonBox.add(Box.createHorizontalStrut(Dimensions.MEDIUM_PADDING));
-        buttonBox.add(openProjectButton);
-        buttonBox.add(Box.createHorizontalStrut(Dimensions.MEDIUM_PADDING));
-        buttonBox.add(showOpenDialogButton);
-        buttonBox.add(Box.createHorizontalStrut(Dimensions.MEDIUM_PADDING));
-        buttonBox.add(Box.createHorizontalStrut(Dimensions.MEDIUM_PADDING));
-        top.add(buttonBox, BorderLayout.WEST);
-
-        final var toolBar = new JToolBar();
-        toolBar.add(actions.showOptionsDialogAction);
-        toolBar.add(actions.quitAction);
-        top.add(toolBar, BorderLayout.EAST);
-
-        root.add(top, BorderLayout.NORTH);
-
+    private void setupCenter(final JPanel root, final HomeActions actions) {
         final var recentList = new JList<>(
                 new Vector<>(
                         java.util.List.of(
@@ -88,18 +94,36 @@ public class HomeView extends JFrame {
                 }
             }
         });
-
-        setContentPane(root);
-        pack();
-        recentList.requestFocusInWindow();
-        setSize(new Dimension(720, 600));
-        setTitle(res.getString("applicationName"));
-        setIconImages(res.applicationIcons);
-        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
-        setLocationRelativeTo(null);
     }
 
-    private static JButton makeButton(ApplicationAction action) {
+    private void setupNorth(final JPanel root, final HomeActions actions) {
+        final var newProjectButton = makeButton(actions.newProjectAction);
+        final var openProjectButton = makeButton(actions.openSelectedAction);
+        final var showOpenDialogButton = makeButton(actions.loadProjectAction);
+
+        final var top = new JPanel(new BorderLayout());
+        top.setBorder(Borders.LARGE_EMPTY);
+
+        final var buttonBox = new JPanel();
+        buttonBox.setLayout(new BoxLayout(buttonBox, BoxLayout.X_AXIS));
+        buttonBox.add(newProjectButton);
+        buttonBox.add(Box.createHorizontalStrut(Dimensions.MEDIUM_PADDING));
+        buttonBox.add(openProjectButton);
+        buttonBox.add(Box.createHorizontalStrut(Dimensions.MEDIUM_PADDING));
+        buttonBox.add(showOpenDialogButton);
+        buttonBox.add(Box.createHorizontalStrut(Dimensions.MEDIUM_PADDING));
+        buttonBox.add(Box.createHorizontalStrut(Dimensions.MEDIUM_PADDING));
+        top.add(buttonBox, BorderLayout.WEST);
+
+        final var toolBar = new JToolBar();
+        toolBar.add(actions.showOptionsDialogAction);
+        toolBar.add(actions.quitAction);
+        top.add(toolBar, BorderLayout.EAST);
+
+        root.add(top, BorderLayout.NORTH);
+    }
+
+    private static JButton makeButton(final ApplicationAction action) {
         final var button = new JButton(action);
         button.setIcon(null);
         Components.setFixedSize(button, Dimensions.HOME_BUTTON_SIZE);

@@ -8,21 +8,25 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.Action;
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 
 import pixelj.models.Project;
 import pixelj.resources.Resources;
 import pixelj.views.kerning_pairs_screen.AddDialog;
 
 public class KerningPairListActions {
-    public final Collection<ApplicationAction> all;
-    public final ApplicationAction showAddDialogAction;
-    public final ApplicationAction showRemoveDialogAction;
-
     private final AddDialog addDialog;
+    public final Collection<ApplicationAction> all;
     private final Project project;
+
     private final JComponent root;
     private final ListSelectionModel selectionModel;
+    public final ApplicationAction showAddDialogAction;
+    public final ApplicationAction showRemoveDialogAction;
 
     public KerningPairListActions(
             final Project project,

@@ -7,9 +7,9 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
-import pixelj.views.controls.GlyphView;
 import pixelj.models.CharacterItem;
 import pixelj.resources.Resources;
+import pixelj.views.controls.GlyphView;
 
 public class CharacterModelCell extends JPanel {
     private final CharacterCell characterCell = new CharacterCell();

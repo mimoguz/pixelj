@@ -1,22 +1,62 @@
 package pixelj.graphics;
 
-import pixelj.util.ChangeListener;
-import pixelj.util.Changeable;
-
-import java.awt.*;
-import java.awt.image.*;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.Image;
+import java.awt.ImageCapabilities;
+import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.ImageObserver;
+import java.awt.image.ImageProducer;
+import java.awt.image.IndexColorModel;
+import java.awt.image.Raster;
+import java.awt.image.WritableRaster;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class BinaryImage extends Image
-        implements
-        Changeable<BinaryImage, Void, BinaryImage.ImageListener> {
+import pixelj.util.ChangeListener;
+import pixelj.util.Changeable;
+
+public class BinaryImage extends Image implements Changeable<BinaryImage, Void, BinaryImage.ImageListener> {
+    public interface ImageListener extends ChangeListener<BinaryImage, Void> {
+        // Empty
+    }
+
     private static final byte BYTE_0 = 0;
     private static final byte BYTE_1 = 1;
+
+    public static BinaryImage from(final BufferedImage image) {
+        if (image.getType() != BufferedImage.TYPE_BYTE_BINARY) {
+            throw new IllegalArgumentException("Image is not binary indexed");
+        }
+
+        if (image.getColorModel() instanceof final IndexColorModel cm && cm.getMapSize() != 2) {
+            throw new IllegalArgumentException("Image is not binary indexed");
+        }
+
+        return new BinaryImage(image.getWidth(), image.getHeight(), image);
+    }
+
+    public static BinaryImage of(final int width, final int height) {
+        final var img = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_BINARY);
+        return new BinaryImage(width, height, img);
+    }
+
+    public static BinaryImage of(final int width, final int height, final boolean fill) {
+        final var img = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_BINARY);
+        final var binaryImage = new BinaryImage(width, height, img);
+        binaryImage.fill(fill, false);
+        return binaryImage;
+    }
+
     protected final BufferedImage image;
+
     private final Set<ImageListener> listeners = new HashSet<>();
+
     private final byte[] pixelBuffer = new byte[1];
+
     private final WritableRaster raster;
 
     private BinaryImage(final int width, final int height, final BufferedImage image) {
@@ -36,7 +76,7 @@ public class BinaryImage extends Image
     }
 
     public void fill(final boolean value, final boolean notify) {
-        var lineBuffer = new byte[image.getWidth()];
+        final var lineBuffer = new byte[image.getWidth()];
         Arrays.fill(lineBuffer, (value ? BYTE_1 : BYTE_0));
         for (var y = 0; y < image.getHeight(); y++) {
             raster.setDataElements(0, y, image.getWidth(), 1, lineBuffer);
@@ -62,18 +102,13 @@ public class BinaryImage extends Image
         return image.getAccelerationPriority();
     }
 
-    @Override
-    public void setAccelerationPriority(final float priority) {
-        image.setAccelerationPriority(priority);
-    }
-
     public byte getByteValue(final int x, final int y) {
         raster.getDataElements(x, y, pixelBuffer);
         return pixelBuffer[0];
     }
 
     @Override
-    public ImageCapabilities getCapabilities(GraphicsConfiguration gc) {
+    public ImageCapabilities getCapabilities(final GraphicsConfiguration gc) {
         return image.getCapabilities(gc);
     } // Idea does weird things with formatting
 
@@ -127,7 +162,7 @@ public class BinaryImage extends Image
     }// Idea does weird things with formatting
 
     public Snapshot getSnapshot(final int id) {
-        var buffer = new byte[getWidth() * getHeight()];
+        final var buffer = new byte[getWidth() * getHeight()];
         raster.getDataElements(0, 0, getWidth(), getHeight(), buffer);
         return new Snapshot(id, 0, 0, getWidth(), getHeight(), buffer);
     }
@@ -135,7 +170,7 @@ public class BinaryImage extends Image
     @Override
     public ImageProducer getSource() {
         return image.getSource();
-    }    // Idea does weird things with formatting
+    } // Idea does weird things with formatting
 
     public Image getSubImage(final int x, final int y, final int width, final int height) {
         return image.getSubimage(x, y, width, height);
@@ -177,6 +212,17 @@ public class BinaryImage extends Image
         }
     }
 
+    @Override
+    public void setAccelerationPriority(final float priority) {
+        image.setAccelerationPriority(priority);
+    }
+
+    @SuppressWarnings("unused")
+    private void setByteValue(final int x, final int y, final byte value) {
+        pixelBuffer[0] = value;
+        raster.setDataElements(x, y, pixelBuffer);
+    }
+
     public void setDataElements(
             final int x,
             final int y,
@@ -199,39 +245,5 @@ public class BinaryImage extends Image
         if (notify) {
             fireChangeEvent(this, null);
         }
-    }
-
-    @SuppressWarnings("unused")
-    private void setByteValue(final int x, final int y, final byte value) {
-        pixelBuffer[0] = value;
-        raster.setDataElements(x, y, pixelBuffer);
-    }
-
-    public static BinaryImage from(final BufferedImage image) {
-        if (image.getType() != BufferedImage.TYPE_BYTE_BINARY) {
-            throw new IllegalArgumentException("Image is not binary indexed");
-        }
-
-        if (image.getColorModel() instanceof IndexColorModel cm && cm.getMapSize() != 2) {
-            throw new IllegalArgumentException("Image is not binary indexed");
-        }
-
-        return new BinaryImage(image.getWidth(), image.getHeight(), image);
-    }
-
-    public static BinaryImage of(final int width, final int height) {
-        var img = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_BINARY);
-        return new BinaryImage(width, height, img);
-    }
-
-    public static BinaryImage of(final int width, final int height, final boolean fill) {
-        var img = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_BINARY);
-        var binaryImage = new BinaryImage(width, height, img);
-        binaryImage.fill(fill, false);
-        return binaryImage;
-    }
-
-    public interface ImageListener extends ChangeListener<BinaryImage, Void> {
-        // Empty
     }
 }

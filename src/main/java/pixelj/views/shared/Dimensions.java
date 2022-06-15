@@ -1,6 +1,6 @@
 package pixelj.views.shared;
 
-import java.awt.*;
+import java.awt.Dimension;
 
 public class Dimensions {
     public static final Dimension HOME_BUTTON_SIZE = new Dimension(160, 32);
@@ -17,6 +17,7 @@ public class Dimensions {
     public static final int SMALL_PADDING = 4;
     public static final Dimension SMALL_SQUARE = new Dimension(4, 4);
     public static final Dimension SPINNER_SIZE = new Dimension(90, 30);
+    public static final Dimension TAB_BAR_BUTTON_SIZE = new Dimension(48, 48);
     public static final Dimension TEXT_BUTTON_SIZE = new Dimension(100, 25);
 
     private Dimensions() {

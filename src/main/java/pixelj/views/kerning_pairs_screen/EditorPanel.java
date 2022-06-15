@@ -1,5 +1,18 @@
 package pixelj.views.kerning_pairs_screen;
 
+import java.awt.GridBagLayout;
+import java.util.ArrayList;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+
+import com.formdev.flatlaf.FlatClientProperties;
+
 import pixelj.models.KerningPair;
 import pixelj.resources.Resources;
 import pixelj.util.Detachable;
@@ -8,12 +21,6 @@ import pixelj.views.controls.ZoomStrip;
 import pixelj.views.shared.Borders;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
-
-import com.formdev.flatlaf.FlatClientProperties;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
 
 public class EditorPanel extends JPanel implements Detachable {
     private static final int INITIAL_ZOOM = 4;
@@ -47,7 +54,7 @@ public class EditorPanel extends JPanel implements Detachable {
             if (model == null) {
                 return;
             }
-            if (valueSpinner.getModel() instanceof SpinnerNumberModel numberModel) {
+            if (valueSpinner.getModel() instanceof final SpinnerNumberModel numberModel) {
                 model.setKerningValue(numberModel.getNumber().intValue());
                 spaces.set(0, spacing + model.getKerningValue());
                 preview.setSpaces(spaces);
@@ -129,7 +136,7 @@ public class EditorPanel extends JPanel implements Detachable {
     }
 
     @Override
-    public void setEnabled(boolean value) {
+    public void setEnabled(final boolean value) {
         super.setEnabled(value);
         final var valueIfNotNull = value && (model != null);
         valueSpinner.setEnabled(valueIfNotNull);

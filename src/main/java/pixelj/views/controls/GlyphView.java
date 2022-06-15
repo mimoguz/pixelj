@@ -1,5 +1,18 @@
 package pixelj.views.controls;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.swing.JPanel;
+
 import pixelj.graphics.BinaryImage;
 import pixelj.models.CharacterItem;
 import pixelj.util.ChangeListener;
@@ -7,13 +20,6 @@ import pixelj.util.Changeable;
 import pixelj.util.ChangeableInt;
 import pixelj.util.Detachable;
 import pixelj.views.shared.Dimensions;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 public class GlyphView extends JPanel
         implements
@@ -39,7 +45,7 @@ public class GlyphView extends JPanel
     private int top;
     private int zoom = 1;
 
-    public GlyphView(Color backgroundColor) {
+    public GlyphView(final Color backgroundColor) {
         this.backgroundColor = backgroundColor;
 
         characterWidthChangeListener = (source, event) -> repaint();
@@ -54,7 +60,7 @@ public class GlyphView extends JPanel
         };
     }
 
-    public void addLines(Line... lines) {
+    public void addLines(final Line... lines) {
         Arrays.stream(lines).forEach(line -> {
             if (line != null) {
                 this.lines.add(line);
@@ -98,7 +104,7 @@ public class GlyphView extends JPanel
     /**
      * @param value May be null
      */
-    public void setOverlay(Image value) {
+    public void setOverlay(final Image value) {
         if (overlay == value) {
             return;
         }
@@ -110,7 +116,7 @@ public class GlyphView extends JPanel
         return top;
     }
 
-    public void setTop(int top) {
+    public void setTop(final int top) {
         this.top = top;
     }
 
@@ -118,7 +124,7 @@ public class GlyphView extends JPanel
         return zoom;
     }
 
-    public void setZoom(int value) {
+    public void setZoom(final int value) {
         zoom = value;
         autoSize();
     }
@@ -127,7 +133,7 @@ public class GlyphView extends JPanel
         return showLines;
     }
 
-    public void setLinesVisible(boolean value) {
+    public void setLinesVisible(final boolean value) {
         if (value == showLines) {
             return;
         }
@@ -139,7 +145,7 @@ public class GlyphView extends JPanel
         return showOverlay;
     }
 
-    public void setOverlayVisible(boolean value) {
+    public void setOverlayVisible(final boolean value) {
         if (value == showOverlay) {
             return;
         }
@@ -151,7 +157,7 @@ public class GlyphView extends JPanel
         return drawShade;
     }
 
-    public void setShaded(boolean value) {
+    public void setShaded(final boolean value) {
         this.drawShade = value;
     }
 
@@ -179,7 +185,7 @@ public class GlyphView extends JPanel
         repaint();
     }
 
-    public void removeLines(Line... lines) {
+    public void removeLines(final Line... lines) {
         this.lines.removeAll(Arrays.stream(lines).toList());
         repaint();
     }
@@ -228,7 +234,7 @@ public class GlyphView extends JPanel
         repaint();
     }
 
-    private void drawLines(Graphics2D g) {
+    private void drawLines(final Graphics2D g) {
         if (lines.isEmpty() || !showLines || model == null) {
             return;
         }
@@ -238,7 +244,7 @@ public class GlyphView extends JPanel
         final var h = glyph.getHeight();
         final var dx = getWidth() / (double) w;
         final var dy = getHeight() / (double) h;
-        for (var line : lines) {
+        for (final var line : lines) {
             g.setColor(line.color());
             if (line.orientation() == Orientation.HORIZONTAL) {
                 final var y = (int) Math.round(line.point() * dy);
@@ -250,14 +256,14 @@ public class GlyphView extends JPanel
         }
     }
 
-    private void drawOverlay(Graphics2D g) {
+    private void drawOverlay(final Graphics2D g) {
         if (overlay == null || !showOverlay) {
             return;
         }
         g.drawImage(overlay, 0, 0, getWidth(), getHeight(), null);
     }
 
-    private void drawShade(Graphics2D g) {
+    private void drawShade(final Graphics2D g) {
         if (model == null || !drawShade) {
             return;
         }

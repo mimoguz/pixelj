@@ -1,14 +1,22 @@
 package pixelj.views.shared;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.BorderFactory;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+
+import com.formdev.flatlaf.FlatClientProperties;
+
 import pixelj.models.Metrics;
 import pixelj.resources.Resources;
 import pixelj.util.ChangeableInt;
 import pixelj.util.ReadOnlyBoolean;
-
-import com.formdev.flatlaf.FlatClientProperties;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class MetricsPanel extends JPanel {
     private final JSpinner ascender;
@@ -100,7 +108,7 @@ public class MetricsPanel extends JPanel {
         return builder.validAll;
     }
 
-    public void setMetrics(final Metrics metrics, boolean canEditCanvasSize) {
+    public void setMetrics(final Metrics metrics, final boolean canEditCanvasSize) {
         canvasWidth.setValue(metrics.canvasWidth());
         canvasHeight.setValue(metrics.canvasHeight());
         ascender.setValue(metrics.ascender());
@@ -117,11 +125,15 @@ public class MetricsPanel extends JPanel {
         canvasWidth.setEnabled(canEditCanvasSize);
     }
 
-    private static JSpinner getSpinner(ChangeableInt value, ReadOnlyBoolean valid) {
+    private static JSpinner getSpinner(final ChangeableInt value, final ReadOnlyBoolean valid) {
         return getSpinner(1, value, valid);
     }
 
-    private static JSpinner getSpinner(final int minimum, ChangeableInt value, ReadOnlyBoolean valid) {
+    private static JSpinner getSpinner(
+            final int minimum,
+            final ChangeableInt value,
+            final ReadOnlyBoolean valid
+    ) {
         final var numberModel = new SpinnerNumberModel(value.getValue(), minimum, 512, 1);
         final var spinner = new JSpinner(numberModel);
         Components.setFixedSize(spinner, Dimensions.SPINNER_SIZE);

@@ -9,7 +9,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.Action;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 
 import pixelj.graphics.BinaryImage;
 import pixelj.models.CharacterItem;
@@ -20,17 +25,17 @@ import pixelj.resources.Resources;
 import pixelj.views.characters_screen.AddDialog;
 
 public class CharacterListActions {
-    public final Collection<ApplicationAction> all;
-    public final ApplicationAction showAddDialogAction;
-    public final ApplicationAction showRemoveDialogAction;
-
     private final AddDialog addDialog;
+    public final Collection<ApplicationAction> all;
     private Dimension canvasSize;
+
     private int defaultCharacterWidth;
     private boolean enabled = true;
     private final Project project;
     private final JComponent root;
     private final ListSelectionModel selectionModel;
+    public final ApplicationAction showAddDialogAction;
+    public final ApplicationAction showRemoveDialogAction;
 
     public CharacterListActions(
             final Project project,
@@ -64,28 +69,6 @@ public class CharacterListActions {
         );
     }
 
-    public int getDefaultCharacterWidth() {
-        return defaultCharacterWidth;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setDefaultCharacterWidth(final int defaultCharacterWidth) {
-        this.defaultCharacterWidth = defaultCharacterWidth;
-    }
-
-    public void setEnabled(final boolean value) {
-        enabled = value;
-        Actions.setEnabled(all, enabled);
-    }
-
-    public void updateMetrics(final Metrics metrics) {
-        canvasSize = new Dimension(metrics.canvasWidth(), metrics.canvasHeight());
-        defaultCharacterWidth = metrics.defaultCharacterWidth();
-    }
-
     @SuppressWarnings("unused")
     private void addCharacters(final int... codePoints) {
         for (final var codePoint : codePoints) {
@@ -106,6 +89,23 @@ public class CharacterListActions {
             kerningPairs.addAll(project.findDependent(character));
         }
         return kerningPairs.size();
+    }
+
+    public int getDefaultCharacterWidth() {
+        return defaultCharacterWidth;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setDefaultCharacterWidth(final int defaultCharacterWidth) {
+        this.defaultCharacterWidth = defaultCharacterWidth;
+    }
+
+    public void setEnabled(final boolean value) {
+        enabled = value;
+        Actions.setEnabled(all, enabled);
     }
 
     private void showAddDialog(final ActionEvent event, final Action action) {
@@ -150,5 +150,10 @@ public class CharacterListActions {
             return;
         }
         listModel.removeAll(characters);
+    }
+
+    public void updateMetrics(final Metrics metrics) {
+        canvasSize = new Dimension(metrics.canvasWidth(), metrics.canvasHeight());
+        defaultCharacterWidth = metrics.defaultCharacterWidth();
     }
 }

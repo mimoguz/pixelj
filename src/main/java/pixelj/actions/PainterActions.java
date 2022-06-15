@@ -20,11 +20,11 @@ import javax.swing.Action;
 import javax.swing.JToggleButton;
 import javax.swing.KeyStroke;
 
-import pixelj.views.controls.GlyphPainter;
-import pixelj.views.controls.painter.Painter;
 import pixelj.graphics.Snapshot;
 import pixelj.resources.Icons;
 import pixelj.resources.Resources;
+import pixelj.views.controls.GlyphPainter;
+import pixelj.views.controls.painter.Painter;
 
 /**
  * In sake of simplicity, all actions assume painter is not null when they are
@@ -39,7 +39,7 @@ public class PainterActions {
         }
 
         @Override
-        public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException {
+        public Object getTransferData(final DataFlavor flavor) throws UnsupportedFlavorException {
             if (flavor.equals(DataFlavor.imageFlavor)) {
                 return image;
             }
@@ -52,17 +52,19 @@ public class PainterActions {
         }
 
         @Override
-        public boolean isDataFlavorSupported(DataFlavor flavor) {
+        public boolean isDataFlavorSupported(final DataFlavor flavor) {
             return Arrays.stream(getTransferDataFlavors()).anyMatch(f -> f.equals(flavor));
         }
     }
 
     private static final int MAX_UNDO = 64;
     public final Collection<ApplicationAction> all = new ArrayList<>();
+    private Snapshot clipboard = null;
     public final ApplicationAction clipboardCopyAction;
     public final ApplicationAction clipboardCutAction;
     public final ApplicationAction clipboardImportAction;
     public final ApplicationAction clipboardPasteAction;
+    private boolean enabled = true;
     public final ApplicationAction eraseAction;
     public final ApplicationAction flipHorizontallyAction;
     public final ApplicationAction flipVerticallyAction;
@@ -72,14 +74,12 @@ public class PainterActions {
     public final ApplicationAction moveLeftAction;
     public final ApplicationAction moveRightAction;
     public final ApplicationAction moveUpAction;
+    private GlyphPainter painter;
+    private final ArrayList<Snapshot> redoBuffer = new ArrayList<>(MAX_UNDO);
     public final ApplicationAction rotateLeftAction;
     public final ApplicationAction rotateRightAction;
     public final Consumer<Snapshot> snapshotConsumer;
     public final ApplicationAction symmetryToggleAction;
-    private Snapshot clipboard = null;
-    private boolean enabled = true;
-    private GlyphPainter painter;
-    private final ArrayList<Snapshot> redoBuffer = new ArrayList<>(MAX_UNDO);
     private final ArrayList<Snapshot> undoBuffer = new ArrayList<>(MAX_UNDO);
 
     public PainterActions() {
@@ -253,40 +253,23 @@ public class PainterActions {
         symmetryToggleAction.putValue(Action.SELECTED_KEY, false);
     }
 
-    public PainterActions(GlyphPainter painter) {
+    public PainterActions(final GlyphPainter painter) {
         this();
         this.painter = painter;
     }
 
-    public Painter getPainter() {
-        return painter;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean value) {
-        enabled = value;
-        Actions.setEnabled(this.all, enabled);
-    }
-
-    public void setPainter(GlyphPainter value) {
-        painter = value;
-    }
-
-    private void act(Consumer<GlyphPainter> consumer) {
+    private void act(final Consumer<GlyphPainter> consumer) {
         consumer.accept(painter);
     }
 
-    private void addToUndoBuffer(Snapshot snapshot) {
+    private void addToUndoBuffer(final Snapshot snapshot) {
         if (undoBuffer.size() >= MAX_UNDO) {
             undoBuffer.remove(0);
         }
         undoBuffer.add(snapshot);
     }
 
-    private void copy(ActionEvent event, Action action) {
+    private void copy(final ActionEvent event, final Action action) {
         final var model = painter.getModel();
         if (model == null) {
             return;
@@ -306,12 +289,12 @@ public class PainterActions {
         g2d.dispose();
     }
 
-    private void cut(ActionEvent event, Action action) {
+    private void cut(final ActionEvent event, final Action action) {
         copy(event, action);
         erase(event, action);
     }
 
-    private void erase(ActionEvent event, Action action) {
+    private void erase(final ActionEvent event, final Action action) {
         final var model = painter.getModel();
         if (model == null) {
             return;
@@ -320,7 +303,11 @@ public class PainterActions {
         painter.erase();
     }
 
-    private void importClip(ActionEvent event, Action action) {
+    public Painter getPainter() {
+        return painter;
+    }
+
+    private void importClip(final ActionEvent event, final Action action) {
         final var model = painter.getModel();
         if (model == null) {
             return;
@@ -341,13 +328,17 @@ public class PainterActions {
                         glyph.set(x, y, (buffer[0] & 1) != 0);
                     }
                 }
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 // Ignore errors
             }
         }
     }
 
-    private void paste(ActionEvent event, Action action) {
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    private void paste(final ActionEvent event, final Action action) {
         final var clip = clipboard;
         final var model = painter.getModel();
         if (model == null || clip == null) {
@@ -357,11 +348,20 @@ public class PainterActions {
         model.getGlyph().setDataElements(clip.x(), clip.y(), clip.width(), clip.height(), clip.data());
     }
 
-    private void redo(ActionEvent event, Action action) {
+    private void redo(final ActionEvent event, final Action action) {
         timeTravel(redoBuffer, undoBuffer);
     }
 
-    private void timeTravel(ArrayList<Snapshot> from, ArrayList<Snapshot> to) {
+    public void setEnabled(final boolean value) {
+        enabled = value;
+        Actions.setEnabled(this.all, enabled);
+    }
+
+    public void setPainter(final GlyphPainter value) {
+        painter = value;
+    }
+
+    private void timeTravel(final ArrayList<Snapshot> from, final ArrayList<Snapshot> to) {
         final var model = painter.getModel();
         if (model == null) {
             return;
@@ -387,7 +387,7 @@ public class PainterActions {
         }
     }
 
-    private void undo(ActionEvent event, Action action) {
+    private void undo(final ActionEvent event, final Action action) {
         timeTravel(undoBuffer, redoBuffer);
     }
 }

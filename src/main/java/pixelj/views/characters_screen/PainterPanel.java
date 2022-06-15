@@ -1,28 +1,40 @@
 package pixelj.views.characters_screen;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridBagLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JToggleButton;
+import javax.swing.JToolBar;
+import javax.swing.SwingConstants;
+
+import com.formdev.flatlaf.FlatClientProperties;
+
 import pixelj.actions.Actions;
 import pixelj.actions.PainterActions;
-import pixelj.views.controls.GlyphPainter;
-import pixelj.views.controls.Line;
-import pixelj.views.controls.Orientation;
 import pixelj.graphics.Snapshot;
 import pixelj.models.CharacterItem;
 import pixelj.models.Metrics;
 import pixelj.models.Project;
 import pixelj.resources.Resources;
 import pixelj.util.Detachable;
+import pixelj.views.controls.GlyphPainter;
+import pixelj.views.controls.Line;
+import pixelj.views.controls.Orientation;
 import pixelj.views.controls.ZoomStrip;
 import pixelj.views.shared.Borders;
 import pixelj.views.shared.Dimensions;
-
-import com.formdev.flatlaf.FlatClientProperties;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 public class PainterPanel extends JPanel implements Detachable {
     private static final Color BASELINE = new Color(45, 147, 173);
@@ -52,9 +64,15 @@ public class PainterPanel extends JPanel implements Detachable {
             }
         });
 
-        actions.setPainter(painter);
-        painter.setSnapshotConsumer(actions.snapshotConsumer);
-        Actions.registerShortcuts(actions.all, root);
+        final var zoomSlider = zoomStrip.getSlider();
+        zoomSlider.addChangeListener(e -> {
+            if (zoomSlider.getValueIsAdjusting()) {
+                painter.setZoom(zoomSlider.getValue());
+            }
+        });
+        zoomStrip.setEnabled(false);
+
+        setLayout(new BorderLayout());
 
         infoPanel = new InfoPanel(project);
         infoPanel.getShowGridCheckBox()
@@ -66,46 +84,13 @@ public class PainterPanel extends JPanel implements Detachable {
             painter.setLinesVisible(visible);
             painter.setShaded(visible);
         });
+        add(infoPanel, BorderLayout.EAST);
 
-        final var zoomSlider = zoomStrip.getSlider();
-        zoomSlider.addChangeListener(e -> {
-            if (zoomSlider.getValueIsAdjusting()) {
-                painter.setZoom(zoomSlider.getValue());
-            }
-        });
-        zoomStrip.setEnabled(false);
+        actions.setPainter(painter);
+        painter.setSnapshotConsumer(actions.snapshotConsumer);
+        Actions.registerShortcuts(actions.all, root);
 
-        setLayout(new BorderLayout());
-
-        // ****************************** WEST ******************************
-
-        final var toolBar = new JToolBar();
-        toolBar.add(actions.historyUndoAction);
-        toolBar.add(actions.historyRedoAction);
-        toolBar.addSeparator();
-        toolBar.add(actions.clipboardCutAction);
-        toolBar.add(actions.clipboardCopyAction);
-        toolBar.add(actions.clipboardPasteAction);
-        toolBar.add(actions.clipboardImportAction);
-        toolBar.addSeparator();
-        toolBar.add(actions.flipHorizontallyAction);
-        toolBar.add(actions.flipVerticallyAction);
-        toolBar.add(actions.rotateLeftAction);
-        toolBar.add(actions.rotateRightAction);
-        toolBar.addSeparator();
-        toolBar.add(actions.moveLeftAction);
-        toolBar.add(actions.moveRightAction);
-        toolBar.add(actions.moveUpAction);
-        toolBar.add(actions.moveDownAction);
-        toolBar.addSeparator();
-        toolBar.add(new JToggleButton(actions.symmetryToggleAction));
-        toolBar.addSeparator();
-        toolBar.add(actions.eraseAction);
-        toolBar.setOrientation(SwingConstants.VERTICAL);
-        toolBar.setBorder(Borders.SMALL_EMPTY_CUP);
-        add(toolBar, BorderLayout.WEST);
-
-        // ****************************** CENTER ******************************
+        final var editorPanel = new JPanel(new BorderLayout());
 
         final var title = new JLabel(Resources.get().getString("painterTitle"));
         title.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
@@ -115,60 +100,22 @@ public class PainterPanel extends JPanel implements Detachable {
         titlePanel.add(Box.createHorizontalStrut(Dimensions.LARGE_PADDING));
         titlePanel.add(title);
         titlePanel.add(Box.createHorizontalGlue());
+        editorPanel.add(titlePanel, BorderLayout.NORTH);
 
-        final var painterPanel = new JPanel();
-        painterPanel.setLayout(new GridBagLayout());
-        painterPanel.setMaximumSize(Dimensions.MAXIMUM);
-        painterPanel.add(painter);
+        final var toolBar = makeToolBar(actions);
+        editorPanel.add(toolBar, BorderLayout.WEST);
 
-        final var scrollPanel = new JScrollPane(painterPanel);
-        scrollPanel.setBorder(Borders.SMALL_EMPTY_CUP_CENTER);
-        scrollPanel.setFocusable(true);
-        scrollPanel.setMaximumSize(Dimensions.MAXIMUM);
+        final var painterPanel = makePainterPanel(painter);
+        editorPanel.add(painterPanel, BorderLayout.CENTER);
 
-        final var moveFocus = new MouseListener() {
-            @Override
-            public void mouseClicked(final MouseEvent e) {
-                // Ignored
-            }
-
-            @Override
-            public void mouseEntered(final MouseEvent e) {
-                // Ignored
-            }
-
-            @Override
-            public void mouseExited(final MouseEvent e) {
-                // Ignored
-            }
-
-            @Override
-            public void mousePressed(final MouseEvent e) {
-                scrollPanel.requestFocus();
-            }
-
-            @Override
-            public void mouseReleased(final MouseEvent e) {
-                // Ignored
-            }
-        };
-
-        scrollPanel.addMouseListener(moveFocus);
-        painter.addMouseListener(moveFocus);
+        editorPanel.add(zoomStrip, BorderLayout.SOUTH);
 
         final var centerPanel = new JPanel();
         centerPanel.setLayout(new BorderLayout());
-        final var editorPanel = new JPanel(new BorderLayout());
-        editorPanel.add(titlePanel, BorderLayout.NORTH);
-        editorPanel.add(toolBar, BorderLayout.WEST);
-        editorPanel.add(scrollPanel, BorderLayout.CENTER);
-        editorPanel.add(zoomStrip, BorderLayout.SOUTH);
         centerPanel.add(editorPanel, BorderLayout.CENTER);
         centerPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Resources.get().colors.divider()));
-        add(centerPanel, BorderLayout.CENTER);
 
-        // ****************************** EAST ******************************
-        add(infoPanel, BorderLayout.EAST);
+        add(centerPanel, BorderLayout.CENTER);
 
         setEnabled(false);
     }
@@ -188,14 +135,12 @@ public class PainterPanel extends JPanel implements Detachable {
     public void setModel(final CharacterItem value) {
         painter.setModel(value);
         infoPanel.setModel(value);
-
         if (value != null) {
             Actions.setEnabled(actions.all, true);
             zoomStrip.setEnabled(true);
-            if (
-                    overlay == null || overlay.getWidth() != value.getGlyph().getWidth()
-                            || overlay.getHeight() != value.getGlyph().getHeight()
-            ) {
+            final var gw = value.getGlyph().getWidth();
+            final var gh = value.getGlyph().getHeight();
+            if (overlay == null || overlay.getWidth() != gw || overlay.getHeight() != gh) {
                 overlay = checkerBoard(value.getGlyph().getWidth(), value.getGlyph().getHeight());
             }
             painter.setOverlay(overlay);
@@ -221,38 +166,85 @@ public class PainterPanel extends JPanel implements Detachable {
      */
     public void setMetrics(final Metrics metrics) {
         painter.removeLines();
-
         if (metrics == null) {
             return;
         }
-
         infoPanel.setMetrics(metrics);
-
         painter.setTop(metrics.descender() + metrics.ascender());
-
-        painter.addLines(
-                // Cap height
-                new Line(
-                        Orientation.HORIZONTAL,
-                        metrics.canvasHeight() - metrics.descender() - metrics.capHeight(),
-                        CAP_HEIGHT
-                ),
-                // x height
-                new Line(
-                        Orientation.HORIZONTAL,
-                        metrics.canvasHeight() - metrics.descender() - metrics.xHeight(),
-                        X_HEIGHT
-                ),
-                // Baseline
-                new Line(Orientation.HORIZONTAL, metrics.canvasHeight() - metrics.descender(), BASELINE)
+        final var capHeight = new Line(
+                Orientation.HORIZONTAL,
+                metrics.canvasHeight() - metrics.descender() - metrics.capHeight(),
+                CAP_HEIGHT
         );
+        final var xHeight = new Line(
+                Orientation.HORIZONTAL,
+                metrics.canvasHeight() - metrics.descender() - metrics.xHeight(),
+                X_HEIGHT
+        );
+        final var baseLine = new Line(
+                Orientation.HORIZONTAL,
+                metrics.canvasHeight() - metrics.descender(),
+                BASELINE
+        );
+        painter.addLines(capHeight, xHeight, baseLine);
     }
 
-    private static BufferedImage checkerBoard(int w, int h) {
+    private static JToolBar makeToolBar(final PainterActions actions) {
+        final var toolBar = new JToolBar();
+        toolBar.add(actions.historyUndoAction);
+        toolBar.add(actions.historyRedoAction);
+        toolBar.addSeparator();
+        toolBar.add(actions.clipboardCutAction);
+        toolBar.add(actions.clipboardCopyAction);
+        toolBar.add(actions.clipboardPasteAction);
+        toolBar.add(actions.clipboardImportAction);
+        toolBar.addSeparator();
+        toolBar.add(actions.flipHorizontallyAction);
+        toolBar.add(actions.flipVerticallyAction);
+        toolBar.add(actions.rotateLeftAction);
+        toolBar.add(actions.rotateRightAction);
+        toolBar.addSeparator();
+        toolBar.add(actions.moveLeftAction);
+        toolBar.add(actions.moveRightAction);
+        toolBar.add(actions.moveUpAction);
+        toolBar.add(actions.moveDownAction);
+        toolBar.addSeparator();
+        toolBar.add(new JToggleButton(actions.symmetryToggleAction));
+        toolBar.addSeparator();
+        toolBar.add(actions.eraseAction);
+        toolBar.setOrientation(SwingConstants.VERTICAL);
+        toolBar.setBorder(Borders.SMALL_EMPTY_CUP);
+        return toolBar;
+    }
+
+    private static JScrollPane makePainterPanel(final GlyphPainter painter) {
+        final var painterPanel = new JPanel();
+        painterPanel.setLayout(new GridBagLayout());
+        painterPanel.setMaximumSize(Dimensions.MAXIMUM);
+        painterPanel.add(painter);
+
+        final var scrollPanel = new JScrollPane(painterPanel);
+        scrollPanel.setBorder(Borders.SMALL_EMPTY_CUP_CENTER);
+        scrollPanel.setFocusable(true);
+        scrollPanel.setMaximumSize(Dimensions.MAXIMUM);
+
+        final var moveFocus = new MouseAdapter() {
+            @Override
+            public void mousePressed(final MouseEvent e) {
+                scrollPanel.requestFocus();
+            }
+        };
+
+        scrollPanel.addMouseListener(moveFocus);
+        painter.addMouseListener(moveFocus);
+        return scrollPanel;
+    }
+
+    private static BufferedImage checkerBoard(final int w, final int h) {
         final var image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         for (var y = 0; y < h; y++) {
             for (var x = 0; x < w; x++) {
-                //noinspection SuspiciousNameCombination
+                // noinspection SuspiciousNameCombination
                 image.setRGB(
                         x,
                         y,
@@ -263,11 +255,11 @@ public class PainterPanel extends JPanel implements Detachable {
         return image;
     }
 
-    private static boolean even(int x) {
+    private static boolean even(final int x) {
         return (x & 1) == 0;
     }
 
-    private static boolean odd(int x) {
+    private static boolean odd(final int x) {
         return (x & 1) == 1;
     }
 }

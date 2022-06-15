@@ -1,8 +1,25 @@
 package pixelj.views.characters_screen;
 
+import java.awt.Dimension;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+
 import pixelj.actions.Actions;
 import pixelj.actions.CharacterListActions;
-import pixelj.models.*;
+import pixelj.models.BlockData;
+import pixelj.models.CharacterItem;
+import pixelj.models.FilteredList;
+import pixelj.models.Metrics;
+import pixelj.models.Project;
+import pixelj.models.SortedList;
 import pixelj.resources.Resources;
 import pixelj.util.Detachable;
 import pixelj.views.controls.SearchableComboBox;
@@ -11,12 +28,11 @@ import pixelj.views.shared.CharacterCellRenderer;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 
-import javax.swing.*;
-import java.awt.*;
-
 public class ListPanel extends JPanel implements Detachable {
     private final CharacterListActions actions;
-    private final SearchableComboBox<BlockData> filterBox = new SearchableComboBox<>(Resources.get().getBlocks());
+    private final SearchableComboBox<BlockData> filterBox = new SearchableComboBox<>(
+            Resources.get().getBlocks()
+    );
     private final JList<CharacterItem> list;
     private final SortedList<CharacterItem> listModel;
     private final ListSelectionModel selectionModel;
@@ -53,7 +69,7 @@ public class ListPanel extends JPanel implements Detachable {
         filterBox.setMaximumSize(Dimensions.MAXIMUM_COMBO_BOX_SIZE);
         filterBox.setMinimumSize(Dimensions.MINIMUM_COMBO_BOX_SIZE);
         filterBox.addActionListener(event -> {
-            if (filterBox.getSelectedItem() instanceof BlockData block) {
+            if (filterBox.getSelectedItem() instanceof final BlockData block) {
                 listModel.setFilter(
                         chr -> chr.getCodePoint() >= block.starts() && chr.getCodePoint() <= block.ends()
                 );

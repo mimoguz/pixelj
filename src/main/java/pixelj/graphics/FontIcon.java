@@ -1,6 +1,12 @@
 package pixelj.graphics;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
 import javax.swing.Icon;
@@ -59,6 +65,14 @@ public class FontIcon implements Icon {
         return width;
     }
 
+    private Color getPaint(final Component component) {
+        if (component.isEnabled()) {
+            return foreground != null ? foreground : component.getForeground();
+        } else {
+            return disabledForeground != null ? disabledForeground : component.getForeground();
+        }
+    }
+
     @Override
     public void paintIcon(final Component component, final Graphics graphics, final int x, final int y) {
         final var g = (Graphics2D) graphics.create();
@@ -72,22 +86,14 @@ public class FontIcon implements Icon {
     /**
      * @param value Color or null
      */
-    public void setDisabledForeground(Color value) {
+    public void setDisabledForeground(final Color value) {
         disabledForeground = value;
     }
 
     /**
      * @param value Color or null
      */
-    public void setForeground(Color value) {
+    public void setForeground(final Color value) {
         foreground = value;
-    }
-
-    private Color getPaint(final Component component) {
-        if (component.isEnabled()) {
-            return foreground != null ? foreground : component.getForeground();
-        } else {
-            return disabledForeground != null ? disabledForeground : component.getForeground();
-        }
     }
 }

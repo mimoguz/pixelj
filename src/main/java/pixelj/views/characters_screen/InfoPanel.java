@@ -1,5 +1,21 @@
 package pixelj.views.characters_screen;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.BoxLayout;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+
+import com.formdev.flatlaf.FlatClientProperties;
+
 import pixelj.models.CharacterItem;
 import pixelj.models.Metrics;
 import pixelj.models.Project;
@@ -7,15 +23,12 @@ import pixelj.resources.Resources;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 
-import com.formdev.flatlaf.FlatClientProperties;
-
-import javax.swing.*;
-import java.awt.*;
-
 public class InfoPanel extends JPanel {
     private static final Color LABEL_FOREGROUND = new Color(50, 55, 65);
 
-    private final JLabel characterWidthLabel = new JLabel(Resources.get().getString("characterWidthSpinnerLabel"));
+    private final JLabel characterWidthLabel = new JLabel(
+            Resources.get().getString("characterWidthSpinnerLabel")
+    );
     private final JSpinner characterWidthSpinner = new JSpinner();
     private final JLabel codePointLabel = new JLabel(" ");
     private final JLabel blockNamePanel = new JLabel(" ");
@@ -37,7 +50,10 @@ public class InfoPanel extends JPanel {
         showLinesCheckBox.setSelected(true);
 
         characterWidthSpinner.addChangeListener(e -> {
-            if (model != null && characterWidthSpinner.getModel() instanceof SpinnerNumberModel numberModel) {
+            if (
+                model != null
+                        && characterWidthSpinner.getModel() instanceof final SpinnerNumberModel numberModel
+            ) {
                 final var value = numberModel.getNumber().intValue();
                 if (value != model.getWidth()) {
                     model.setWidth(value);
@@ -62,7 +78,7 @@ public class InfoPanel extends JPanel {
         cons.weighty = 0.0;
         cons.insets = new Insets(pad - focusWidth, pad, pad, pad - divWidth);
         final var glyphBackground = new JPanel(new GridBagLayout());
-        //noinspection SuspiciousNameCombination
+        // noinspection SuspiciousNameCombination
         Components.setFixedSize(glyphBackground, new Dimension(innerWidth, innerWidth));
         glyphBackground.add(glyphLabel, new GridBagConstraints());
         glyphBackground.setBackground(Color.WHITE);
@@ -148,7 +164,7 @@ public class InfoPanel extends JPanel {
                     res.formatString("blockNameLabel", res.getBlockData(characterData.blockId()).name())
             );
             glyphLabel.setText(Character.toString((char) model.getCodePoint()));
-            if (characterWidthSpinner.getModel() instanceof SpinnerNumberModel numberModel) {
+            if (characterWidthSpinner.getModel() instanceof final SpinnerNumberModel numberModel) {
                 numberModel.setValue(value.getWidth());
                 characterWidthSpinner.setEnabled(true);
                 characterWidthLabel.setEnabled(true);

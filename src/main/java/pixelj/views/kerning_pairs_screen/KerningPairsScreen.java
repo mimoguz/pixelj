@@ -1,11 +1,14 @@
 package pixelj.views.kerning_pairs_screen;
 
+import javax.swing.DefaultListSelectionModel;
+import javax.swing.JComponent;
+import javax.swing.JSplitPane;
+import javax.swing.ListSelectionModel;
+
 import pixelj.models.Metrics;
 import pixelj.models.Project;
 import pixelj.util.Detachable;
 import pixelj.views.shared.Dimensions;
-
-import javax.swing.*;
 
 public class KerningPairsScreen extends JSplitPane implements Detachable {
     private final EditorPanel editorPanel;
@@ -22,8 +25,8 @@ public class KerningPairsScreen extends JSplitPane implements Detachable {
         // Connect the listModel to the editor
         selectionModel.addListSelectionListener(e -> {
             if (
-                    selectionModel.getMinSelectionIndex() == selectionModel.getMaxSelectionIndex()
-                            && selectionModel.getMinSelectionIndex() >= 0
+                selectionModel.getMinSelectionIndex() == selectionModel.getMaxSelectionIndex()
+                        && selectionModel.getMinSelectionIndex() >= 0
             ) {
                 editorPanel.setModel(
                         listPanel.getListModel().getElementAt(selectionModel.getMinSelectionIndex())

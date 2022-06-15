@@ -1,18 +1,19 @@
 package pixelj.models;
 
-import pixelj.util.ChangeableValue;
-
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
+
+import pixelj.util.ChangeableValue;
+
 public class Project {
 
-    public final ChangeableValue<Metrics> metricsProperty;
-    public final ChangeableValue<String> titleProperty;
     private final SortedList<CharacterItem> characters;
     private final SortedList<KerningPair> kerningPairs;
+    public final ChangeableValue<Metrics> metricsProperty;
+    public final ChangeableValue<String> titleProperty;
 
     public Project(
             final String title,
@@ -27,18 +28,18 @@ public class Project {
 
         // Ignore
         // Kerning pairs which depend on non-existing characters
-        ListDataListener kerningPairRemover = new ListDataListener() {
+        final ListDataListener kerningPairRemover = new ListDataListener() {
+            @Override
+            public void contentsChanged(final ListDataEvent e) {
+                sync();
+            }
+
             @Override
             public void intervalAdded(final ListDataEvent e) { // Ignore
             }
 
             @Override
             public void intervalRemoved(final ListDataEvent e) {
-                sync();
-            }
-
-            @Override
-            public void contentsChanged(final ListDataEvent e) {
                 sync();
             }
 
@@ -53,8 +54,8 @@ public class Project {
                 for (var index = 0; index < kerningPairs.getSize(); index++) {
                     final var model = kerningPairs.getElementAt(index);
                     if (
-                            !characters.sourceContains(model.getLeft())
-                                    || !characters.sourceContains(model.getRight())
+                        !characters.sourceContains(model.getLeft())
+                                || !characters.sourceContains(model.getRight())
                     ) {
                         marked.add(model);
                     }
@@ -87,12 +88,12 @@ public class Project {
         return metricsProperty.getValue();
     }
 
-    public void setMetrics(final Metrics value) {
-        metricsProperty.setValue(value);
-    }
-
     public String getTitle() {
         return titleProperty.getValue();
+    }
+
+    public void setMetrics(final Metrics value) {
+        metricsProperty.setValue(value);
     }
 
     public void setTitle(final String value) {

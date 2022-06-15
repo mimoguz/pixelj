@@ -13,20 +13,20 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.text.BadLocationException;
 
-import pixelj.views.controls.StringView;
 import pixelj.models.CharacterItem;
 import pixelj.models.KerningPair;
 import pixelj.models.Project;
+import pixelj.views.controls.StringView;
 
 public class PreviewScreenActions {
     private static final int SPACE = 32;
 
     public final Collection<ApplicationAction> all = new ArrayList<>();
     public final ApplicationAction clearAction;
-    public final ApplicationAction refreshAction;
     private final JPanel container;
     private final JTextArea input;
     private final Project project;
+    public final ApplicationAction refreshAction;
     private int zoom = 1;
 
     public PreviewScreenActions(final Project project, final JTextArea input, final JPanel container) {
@@ -45,31 +45,21 @@ public class PreviewScreenActions {
         all.add(refreshAction);
     }
 
-    public void setZoom(int value) {
-        zoom = value;
-        for (var child : container.getComponents()) {
-            if (child instanceof StringView view) {
-                view.setZoom(value);
-            }
-        }
-        container.revalidate();
-    }
-
     private void clearContainer() {
-        var currentViews = container.getComponents();
-        for (var view : currentViews) {
+        final var currentViews = container.getComponents();
+        for (final var view : currentViews) {
             container.remove(view);
         }
     }
 
-    private void clearPreview(ActionEvent event, Action action) {
+    private void clearPreview(final ActionEvent event, final Action action) {
         clearContainer();
         container.revalidate();
         container.repaint();
         input.setText(null);
     }
 
-    private List<CharacterItem> getCharactersOfLine(String line) {
+    private List<CharacterItem> getCharactersOfLine(final String line) {
         final var characters = project.getCharacters();
         return line.codePoints()
                 .mapToObj(cp -> cp == SPACE ? new CharacterItem(SPACE, 0, null) : characters.findHash(cp))
@@ -77,7 +67,7 @@ public class PreviewScreenActions {
                 .toList();
     }
 
-    private List<Integer> getSpaces(List<CharacterItem> characters) {
+    private List<Integer> getSpaces(final List<CharacterItem> characters) {
         if (characters.isEmpty()) {
             return java.util.Collections.emptyList();
         }
@@ -105,7 +95,7 @@ public class PreviewScreenActions {
         return spaces;
     }
 
-    private StringView getView(String line) {
+    private StringView getView(final String line) {
         final var view = new StringView(Color.WHITE);
         view.setMaxY(project.getMetrics().descender() + project.getMetrics().ascender());
         final var characters = getCharactersOfLine(line);
@@ -114,7 +104,7 @@ public class PreviewScreenActions {
         return view;
     }
 
-    private void refreshPreview(ActionEvent event, Action action) {
+    private void refreshPreview(final ActionEvent event, final Action action) {
         clearContainer();
 
         if (input.getText() != null && !input.getText().isEmpty()) {
@@ -132,7 +122,7 @@ public class PreviewScreenActions {
                     }
                     view.setAlignmentX(0f);
                     container.add(view);
-                } catch (BadLocationException exception) {
+                } catch (final BadLocationException exception) {
                     break;
                 }
             }
@@ -140,5 +130,15 @@ public class PreviewScreenActions {
 
         container.revalidate();
         container.repaint();
+    }
+
+    public void setZoom(final int value) {
+        zoom = value;
+        for (final var child : container.getComponents()) {
+            if (child instanceof final StringView view) {
+                view.setZoom(value);
+            }
+        }
+        container.revalidate();
     }
 }

@@ -1,21 +1,37 @@
 package pixelj.views.kerning_pairs_screen;
 
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.util.function.BiConsumer;
+import java.util.function.Predicate;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+
+import com.formdev.flatlaf.FlatClientProperties;
+
 import pixelj.actions.Actions;
 import pixelj.actions.KerningPairListActions;
-import pixelj.models.*;
+import pixelj.models.BlockData;
+import pixelj.models.FilteredList;
+import pixelj.models.KerningPair;
+import pixelj.models.Project;
+import pixelj.models.SortedList;
 import pixelj.resources.Resources;
 import pixelj.util.Detachable;
 import pixelj.views.controls.SearchableComboBox;
 import pixelj.views.shared.Borders;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
-
-import com.formdev.flatlaf.FlatClientProperties;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.function.BiConsumer;
-import java.util.function.Predicate;
 
 public class ListPanel extends JPanel implements Detachable {
     private final KerningPairListActions actions;
@@ -117,7 +133,7 @@ public class ListPanel extends JPanel implements Detachable {
         box.setMaximumSize(Dimensions.MAXIMUM_COMBO_BOX_SIZE);
         box.setMinimumSize(Dimensions.MINIMUM_COMBO_BOX_SIZE);
         box.addActionListener(event -> {
-            if (box.getSelectedItem() instanceof BlockData block) {
+            if (box.getSelectedItem() instanceof final BlockData block) {
                 setter.accept(block.starts(), block.ends());
             } else {
                 setter.accept(0, Integer.MAX_VALUE);

@@ -1,12 +1,32 @@
 package pixelj.views.kerning_pairs_screen;
 
-import pixelj.views.controls.SearchableComboBox;
-import pixelj.models.*;
-import pixelj.resources.Resources;
-import pixelj.views.shared.*;
+import java.awt.BorderLayout;
+import java.awt.Dialog;
+import java.awt.Frame;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.DefaultListSelectionModel;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+
+import pixelj.models.BlockData;
+import pixelj.models.CharacterItem;
+import pixelj.models.FilteredList;
+import pixelj.models.KerningPair;
+import pixelj.models.SortedList;
+import pixelj.resources.Resources;
+import pixelj.views.controls.SearchableComboBox;
+import pixelj.views.shared.Borders;
+import pixelj.views.shared.CharacterCellRenderer;
+import pixelj.views.shared.CharacterModelCell;
+import pixelj.views.shared.Components;
+import pixelj.views.shared.Dimensions;
 
 public class AddDialog extends JDialog {
     private final ListSelectionModel selectionModel = new DefaultListSelectionModel();
@@ -36,7 +56,7 @@ public class AddDialog extends JDialog {
         final var filterBox = new SearchableComboBox<>(res.getBlocks());
         filterBox.setSelectedIndex(0);
         filterBox.addActionListener(event -> {
-            if (filterBox.getSelectedItem() instanceof BlockData block) {
+            if (filterBox.getSelectedItem() instanceof final BlockData block) {
                 listModel.setFilter(
                         chr -> chr.getCodePoint() >= block.starts() && chr.getCodePoint() <= block.ends()
                 );

@@ -1,12 +1,15 @@
 package pixelj.views.controls;
 
+import java.awt.Color;
+import java.util.function.Consumer;
+
 import pixelj.graphics.Snapshot;
 import pixelj.models.CharacterItem;
 import pixelj.util.ChangeableInt;
-import pixelj.views.controls.painter.*;
-
-import java.awt.*;
-import java.util.function.Consumer;
+import pixelj.views.controls.painter.CanFlipImage;
+import pixelj.views.controls.painter.CanRotateImage;
+import pixelj.views.controls.painter.CanTranslateImage;
+import pixelj.views.controls.painter.PaintAdapter;
 
 public class GlyphPainter extends GlyphView implements CanFlipImage, CanRotateImage, CanTranslateImage {
 

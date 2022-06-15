@@ -1,6 +1,6 @@
 package pixelj.views.shared;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
 import javax.swing.border.Border;
 
 public class Borders {
@@ -43,12 +43,8 @@ public class Borders {
             Dimensions.SMALL_PADDING,
             Dimensions.SMALL_PADDING
     );
-    public static final Border SMALL_EMPTY_CUP_CENTER = BorderFactory.createEmptyBorder(
-            0,
-            Dimensions.SMALL_PADDING,
-            Dimensions.SMALL_PADDING,
-            0
-    );
+    public static final Border SMALL_EMPTY_CUP_CENTER = BorderFactory
+            .createEmptyBorder(0, Dimensions.SMALL_PADDING, Dimensions.SMALL_PADDING, 0);
     public static final Border TITLE = BorderFactory.createEmptyBorder(
             Dimensions.LARGE_PADDING,
             Dimensions.SMALL_PADDING,

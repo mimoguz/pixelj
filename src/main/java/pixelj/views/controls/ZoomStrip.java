@@ -1,12 +1,17 @@
 package pixelj.views.controls;
 
+import java.awt.Dimension;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+
 import pixelj.resources.Icons;
 import pixelj.resources.Resources;
 import pixelj.views.shared.Borders;
 import pixelj.views.shared.Components;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class ZoomStrip extends JPanel {
     private final JSlider slider;
@@ -43,7 +48,7 @@ public class ZoomStrip extends JPanel {
     }
 
     @Override
-    public void setEnabled(boolean enabled) {
+    public void setEnabled(final boolean enabled) {
         super.setEnabled(enabled);
         zoomIn.setEnabled(enabled);
         zoomOut.setEnabled(enabled);

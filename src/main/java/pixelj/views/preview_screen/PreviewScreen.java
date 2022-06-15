@@ -1,5 +1,24 @@
 package pixelj.views.preview_screen;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagLayout;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+
+import com.formdev.flatlaf.FlatClientProperties;
+
 import pixelj.actions.Actions;
 import pixelj.actions.ApplicationAction;
 import pixelj.actions.PreviewScreenActions;
@@ -12,13 +31,6 @@ import pixelj.views.controls.ZoomStrip;
 import pixelj.views.shared.Borders;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
-
-import com.formdev.flatlaf.FlatClientProperties;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 
 public class PreviewScreen extends JPanel implements Detachable {
     private static final int INITIAL_ZOOM = 4;
@@ -33,25 +45,7 @@ public class PreviewScreen extends JPanel implements Detachable {
         textInput.setMaximumSize(Dimensions.MAXIMUM);
         textInput.setPromptText(res.getString("previewTextInputPrompt"));
 
-        final var contextMenu = new JPopupMenu();
-        contextMenu.add(
-                new ApplicationAction("previewCutAction", (event, action) -> textInput.cut())
-                        .setIcon(Icons.CLIPBOARD_CUT, res.colors.icon(), res.colors.disabledIcon())
-                        .setTextKey("cut")
-                        .setAccelerator(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx())
-        );
-        contextMenu.add(
-                new ApplicationAction("previewCopyAction", (event, action) -> textInput.copy())
-                        .setIcon(Icons.CLIPBOARD_COPY, res.colors.icon(), res.colors.disabledIcon())
-                        .setTextKey("copy")
-                        .setAccelerator(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx())
-        );
-        contextMenu.add(
-                new ApplicationAction("previewPasteAction", (event, action) -> textInput.paste())
-                        .setIcon(Icons.CLIPBOARD_PASTE, res.colors.icon(), res.colors.disabledIcon())
-                        .setTextKey("paste")
-                        .setAccelerator(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx())
-        );
+        final var contextMenu = makeContextMenu();
         textInput.setComponentPopupMenu(contextMenu);
 
         final var container = new JPanel();
@@ -127,6 +121,30 @@ public class PreviewScreen extends JPanel implements Detachable {
             }
         });
         add(zoomStrip);
+    }
+
+    private JPopupMenu makeContextMenu() {
+        final var res = Resources.get();
+        final var contextMenu = new JPopupMenu();
+        contextMenu.add(
+                new ApplicationAction("previewCutAction", (event, action) -> textInput.cut())
+                        .setIcon(Icons.CLIPBOARD_CUT, res.colors.icon(), res.colors.disabledIcon())
+                        .setTextKey("cut")
+                        .setAccelerator(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx())
+        );
+        contextMenu.add(
+                new ApplicationAction("previewCopyAction", (event, action) -> textInput.copy())
+                        .setIcon(Icons.CLIPBOARD_COPY, res.colors.icon(), res.colors.disabledIcon())
+                        .setTextKey("copy")
+                        .setAccelerator(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx())
+        );
+        contextMenu.add(
+                new ApplicationAction("previewPasteAction", (event, action) -> textInput.paste())
+                        .setIcon(Icons.CLIPBOARD_PASTE, res.colors.icon(), res.colors.disabledIcon())
+                        .setTextKey("paste")
+                        .setAccelerator(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx())
+        );
+        return contextMenu;
     }
 
     @Override

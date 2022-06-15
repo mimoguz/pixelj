@@ -1,13 +1,20 @@
 package pixelj.views.controls;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.util.Map;
+
+import javax.swing.JTextArea;
 
 /**
  * A text area control that can display a prompt text when it's empty and
  * unfocused.<br />
- * <a href="https://stackoverflow.com/questions/16213836/java-swing-jtextfield-set-placeholder">Stackoverflow thread</a>
+ * <a href=
+ * "https://stackoverflow.com/questions/16213836/java-swing-jtextfield-set-placeholder">Stackoverflow
+ * thread</a>
  */
 public class PromptTextArea extends JTextArea {
     private static final Map<?, ?> hints = (Map<?, ?>) Toolkit.getDefaultToolkit()
@@ -38,8 +45,10 @@ public class PromptTextArea extends JTextArea {
     public void paintComponent(final Graphics graphics) {
         super.paintComponent(graphics);
 
-        if (isFocusOwner() || (getText() != null && !getText().isEmpty()) || promptText == null
-                || promptText.isEmpty() || promptText.isBlank()) {
+        if (
+            isFocusOwner() || (getText() != null && !getText().isEmpty()) || promptText == null
+                    || promptText.isEmpty() || promptText.isBlank()
+        ) {
             return;
         }
 
@@ -50,7 +59,11 @@ public class PromptTextArea extends JTextArea {
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         }
         g2d.setColor(promptColor != null ? promptColor : Color.GRAY);
-        g2d.drawString(promptText, getInsets().left, graphics.getFontMetrics().getMaxAscent() + getInsets().top);
+        g2d.drawString(
+                promptText,
+                getInsets().left,
+                graphics.getFontMetrics().getMaxAscent() + getInsets().top
+        );
         g2d.dispose();
     }
 }

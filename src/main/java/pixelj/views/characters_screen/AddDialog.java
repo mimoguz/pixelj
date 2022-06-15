@@ -7,12 +7,21 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import javax.swing.*;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
+import javax.swing.DefaultListSelectionModel;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 
-import pixelj.views.controls.SearchableComboBox;
 import pixelj.models.BlockData;
 import pixelj.models.CharacterData;
 import pixelj.resources.Resources;
+import pixelj.views.controls.SearchableComboBox;
 import pixelj.views.shared.Borders;
 import pixelj.views.shared.CharacterDataCellRenderer;
 import pixelj.views.shared.Components;
@@ -43,11 +52,11 @@ public class AddDialog extends JDialog {
 
         final var filterBox = new SearchableComboBox<>(res.getBlocks().stream().skip(1).toList());
         filterBox.setSelectedIndex(0);
-        if (filterBox.getSelectedItem() instanceof BlockData block) {
+        if (filterBox.getSelectedItem() instanceof final BlockData block) {
             listModel.addAll(res.getCharacters(block.id()));
         }
         filterBox.addActionListener(event -> {
-            if (filterBox.getSelectedItem() instanceof  BlockData block) {
+            if (filterBox.getSelectedItem() instanceof final BlockData block) {
                 listModel.clear();
                 listModel.addAll(res.getCharacters(block.id()));
             }
