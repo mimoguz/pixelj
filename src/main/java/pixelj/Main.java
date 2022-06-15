@@ -18,7 +18,6 @@ public class Main {
         }
         Resources.initialize(USE_DARK_THEME);
 
-//        final var view = new ProjectView(ExampleData.createProject());
         final var view = new HomeView();
         view.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         view.setVisible(true);
