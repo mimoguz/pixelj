@@ -9,7 +9,6 @@ import pixelj.views.ProjectView;
 
 import javax.swing.*;
 
-import org.lwjgl.PointerBuffer;
 import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.util.nfd.NativeFileDialog;
 
@@ -22,13 +21,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class HomeActions {
+    private static final String EXTENSION = "pixj";
+
     public final Collection<ApplicationAction> all;
     public final ApplicationAction openContainingFolderAction;
-    public final ApplicationAction openSelectedProjectAction;
+    public final ApplicationAction openSelectedAction;
     public final ApplicationAction quitAction;
     public final ApplicationAction removeRecentItemAction;
-    public final ApplicationAction showNewProjectDialogAction;
-    public final ApplicationAction showOpenDialogAction;
+    public final ApplicationAction newProjectAction;
+    public final ApplicationAction loadProjectAction;
     public final ApplicationAction showOptionsDialogAction;
     private final Logger logger;
 
@@ -42,24 +43,20 @@ public class HomeActions {
 
         final var res = Resources.get();
 
-        showNewProjectDialogAction = new ApplicationAction(
-                "showNewProjectDialogAction",
-                this::showNewProjectDialog
-        ).setTextKey("showNewProjectDialogAction")
+        newProjectAction = new ApplicationAction("newProjectAction", this::newProject)
+                .setTextKey("newProjectAction")
                 .setIcon(Icons.FILE_NEW, res.colors.icon(), res.colors.disabledIcon());
 
-        openSelectedProjectAction = new ApplicationAction(
-                "openSelectedProjectAction",
-                this::openSelectedProject
-        ).setTextKey("openSelectedProjectAction")
+        openSelectedAction = new ApplicationAction("openSelectedAction", this::openSelectedProject)
+                .setTextKey("openSelectedAction")
                 .setIcon(Icons.FILE_OPEN_SELECTED, res.colors.icon(), res.colors.disabledIcon());
 
         quitAction = new ApplicationAction("quitAction", this::quit)
                 .setTooltip(res.getString("quitActionTooltip"))
                 .setIcon(Icons.EXIT, res.colors.icon(), res.colors.disabledIcon());
 
-        showOpenDialogAction = new ApplicationAction("showOpenDialogAction", this::showOpenDialog)
-                .setTextKey("showOpenDialogAction")
+        loadProjectAction = new ApplicationAction("loadProjectAction", this::openProject)
+                .setTextKey("loadProjectAction")
                 .setIcon(Icons.FILE_OPEN, res.colors.icon(), res.colors.disabledIcon());
 
         showOptionsDialogAction = new ApplicationAction("showOptionsDialogAction", this::showOptionsDialog)
@@ -75,10 +72,10 @@ public class HomeActions {
         ).setTextKey("openContainingFolderAction");
 
         all = List.of(
-                showNewProjectDialogAction,
-                openSelectedProjectAction,
+                newProjectAction,
+                openSelectedAction,
                 quitAction,
-                showOpenDialogAction,
+                loadProjectAction,
                 showOptionsDialogAction
         );
     }
@@ -97,7 +94,7 @@ public class HomeActions {
         log(action);
     }
 
-    private void showNewProjectDialog(final ActionEvent event, final Action action) {
+    private void newProject(final ActionEvent event, final Action action) {
         final var dialog = new NewProjectDialog((Frame) SwingUtilities.getWindowAncestor(root));
         dialog.setVisible(true);
         final var project = dialog.getProject();
@@ -107,14 +104,12 @@ public class HomeActions {
         }
     }
 
-    private void showOpenDialog(final ActionEvent event, final Action action) {
+    private void openProject(final ActionEvent event, final Action action) {
         log(action);
         final var outPath = MemoryUtil.memAllocPointer(1);
         try {
-            if (NativeFileDialog.NFD_OpenDialog("pixj", null, outPath) == NativeFileDialog.NFD_OKAY) {
-                if (outPath != null) {
-                    logger.log(Level.INFO, "Selected {0}", outPath.getStringUTF8());
-                }
+            if (NativeFileDialog.NFD_OpenDialog(EXTENSION, null, outPath) == NativeFileDialog.NFD_OKAY) {
+                logger.log(Level.INFO, "Selected {0}", outPath.getStringUTF8());
                 NativeFileDialog.nNFD_Free(outPath.get(0));
             } else {
                 logger.log(Level.INFO, "Cancelled or error");

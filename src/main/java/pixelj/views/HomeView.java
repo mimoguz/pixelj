@@ -22,9 +22,9 @@ public class HomeView extends JFrame {
         final var root = new JPanel(new BorderLayout());
         final var actions = new HomeActions(root);
 
-        final var newProjectButton = makeButton(actions.showNewProjectDialogAction);
-        final var openProjectButton = makeButton(actions.openSelectedProjectAction);
-        final var showOpenDialogButton = makeButton(actions.showOpenDialogAction);
+        final var newProjectButton = makeButton(actions.newProjectAction);
+        final var openProjectButton = makeButton(actions.openSelectedAction);
+        final var showOpenDialogButton = makeButton(actions.loadProjectAction);
 
         final var top = new JPanel(new BorderLayout());
         top.setBorder(Borders.LARGE_EMPTY);
@@ -47,10 +47,14 @@ public class HomeView extends JFrame {
 
         root.add(top, BorderLayout.NORTH);
 
-        final var recentList = new JList<>(new Vector<>(java.util.List.of(
-                new RecentItem("Project Panama", "c:\\path\\to\\panama.ext"),
-                new RecentItem("Project Valhalla", "c:\\path\\to\\valhalla.ext")
-        )));
+        final var recentList = new JList<>(
+                new Vector<>(
+                        java.util.List.of(
+                                new RecentItem("Project Panama", "c:\\path\\to\\panama.ext"),
+                                new RecentItem("Project Valhalla", "c:\\path\\to\\valhalla.ext")
+                        )
+                )
+        );
         recentList.setCellRenderer(new RecentItemCellRenderer());
         recentList.setBorder(Borders.EMPTY);
         final var scrollPanel = new JScrollPane(recentList);
@@ -60,8 +64,10 @@ public class HomeView extends JFrame {
         final var contextMenu = new JPopupMenu();
         final var removeRecent = new JMenuItem(actions.removeRecentItemAction);
         final var openContainingFolder = new JMenuItem(actions.openContainingFolderAction);
-        if (actions.removeRecentItemAction.getValue(Action.SMALL_ICON) == null
-                || actions.openContainingFolderAction.getValue(Action.SMALL_ICON) == null) {
+        if (
+            actions.removeRecentItemAction.getValue(Action.SMALL_ICON) == null
+                    || actions.openContainingFolderAction.getValue(Action.SMALL_ICON) == null
+        ) {
             removeRecent.setIconTextGap(0);
             openContainingFolder.setIconTextGap(0);
         }
@@ -111,12 +117,14 @@ public class HomeView extends JFrame {
             component.add(title, BorderLayout.NORTH);
             path.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
             component.add(path, BorderLayout.SOUTH);
-            component.setBorder(BorderFactory.createEmptyBorder(
-                    Dimensions.MEDIUM_PADDING,
-                    Dimensions.LARGE_PADDING,
-                    Dimensions.MEDIUM_PADDING,
-                    Dimensions.LARGE_PADDING
-            ));
+            component.setBorder(
+                    BorderFactory.createEmptyBorder(
+                            Dimensions.MEDIUM_PADDING,
+                            Dimensions.LARGE_PADDING,
+                            Dimensions.MEDIUM_PADDING,
+                            Dimensions.LARGE_PADDING
+                    )
+            );
         }
 
         @Override
