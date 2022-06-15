@@ -59,7 +59,7 @@ public class ProjectView extends JFrame {
                 Stream.of(16, 32, 48, 64, 128, 256)
                         .map(
                                 size -> new FlatSVGIcon(
-                                        "io/github/mimoguz/pixelj/resources/application_icon.svg",
+                                        "pixelj/resources/application_icon.svg",
                                         size,
                                         getClass().getClassLoader()
                                 ).getImage()
