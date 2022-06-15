@@ -18,20 +18,9 @@ public record Metrics(
         int lineSpacing,
         boolean isMonospaced
 ) {
+
     public static Metrics getDefault() {
-        return new Metrics(
-                24,
-                24,
-                16,
-                4,
-                11,
-                7,
-                7,
-                1,
-                4,
-                2,
-                false
-        );
+        return new Metrics(24, 24, 16, 4, 11, 7, 7, 1, 4, 2, false);
     }
 
     public static class ValidatedBuilder {
@@ -61,8 +50,7 @@ public record Metrics(
         private final ChangeableInt xHeight = new ChangeableInt(0);
         public final ReadOnlyBoolean validXHeight = xHeight.le(capHeight).and(xHeight.gt(ZERO));
 
-        public final ReadOnlyBoolean validAll = validCanvasHeight
-                .and(validCanvasWidth)
+        public final ReadOnlyBoolean validAll = validCanvasHeight.and(validCanvasWidth)
                 .and(validAscender)
                 .and(validDescender)
                 .and(validCapHeight)
@@ -170,15 +158,8 @@ public record Metrics(
         }
 
         public static final class InvalidStateException extends Exception {
-            private final String message;
-
             public InvalidStateException(final String message) {
-                this.message = message;
-            }
-
-            @Override
-            public String getMessage() {
-                return message;
+                super(message);
             }
         }
     }

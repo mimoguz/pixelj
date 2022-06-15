@@ -137,6 +137,6 @@
         <setting id="cleanup.overridden_assignment" value="false"/>
         <setting id="cleanup.primitive_rather_than_wrapper" value="true"/>
         <setting id="cleanup.correct_indentation" value="true"/>
-        <setting id="cleanup.use_var" value="false"/>
+        <setting id="cleanup.use_var" value="true"/>
     </profile>
 </profiles>
