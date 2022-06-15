@@ -111,18 +111,13 @@ public class HomeActions {
         log(action);
         final var outPath = MemoryUtil.memAllocPointer(1);
         try {
-            switch (NativeFileDialog.NFD_OpenDialog("", null, outPath)) {
-                case NativeFileDialog.NFD_OKAY:
-                    if (outPath != null) {
-                        logger.log(Level.INFO, "Selected {0}", outPath.getStringUTF8());
-                    }
-                    NativeFileDialog.nNFD_Free(outPath.get(0));
-                    break;
-                case NativeFileDialog.NFD_CANCEL:
-                    logger.log(Level.INFO, "Cancelled");
-                    break;
-                default: // NFD_Error
-                    logger.log(Level.SEVERE, "Error");
+            if (NativeFileDialog.NFD_OpenDialog("pixj", null, outPath) == NativeFileDialog.NFD_OKAY) {
+                if (outPath != null) {
+                    logger.log(Level.INFO, "Selected {0}", outPath.getStringUTF8());
+                }
+                NativeFileDialog.nNFD_Free(outPath.get(0));
+            } else {
+                logger.log(Level.INFO, "Cancelled or error");
             }
         } finally {
             if (outPath != null) {
