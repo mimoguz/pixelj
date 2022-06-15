@@ -8,6 +8,11 @@ import pixelj.views.NewProjectDialog;
 import pixelj.views.ProjectView;
 
 import javax.swing.*;
+
+import org.lwjgl.PointerBuffer;
+import org.lwjgl.system.MemoryUtil;
+import org.lwjgl.util.nfd.NativeFileDialog;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Collection;
@@ -37,12 +42,16 @@ public class HomeActions {
 
         final var res = Resources.get();
 
-        showNewProjectDialogAction = new ApplicationAction("showNewProjectDialogAction", this::showNewProjectDialog)
-                .setTextKey("showNewProjectDialogAction")
+        showNewProjectDialogAction = new ApplicationAction(
+                "showNewProjectDialogAction",
+                this::showNewProjectDialog
+        ).setTextKey("showNewProjectDialogAction")
                 .setIcon(Icons.FILE_NEW, res.colors.icon(), res.colors.disabledIcon());
 
-        openSelectedProjectAction = new ApplicationAction("openSelectedProjectAction", this::openSelectedProject)
-                .setTextKey("openSelectedProjectAction")
+        openSelectedProjectAction = new ApplicationAction(
+                "openSelectedProjectAction",
+                this::openSelectedProject
+        ).setTextKey("openSelectedProjectAction")
                 .setIcon(Icons.FILE_OPEN_SELECTED, res.colors.icon(), res.colors.disabledIcon());
 
         quitAction = new ApplicationAction("quitAction", this::quit)
@@ -60,8 +69,10 @@ public class HomeActions {
         removeRecentItemAction = new ApplicationAction("removeRecentItemAction", this::showOptionsDialog)
                 .setTextKey("removeRecentItemAction");
 
-        openContainingFolderAction = new ApplicationAction("openContainingFolderAction", this::showOptionsDialog)
-                .setTextKey("openContainingFolderAction");
+        openContainingFolderAction = new ApplicationAction(
+                "openContainingFolderAction",
+                this::showOptionsDialog
+        ).setTextKey("openContainingFolderAction");
 
         all = List.of(
                 showNewProjectDialogAction,
@@ -75,13 +86,7 @@ public class HomeActions {
     private void log(final Action action) {
         final var name = action.getValue(Action.NAME);
         final var toolTip = action.getValue(Action.SHORT_DESCRIPTION);
-        logger.log(
-                Level.INFO,
-                "{0}",
-                name == null
-                        ? (toolTip == null ? action : toolTip)
-                        : name
-        );
+        logger.log(Level.INFO, "{0}", name == null ? (toolTip == null ? action : toolTip) : name);
     }
 
     private void openSelectedProject(final ActionEvent event, final Action action) {
@@ -104,6 +109,26 @@ public class HomeActions {
 
     private void showOpenDialog(final ActionEvent event, final Action action) {
         log(action);
+        final var outPath = MemoryUtil.memAllocPointer(1);
+        try {
+            switch (NativeFileDialog.NFD_OpenDialog("", null, outPath)) {
+                case NativeFileDialog.NFD_OKAY:
+                    if (outPath != null) {
+                        logger.log(Level.INFO, "Selected {0}", outPath.getStringUTF8());
+                    }
+                    NativeFileDialog.nNFD_Free(outPath.get(0));
+                    break;
+                case NativeFileDialog.NFD_CANCEL:
+                    logger.log(Level.INFO, "Cancelled");
+                    break;
+                default: // NFD_Error
+                    logger.log(Level.SEVERE, "Error");
+            }
+        } finally {
+            if (outPath != null) {
+                MemoryUtil.memFree(outPath);
+            }
+        }
     }
 
     private void showOptionsDialog(final ActionEvent event, final Action action) {
