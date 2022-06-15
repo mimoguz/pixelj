@@ -94,6 +94,7 @@ public class HomeView extends JFrame {
         recentList.requestFocusInWindow();
         setSize(new Dimension(720, 600));
         setTitle(res.getString("applicationName"));
+        setIconImages(res.applicationIcons);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
         setLocationRelativeTo(null);
     }

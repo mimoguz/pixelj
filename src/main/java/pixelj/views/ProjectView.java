@@ -54,19 +54,6 @@ public class ProjectView extends JFrame {
         kerningPairsScreen.setEnabled(false);
         previewScreen.setEnabled(false);
 
-        setTitle(project.getTitle() + " - " + res.getString("applicationName"));
-        setIconImages(
-                Stream.of(16, 32, 48, 64, 128, 256)
-                        .map(
-                                size -> new FlatSVGIcon(
-                                        "pixelj/resources/application_icon.svg",
-                                        size,
-                                        getClass().getClassLoader()
-                                ).getImage()
-                        )
-                        .toList()
-        );
-
         final ChangeableValue.Listener<Metrics> metricsListener = (sender, value) -> metricsChanged(value);
         project.metricsProperty.addChangeListener(metricsListener);
 
@@ -215,8 +202,10 @@ public class ProjectView extends JFrame {
         root.putClientProperty(FlatClientProperties.TABBED_PANE_TAB_ICON_PLACEMENT, SwingConstants.TOP);
         root.setTabPlacement(SwingConstants.LEFT);
         root.setFocusable(false);
-        add(root);
 
+        setContentPane(root);
+        setTitle(project.getTitle() + " - " + res.getString("applicationName"));
+        setIconImages(res.applicationIcons);
         pack();
         setSize(1200, 720);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
