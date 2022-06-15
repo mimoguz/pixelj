@@ -1,6 +1,5 @@
 package pixelj.models;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
