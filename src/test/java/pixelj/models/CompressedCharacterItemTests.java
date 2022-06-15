@@ -25,7 +25,6 @@ public class CompressedCharacterItemTests {
         try {
             final var decompressed = compressed.getCharacterItem(size, size);
             decompressed.getGlyph().getDataElements(0, 0, size, size, outBytes);
-
         } catch (MisshapenDataException exception) {
             throw new RuntimeException("Couldn't decompress back?");
         }
