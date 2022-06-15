@@ -32,6 +32,7 @@ public class CompressedCharacterItemTests {
         assertArrayEquals(inBytes, outBytes);
     }
 
+    @Test
     public void testRectangular() {
         final var width = 8;
         final var height = 21;
