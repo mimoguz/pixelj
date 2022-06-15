@@ -1,11 +1,11 @@
 package pixelj;
 
+import javax.swing.WindowConstants;
+
 import pixelj.resources.Resources;
 import pixelj.themes.PixeljDark;
 import pixelj.themes.PixeljLight;
 import pixelj.views.HomeView;
-
-import javax.swing.*;
 
 public class Main {
     private static final boolean USE_DARK_THEME = false;
