@@ -11,7 +11,7 @@ public class CompressedCharacterItemTests {
     @Test
     public void testSquare() {
         final var size = 16;
-        final var capitalA = new CharacterItem(65, 10, BinaryImage.of(size, size));
+        final var capitalA = new CharacterItem(65, 10, BinaryImage.of(size, size, false));
         for (var i = 0; i < size; i++) {
             capitalA.getGlyph().set(i, i, true);
         }
@@ -36,7 +36,7 @@ public class CompressedCharacterItemTests {
         final var width = 8;
         final var height = 21;
 
-        final var capitalA = new CharacterItem(65, 10, BinaryImage.of(width, height));
+        final var capitalA = new CharacterItem(65, 10, BinaryImage.of(width, height, false));
         final var min = Math.min(width, height);
         for (var i = 0; i < min; i++) {
             capitalA.getGlyph().set(i, i, true);
