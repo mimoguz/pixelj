@@ -9,6 +9,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <eclipse.collections.version>11.0.0</eclipse.collections.version>
         <flatlaf.version>2.3</flatlaf.version>
+        <!-- LWJGL3 provides a wrapper for NativeFileDialog library -->
         <lwjgl.version>3.3.1</lwjgl.version>
         <jackson.version>2.13.3</jackson.version>
         <junit.version>5.8.2</junit.version>
@@ -131,7 +132,7 @@
                 <version>3.10.1</version>
                 <configuration>
                     <source>18</source>
-                    <target>18</target><!-- <compilerArgs>- -enable-preview</compilerArgs> -->
+                    <target>18</target>
                 </configuration>
             </plugin>
             <plugin>
