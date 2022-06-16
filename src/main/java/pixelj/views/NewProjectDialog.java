@@ -55,7 +55,8 @@ public class NewProjectDialog extends JDialog {
 
         setContentPane(content);
         getRootPane().setDefaultButton(createButton);
-        cancelButton.requestFocus();
+        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
+
         pack();
         metricsPanel.doLayout();
         setResizable(false);
