@@ -10,7 +10,7 @@ import pixelj.resources.Resources;
 import pixelj.views.HomeView;
 
 public class Main {
-    private static final boolean USE_DARK_THEME = true;
+    private static final boolean USE_DARK_THEME = false;
 
     public static void main(final String[] args) {
         FlatLaf.registerCustomDefaultsSource("pixelj.themes");
