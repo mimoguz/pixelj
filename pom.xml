@@ -9,7 +9,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <eclipse.collections.version>11.0.0</eclipse.collections.version>
         <flatlaf.version>2.3</flatlaf.version>
-        <!-- LWJGL3 provides a wrapper for NativeFileDialog library -->
+        <h2.version>2.1.214</h2.version><!-- LWJGL3 provides a wrapper for NativeFileDialog library -->
         <lwjgl.version>3.3.1</lwjgl.version>
         <jackson.version>2.13.3</jackson.version>
         <junit.version>5.8.2</junit.version>
@@ -182,6 +182,11 @@
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf-extras</artifactId>
             <version>${flatlaf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${h2.version}</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
