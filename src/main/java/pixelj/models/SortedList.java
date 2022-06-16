@@ -20,6 +20,11 @@ import org.eclipse.collections.impl.map.mutable.primitive.IntObjectHashMap;
  */
 public class SortedList<E extends Comparable<E>> implements ListModel<E> {
     protected final ArrayList<E> display = new ArrayList<>();
+
+    public List<E> getElements() {
+        return display;
+    }
+
     protected final EventListenerList listeners = new EventListenerList();
     protected final IntObjectHashMap<E> source = new IntObjectHashMap<>();
 

@@ -9,9 +9,9 @@ import pixelj.graphics.BinaryImage;
 
 public record CompressedGlyph(int codePoint, int width, byte[] imageBytes) {
 
-    public static CompressedGlyph from(Glyph scalar) {
+    public static CompressedGlyph from(Glyph glyph) {
         final var deflater = new Deflater();
-        final var image = scalar.getImage();
+        final var image = glyph.getImage();
         final var inBytes = new byte[image.getWidth() * image.getHeight()];
         image.getDataElements(0, 0, image.getWidth(), image.getHeight(), inBytes);
         final var outBuffer = new byte[inBytes.length];
@@ -19,7 +19,7 @@ public record CompressedGlyph(int codePoint, int width, byte[] imageBytes) {
         deflater.finish();
         final var outLength = deflater.deflate(outBuffer);
         final var outBytes = Arrays.copyOfRange(outBuffer, 0, outLength);
-        return new CompressedGlyph(scalar.getCodePoint(), scalar.getWidth(), outBytes);
+        return new CompressedGlyph(glyph.getCodePoint(), glyph.getWidth(), outBytes);
     }
 
     public Glyph decompress(int imageWidth, int imageHeight) throws MisshapenDataException {
