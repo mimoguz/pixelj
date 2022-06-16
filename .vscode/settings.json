@@ -1,8 +1,12 @@
 {
     "cSpell.words": [
+        "BORDERLESS",
+        "codespace",
         "pixelj",
-        "pixj"
+        "pixj",
+        "Undoable"
     ],
     "java.format.settings.url": "eclipse-formatter.xml",
-    "java.configuration.updateBuildConfiguration": "automatic"
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "cSpell.language": "en-US"
 }

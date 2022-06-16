@@ -14,7 +14,7 @@ import java.util.Set;
 import javax.swing.JPanel;
 
 import pixelj.graphics.BinaryImage;
-import pixelj.models.CharacterItem;
+import pixelj.models.Glyph;
 import pixelj.util.ChangeListener;
 import pixelj.util.Changeable;
 import pixelj.util.ChangeableInt;
@@ -35,7 +35,7 @@ public class GlyphView extends JPanel
     /**
      * May be null;
      */
-    private CharacterItem model;
+    private Glyph model;
     /**
      * May be null;
      */
@@ -51,7 +51,7 @@ public class GlyphView extends JPanel
         characterWidthChangeListener = (source, event) -> repaint();
 
         imageChangeListener = (source, event) -> {
-            if (model == null || source != model.getGlyph()) {
+            if (model == null || source != model.getImage()) {
                 return;
             }
             // TODO: Repaint only changed region
@@ -71,7 +71,7 @@ public class GlyphView extends JPanel
     @Override
     public void detach() {
         if (model != null) {
-            model.getGlyph().removeChangeListener(imageChangeListener);
+            model.getImage().removeChangeListener(imageChangeListener);
         }
     }
 
@@ -83,14 +83,14 @@ public class GlyphView extends JPanel
     /**
      * @return Character model or null
      */
-    public CharacterItem getModel() {
+    public Glyph getModel() {
         return model;
     }
 
     /**
      * @param value May be null.
      */
-    public void setModel(final CharacterItem value) {
+    public void setModel(final Glyph value) {
         setModel(value, true);
     }
 
@@ -169,7 +169,7 @@ public class GlyphView extends JPanel
                     RenderingHints.KEY_INTERPOLATION,
                     RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR
             );
-            model.getGlyph().draw(g2d, 0, 0, getWidth(), getHeight());
+            model.getImage().draw(g2d, 0, 0, getWidth(), getHeight());
             drawShade(g2d);
             drawOverlay(g2d);
             drawLines(g2d);
@@ -194,16 +194,16 @@ public class GlyphView extends JPanel
      * @param value  May be null.
      * @param listen If true, the view will add an imageChangeListener to the glyph.
      */
-    public void setModel(final CharacterItem value, final boolean listen) {
+    public void setModel(final Glyph value, final boolean listen) {
         if (model == value) {
             return;
         }
         if (model != null) {
-            model.getGlyph().removeChangeListener(imageChangeListener);
+            model.getImage().removeChangeListener(imageChangeListener);
             model.widthProperty.removeChangeListener(characterWidthChangeListener);
             fireChangeEvent(this, ViewChangeEvent.MODEL_UNLOADED);
             if (top <= 0) {
-                top = model.getGlyph().getHeight();
+                top = model.getImage().getHeight();
             }
         }
 
@@ -211,7 +211,7 @@ public class GlyphView extends JPanel
 
         if (value != null) {
             if (listen) {
-                value.getGlyph().addChangeListener(imageChangeListener);
+                value.getImage().addChangeListener(imageChangeListener);
                 value.widthProperty.addChangeListener(characterWidthChangeListener);
             }
             fireChangeEvent(this, ViewChangeEvent.MODEL_LOADED);
@@ -223,7 +223,7 @@ public class GlyphView extends JPanel
     private void autoSize() {
         if (zoom > 0) {
             final var dimension = model != null
-                    ? new Dimension(model.getGlyph().getWidth() * zoom, model.getGlyph().getHeight() * zoom)
+                    ? new Dimension(model.getImage().getWidth() * zoom, model.getImage().getHeight() * zoom)
                     : Dimensions.LARGE_SQUARE;
             setMinimumSize(dimension);
             setMaximumSize(dimension);
@@ -239,7 +239,7 @@ public class GlyphView extends JPanel
             return;
         }
 
-        final var glyph = model.getGlyph();
+        final var glyph = model.getImage();
         final var w = glyph.getWidth();
         final var h = glyph.getHeight();
         final var dx = getWidth() / (double) w;
@@ -271,11 +271,11 @@ public class GlyphView extends JPanel
         g.setColor(SHADE);
 
         final var x = (int) Math
-                .round((((double) getWidth()) / model.getGlyph().getWidth()) * model.getWidth());
+                .round((((double) getWidth()) / model.getImage().getWidth()) * model.getWidth());
         g.fillRect(x, 0, getWidth() - x, getHeight());
 
         final var y = (int) Math.round(
-                (((double) getHeight()) / model.getGlyph().getHeight()) * (model.getGlyph().getHeight() - top)
+                (((double) getHeight()) / model.getImage().getHeight()) * (model.getImage().getHeight() - top)
         );
         g.fillRect(0, 0, x, y);
     }

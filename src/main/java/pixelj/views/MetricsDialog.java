@@ -23,7 +23,6 @@ import java.util.logging.Logger;
 
 public class MetricsDialog extends JDialog {
     private final JButton applyButton;
-
     private final MetricsPanel inputPanel;
     private Metrics result;
 

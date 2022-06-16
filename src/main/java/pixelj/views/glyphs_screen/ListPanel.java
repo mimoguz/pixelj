@@ -1,4 +1,4 @@
-package pixelj.views.characters_screen;
+package pixelj.views.glyphs_screen;
 
 import java.awt.Dimension;
 
@@ -13,9 +13,9 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
 import pixelj.actions.Actions;
-import pixelj.actions.CharacterListActions;
-import pixelj.models.BlockData;
-import pixelj.models.CharacterItem;
+import pixelj.actions.GlyphListActions;
+import pixelj.models.BlockRecord;
+import pixelj.models.Glyph;
 import pixelj.models.FilteredList;
 import pixelj.models.Metrics;
 import pixelj.models.Project;
@@ -24,17 +24,17 @@ import pixelj.resources.Resources;
 import pixelj.util.Detachable;
 import pixelj.views.controls.SearchableComboBox;
 import pixelj.views.shared.Borders;
-import pixelj.views.shared.CharacterCellRenderer;
+import pixelj.views.shared.GlyphCellRenderer;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 
 public class ListPanel extends JPanel implements Detachable {
-    private final CharacterListActions actions;
-    private final SearchableComboBox<BlockData> filterBox = new SearchableComboBox<>(
+    private final GlyphListActions actions;
+    private final SearchableComboBox<BlockRecord> filterBox = new SearchableComboBox<>(
             Resources.get().getBlocks()
     );
-    private final JList<CharacterItem> list;
-    private final SortedList<CharacterItem> listModel;
+    private final JList<Glyph> list;
+    private final SortedList<Glyph> listModel;
     private final ListSelectionModel selectionModel;
 
     public ListPanel(
@@ -47,7 +47,7 @@ public class ListPanel extends JPanel implements Detachable {
 
         final var res = Resources.get();
 
-        actions = new CharacterListActions(project, selectionModel, metrics, root);
+        actions = new GlyphListActions(project, selectionModel, metrics, root);
         actions.showRemoveDialogAction.setEnabled(false);
         Actions.registerShortcuts(actions.all, root);
 
@@ -59,17 +59,17 @@ public class ListPanel extends JPanel implements Detachable {
         removeButton.setAction(actions.showRemoveDialogAction);
         Components.setFixedSize(removeButton, Dimensions.TEXT_BUTTON_SIZE);
 
-        final var listModel = new FilteredList<>(project.getCharacters());
+        final var listModel = new FilteredList<>(project.getGlyphs());
         list = new JList<>(listModel);
         list.setSelectionModel(selectionModel);
-        list.setCellRenderer(new CharacterCellRenderer(48));
+        list.setCellRenderer(new GlyphCellRenderer(48));
         list.setMaximumSize(Dimensions.MAXIMUM);
         setBorder(Borders.EMPTY);
 
         filterBox.setMaximumSize(Dimensions.MAXIMUM_COMBO_BOX_SIZE);
         filterBox.setMinimumSize(Dimensions.MINIMUM_COMBO_BOX_SIZE);
         filterBox.addActionListener(event -> {
-            if (filterBox.getSelectedItem() instanceof final BlockData block) {
+            if (filterBox.getSelectedItem() instanceof final BlockRecord block) {
                 listModel.setFilter(
                         chr -> chr.getCodePoint() >= block.starts() && chr.getCodePoint() <= block.ends()
                 );
@@ -112,15 +112,15 @@ public class ListPanel extends JPanel implements Detachable {
         list.setModel(null);
     }
 
-    public CharacterListActions getActions() {
+    public GlyphListActions getActions() {
         return actions;
     }
 
-    public JList<CharacterItem> getList() {
+    public JList<Glyph> getList() {
         return list;
     }
 
-    public SortedList<CharacterItem> getListModel() {
+    public SortedList<Glyph> getListModel() {
         return listModel;
     }
 

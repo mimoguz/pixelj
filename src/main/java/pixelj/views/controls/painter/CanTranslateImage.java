@@ -19,7 +19,7 @@ public interface CanTranslateImage extends Painter {
 
         takeSnapshot();
 
-        final var image = model.getGlyph();
+        final var image = model.getImage();
         final var buffer = new byte[image.getWidth()];
         final var length = image.getWidth() - 1;
         final var height = image.getHeight();
@@ -46,7 +46,7 @@ public interface CanTranslateImage extends Painter {
 
         takeSnapshot();
 
-        final var image = model.getGlyph();
+        final var image = model.getImage();
         final var buffer = new byte[image.getWidth()];
         final var width = image.getWidth();
 
@@ -88,7 +88,7 @@ public interface CanTranslateImage extends Painter {
 
         takeSnapshot();
 
-        final var image = model.getGlyph();
+        final var image = model.getImage();
         final var buffer = new byte[image.getWidth()];
         final var width = image.getWidth();
         final var height = image.getHeight();

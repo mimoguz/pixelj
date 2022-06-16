@@ -5,29 +5,24 @@ import java.awt.Component;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
-import pixelj.models.CharacterData;
-import pixelj.resources.Resources;
+import pixelj.models.Glyph;
 
-public class CharacterDataCellRenderer implements ListCellRenderer<CharacterData> {
-    private final CharacterCell component = new CharacterCell();
+public class GlyphCellRenderer implements ListCellRenderer<Glyph> {
+    private final GlyphCell component;
 
-    public CharacterDataCellRenderer() {
-        component.setBorder(Borders.LIST_ITEM);
+    public GlyphCellRenderer(final int maxPictureSize) {
+        component = new GlyphCell(maxPictureSize);
     }
 
     @Override
     public Component getListCellRendererComponent(
-            final JList<? extends CharacterData> list,
-            final CharacterData value,
+            final JList<? extends Glyph> list,
+            final Glyph value,
             final int index,
             final boolean isSelected,
             final boolean cellHasFocus
     ) {
-        component.set(
-                value.codePoint(),
-                Resources.get().getCharacterData(value.codePoint()).name(),
-                list.getWidth() - Dimensions.MEDIUM_PADDING * 3
-        );
+        component.set(value, list.getWidth());
         if (isSelected) {
             component.setBackgroundColor(list.getSelectionBackground());
             component.setForegroundColor(list.getSelectionForeground());

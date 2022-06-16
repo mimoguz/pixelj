@@ -3,16 +3,16 @@ package pixelj.models;
 import pixelj.util.ChangeableInt;
 
 /**
- * Two kerning pairs are equal if their left and right characters are equal.
- * Hash code of a kerning pair is calculated over its left and right characters
- * using getHash static method.
+ * Two kerning pairs are equal if their left and right scalars are equal. Hash
+ * code of a kerning pair is calculated over its left and right scalars using
+ * getHash static method.
  */
 public class KerningPair implements Comparable<KerningPair> {
-    private final CharacterItem left;
-    private final CharacterItem right;
+    private final Glyph left;
+    private final Glyph right;
     public ChangeableInt kerningValueProperty;
 
-    public KerningPair(final CharacterItem left, final CharacterItem right, final int kerningValue) {
+    public KerningPair(final Glyph left, final Glyph right, final int kerningValue) {
         this.left = left;
         this.right = right;
         kerningValueProperty = new ChangeableInt(kerningValue);
@@ -36,11 +36,11 @@ public class KerningPair implements Comparable<KerningPair> {
         kerningValueProperty.setValue(value);
     }
 
-    public CharacterItem getLeft() {
+    public Glyph getLeft() {
         return left;
     }
 
-    public CharacterItem getRight() {
+    public Glyph getRight() {
         return right;
     }
 
@@ -65,7 +65,7 @@ public class KerningPair implements Comparable<KerningPair> {
      * creating an instance, then use that hash to search a model in a
      * KerningPairListModel.
      */
-    public static int getHash(final CharacterItem left, final CharacterItem right) {
+    public static int getHash(final Glyph left, final Glyph right) {
         // >In the Unicode Standard, the codespace consists of the integers from 0 to
         // 0x10FFFF.<
         // 0x10FFFF occupies 21 bits, there shouldn't be any collisions here.

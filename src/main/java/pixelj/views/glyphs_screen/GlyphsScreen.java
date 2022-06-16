@@ -1,4 +1,4 @@
-package pixelj.views.characters_screen;
+package pixelj.views.glyphs_screen;
 
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JComponent;
@@ -11,12 +11,12 @@ import pixelj.util.Detachable;
 import pixelj.views.controls.GlyphView;
 import pixelj.views.shared.Dimensions;
 
-public class CharactersScreen extends JSplitPane implements Detachable {
+public class GlyphsScreen extends JSplitPane implements Detachable {
     private final ListPanel listPanel;
     private final PainterPanel painterPanel;
     private final ListSelectionModel selectionModel;
 
-    public CharactersScreen(final Project project, final JComponent root) {
+    public GlyphsScreen(final Project project, final JComponent root) {
         selectionModel = new DefaultListSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 

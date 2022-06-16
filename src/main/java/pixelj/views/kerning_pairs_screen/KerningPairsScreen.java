@@ -61,7 +61,7 @@ public class KerningPairsScreen extends JSplitPane implements Detachable {
     }
 
     public void updateMetrics(final Metrics metrics) {
-        editorPanel.setSpacing(metrics.spacing());
+        editorPanel.setLetterSpacing(metrics.letterSpacing());
         editorPanel.getPreview().setMaxY(metrics.descender() + metrics.ascender());
     }
 }

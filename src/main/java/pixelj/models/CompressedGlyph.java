@@ -7,11 +7,11 @@ import java.util.zip.Inflater;
 
 import pixelj.graphics.BinaryImage;
 
-public record CompressedCharacterItem(int codePoint, int width, byte[] imageBytes) {
+public record CompressedGlyph(int codePoint, int width, byte[] imageBytes) {
 
-    public static CompressedCharacterItem from(CharacterItem character) {
+    public static CompressedGlyph from(Glyph scalar) {
         final var deflater = new Deflater();
-        final var image = character.getGlyph();
+        final var image = scalar.getImage();
         final var inBytes = new byte[image.getWidth() * image.getHeight()];
         image.getDataElements(0, 0, image.getWidth(), image.getHeight(), inBytes);
         final var outBuffer = new byte[inBytes.length];
@@ -19,10 +19,10 @@ public record CompressedCharacterItem(int codePoint, int width, byte[] imageByte
         deflater.finish();
         final var outLength = deflater.deflate(outBuffer);
         final var outBytes = Arrays.copyOfRange(outBuffer, 0, outLength);
-        return new CompressedCharacterItem(character.getCodePoint(), character.getWidth(), outBytes);
+        return new CompressedGlyph(scalar.getCodePoint(), scalar.getWidth(), outBytes);
     }
 
-    public CharacterItem getCharacterItem(int imageWidth, int imageHeight) throws MisshapenDataException {
+    public Glyph decompress(int imageWidth, int imageHeight) throws MisshapenDataException {
         final var inflater = new Inflater();
         final var outBytes = new byte[imageWidth * imageHeight];
         inflater.setInput(imageBytes);
@@ -33,7 +33,7 @@ public record CompressedCharacterItem(int codePoint, int width, byte[] imageByte
             }
             final var image = BinaryImage.of(imageWidth, imageHeight, false);
             image.setDataElements(0, 0, imageWidth, imageHeight, outBytes);
-            return new CharacterItem(codePoint, width, image);
+            return new Glyph(codePoint, width, image);
         } catch (DataFormatException exception) {
             throw new MisshapenDataException("Can't inflate input:\n" + exception.getMessage());
         }

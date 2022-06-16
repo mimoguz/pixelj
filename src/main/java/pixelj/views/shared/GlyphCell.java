@@ -7,36 +7,36 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
-import pixelj.models.CharacterItem;
+import pixelj.models.Glyph;
 import pixelj.resources.Resources;
 import pixelj.views.controls.GlyphView;
 
-public class CharacterModelCell extends JPanel {
-    private final CharacterCell characterCell = new CharacterCell();
+public class GlyphCell extends JPanel {
+    private final ScalarCell scalarCell = new ScalarCell();
     private final int maxPictureSize;
     private final GlyphView picture = new GlyphView(Resources.get().colors.disabledIcon());
 
-    public CharacterModelCell() {
+    public GlyphCell() {
         this(48);
     }
 
-    public CharacterModelCell(final int maxPictureSize) {
+    public GlyphCell(final int maxPictureSize) {
         this.maxPictureSize = maxPictureSize;
 
-        characterCell.setOpaque(false);
+        scalarCell.setOpaque(false);
 
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         setBorder(Borders.LIST_ITEM);
         add(picture);
         add(Box.createHorizontalStrut(8));
-        add(characterCell);
+        add(scalarCell);
     }
 
-    public void set(final CharacterItem model, final int contentWidth) {
+    public void set(final Glyph model, final int contentWidth) {
         picture.setModel(model, false);
 
-        final int pictureWidth = model.getGlyph().getWidth();
-        final int pictureHeight = model.getGlyph().getHeight();
+        final int pictureWidth = model.getImage().getWidth();
+        final int pictureHeight = model.getImage().getHeight();
         final var pictureSize = Math.max(pictureWidth, pictureHeight);
         if (pictureSize > maxPictureSize) {
             picture.setZoom(0);
@@ -51,20 +51,20 @@ public class CharacterModelCell extends JPanel {
             picture.setZoom(1);
         }
 
-        characterCell.set(
+        scalarCell.set(
                 model.getCodePoint(),
-                Resources.get().getCharacterData(model.getCodePoint()).name(),
+                Resources.get().getScalar(model.getCodePoint()).name(),
                 contentWidth - pictureWidth - Dimensions.MEDIUM_PADDING * 4
         );
     }
 
     public void setBackgroundColor(final Color color) {
-        characterCell.setBackgroundColor(color);
+        scalarCell.setBackgroundColor(color);
         setBackground(color);
     }
 
     public void setForegroundColor(final Color color) {
-        characterCell.setForegroundColor(color);
+        scalarCell.setForegroundColor(color);
         setForeground(color);
     }
 }

@@ -49,7 +49,7 @@ public class PaintAdapter implements MouseListener, MouseMotionListener {
             return;
         }
 
-        final var image = model.getGlyph();
+        final var image = model.getImage();
         final var pt = getPixelCoordinates(image, e);
         if (pt.x != lastPixel.x || pt.y != lastPixel.y) {
             lastPixel.setLocation(pt);
@@ -79,7 +79,7 @@ public class PaintAdapter implements MouseListener, MouseMotionListener {
 
         painter.takeSnapshot();
 
-        final var image = model.getGlyph();
+        final var image = model.getImage();
         lastPixel.setLocation(getPixelCoordinates(image, e));
         // The button1 (or any other button while control pressed) clears, any other
         // button besides the button1 paints.

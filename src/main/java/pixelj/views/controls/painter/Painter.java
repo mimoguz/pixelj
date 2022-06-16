@@ -1,11 +1,11 @@
 package pixelj.views.controls.painter;
 
-import pixelj.models.CharacterItem;
+import pixelj.models.Glyph;
 
 public interface Painter {
     int getHeight();
 
-    CharacterItem getModel();
+    Glyph getModel();
 
     int getWidth();
 

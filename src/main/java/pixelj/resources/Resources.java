@@ -27,19 +27,90 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import pixelj.graphics.FontIcon;
-import pixelj.models.BlockData;
-import pixelj.models.CharacterData;
+import pixelj.models.BlockRecord;
+import pixelj.models.ScalarRecord;
 
 public class Resources {
-    public static class ResourceInitializationException extends RuntimeException {
-        public ResourceInitializationException(final String message) {
-            super(message);
-        }
-    }
 
     private static final String BASE = "pixelj/resources/";
-
     private static Resources instance = null;
+
+    public final List<Image> applicationIcons;
+    public final Colors colors;
+
+    private final Collection<BlockRecord> blocks;
+    private final ImmutableIntObjectMap<BlockRecord> blocksTable;
+    private final ImmutableIntObjectMap<ScalarRecord> scalarsTable;
+    private final ImmutableIntObjectMap<Collection<ScalarRecord>> scalarsInBlock;
+    private final Font iconFont;
+    private final Strings strings;
+
+    private Resources(final boolean useDarkTheme) {
+        final var blockList = new ArrayList<BlockRecord>();
+        blockList.add(new BlockRecord(0, "All", 0, Integer.MAX_VALUE));
+        blockList.addAll(loadBlocks());
+        blocks = Collections.unmodifiableCollection(blockList);
+
+        final var blockMap = new IntObjectHashMap<BlockRecord>(blockList.size());
+        for (final var block : blockList) {
+            blockMap.put(block.id(), block);
+        }
+        blocksTable = blockMap.toImmutable();
+
+        final Collection<ScalarRecord> scalarRecords = loadScalarRecords();
+        final var scalars = new IntObjectHashMap<ScalarRecord>(scalarRecords.size());
+        for (final var scalar : scalarRecords) {
+            scalars.put(scalar.codePoint(), scalar);
+        }
+        scalarsTable = scalars.toImmutable();
+
+        final var scalarsByBlock = new IntObjectHashMap<Collection<ScalarRecord>>();
+        scalarRecords.stream()
+                .collect(Collectors.groupingBy(ScalarRecord::blockId))
+                .forEach((key, value) -> scalarsByBlock.put(key, Collections.unmodifiableCollection(value)));
+        scalarsInBlock = scalarsByBlock.toImmutable();
+
+        iconFont = loadFont();
+        strings = new Strings(loadResourceBundle());
+        colors = useDarkTheme ? new DarkColors() : new LightColors();
+        applicationIcons = loadApplicationIcons();
+    }
+
+    public String formatString(final String key, final Object... arguments) {
+        return strings.format(key, arguments);
+    }
+
+    public BlockRecord getBlockData(final int blockId) {
+        return blocksTable.get(blockId);
+    }
+
+    public Collection<BlockRecord> getBlocks() {
+        return blocks;
+    }
+
+    public ScalarRecord getScalar(final int codePoint) {
+        return scalarsTable.get(codePoint);
+    }
+
+    public Collection<ScalarRecord> getScalars(final int blockId) {
+        return scalarsInBlock.get(blockId);
+    }
+
+    public FontIcon getIcon(final Icons icon) {
+        return new FontIcon(icon.codePoint, null, null, iconFont);
+    }
+
+    public FontIcon getIcon(final Icons icon, final Color color, final Color disabledColor) {
+        return new FontIcon(icon.codePoint, color, disabledColor, iconFont);
+    }
+
+    public Locale getLocale() {
+        return strings.getLocale();
+    }
+
+    public String getString(final String key) {
+        return strings.get(key);
+    }
 
     public static Resources get() {
         if (instance == null) {
@@ -64,14 +135,14 @@ public class Resources {
         }).filter(Objects::nonNull).toList();
     }
 
-    private static Collection<BlockData> loadBlocks() {
+    private static Collection<BlockRecord> loadBlocks() {
         return loadSerializedCollection("blocks.json", new TypeReference<>() {
             // Empty
         });
     }
 
-    private static Collection<CharacterData> loadCharacters() {
-        return loadSerializedCollection("characterData.json", new TypeReference<>() {
+    private static Collection<ScalarRecord> loadScalarRecords() {
+        return loadSerializedCollection("scalars.json", new TypeReference<>() {
             // Empty
         });
     }
@@ -126,86 +197,9 @@ public class Resources {
         }
     }
 
-    public final List<Image> applicationIcons;
-
-    private final Collection<BlockData> blockList;
-
-    private final ImmutableIntObjectMap<BlockData> blockMap;
-
-    private final ImmutableIntObjectMap<CharacterData> characterMap;
-
-    private final ImmutableIntObjectMap<Collection<CharacterData>> charactersInBlock;
-
-    public final Colors colors;
-
-    private final Font iconFont;
-
-    private final Strings strings;
-
-    private Resources(final boolean useDarkTheme) {
-        final var blocks = new ArrayList<BlockData>();
-        blocks.add(new BlockData(0, "All", 0, Integer.MAX_VALUE));
-        blocks.addAll(loadBlocks());
-        blockList = Collections.unmodifiableCollection(blocks);
-
-        final var blockHashMap = new IntObjectHashMap<BlockData>(blocks.size());
-        for (final var block : blocks) {
-            blockHashMap.put(block.id(), block);
+    public static class ResourceInitializationException extends RuntimeException {
+        public ResourceInitializationException(final String message) {
+            super(message);
         }
-        blockMap = blockHashMap.toImmutable();
-
-        final Collection<CharacterData> characterList = loadCharacters();
-        final var characters = new IntObjectHashMap<CharacterData>(characterList.size());
-        for (final var character : characterList) {
-            characters.put(character.codePoint(), character);
-        }
-        characterMap = characters.toImmutable();
-
-        final var blockChars = new IntObjectHashMap<Collection<CharacterData>>();
-        characterList.stream()
-                .collect(Collectors.groupingBy(CharacterData::blockId))
-                .forEach((key, value) -> blockChars.put(key, Collections.unmodifiableCollection(value)));
-        charactersInBlock = blockChars.toImmutable();
-
-        iconFont = loadFont();
-        strings = new Strings(loadResourceBundle());
-        colors = useDarkTheme ? new DarkColors() : new LightColors();
-        applicationIcons = loadApplicationIcons();
-    }
-
-    public String formatString(final String key, final Object... arguments) {
-        return strings.format(key, arguments);
-    }
-
-    public BlockData getBlockData(final int blockId) {
-        return blockMap.get(blockId);
-    }
-
-    public Collection<BlockData> getBlocks() {
-        return blockList;
-    }
-
-    public CharacterData getCharacterData(final int codePoint) {
-        return characterMap.get(codePoint);
-    }
-
-    public Collection<CharacterData> getCharacters(final int blockId) {
-        return charactersInBlock.get(blockId);
-    }
-
-    public FontIcon getIcon(final Icons icon) {
-        return new FontIcon(icon.codePoint, null, null, iconFont);
-    }
-
-    public FontIcon getIcon(final Icons icon, final Color color, final Color disabledColor) {
-        return new FontIcon(icon.codePoint, color, disabledColor, iconFont);
-    }
-
-    public Locale getLocale() {
-        return strings.getLocale();
-    }
-
-    public String getString(final String key) {
-        return strings.get(key);
     }
 }

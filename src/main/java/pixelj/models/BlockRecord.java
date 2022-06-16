@@ -2,10 +2,11 @@ package pixelj.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record CharacterData(
-        @JsonProperty("codePoint") int codePoint,
+public record BlockRecord(
+        @JsonProperty("id") int id,
         @JsonProperty("name") String name,
-        @JsonProperty("blockId") int blockId
+        @JsonProperty("firstCodePoint") int starts,
+        @JsonProperty("lastCodePoint") int ends
 ) {
     @Override
     public String toString() {
@@ -14,7 +15,7 @@ public record CharacterData(
 
     @Override
     public int hashCode() {
-        return codePoint;
+        return id;
     }
 
     @Override
@@ -22,8 +23,8 @@ public record CharacterData(
         if (this == obj) {
             return true;
         }
-        if (obj instanceof CharacterData other) {
-            return codePoint == other.codePoint();
+        if (obj instanceof BlockRecord other) {
+            return id == other.id();
         }
         return false;
     }

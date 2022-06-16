@@ -21,7 +21,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 
 import pixelj.actions.Actions;
 import pixelj.actions.KerningPairListActions;
-import pixelj.models.BlockData;
+import pixelj.models.BlockRecord;
 import pixelj.models.FilteredList;
 import pixelj.models.KerningPair;
 import pixelj.models.Project;
@@ -128,12 +128,12 @@ public class ListPanel extends JPanel implements Detachable {
         actions.showRemoveDialogAction.setEnabled(value && (selectionModel.getMinSelectionIndex() >= 0));
     }
 
-    private SearchableComboBox<BlockData> filterBox(final BiConsumer<Integer, Integer> setter) {
+    private SearchableComboBox<BlockRecord> filterBox(final BiConsumer<Integer, Integer> setter) {
         final var box = new SearchableComboBox<>(Resources.get().getBlocks());
         box.setMaximumSize(Dimensions.MAXIMUM_COMBO_BOX_SIZE);
         box.setMinimumSize(Dimensions.MINIMUM_COMBO_BOX_SIZE);
         box.addActionListener(event -> {
-            if (box.getSelectedItem() instanceof final BlockData block) {
+            if (box.getSelectedItem() instanceof final BlockRecord block) {
                 setter.accept(block.starts(), block.ends());
             } else {
                 setter.accept(0, Integer.MAX_VALUE);

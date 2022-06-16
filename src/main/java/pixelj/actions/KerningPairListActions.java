@@ -38,7 +38,7 @@ public class KerningPairListActions {
         this.selectionModel = selectionModel;
         this.root = root;
 
-        addDialog = new AddDialog(project.getCharacters(), (Frame) SwingUtilities.getWindowAncestor(root));
+        addDialog = new AddDialog(project.getGlyphs(), (Frame) SwingUtilities.getWindowAncestor(root));
 
         showAddDialogAction = new ApplicationAction("showAddDialog", this::showAddDialog)
                 .setTextKey("kerningPairsShowAddDialogAction")

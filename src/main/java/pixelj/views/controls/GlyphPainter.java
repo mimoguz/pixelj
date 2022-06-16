@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.util.function.Consumer;
 
 import pixelj.graphics.Snapshot;
-import pixelj.models.CharacterItem;
+import pixelj.models.Glyph;
 import pixelj.util.ChangeableInt;
 import pixelj.views.controls.painter.CanFlipImage;
 import pixelj.views.controls.painter.CanRotateImage;
@@ -29,7 +29,7 @@ public class GlyphPainter extends GlyphView implements CanFlipImage, CanRotateIm
     public void erase() {
         final var model = getModel();
         if (model != null) {
-            model.getGlyph().fill(true);
+            model.getImage().fill(true);
         }
     }
 
@@ -42,7 +42,7 @@ public class GlyphPainter extends GlyphView implements CanFlipImage, CanRotateIm
     }
 
     @Override
-    public void setModel(final CharacterItem value) {
+    public void setModel(final Glyph value) {
         final var current = getModel();
         if (current != null) {
             current.widthProperty.removeChangeListener(characterWidthChangeListener);
@@ -62,7 +62,7 @@ public class GlyphPainter extends GlyphView implements CanFlipImage, CanRotateIm
     public void takeSnapshot() {
         final var model = getModel();
         if (model != null) {
-            snapshotConsumer.accept(model.getGlyph().getSnapshot(model.getCodePoint()));
+            snapshotConsumer.accept(model.getImage().getSnapshot(model.getCodePoint()));
         }
     }
 }

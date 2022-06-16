@@ -11,101 +11,101 @@ public class ExampleData {
     public static Project createProject() {
         final var metrics = Metrics.getDefault();
 
-        final var characters = List.of(
-                new CharacterItem(
+        final var glyphs = List.of(
+                new Glyph(
                         65,
-                        metrics.defaultCharacterWidth(),
+                        metrics.defaultWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterItem(
+                new Glyph(
                         66,
-                        metrics.defaultCharacterWidth(),
+                        metrics.defaultWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterItem(
+                new Glyph(
                         67,
-                        metrics.defaultCharacterWidth(),
+                        metrics.defaultWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterItem(
+                new Glyph(
                         68,
-                        metrics.defaultCharacterWidth(),
+                        metrics.defaultWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterItem(
+                new Glyph(
                         69,
-                        metrics.defaultCharacterWidth(),
+                        metrics.defaultWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterItem(
+                new Glyph(
                         70,
-                        metrics.defaultCharacterWidth(),
+                        metrics.defaultWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterItem(
+                new Glyph(
                         71,
-                        metrics.defaultCharacterWidth(),
+                        metrics.defaultWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterItem(
+                new Glyph(
                         72,
-                        metrics.defaultCharacterWidth(),
+                        metrics.defaultWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterItem(
+                new Glyph(
                         73,
-                        metrics.defaultCharacterWidth(),
+                        metrics.defaultWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterItem(
+                new Glyph(
                         74,
-                        metrics.defaultCharacterWidth(),
+                        metrics.defaultWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterItem(
+                new Glyph(
                         75,
-                        metrics.defaultCharacterWidth(),
+                        metrics.defaultWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterItem(
+                new Glyph(
                         76,
-                        metrics.defaultCharacterWidth(),
+                        metrics.defaultWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterItem(
+                new Glyph(
                         77,
-                        metrics.defaultCharacterWidth(),
+                        metrics.defaultWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterItem(
+                new Glyph(
                         78,
-                        metrics.defaultCharacterWidth(),
+                        metrics.defaultWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterItem(
+                new Glyph(
                         79,
-                        metrics.defaultCharacterWidth(),
+                        metrics.defaultWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 ),
-                new CharacterItem(
+                new Glyph(
                         80,
-                        metrics.defaultCharacterWidth(),
+                        metrics.defaultWidth(),
                         BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
                 )
         );
 
         final var kerningPairs = List.of(
-                new KerningPair(characters.get(0), characters.get(1), 0),
-                new KerningPair(characters.get(1), characters.get(2), 0),
-                new KerningPair(characters.get(2), characters.get(3), 0),
-                new KerningPair(characters.get(3), characters.get(4), 0),
-                new KerningPair(characters.get(4), characters.get(5), 0),
-                new KerningPair(characters.get(5), characters.get(6), 0)
+                new KerningPair(glyphs.get(0), glyphs.get(1), 0),
+                new KerningPair(glyphs.get(1), glyphs.get(2), 0),
+                new KerningPair(glyphs.get(2), glyphs.get(3), 0),
+                new KerningPair(glyphs.get(3), glyphs.get(4), 0),
+                new KerningPair(glyphs.get(4), glyphs.get(5), 0),
+                new KerningPair(glyphs.get(5), glyphs.get(6), 0)
         );
 
         return new Project(
                 "Example project",
-                new SortedList<>(characters),
+                new SortedList<>(glyphs),
                 new SortedList<>(kerningPairs),
                 metrics
         );

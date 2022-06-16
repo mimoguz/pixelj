@@ -17,19 +17,19 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
 import pixelj.graphics.BinaryImage;
-import pixelj.models.CharacterItem;
+import pixelj.models.Glyph;
 import pixelj.models.KerningPair;
 import pixelj.models.Metrics;
 import pixelj.models.Project;
 import pixelj.resources.Resources;
-import pixelj.views.characters_screen.AddDialog;
+import pixelj.views.glyphs_screen.AddDialog;
 
-public class CharacterListActions {
+public class GlyphListActions {
     private final AddDialog addDialog;
     public final Collection<ApplicationAction> all;
     private Dimension canvasSize;
 
-    private int defaultCharacterWidth;
+    private int defaultWidth;
     private boolean enabled = true;
     private final Project project;
     private final JComponent root;
@@ -37,7 +37,7 @@ public class CharacterListActions {
     public final ApplicationAction showAddDialogAction;
     public final ApplicationAction showRemoveDialogAction;
 
-    public CharacterListActions(
+    public GlyphListActions(
             final Project project,
             final ListSelectionModel selectionModel,
             final Metrics metrics,
@@ -49,20 +49,18 @@ public class CharacterListActions {
 
         addDialog = new AddDialog((JFrame) SwingUtilities.getWindowAncestor(root));
 
-        showAddDialogAction = new ApplicationAction("charactersShowAddDialogAction", this::showAddDialog)
-                .setTextKey("charactersShowAddDialogAction")
+        showAddDialogAction = new ApplicationAction("addGlyphsAction", this::showAddDialog)
+                .setTextKey("addGlyphsAction")
                 .setAccelerator(KeyEvent.VK_PLUS, InputEvent.ALT_DOWN_MASK);
 
-        showRemoveDialogAction = new ApplicationAction(
-                "charactersShowRemoveDialogAction",
-                this::showRemoveDialog
-        ).setTextKey("charactersShowRemoveDialogAction")
+        showRemoveDialogAction = new ApplicationAction("removeGlyphsAction", this::showRemoveDialog)
+                .setTextKey("removeGlyphsAction")
                 .setAccelerator(KeyEvent.VK_MINUS, InputEvent.ALT_DOWN_MASK);
 
         all = List.of(showAddDialogAction, showRemoveDialogAction);
 
         canvasSize = new Dimension(metrics.canvasWidth(), metrics.canvasHeight());
-        defaultCharacterWidth = metrics.defaultCharacterWidth();
+        defaultWidth = metrics.defaultWidth();
 
         selectionModel.addListSelectionListener(
                 e -> showRemoveDialogAction.setEnabled(selectionModel.getMinSelectionIndex() >= 0)
@@ -72,18 +70,18 @@ public class CharacterListActions {
     @SuppressWarnings("unused")
     private void addCharacters(final int... codePoints) {
         for (final var codePoint : codePoints) {
-            project.getCharacters()
+            project.getGlyphs()
                     .add(
-                            new CharacterItem(
+                            new Glyph(
                                     codePoint,
-                                    defaultCharacterWidth,
+                                    defaultWidth,
                                     BinaryImage.of(canvasSize.width, canvasSize.height)
                             )
                     );
         }
     }
 
-    private int countAffectedKerningPairs(final Collection<CharacterItem> characters) {
+    private int countAffectedKerningPairs(final Collection<Glyph> characters) {
         final var kerningPairs = new HashSet<KerningPair>();
         for (final var character : characters) {
             kerningPairs.addAll(project.findDependent(character));
@@ -92,7 +90,7 @@ public class CharacterListActions {
     }
 
     public int getDefaultCharacterWidth() {
-        return defaultCharacterWidth;
+        return defaultWidth;
     }
 
     public boolean isEnabled() {
@@ -100,7 +98,7 @@ public class CharacterListActions {
     }
 
     public void setDefaultCharacterWidth(final int defaultCharacterWidth) {
-        this.defaultCharacterWidth = defaultCharacterWidth;
+        this.defaultWidth = defaultCharacterWidth;
     }
 
     public void setEnabled(final boolean value) {
@@ -115,11 +113,11 @@ public class CharacterListActions {
             return;
         }
         for (final var characterData : result) {
-            project.getCharacters()
+            project.getGlyphs()
                     .add(
-                            new CharacterItem(
+                            new Glyph(
                                     characterData.codePoint(),
-                                    defaultCharacterWidth,
+                                    defaultWidth,
                                     BinaryImage.of(canvasSize.width, canvasSize.height, true)
                             )
                     );
@@ -132,13 +130,13 @@ public class CharacterListActions {
             return;
         }
 
-        final var listModel = project.getCharacters();
-        final var characters = Arrays.stream(indices).mapToObj(listModel::getElementAt).toList();
-        final var kerningPairs = countAffectedKerningPairs(characters);
+        final var listModel = project.getGlyphs();
+        final var removed = Arrays.stream(indices).mapToObj(listModel::getElementAt).toList();
+        final var affected = countAffectedKerningPairs(removed);
 
         final var res = Resources.get();
-        final var message = kerningPairs == 0 ? res.formatString("removingCharactersMessage", indices.length)
-                : res.formatString("removingCharactersAndKerningPairsMessage", indices.length, kerningPairs);
+        final var message = affected == 0 ? res.formatString("removingGlyphsMessage", indices.length)
+                : res.formatString("removingGlyphsAndKerningPairsMessage", indices.length, affected);
         final var result = JOptionPane.showConfirmDialog(
                 root,
                 message,
@@ -149,11 +147,12 @@ public class CharacterListActions {
         if (result != JOptionPane.OK_OPTION) {
             return;
         }
-        listModel.removeAll(characters);
+        // Project model should take care of removing the affected kerning pairs.
+        listModel.removeAll(removed);
     }
 
     public void updateMetrics(final Metrics metrics) {
         canvasSize = new Dimension(metrics.canvasWidth(), metrics.canvasHeight());
-        defaultCharacterWidth = metrics.defaultCharacterWidth();
+        defaultWidth = metrics.defaultWidth();
     }
 }

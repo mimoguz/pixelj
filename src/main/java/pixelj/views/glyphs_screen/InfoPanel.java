@@ -1,4 +1,4 @@
-package pixelj.views.characters_screen;
+package pixelj.views.glyphs_screen;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -16,7 +16,7 @@ import javax.swing.SpinnerNumberModel;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
-import pixelj.models.CharacterItem;
+import pixelj.models.Glyph;
 import pixelj.models.Metrics;
 import pixelj.models.Project;
 import pixelj.resources.Resources;
@@ -26,14 +26,12 @@ import pixelj.views.shared.Dimensions;
 public class InfoPanel extends JPanel {
     private static final Color LABEL_FOREGROUND = new Color(50, 55, 65);
 
-    private final JLabel characterWidthLabel = new JLabel(
-            Resources.get().getString("characterWidthSpinnerLabel")
-    );
-    private final JSpinner characterWidthSpinner = new JSpinner();
+    private final JLabel widthLabel = new JLabel(Resources.get().getString("widthSpinnerLabel"));
+    private final JSpinner widthSpinner = new JSpinner();
     private final JLabel codePointLabel = new JLabel(" ");
     private final JLabel blockNamePanel = new JLabel(" ");
     private final JLabel glyphLabel = new JLabel(" ");
-    private CharacterItem model;
+    private Glyph model;
     private final JLabel nameLabel = new JLabel(" ");
     private final JCheckBox showGridCheckBox = new JCheckBox(Resources.get().getString("showGrid"));
     private final JCheckBox showLinesCheckBox = new JCheckBox(Resources.get().getString("showGuides"));
@@ -43,17 +41,14 @@ public class InfoPanel extends JPanel {
         glyphLabel.setForeground(LABEL_FOREGROUND);
         codePointLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
         blockNamePanel.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
-        Components.setFixedSize(characterWidthSpinner, Dimensions.SPINNER_SIZE);
-        characterWidthSpinner.setEnabled(false);
-        characterWidthLabel.setEnabled(false);
+        Components.setFixedSize(widthSpinner, Dimensions.SPINNER_SIZE);
+        widthSpinner.setEnabled(false);
+        widthLabel.setEnabled(false);
         showGridCheckBox.setSelected(true);
         showLinesCheckBox.setSelected(true);
 
-        characterWidthSpinner.addChangeListener(e -> {
-            if (
-                model != null
-                        && characterWidthSpinner.getModel() instanceof final SpinnerNumberModel numberModel
-            ) {
+        widthSpinner.addChangeListener(e -> {
+            if (model != null && widthSpinner.getModel() instanceof final SpinnerNumberModel numberModel) {
                 final var value = numberModel.getNumber().intValue();
                 if (value != model.getWidth()) {
                     model.setWidth(value);
@@ -98,12 +93,12 @@ public class InfoPanel extends JPanel {
         cons.gridwidth = 1;
         cons.gridx = 0;
         cons.insets = new Insets(pad, pad, pad, pad);
-        add(characterWidthLabel, cons);
+        add(widthLabel, cons);
 
         cons.gridx = 1;
         cons.insets = new Insets(pad, 0, pad, pad - divWidth - focusWidth);
         cons.anchor = GridBagConstraints.EAST;
-        add(characterWidthSpinner, cons);
+        add(widthSpinner, cons);
 
         cons.gridy = 3;
         cons.weighty = 1.0;
@@ -124,7 +119,7 @@ public class InfoPanel extends JPanel {
         setMetrics(project.getMetrics());
     }
 
-    public CharacterItem getModel() {
+    public Glyph getModel() {
         return model;
     }
 
@@ -137,9 +132,9 @@ public class InfoPanel extends JPanel {
     }
 
     public void setMetrics(final Metrics metrics) {
-        characterWidthSpinner.setModel(
+        widthSpinner.setModel(
                 new SpinnerNumberModel(
-                        model != null ? model.getWidth() : metrics.defaultCharacterWidth(),
+                        model != null ? model.getWidth() : metrics.defaultWidth(),
                         0,
                         metrics.canvasWidth(),
                         1
@@ -147,35 +142,31 @@ public class InfoPanel extends JPanel {
         );
     }
 
-    public void setModel(final CharacterItem value) {
+    public void setModel(final Glyph value) {
         this.model = value;
         if (value != null) {
             final var res = Resources.get();
-            final var characterData = res.getCharacterData(value.getCodePoint());
-            final var name = String.format(
-                    "<html><body style=\"text-align: left; \">%s</body></html>",
-                    characterData.name()
-            );
+            final var scalar = res.getScalar(value.getCodePoint());
+            final var name = String
+                    .format("<html><body style=\"text-align: left; \">%s</body></html>", scalar.name());
             nameLabel.setText(name);
-            codePointLabel.setText(
-                    res.formatString("codePointLabel", Integer.toHexString(characterData.codePoint()))
-            );
-            blockNamePanel.setText(
-                    res.formatString("blockNameLabel", res.getBlockData(characterData.blockId()).name())
-            );
+            codePointLabel
+                    .setText(res.formatString("codePointLabel", Integer.toHexString(scalar.codePoint())));
+            blockNamePanel
+                    .setText(res.formatString("blockNameLabel", res.getBlockData(scalar.blockId()).name()));
             glyphLabel.setText(Character.toString((char) model.getCodePoint()));
-            if (characterWidthSpinner.getModel() instanceof final SpinnerNumberModel numberModel) {
+            if (widthSpinner.getModel() instanceof final SpinnerNumberModel numberModel) {
                 numberModel.setValue(value.getWidth());
-                characterWidthSpinner.setEnabled(true);
-                characterWidthLabel.setEnabled(true);
+                widthSpinner.setEnabled(true);
+                widthLabel.setEnabled(true);
             }
         } else {
             nameLabel.setText(" ");
             codePointLabel.setText(" ");
             blockNamePanel.setText(" ");
             glyphLabel.setText(" ");
-            characterWidthSpinner.setEnabled(false);
-            characterWidthLabel.setEnabled(false);
+            widthSpinner.setEnabled(false);
+            widthLabel.setEnabled(false);
         }
     }
 }

@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.text.BadLocationException;
 
-import pixelj.models.CharacterItem;
+import pixelj.models.Glyph;
 import pixelj.models.KerningPair;
 import pixelj.models.Project;
 import pixelj.views.controls.StringView;
@@ -59,20 +59,20 @@ public class PreviewScreenActions {
         input.setText(null);
     }
 
-    private List<CharacterItem> getCharactersOfLine(final String line) {
-        final var characters = project.getCharacters();
+    private List<Glyph> getCharactersOfLine(final String line) {
+        final var characters = project.getGlyphs();
         return line.codePoints()
-                .mapToObj(cp -> cp == SPACE ? new CharacterItem(SPACE, 0, null) : characters.findHash(cp))
+                .mapToObj(cp -> cp == SPACE ? new Glyph(SPACE, 0, null) : characters.findHash(cp))
                 .filter(Objects::nonNull)
                 .toList();
     }
 
-    private List<Integer> getSpaces(final List<CharacterItem> characters) {
+    private List<Integer> getSpaces(final List<Glyph> characters) {
         if (characters.isEmpty()) {
             return java.util.Collections.emptyList();
         }
 
-        final var spacing = project.getMetrics().spacing();
+        final var letterSpacing = project.getMetrics().letterSpacing();
         final var kerningPairs = project.getKerningPairs();
         final var pairs = characters.size() - 1;
         final var spaces = new ArrayList<Integer>(pairs);
@@ -90,7 +90,7 @@ public class PreviewScreenActions {
             }
 
             final var pair = kerningPairs.findHash(KerningPair.getHash(left, right));
-            spaces.add(pair == null ? spacing : spacing + pair.getKerningValue());
+            spaces.add(pair == null ? letterSpacing : letterSpacing + pair.getKerningValue());
         }
         return spaces;
     }

@@ -10,12 +10,12 @@ import java.util.Collection;
 
 import javax.swing.JPanel;
 
-import pixelj.models.CharacterItem;
+import pixelj.models.Glyph;
 import pixelj.views.shared.Dimensions;
 
 public class StringView extends JPanel {
     private final Color backgroundColor;
-    private final ArrayList<CharacterItem> characters = new ArrayList<>();
+    private final ArrayList<Glyph> characters = new ArrayList<>();
     private int lineSpacing;
     private int maxY;
     private int padding;
@@ -44,7 +44,7 @@ public class StringView extends JPanel {
         return zoom;
     }
 
-    public void set(Collection<CharacterItem> characters, Collection<Integer> spaces) {
+    public void set(Collection<Glyph> characters, Collection<Integer> spaces) {
         this.characters.clear();
         this.characters.addAll(characters);
 
@@ -89,16 +89,11 @@ public class StringView extends JPanel {
     }
 
     @SuppressWarnings("SameParameterValue")
-    private void drawCharacter(
-            final BufferedImage target,
-            final CharacterItem character,
-            final int x,
-            final int y
-    ) {
+    private void drawCharacter(final BufferedImage target, final Glyph character, final int x, final int y) {
         final var w = character.getWidth();
         final var sourceBuffer = new byte[w];
         final var targetBuffer = new int[w];
-        final var source = character.getGlyph();
+        final var source = character.getImage();
         final var firstLine = maxY > 0 ? source.getHeight() - maxY : 0;
         for (var sourceLine = firstLine; sourceLine < source.getHeight(); sourceLine++) {
             final var targetLine = sourceLine - firstLine;
@@ -120,11 +115,11 @@ public class StringView extends JPanel {
             return;
         }
 
-        final var w = characters.stream().mapToInt(CharacterItem::getWidth).sum()
+        final var w = characters.stream().mapToInt(Glyph::getWidth).sum()
                 + spaces.stream().mapToInt(i -> i).limit(characters.size()).reduce(0, Integer::sum);
 
         var h = characters.stream()
-                .mapToInt(chr -> chr.getGlyph() == null ? 0 : chr.getGlyph().getHeight())
+                .mapToInt(chr -> chr.getImage() == null ? 0 : chr.getImage().getHeight())
                 .max()
                 .orElse(0);
 
@@ -144,7 +139,7 @@ public class StringView extends JPanel {
         var x = 0;
         for (var index = 0; index < characters.size(); index++) {
             final var character = characters.get(index);
-            if (character.getGlyph() == null) {
+            if (character.getImage() == null) {
                 // Non-printable character. Spaces should handle that.
                 x += spaces.size() > index ? spaces.get(index) : 0;
                 continue;

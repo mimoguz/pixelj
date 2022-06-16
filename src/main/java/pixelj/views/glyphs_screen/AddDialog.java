@@ -1,4 +1,4 @@
-package pixelj.views.characters_screen;
+package pixelj.views.glyphs_screen;
 
 import java.awt.BorderLayout;
 import java.awt.Dialog;
@@ -18,47 +18,43 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
-import pixelj.models.BlockData;
-import pixelj.models.CharacterData;
+import pixelj.models.BlockRecord;
+import pixelj.models.ScalarRecord;
 import pixelj.resources.Resources;
 import pixelj.views.controls.SearchableComboBox;
 import pixelj.views.shared.Borders;
-import pixelj.views.shared.CharacterDataCellRenderer;
+import pixelj.views.shared.ScalarCellRenderer;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 
 public class AddDialog extends JDialog {
-    private final DefaultListModel<CharacterData> listModel = new DefaultListModel<>();
-    private final ArrayList<CharacterData> result = new ArrayList<>();
+    private final DefaultListModel<ScalarRecord> listModel = new DefaultListModel<>();
+    private final ArrayList<ScalarRecord> result = new ArrayList<>();
     private final ListSelectionModel selectionModel = new DefaultListSelectionModel();
 
     public AddDialog(final Frame owner) {
-        super(
-                owner,
-                Resources.get().getString("charactersAddDialogTitle"),
-                Dialog.ModalityType.APPLICATION_MODAL
-        );
+        super(owner, Resources.get().getString("addGlyphsTitle"), Dialog.ModalityType.APPLICATION_MODAL);
 
         final var res = Resources.get();
 
-        final JList<CharacterData> list = new JList<>();
+        final JList<ScalarRecord> list = new JList<>();
         selectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         list.setModel(listModel);
         list.setSelectionModel(selectionModel);
-        list.setCellRenderer(new CharacterDataCellRenderer());
+        list.setCellRenderer(new ScalarCellRenderer());
 
         final var scrollPanel = new JScrollPane(list);
         scrollPanel.setMaximumSize(Dimensions.MAXIMUM);
 
         final var filterBox = new SearchableComboBox<>(res.getBlocks().stream().skip(1).toList());
         filterBox.setSelectedIndex(0);
-        if (filterBox.getSelectedItem() instanceof final BlockData block) {
-            listModel.addAll(res.getCharacters(block.id()));
+        if (filterBox.getSelectedItem() instanceof final BlockRecord block) {
+            listModel.addAll(res.getScalars(block.id()));
         }
         filterBox.addActionListener(event -> {
-            if (filterBox.getSelectedItem() instanceof final BlockData block) {
+            if (filterBox.getSelectedItem() instanceof final BlockRecord block) {
                 listModel.clear();
-                listModel.addAll(res.getCharacters(block.id()));
+                listModel.addAll(res.getScalars(block.id()));
             }
         });
 
@@ -100,7 +96,7 @@ public class AddDialog extends JDialog {
         setResizable(true);
     }
 
-    public Collection<CharacterData> getResult() {
+    public Collection<ScalarRecord> getResult() {
         return Collections.unmodifiableCollection(result);
     }
 

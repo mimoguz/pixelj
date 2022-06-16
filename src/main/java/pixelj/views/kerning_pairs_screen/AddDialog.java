@@ -15,26 +15,26 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
-import pixelj.models.BlockData;
-import pixelj.models.CharacterItem;
+import pixelj.models.BlockRecord;
+import pixelj.models.Glyph;
 import pixelj.models.FilteredList;
 import pixelj.models.KerningPair;
 import pixelj.models.SortedList;
 import pixelj.resources.Resources;
 import pixelj.views.controls.SearchableComboBox;
 import pixelj.views.shared.Borders;
-import pixelj.views.shared.CharacterCellRenderer;
-import pixelj.views.shared.CharacterModelCell;
+import pixelj.views.shared.GlyphCellRenderer;
+import pixelj.views.shared.GlyphCell;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 
 public class AddDialog extends JDialog {
     private final ListSelectionModel selectionModel = new DefaultListSelectionModel();
-    private CharacterItem left;
+    private Glyph left;
     private KerningPair result;
-    private CharacterItem right;
+    private Glyph right;
 
-    public AddDialog(final SortedList<CharacterItem> source, final Frame owner) {
+    public AddDialog(final SortedList<Glyph> source, final Frame owner) {
         super(
                 owner,
                 Resources.get().getString("kerningPairsAddDialogTitle"),
@@ -44,11 +44,11 @@ public class AddDialog extends JDialog {
         final var res = Resources.get();
 
         final var listModel = new FilteredList<>(source);
-        final JList<CharacterItem> list = new JList<>();
+        final JList<Glyph> list = new JList<>();
         list.setModel(listModel);
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setSelectionModel(selectionModel);
-        list.setCellRenderer(new CharacterCellRenderer(Dimensions.MAXIMUM_PREVIEW_SIZE));
+        list.setCellRenderer(new GlyphCellRenderer(Dimensions.MAXIMUM_PREVIEW_SIZE));
 
         final var scrollPanel = new JScrollPane(list);
         scrollPanel.setMaximumSize(Dimensions.MAXIMUM);
@@ -56,15 +56,15 @@ public class AddDialog extends JDialog {
         final var filterBox = new SearchableComboBox<>(res.getBlocks());
         filterBox.setSelectedIndex(0);
         filterBox.addActionListener(event -> {
-            if (filterBox.getSelectedItem() instanceof final BlockData block) {
+            if (filterBox.getSelectedItem() instanceof final BlockRecord block) {
                 listModel.setFilter(
                         chr -> chr.getCodePoint() >= block.starts() && chr.getCodePoint() <= block.ends()
                 );
             }
         });
 
-        final var leftView = new CharacterModelCell(Dimensions.MAXIMUM_PREVIEW_SIZE);
-        final var rightView = new CharacterModelCell(Dimensions.MAXIMUM_PREVIEW_SIZE);
+        final var leftView = new GlyphCell(Dimensions.MAXIMUM_PREVIEW_SIZE);
+        final var rightView = new GlyphCell(Dimensions.MAXIMUM_PREVIEW_SIZE);
 
         final var addButton = new JButton(res.getString("add"));
         Components.setFixedSize(addButton, Dimensions.TEXT_BUTTON_SIZE);

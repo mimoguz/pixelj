@@ -12,8 +12,8 @@ public record Metrics(
         int descender,
         int capHeight,
         int xHeight,
-        int defaultCharacterWidth,
-        int spacing,
+        int defaultWidth,
+        int letterSpacing,
         int spaceSize,
         int lineSpacing,
         boolean isMonospaced
@@ -30,23 +30,24 @@ public record Metrics(
         public final ChangeableInt canvasHeight = new ChangeableInt(0);
         public final ChangeableInt canvasWidth = new ChangeableInt(0);
         public final ChangeableInt capHeight = new ChangeableInt(0);
-        public final ChangeableInt defaultCharacterWidth = new ChangeableInt(0);
+        public final ChangeableInt defaultWidth = new ChangeableInt(0);
         public final ChangeableInt descender = new ChangeableInt(0);
         public final ChangeableBoolean isMonospaced = new ChangeableBoolean(false);
         public final ChangeableInt lineSpacing = new ChangeableInt(0);
         public final ChangeableInt spaceSize = new ChangeableInt(0);
-        public final ChangeableInt spacing = new ChangeableInt(0);
+        public final ChangeableInt letterSpacing = new ChangeableInt(0);
+
         public final ReadOnlyBoolean validAscender = new ReadOnlyInt(descender)
                 .le(canvasHeight.subtract(ascender))
                 .and(ascender.gt(ZERO));
         public final ReadOnlyBoolean validCanvasHeight = canvasHeight.gt(ZERO);
         public final ReadOnlyBoolean validCanvasWidth = canvasWidth.gt(ZERO);
         public final ReadOnlyBoolean validCapHeight = capHeight.le(ascender).and(capHeight.gt(ZERO));
-        public final ReadOnlyBoolean validDefaultCharacterWidth = defaultCharacterWidth.le(canvasWidth);
+        public final ReadOnlyBoolean validDefaultWidth = defaultWidth.le(canvasWidth);
         public final ReadOnlyBoolean validDescender = descender.le(canvasHeight).and(descender.gt(ZERO));
         public final ReadOnlyBoolean validLineSpacing = lineSpacing.ge(ZERO);
         public final ReadOnlyBoolean validSpaceSize = spaceSize.ge(ZERO);
-        public final ReadOnlyBoolean validSpacing = spacing.ge(ZERO);
+        public final ReadOnlyBoolean validLetterSpacing = letterSpacing.ge(ZERO);
         private final ChangeableInt xHeight = new ChangeableInt(0);
         public final ReadOnlyBoolean validXHeight = xHeight.le(capHeight).and(xHeight.gt(ZERO));
 
@@ -55,8 +56,8 @@ public record Metrics(
                 .and(validDescender)
                 .and(validCapHeight)
                 .and(validXHeight)
-                .and(validDefaultCharacterWidth)
-                .and(validSpacing)
+                .and(validDefaultWidth)
+                .and(validLetterSpacing)
                 .and(validLineSpacing)
                 .and(validSpaceSize);
 
@@ -74,8 +75,8 @@ public record Metrics(
                     descender.getValue(),
                     capHeight.getValue(),
                     xHeight.getValue(),
-                    defaultCharacterWidth.getValue(),
-                    spacing.getValue(),
+                    defaultWidth.getValue(),
+                    letterSpacing.getValue(),
                     spaceSize.getValue(),
                     lineSpacing.getValue(),
                     isMonospaced.getValue()
@@ -102,8 +103,8 @@ public record Metrics(
             return this;
         }
 
-        public ValidatedBuilder setDefaultCharacterWidth(int value) {
-            defaultCharacterWidth.setValue(value);
+        public ValidatedBuilder setDefaultWidth(int value) {
+            defaultWidth.setValue(value);
             return this;
         }
 
@@ -128,7 +129,7 @@ public record Metrics(
         }
 
         public ValidatedBuilder setSpacing(int value) {
-            spacing.setValue(value);
+            letterSpacing.setValue(value);
             return this;
         }
 
@@ -143,12 +144,12 @@ public record Metrics(
             builder.canvasHeight.setValue(metrics.canvasHeight());
             builder.canvasWidth.setValue(metrics.canvasWidth());
             builder.capHeight.setValue(metrics.capHeight());
-            builder.defaultCharacterWidth.setValue(metrics.defaultCharacterWidth());
+            builder.defaultWidth.setValue(metrics.defaultWidth);
             builder.descender.setValue(metrics.descender());
             builder.isMonospaced.setValue(metrics.isMonospaced());
             builder.lineSpacing.setValue(metrics.lineSpacing());
             builder.spaceSize.setValue(metrics.spaceSize());
-            builder.spacing.setValue(metrics.spacing());
+            builder.letterSpacing.setValue(metrics.letterSpacing);
             builder.xHeight.setValue(metrics.xHeight());
             return builder;
         }

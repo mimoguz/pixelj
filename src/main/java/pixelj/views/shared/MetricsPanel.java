@@ -19,31 +19,31 @@ import pixelj.util.ChangeableInt;
 import pixelj.util.ReadOnlyBoolean;
 
 public class MetricsPanel extends JPanel {
-    private final JSpinner ascender;
+    private final JSpinner ascenderIn;
     private final Metrics.ValidatedBuilder builder;
-    private final JSpinner canvasHeight;
-    private final JSpinner canvasWidth;
-    private final JSpinner capHeight;
-    private final JSpinner defaultCharacterWidth;
-    private final JSpinner descender;
+    private final JSpinner canvasHeightIn;
+    private final JSpinner canvasWidthIn;
+    private final JSpinner capHeightIn;
+    private final JSpinner defaultWidthIn;
+    private final JSpinner descenderIn;
     private final JCheckBox isMonospaced;
-    private final JSpinner lineSpacing;
-    private final JSpinner spaceSize;
-    private final JSpinner spacing;
-    private final JSpinner xHeight;
+    private final JSpinner lineSpacingIn;
+    private final JSpinner spaceSizeIn;
+    private final JSpinner letterSpacingIn;
+    private final JSpinner xHeightIn;
 
     public MetricsPanel(final Metrics init, final boolean canEditCanvasSize) {
         builder = Metrics.ValidatedBuilder.from(init);
-        ascender = getSpinner(builder.ascender, builder.validAscender);
-        canvasHeight = getSpinner(builder.canvasHeight, builder.validCanvasHeight);
-        canvasWidth = getSpinner(builder.canvasWidth, builder.validCanvasWidth);
-        capHeight = getSpinner(builder.capHeight, builder.validCapHeight);
-        defaultCharacterWidth = getSpinner(builder.defaultCharacterWidth, builder.validDefaultCharacterWidth);
-        descender = getSpinner(builder.descender, builder.validDescender);
-        lineSpacing = getSpinner(builder.lineSpacing, builder.validLineSpacing);
-        spaceSize = getSpinner(0, builder.spaceSize, builder.validSpaceSize);
-        spacing = getSpinner(0, builder.spacing, builder.validSpacing);
-        xHeight = getSpinner(0, builder.spaceSize, builder.validSpaceSize);
+        ascenderIn = getSpinner(builder.ascender, builder.validAscender);
+        canvasHeightIn = getSpinner(builder.canvasHeight, builder.validCanvasHeight);
+        canvasWidthIn = getSpinner(builder.canvasWidth, builder.validCanvasWidth);
+        capHeightIn = getSpinner(builder.capHeight, builder.validCapHeight);
+        defaultWidthIn = getSpinner(builder.defaultWidth, builder.validDefaultWidth);
+        descenderIn = getSpinner(builder.descender, builder.validDescender);
+        lineSpacingIn = getSpinner(builder.lineSpacing, builder.validLineSpacing);
+        spaceSizeIn = getSpinner(0, builder.spaceSize, builder.validSpaceSize);
+        letterSpacingIn = getSpinner(0, builder.letterSpacing, builder.validLetterSpacing);
+        xHeightIn = getSpinner(0, builder.spaceSize, builder.validSpaceSize);
 
         isMonospaced = new JCheckBox();
         isMonospaced.addChangeListener(e -> builder.isMonospaced.setValue(isMonospaced.isSelected()));
@@ -66,8 +66,8 @@ public class MetricsPanel extends JPanel {
         add(new JLabel(res.getString("metricsDescender")), cons);
         add(new JLabel(res.getString("metricsCapHeight")), cons);
         add(new JLabel(res.getString("metricsXHeight")), cons);
-        add(new JLabel(res.getString("metricsDefaultCharacterWidth")), cons);
-        add(new JLabel(res.getString("metricsCharacterSpacing")), cons);
+        add(new JLabel(res.getString("metricsDefaultWidth")), cons);
+        add(new JLabel(res.getString("metricsLetterSpacing")), cons);
         add(new JLabel(res.getString("metricsSpaceSize")), cons);
         add(new JLabel(res.getString("metricsLineSpacing")), cons);
         final var isMonospacedLabel = new JLabel(res.getString("metricsIsMonospaced"));
@@ -80,17 +80,17 @@ public class MetricsPanel extends JPanel {
         cons.insets = new Insets(0, 0, Dimensions.SMALL_PADDING, 0);
         cons.fill = GridBagConstraints.NONE;
         cons.anchor = GridBagConstraints.LINE_END;
-        add(canvasWidth, cons);
+        add(canvasWidthIn, cons);
         cons.gridy = GridBagConstraints.RELATIVE;
-        add(canvasHeight, cons);
-        add(ascender, cons);
-        add(descender, cons);
-        add(capHeight, cons);
-        add(xHeight, cons);
-        add(defaultCharacterWidth, cons);
-        add(spacing, cons);
-        add(spaceSize, cons);
-        add(lineSpacing, cons);
+        add(canvasHeightIn, cons);
+        add(ascenderIn, cons);
+        add(descenderIn, cons);
+        add(capHeightIn, cons);
+        add(xHeightIn, cons);
+        add(defaultWidthIn, cons);
+        add(letterSpacingIn, cons);
+        add(spaceSizeIn, cons);
+        add(lineSpacingIn, cons);
         add(isMonospaced, cons);
 
         setMetrics(init, canEditCanvasSize);
@@ -109,20 +109,20 @@ public class MetricsPanel extends JPanel {
     }
 
     public void setMetrics(final Metrics metrics, final boolean canEditCanvasSize) {
-        canvasWidth.setValue(metrics.canvasWidth());
-        canvasHeight.setValue(metrics.canvasHeight());
-        ascender.setValue(metrics.ascender());
-        descender.setValue(metrics.descender());
-        capHeight.setValue(metrics.capHeight());
-        xHeight.setValue(metrics.xHeight());
-        defaultCharacterWidth.setValue(metrics.defaultCharacterWidth());
-        spacing.setValue(metrics.spacing());
-        spaceSize.setValue(metrics.spaceSize());
-        lineSpacing.setValue(metrics.lineSpacing());
+        canvasWidthIn.setValue(metrics.canvasWidth());
+        canvasHeightIn.setValue(metrics.canvasHeight());
+        ascenderIn.setValue(metrics.ascender());
+        descenderIn.setValue(metrics.descender());
+        capHeightIn.setValue(metrics.capHeight());
+        xHeightIn.setValue(metrics.xHeight());
+        defaultWidthIn.setValue(metrics.defaultWidth());
+        letterSpacingIn.setValue(metrics.letterSpacing());
+        spaceSizeIn.setValue(metrics.spaceSize());
+        lineSpacingIn.setValue(metrics.lineSpacing());
         isMonospaced.setSelected(metrics.isMonospaced());
 
-        canvasHeight.setEnabled(canEditCanvasSize);
-        canvasWidth.setEnabled(canEditCanvasSize);
+        canvasHeightIn.setEnabled(canEditCanvasSize);
+        canvasWidthIn.setEnabled(canEditCanvasSize);
     }
 
     private static JSpinner getSpinner(final ChangeableInt value, final ReadOnlyBoolean valid) {

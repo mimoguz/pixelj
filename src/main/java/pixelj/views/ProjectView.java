@@ -36,7 +36,7 @@ import pixelj.models.Project;
 import pixelj.resources.Icons;
 import pixelj.resources.Resources;
 import pixelj.util.ChangeableValue;
-import pixelj.views.characters_screen.CharactersScreen;
+import pixelj.views.glyphs_screen.GlyphsScreen;
 import pixelj.views.kerning_pairs_screen.KerningPairsScreen;
 import pixelj.views.preview_screen.PreviewScreen;
 import pixelj.views.shared.Borders;
@@ -44,7 +44,7 @@ import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 
 public class ProjectView extends JFrame {
-    private final CharactersScreen charactersScreen;
+    private final GlyphsScreen charactersScreen;
     private final KerningPairsScreen kerningPairsScreen;
     private final PreviewScreen previewScreen;
     private final JTabbedPane root;
@@ -56,7 +56,7 @@ public class ProjectView extends JFrame {
 
         root = new JTabbedPane();
 
-        charactersScreen = new CharactersScreen(project, root);
+        charactersScreen = new GlyphsScreen(project, root);
         kerningPairsScreen = new KerningPairsScreen(project, root);
         previewScreen = new PreviewScreen(project, root);
         // Invisible screens should be disabled to prevent shortcut collisions.
@@ -162,7 +162,7 @@ public class ProjectView extends JFrame {
                 null,
                 res.getIcon(Icons.LIST, res.colors.active(), null),
                 charactersScreen,
-                res.getString("charactersScreenTabTooltip")
+                res.getString("glyphsScreenTabTooltip")
         );
 
         root.addTab(

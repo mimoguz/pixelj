@@ -5,14 +5,16 @@ import java.util.function.IntBinaryOperator;
 
 public interface CanRotateImage extends Painter {
     /**
-     * Rotates the top-left square of the image 90 degrees left, and fills the rest with 1.
+     * Rotates the top-left square of the image 90 degrees left, and fills the rest
+     * with 1.
      */
     default void rotateLeft() {
         rotate((size, y) -> y, (size, x) -> size - x - 1);
     }
 
     /**
-     * Rotates the top-left square of the image 90 degrees right, and fills the rest with 1.
+     * Rotates the top-left square of the image 90 degrees right, and fills the rest
+     * with 1.
      */
     default void rotateRight() {
         rotate((size, y) -> size - y - 1, (size, x) -> x);
@@ -30,7 +32,7 @@ public interface CanRotateImage extends Painter {
 
         takeSnapshot();
 
-        final var image = model.getGlyph();
+        final var image = model.getImage();
         final var width = image.getWidth();
         final var size = Math.min(image.getWidth(), image.getHeight());
         final var buffer = new byte[image.getWidth() * image.getHeight()];
@@ -38,7 +40,8 @@ public interface CanRotateImage extends Painter {
 
         for (var y = 0; y < size; y++) {
             for (var x = 0; x < size; x++) {
-                @SuppressWarnings("SuspiciousNameCombination") final var destX = getX.applyAsInt(size, y);
+                @SuppressWarnings("SuspiciousNameCombination")
+                final var destX = getX.applyAsInt(size, y);
                 final var destY = getY.applyAsInt(size, x);
                 buffer[destY * width + destX] = image.getByteValue(x, y);
             }

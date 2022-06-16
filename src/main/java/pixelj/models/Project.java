@@ -10,19 +10,19 @@ import pixelj.util.ChangeableValue;
 
 public class Project {
 
-    private final SortedList<CharacterItem> characters;
+    private final SortedList<Glyph> glyphs;
     private final SortedList<KerningPair> kerningPairs;
     public final ChangeableValue<Metrics> metricsProperty;
     public final ChangeableValue<String> titleProperty;
 
     public Project(
             final String title,
-            final SortedList<CharacterItem> characters,
+            final SortedList<Glyph> glyphs,
             final SortedList<KerningPair> kerningPairs,
             final Metrics metrics
     ) {
         titleProperty = new ChangeableValue<>(title);
-        this.characters = characters;
+        this.glyphs = glyphs;
         this.kerningPairs = kerningPairs;
         metricsProperty = new ChangeableValue<>(metrics);
 
@@ -53,10 +53,7 @@ public class Project {
                 final var marked = new ArrayList<KerningPair>();
                 for (var index = 0; index < kerningPairs.getSize(); index++) {
                     final var model = kerningPairs.getElementAt(index);
-                    if (
-                        !characters.sourceContains(model.getLeft())
-                                || !characters.sourceContains(model.getRight())
-                    ) {
+                    if (!glyphs.sourceContains(model.getLeft()) || !glyphs.sourceContains(model.getRight())) {
                         marked.add(model);
                     }
                 }
@@ -65,19 +62,19 @@ public class Project {
             }
         };
 
-        characters.addListDataListener(kerningPairRemover);
+        glyphs.addListDataListener(kerningPairRemover);
     }
 
-    public int countDependent(final CharacterItem model) {
+    public int countDependent(final Glyph model) {
         return kerningPairs.countWhere(p -> p.getLeft().equals(model) || p.getRight().equals(model));
     }
 
-    public List<KerningPair> findDependent(final CharacterItem model) {
+    public List<KerningPair> findDependent(final Glyph model) {
         return kerningPairs.find(p -> p.getLeft().equals(model) || p.getRight().equals(model));
     }
 
-    public SortedList<CharacterItem> getCharacters() {
-        return characters;
+    public SortedList<Glyph> getGlyphs() {
+        return glyphs;
     }
 
     public SortedList<KerningPair> getKerningPairs() {

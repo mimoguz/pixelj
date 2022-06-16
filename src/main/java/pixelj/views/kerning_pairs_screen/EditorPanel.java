@@ -74,7 +74,7 @@ public class EditorPanel extends JPanel implements Detachable {
         final var titlePanel = new JPanel();
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.X_AXIS));
         titlePanel.setBorder(Borders.TITLE_CENTER);
-//        titlePanel.add(Box.createHorizontalGlue());
+        // titlePanel.add(Box.createHorizontalGlue());
         titlePanel.add(Box.createHorizontalStrut(Dimensions.LARGE_PADDING));
         titlePanel.add(title);
         titlePanel.add(Box.createHorizontalGlue());
@@ -118,7 +118,7 @@ public class EditorPanel extends JPanel implements Detachable {
         return spacing;
     }
 
-    public void setSpacing(final int value) {
+    public void setLetterSpacing(final int value) {
         spacing = value;
         if (model == null) {
             return;

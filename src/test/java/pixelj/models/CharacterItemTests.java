@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Test;
 import pixelj.graphics.BinaryImage;
 
 public class CharacterItemTests {
-    private final CharacterItem capitalA = new CharacterItem(65, 10, BinaryImage.of(16, 16));
-    private final CharacterItem capitalA2 = new CharacterItem(65, 11, BinaryImage.of(16, 16));
-    private final CharacterItem capitalB = new CharacterItem(66, 9, BinaryImage.of(16, 16));
-    private final CharacterItem capitalC = new CharacterItem(67, 8, BinaryImage.of(16, 16));
+    private final Glyph capitalA = new Glyph(65, 10, BinaryImage.of(16, 16));
+    private final Glyph capitalA2 = new Glyph(65, 11, BinaryImage.of(16, 16));
+    private final Glyph capitalB = new Glyph(66, 9, BinaryImage.of(16, 16));
+    private final Glyph capitalC = new Glyph(67, 8, BinaryImage.of(16, 16));
 
     @Test
     public void capitalAEqualsCapitalA() {

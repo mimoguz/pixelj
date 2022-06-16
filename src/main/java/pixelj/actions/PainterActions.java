@@ -274,16 +274,16 @@ public class PainterActions {
         if (model == null) {
             return;
         }
-        final var glyph = model.getGlyph();
-        clipboard = glyph.getSnapshot(model.getCodePoint());
+        final var image = model.getImage();
+        clipboard = image.getSnapshot(model.getCodePoint());
         // Send to system clipboard:
         final var rgbImage = new BufferedImage(
-                glyph.getWidth(),
-                glyph.getHeight(),
+                image.getWidth(),
+                image.getHeight(),
                 BufferedImage.TYPE_INT_RGB
         );
         final var g2d = (Graphics2D) rgbImage.getGraphics();
-        glyph.draw(g2d, 0, 0, glyph.getWidth(), glyph.getHeight());
+        image.draw(g2d, 0, 0, image.getWidth(), image.getHeight());
         final var transferable = new TransferableImage(rgbImage);
         Toolkit.getDefaultToolkit().getSystemClipboard().setContents(transferable, null);
         g2d.dispose();
@@ -299,7 +299,7 @@ public class PainterActions {
         if (model == null) {
             return;
         }
-        addToUndoBuffer(model.getGlyph().getSnapshot(model.getCodePoint()));
+        addToUndoBuffer(model.getImage().getSnapshot(model.getCodePoint()));
         painter.erase();
     }
 
@@ -312,20 +312,20 @@ public class PainterActions {
         if (model == null) {
             return;
         }
-        final var glyph = model.getGlyph();
+        final var image = model.getImage();
         final var transferable = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
         if (transferable != null && transferable.isDataFlavorSupported(DataFlavor.imageFlavor)) {
             try {
                 final var source = (BufferedImage) transferable.getTransferData(DataFlavor.imageFlavor);
-                final var w = Math.min(source.getWidth(null), glyph.getWidth());
-                final var h = Math.min(source.getHeight(null), glyph.getHeight());
+                final var w = Math.min(source.getWidth(null), image.getWidth());
+                final var h = Math.min(source.getHeight(null), image.getHeight());
                 final var raster = source.getRaster();
-                addToUndoBuffer(glyph.getSnapshot(model.getCodePoint()));
+                addToUndoBuffer(image.getSnapshot(model.getCodePoint()));
                 final var buffer = new int[raster.getNumDataElements()];
                 for (var y = 0; y < h; y++) {
                     for (var x = 0; x < w; x++) {
                         raster.getPixel(x, y, buffer);
-                        glyph.set(x, y, (buffer[0] & 1) != 0);
+                        image.set(x, y, (buffer[0] & 1) != 0);
                     }
                 }
             } catch (final Exception e) {
@@ -344,8 +344,8 @@ public class PainterActions {
         if (model == null || clip == null) {
             return;
         }
-        addToUndoBuffer(model.getGlyph().getSnapshot(model.getCodePoint()));
-        model.getGlyph().setDataElements(clip.x(), clip.y(), clip.width(), clip.height(), clip.data());
+        addToUndoBuffer(model.getImage().getSnapshot(model.getCodePoint()));
+        model.getImage().setDataElements(clip.x(), clip.y(), clip.width(), clip.height(), clip.data());
     }
 
     private void redo(final ActionEvent event, final Action action) {
@@ -373,8 +373,8 @@ public class PainterActions {
                     to.remove(0);
                 }
                 from.remove(index);
-                to.add(model.getGlyph().getSnapshot(model.getCodePoint()));
-                model.getGlyph()
+                to.add(model.getImage().getSnapshot(model.getCodePoint()));
+                model.getImage()
                         .setDataElements(
                                 snapshot.x(),
                                 snapshot.y(),

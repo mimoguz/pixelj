@@ -11,12 +11,12 @@ import javax.swing.JPanel;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
-public class CharacterCell extends JPanel {
+public class ScalarCell extends JPanel {
     private final JLabel letter = new JLabel();
     private final JLabel subtitle = new JLabel();
     private final JLabel title = new JLabel();
 
-    public CharacterCell() {
+    public ScalarCell() {
         Components.setFixedSize(letter, Dimensions.LETTER_BOX_SIZE);
         letter.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
         subtitle.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");

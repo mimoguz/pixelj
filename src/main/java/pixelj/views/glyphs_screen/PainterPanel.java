@@ -1,4 +1,4 @@
-package pixelj.views.characters_screen;
+package pixelj.views.glyphs_screen;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -24,7 +24,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import pixelj.actions.Actions;
 import pixelj.actions.PainterActions;
 import pixelj.graphics.Snapshot;
-import pixelj.models.CharacterItem;
+import pixelj.models.Glyph;
 import pixelj.models.Metrics;
 import pixelj.models.Project;
 import pixelj.resources.Resources;
@@ -125,23 +125,23 @@ public class PainterPanel extends JPanel implements Detachable {
         painter.detach();
     }
 
-    public CharacterItem getModel() {
+    public Glyph getModel() {
         return painter.getModel();
     }
 
     /**
      * @param value May be null
      */
-    public void setModel(final CharacterItem value) {
+    public void setModel(final Glyph value) {
         painter.setModel(value);
         infoPanel.setModel(value);
         if (value != null) {
             Actions.setEnabled(actions.all, true);
             zoomStrip.setEnabled(true);
-            final var gw = value.getGlyph().getWidth();
-            final var gh = value.getGlyph().getHeight();
+            final var gw = value.getImage().getWidth();
+            final var gh = value.getImage().getHeight();
             if (overlay == null || overlay.getWidth() != gw || overlay.getHeight() != gh) {
-                overlay = checkerBoard(value.getGlyph().getWidth(), value.getGlyph().getHeight());
+                overlay = checkerBoard(value.getImage().getWidth(), value.getImage().getHeight());
             }
             painter.setOverlay(overlay);
         } else {

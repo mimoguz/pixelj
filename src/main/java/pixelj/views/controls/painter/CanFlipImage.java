@@ -26,7 +26,7 @@ public interface CanFlipImage extends Painter {
 
         takeSnapshot();
 
-        final var image = model.getGlyph();
+        final var image = model.getImage();
         final var width = image.getWidth();
         final var height = image.getHeight();
         final var buffer = new byte[width];
@@ -53,7 +53,7 @@ public interface CanFlipImage extends Painter {
 
         takeSnapshot();
 
-        final var image = model.getGlyph();
+        final var image = model.getImage();
         final var width = image.getWidth();
         final var height = image.getHeight();
         final var half = height / 2;

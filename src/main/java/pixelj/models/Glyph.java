@@ -4,22 +4,22 @@ import pixelj.graphics.BinaryImage;
 import pixelj.util.ChangeableInt;
 
 /**
- * Two characters are equal if their code points are equal.
- * Hash code of a character is its code point.
+ * Two characters are equal if their code points are equal. Hash code of a
+ * character is its code point.
  */
-public class CharacterItem implements Comparable<CharacterItem> {
+public class Glyph implements Comparable<Glyph> {
     public final ChangeableInt widthProperty;
     private final int codePoint;
-    private final BinaryImage glyph;
+    private final BinaryImage image;
 
-    public CharacterItem(final int codePoint, final int width, final BinaryImage glyph) {
+    public Glyph(final int codePoint, final int width, final BinaryImage image) {
         this.codePoint = codePoint;
         widthProperty = new ChangeableInt(width);
-        this.glyph = glyph;
+        this.image = image;
     }
 
     @Override
-    public int compareTo(final CharacterItem that) {
+    public int compareTo(final Glyph that) {
         return Integer.compare(codePoint, that.codePoint);
     }
 
@@ -27,8 +27,8 @@ public class CharacterItem implements Comparable<CharacterItem> {
         return codePoint;
     }
 
-    public BinaryImage getGlyph() {
-        return glyph;
+    public BinaryImage getImage() {
+        return image;
     }
 
     public int getWidth() {
@@ -49,7 +49,7 @@ public class CharacterItem implements Comparable<CharacterItem> {
         if (this == that) {
             return true;
         }
-        if (that instanceof CharacterItem other) {
+        if (that instanceof Glyph other) {
             return codePoint == other.codePoint;
         }
         return false;
