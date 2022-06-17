@@ -1,7 +1,6 @@
 package pixelj.actions;
 
 import java.awt.Frame;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.nio.file.Path;
@@ -13,11 +12,8 @@ import java.util.logging.Logger;
 
 import javax.swing.Action;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
 
 import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.util.nfd.NativeFileDialog;
@@ -25,9 +21,8 @@ import org.lwjgl.util.nfd.NativeFileDialog;
 import pixelj.models.Project;
 import pixelj.resources.Icons;
 import pixelj.resources.Resources;
-import pixelj.services.DBService;
+import pixelj.services.FileService;
 import pixelj.views.MetricsDialog;
-import pixelj.views.shared.Borders;
 
 public class MainActions {
     public final Collection<ApplicationAction> all;
@@ -126,22 +121,21 @@ public class MainActions {
     private void saveAs(final ActionEvent event, final Action action) {
         final var path = showSaveDialog();
         if (path != null && path.getFileName() != null) {
-            executeBlocking("Getting a snapshot", () -> new DBService().writeFile(project, path));
+            if (!FileService.writeFile(project, path))
+                showInfo(Resources.get().getString("saveFailed"));
         }
     }
 
     private Path showSaveDialog() {
         final var outPath = MemoryUtil.memAllocPointer(1);
         try {
-            // TODO: Use a shared constant for extension.
-            if (NativeFileDialog.NFD_SaveDialog("mv.db", null, outPath) == NativeFileDialog.NFD_OKAY) {
+            if (
+                NativeFileDialog
+                        .NFD_SaveDialog(FileService.EXTENSION, null, outPath) == NativeFileDialog.NFD_OKAY
+            ) {
                 final var pathStr = outPath.getStringUTF8();
                 NativeFileDialog.nNFD_Free(outPath.get(0));
-                return Path.of(
-                        pathStr.endsWith(".mv.db")
-                                ? pathStr.substring(0, pathStr.length() - ".mv.db".length())
-                                : pathStr
-                );
+                return Path.of(pathStr);
             } else {
                 return null;
             }
@@ -173,38 +167,7 @@ public class MainActions {
     }
 
     // TODO: That doesn't work??
-    private void executeBlocking(String message, Runnable runnable) {
-        final var content = new JPanel(new GridLayout(1, 1));
-        content.add(new JLabel(message));
-        content.setBorder(Borders.LARGE_EMPTY);
-
-        final var prompt = new JDialog(SwingUtilities.getWindowAncestor(root));
-        prompt.setUndecorated(true);
-        prompt.setContentPane(content);
-        prompt.setLocationRelativeTo(SwingUtilities.getWindowAncestor(root));
-        prompt.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-        prompt.setModal(true);
-
-        final var worker = new SwingWorker<Void, Void>() {
-            @Override
-            protected Void doInBackground() throws Exception {
-                runnable.run();
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                prompt.dispose();
-            }
-        };
-
-        worker.execute();
-        prompt.setVisible(true);
-        try {
-            worker.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.log(Level.SEVERE, e.getMessage());
-        }
+    private void showInfo(String message) {
+        JOptionPane.showMessageDialog((Frame) SwingUtilities.getWindowAncestor(root), message);
     }
 }

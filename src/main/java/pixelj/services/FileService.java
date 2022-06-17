@@ -15,10 +15,11 @@ import pixelj.models.KerningPair;
 import pixelj.models.Metrics;
 import pixelj.models.Project;
 
-public class DBService {
-    private static final String PIXELJ = "pixelj";
+public class FileService {
+    public static final String EXTENSION = "pixj";
+    public static final String PIXELJ = "pixelj";
     // private static final String URL_PREFIX = "jdbc:h2:" + PIXELJ + ":";
-    private static final String URL_PREFIX = "jdbc:h2:";
+    private static final String URL_PREFIX = "jdbc:h2:" + PIXELJ + ":";
     private static final String GLYPHS_TABLE = "glyphs";
     private static final String K_PAIRS_TABLE = "kerning_pairs";
     private static final String METRICS_TABLE = "metrics";
@@ -89,13 +90,12 @@ public class DBService {
     private static final String INSERT_K_PAIR_QUERY = "INSERT INTO " + K_PAIRS_TABLE
             + " (id, left_code_point, right_code_point, kerning_value) VALUES (?, ?, ?, ?);";
 
-    // TODO: This doesn't work?
-    // static {
-    // final var wrapper = new CustomExtensionWrapper(PIXELJ, PIXELJ);
-    // FilePath.register(wrapper);
-    // }
+    static {
+        final var wrapper = new CustomExtensionWrapper();
+        FilePath.register(wrapper);
+    }
 
-    public boolean writeFile(Project project, Path path) {
+    public static boolean writeFile(Project project, Path path) {
         List<CompressedGlyph> glyphs;
         List<KerningPairRecord> kerningPairs;
         String title;
@@ -109,10 +109,6 @@ public class DBService {
                     .stream()
                     .map(KerningPairRecord::from)
                     .toList();
-            try {
-                wait(2000);
-            } catch (Exception e) {
-            }
         }
 
         try {
@@ -152,7 +148,10 @@ public class DBService {
 
         @Override
         protected Boolean doInBackground() throws Exception {
-            try (var connection = DriverManager.getConnection(URL_PREFIX + path, PIXELJ, "")) {
+            final var url = path.endsWith("." + EXTENSION)
+                    ? path.substring(0, path.length() - EXTENSION.length() - 1)
+                    : path;
+            try (var connection = DriverManager.getConnection(URL_PREFIX + url, PIXELJ, "")) {
                 connection.setAutoCommit(false);
 
                 final var statement = connection.createStatement();
