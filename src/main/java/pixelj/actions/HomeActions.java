@@ -25,7 +25,8 @@ import pixelj.views.NewProjectDialog;
 import pixelj.views.ProjectView;
 
 public class HomeActions {
-    private static final String EXTENSION = "pixj";
+    // private static final String EXTENSION = "pixj";
+    private static final String EXTENSION = "h2.db";
 
     public final Collection<ApplicationAction> all;
     public final ApplicationAction loadProjectAction;

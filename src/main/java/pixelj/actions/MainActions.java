@@ -1,8 +1,10 @@
 package pixelj.actions;
 
 import java.awt.Frame;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
@@ -11,12 +13,21 @@ import java.util.logging.Logger;
 
 import javax.swing.Action;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
+
+import org.lwjgl.system.MemoryUtil;
+import org.lwjgl.util.nfd.NativeFileDialog;
 
 import pixelj.models.Project;
 import pixelj.resources.Icons;
 import pixelj.resources.Resources;
+import pixelj.services.DBService;
 import pixelj.views.MetricsDialog;
+import pixelj.views.shared.Borders;
 
 public class MainActions {
     public final Collection<ApplicationAction> all;
@@ -32,9 +43,11 @@ public class MainActions {
     private final Logger logger;
     private final MetricsDialog metricsDialog;
     private final Project project;
+    private final JComponent root;
 
     public MainActions(final Project project, final JComponent root) {
         this.project = project;
+        this.root = root;
         metricsDialog = new MetricsDialog((Frame) SwingUtilities.windowForComponent(root));
 
         logger = Logger.getLogger(this.getClass().getName());
@@ -111,7 +124,35 @@ public class MainActions {
     }
 
     private void saveAs(final ActionEvent event, final Action action) {
-        logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
+        final var path = showSaveDialog();
+        if (path != null && path.getFileName() != null) {
+            executeBlocking("Getting a snapshot", () -> new DBService().writeFile(project, path));
+        }
+    }
+
+    private Path showSaveDialog() {
+        final var outPath = MemoryUtil.memAllocPointer(1);
+        try {
+            // TODO: Use a shared constant for extension.
+            if (NativeFileDialog.NFD_SaveDialog("mv.db", null, outPath) == NativeFileDialog.NFD_OKAY) {
+                final var pathStr = outPath.getStringUTF8();
+                NativeFileDialog.nNFD_Free(outPath.get(0));
+                return Path.of(
+                        pathStr.endsWith(".mv.db")
+                                ? pathStr.substring(0, pathStr.length() - ".mv.db".length())
+                                : pathStr
+                );
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+            return null;
+        } finally {
+            if (outPath != null) {
+                MemoryUtil.memFree(outPath);
+            }
+        }
     }
 
     private void showHelp(final ActionEvent event, final Action action) {
@@ -129,5 +170,41 @@ public class MainActions {
 
     private void showSettings(final ActionEvent event, final Action action) {
         logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
+    }
+
+    // TODO: That doesn't work??
+    private void executeBlocking(String message, Runnable runnable) {
+        final var content = new JPanel(new GridLayout(1, 1));
+        content.add(new JLabel(message));
+        content.setBorder(Borders.LARGE_EMPTY);
+
+        final var prompt = new JDialog(SwingUtilities.getWindowAncestor(root));
+        prompt.setUndecorated(true);
+        prompt.setContentPane(content);
+        prompt.setLocationRelativeTo(SwingUtilities.getWindowAncestor(root));
+        prompt.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+        prompt.setModal(true);
+
+        final var worker = new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                runnable.run();
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                prompt.dispose();
+            }
+        };
+
+        worker.execute();
+        prompt.setVisible(true);
+        try {
+            worker.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.log(Level.SEVERE, e.getMessage());
+        }
     }
 }

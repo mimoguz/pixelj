@@ -17,7 +17,8 @@ import pixelj.models.Project;
 
 public class DBService {
     private static final String PIXELJ = "pixelj";
-    private static final String URL_PREFIX = "jdbc:h2:" + PIXELJ + ":";
+    // private static final String URL_PREFIX = "jdbc:h2:" + PIXELJ + ":";
+    private static final String URL_PREFIX = "jdbc:h2:";
     private static final String GLYPHS_TABLE = "glyphs";
     private static final String K_PAIRS_TABLE = "kerning_pairs";
     private static final String METRICS_TABLE = "metrics";
@@ -37,10 +38,11 @@ public class DBService {
             """;
 
     private static final String CREATE_K_PAIRS_TABLE_QUERY = "CREATE TABLE " + K_PAIRS_TABLE + "(" + """
-                left INT NOT NULL,
-                right INT NOT NULL,
-                value INT NOT NULL,
-                CONSTRAINT pk PRIMARY KEY (left, right)
+                id INT NOT NULL,
+                left_code_point INT NOT NULL,
+                right_code_point INT NOT NULL,
+                kerning_value INT NOT NULL,
+                PRIMARY KEY (id)
             );
             """;
 
@@ -85,14 +87,15 @@ public class DBService {
     private static final String INSERT_TITLE_QUERY = "INSERT INTO " + TITLE_TABLE + " (title) VALUES (?);";
 
     private static final String INSERT_K_PAIR_QUERY = "INSERT INTO " + K_PAIRS_TABLE
-            + " (left, right, value) VALUES (?, ?, ?);";
+            + " (id, left_code_point, right_code_point, kerning_value) VALUES (?, ?, ?, ?);";
 
-    static {
-        final var wrapper = new CustomExtensionWrapper(PIXELJ, PIXELJ);
-        FilePath.register(wrapper);
-    }
+    // TODO: This doesn't work?
+    // static {
+    // final var wrapper = new CustomExtensionWrapper(PIXELJ, PIXELJ);
+    // FilePath.register(wrapper);
+    // }
 
-    public static boolean writeFile(Project project, Path path) {
+    public boolean writeFile(Project project, Path path) {
         List<CompressedGlyph> glyphs;
         List<KerningPairRecord> kerningPairs;
         String title;
@@ -106,11 +109,16 @@ public class DBService {
                     .stream()
                     .map(KerningPairRecord::from)
                     .toList();
+            try {
+                wait(2000);
+            } catch (Exception e) {
+            }
         }
 
         try {
             (new SaveWorker(path, glyphs, kerningPairs, metrics, title)).doInBackground();
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
 
@@ -119,16 +127,6 @@ public class DBService {
 
     public static Project loadFile(Path path) {
         return null;
-    }
-
-    private record KerningPairRecord(int left, int right, int value) {
-        public static KerningPairRecord from(KerningPair p) {
-            return new KerningPairRecord(
-                    p.getLeft().getCodePoint(),
-                    p.getRight().getCodePoint(),
-                    p.getKerningValue()
-            );
-        }
     }
 
     private static class SaveWorker extends SwingWorker<Boolean, Void> {
@@ -153,14 +151,14 @@ public class DBService {
         }
 
         @Override
-        protected Boolean doInBackground() {
+        protected Boolean doInBackground() throws Exception {
             try (var connection = DriverManager.getConnection(URL_PREFIX + path, PIXELJ, "")) {
                 connection.setAutoCommit(false);
 
                 final var statement = connection.createStatement();
 
-                statement.executeQuery(DROP_GLYPHS_TABLE_QUERY);
-                statement.executeQuery(CREATE_GLYPHS_TABLE_QUERY);
+                statement.executeUpdate(DROP_GLYPHS_TABLE_QUERY);
+                statement.executeUpdate(CREATE_GLYPHS_TABLE_QUERY);
                 final var insertGlyph = connection.prepareStatement(INSERT_GLYPH_QUERY);
                 for (var glyph : glyphs) {
                     insertGlyph.setInt(1, glyph.codePoint());
@@ -169,18 +167,19 @@ public class DBService {
                     insertGlyph.executeUpdate();
                 }
 
-                statement.executeQuery(DROP_K_PAIRS_TABLE_QUERY);
-                statement.executeQuery(CREATE_K_PAIRS_TABLE_QUERY);
+                statement.executeUpdate(DROP_K_PAIRS_TABLE_QUERY);
+                statement.executeUpdate(CREATE_K_PAIRS_TABLE_QUERY);
                 final var insertKerningPair = connection.prepareStatement(INSERT_K_PAIR_QUERY);
                 for (var pair : kerningPairs) {
-                    insertKerningPair.setInt(1, pair.left());
-                    insertKerningPair.setInt(2, pair.right());
-                    insertKerningPair.setInt(3, pair.value());
+                    insertKerningPair.setInt(1, pair.id());
+                    insertKerningPair.setInt(2, pair.left());
+                    insertKerningPair.setInt(3, pair.right());
+                    insertKerningPair.setInt(4, pair.value());
                     insertKerningPair.executeUpdate();
                 }
 
-                statement.executeQuery(DROP_METRICS_TABLE_QUERY);
-                statement.executeQuery(CREATE_METRICS_TABLE_QUERY);
+                statement.executeUpdate(DROP_METRICS_TABLE_QUERY);
+                statement.executeUpdate(CREATE_METRICS_TABLE_QUERY);
                 final var insertMetrics = connection.prepareStatement(INSERT_METRICS_QUERY);
                 insertMetrics.setInt(1, metrics.canvasWidth());
                 insertMetrics.setInt(2, metrics.canvasHeight());
@@ -195,14 +194,15 @@ public class DBService {
                 insertMetrics.setBoolean(11, metrics.isMonospaced());
                 insertMetrics.executeUpdate();
 
-                statement.executeQuery(DROP_TITLE_TABLE_QUERY);
-                statement.executeQuery(CREATE_TITLE_TABLE_QUERY);
+                statement.executeUpdate(DROP_TITLE_TABLE_QUERY);
+                statement.executeUpdate(CREATE_TITLE_TABLE_QUERY);
                 final var insertTitle = connection.prepareStatement(INSERT_TITLE_QUERY);
                 insertTitle.setString(1, title);
                 insertTitle.executeUpdate();
 
                 connection.commit();
             } catch (SQLException e) {
+                e.printStackTrace();
                 return false;
             }
 
@@ -219,6 +219,17 @@ public class DBService {
                 e.printStackTrace();
                 // TODO: Inform user
             }
+        }
+    }
+
+    private record KerningPairRecord(int id, int left, int right, int value) {
+        public static KerningPairRecord from(KerningPair p) {
+            return new KerningPairRecord(
+                    p.hashCode(),
+                    p.getLeft().getCodePoint(),
+                    p.getRight().getCodePoint(),
+                    p.getKerningValue()
+            );
         }
     }
 }
