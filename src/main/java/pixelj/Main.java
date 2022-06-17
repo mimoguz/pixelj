@@ -13,6 +13,7 @@ public class Main {
     private static final boolean USE_DARK_THEME = true;
 
     public static void main(final String[] args) {
+        Resources.initialize(USE_DARK_THEME);
         FlatLaf.registerCustomDefaultsSource("pixelj.themes");
         if (USE_DARK_THEME) {
             FlatDarkLaf.setup();

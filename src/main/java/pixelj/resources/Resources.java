@@ -70,10 +70,12 @@ public class Resources {
                 .forEach((key, value) -> scalarsByBlock.put(key, Collections.unmodifiableCollection(value)));
         scalarsInBlock = scalarsByBlock.toImmutable();
 
-        iconFont = loadFont();
+        iconFont = loadIconFont();
         strings = new Strings(loadResourceBundle());
         colors = useDarkTheme ? new DarkColors() : new LightColors();
         applicationIcons = loadApplicationIcons();
+
+        registerUIFonts();
     }
 
     public String formatString(final String key, final Object... arguments) {
@@ -147,17 +149,35 @@ public class Resources {
         });
     }
 
-    private static Font loadFont() {
-        try (final var stream = Resources.class.getResourceAsStream("pxf16.otf")) {
-            return loadFont(stream);
+    private static Font loadIconFont() {
+        try (final var stream = Resources.class.getResourceAsStream("fonts/pxf16.otf")) {
+            return loadFont(stream, Font.PLAIN, 16);
+        } catch (final IOException e) {
+            throw new ResourceInitializationException("Can't read the icon font file:\n" + e.getMessage());
+        }
+    }
+
+    private static void registerUIFonts() {
+        try (final var stream = Resources.class.getResourceAsStream("fonts/NotoSans-Regular.ttf")) {
+            loadFont(stream, Font.PLAIN, 13);
+        } catch (final IOException e) {
+            throw new ResourceInitializationException("Can't read the font file:\n" + e.getMessage());
+        }
+        try (final var stream = Resources.class.getResourceAsStream("fonts/NotoSans-Bold.ttf")) {
+            loadFont(stream, Font.BOLD, 13);
+        } catch (final IOException e) {
+            throw new ResourceInitializationException("Can't read the font file:\n" + e.getMessage());
+        }
+        try (final var stream = Resources.class.getResourceAsStream("fonts/NotoSans-Italic.ttf")) {
+            loadFont(stream, Font.ITALIC, 13);
         } catch (final IOException e) {
             throw new ResourceInitializationException("Can't read the font file:\n" + e.getMessage());
         }
     }
 
-    private static Font loadFont(final InputStream stream) {
+    private static Font loadFont(final InputStream stream, final int style, final int size) {
         try {
-            final var font = Font.createFont(Font.TRUETYPE_FONT, stream).deriveFont(Font.PLAIN, 16);
+            final var font = Font.createFont(Font.TRUETYPE_FONT, stream).deriveFont(style, size);
             GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
             return font;
         } catch (final IOException | FontFormatException e) {

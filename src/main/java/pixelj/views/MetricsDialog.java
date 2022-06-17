@@ -80,6 +80,7 @@ public class MetricsDialog extends JDialog {
 
         setContentPane(content);
         getRootPane().setDefaultButton(cancelButton);
+        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
 
         pack();
         inputPanel.doLayout();

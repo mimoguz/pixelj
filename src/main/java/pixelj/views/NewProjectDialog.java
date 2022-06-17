@@ -41,7 +41,9 @@ public class NewProjectDialog extends JDialog {
         final var isTitleValid = getTitleValid();
         final var areInputsValid = metricsPanel.metricsValidProperty().and(isTitleValid);
 
-        final var content = new JPanel(new BorderLayout(Dimensions.SMALL_PADDING, Dimensions.LARGE_PADDING * 2));
+        final var content = new JPanel(
+                new BorderLayout(Dimensions.SMALL_PADDING, Dimensions.LARGE_PADDING * 2)
+        );
         content.setBorder(Borders.LARGE_EMPTY);
 
         setupCreateButton(metricsPanel, areInputsValid);
@@ -53,7 +55,8 @@ public class NewProjectDialog extends JDialog {
 
         setContentPane(content);
         getRootPane().setDefaultButton(createButton);
-        cancelButton.requestFocus();
+        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
+
         pack();
         metricsPanel.doLayout();
         setResizable(false);
@@ -127,11 +130,10 @@ public class NewProjectDialog extends JDialog {
     }
 
     private void setupCenterPanel(final JPanel content, final MetricsPanel metricsPanel) {
-        final var centerPanel = new JPanel(new BorderLayout());
+        final var centerPanel = new JPanel(new BorderLayout(0, Dimensions.MEDIUM_PADDING));
 
         final var metricsLabel = new JLabel(Resources.get().getString("metricsPanelTitle"));
-        metricsLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, Dimensions.SMALL_PADDING, 0));
-        metricsLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "h4");
+        setupPanelTitle(metricsLabel);
         centerPanel.add(metricsLabel, BorderLayout.NORTH);
 
         final var scroll = new JScrollPane(metricsPanel);
@@ -144,7 +146,12 @@ public class NewProjectDialog extends JDialog {
         createButton.addActionListener(e -> {
             final var title = titleField.getText().trim();
             try {
-                project = new Project(title, new SortedList<>(), new SortedList<>(), metricsPanel.getMetrics());
+                project = new Project(
+                        title,
+                        new SortedList<>(),
+                        new SortedList<>(),
+                        metricsPanel.getMetrics()
+                );
             } catch (Metrics.ValidatedBuilder.InvalidStateException exception) {
                 project = null;
             }
@@ -156,11 +163,9 @@ public class NewProjectDialog extends JDialog {
 
     private void setupHelpButton(final JPanel content, final JButton helpButton) {
         final var res = Resources.get();
-        final var helpAction = new ApplicationAction(
-                "metricsDialogHelpAction",
-                (event, action) -> {
-                }
-        ).setIcon(Icons.HELP, res.colors.icon(), res.colors.disabledIcon()).setAccelerator(KeyEvent.VK_F1, 0);
+        final var helpAction = new ApplicationAction("metricsDialogHelpAction", (event, action) -> {
+        }).setIcon(Icons.HELP, res.colors.icon(), res.colors.disabledIcon())
+                .setAccelerator(KeyEvent.VK_F1, 0);
         helpButton.setAction(helpAction);
         helpButton.putClientProperty(
                 FlatClientProperties.BUTTON_TYPE,
@@ -172,16 +177,26 @@ public class NewProjectDialog extends JDialog {
     private void setupTitlePanel(final JPanel content, ChangeableBoolean validTitle) {
         final var titlePanel = new JPanel(new BorderLayout(0, Dimensions.MEDIUM_PADDING));
         final var titleLabel = new JLabel(Resources.get().getString("projectTitlePrompt"));
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, Dimensions.SMALL_PADDING, 0));
-        titleLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "h4");
+        setupPanelTitle(titleLabel);
         titlePanel.add(titleLabel, BorderLayout.NORTH);
         titlePanel.add(titleField, BorderLayout.CENTER);
 
-        validTitle.addChangeListener((sender, valid) -> titleField.putClientProperty(
-                FlatClientProperties.OUTLINE,
-                valid ? null : FlatClientProperties.OUTLINE_ERROR
-        ));
+        validTitle.addChangeListener(
+                (sender, valid) -> titleField.putClientProperty(
+                        FlatClientProperties.OUTLINE,
+                        valid ? null : FlatClientProperties.OUTLINE_ERROR
+                )
+        );
 
         content.add(titlePanel, BorderLayout.NORTH);
+    }
+
+    private void setupPanelTitle(final JLabel title) {
+        title.setBorder(BorderFactory.createEmptyBorder(0, 0, Dimensions.SMALL_PADDING, 0));
+        Components.addOuterBorder(
+                title,
+                BorderFactory.createMatteBorder(0, 0, 1, 0, Resources.get().colors.divider())
+        );
+        title.putClientProperty(FlatClientProperties.STYLE_CLASS, "h4");
     }
 }
