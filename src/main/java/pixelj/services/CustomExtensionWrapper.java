@@ -8,8 +8,8 @@ import org.h2.store.fs.FilePathWrapper;
  */
 public class CustomExtensionWrapper extends FilePathWrapper {
     private static final String MV_DB = ".mv.db";
-    private static final String EXTENSION = "." + FileService.EXTENSION;
-    private static final String SCHEME = FileService.PIXELJ;
+    private static final String EXTENSION = "." + Queries.EXTENSION;
+    private static final String SCHEME = Queries.PIXELJ;
 
     @Override
     public String getScheme() {
@@ -32,12 +32,8 @@ public class CustomExtensionWrapper extends FilePathWrapper {
 
     private String switchExtension(final String fileName, final String oldExt, final String newExt) {
         if (fileName.endsWith(oldExt)) {
-            return replaceExtension(fileName, oldExt, newExt);
+            return fileName.substring(0, fileName.length() - oldExt.length()) + newExt;
         }
         return fileName;
-    }
-
-    private static String replaceExtension(final String fileName, final String oldExt, final String newExt) {
-        return fileName.substring(0, fileName.length() - oldExt.length()) + newExt;
     }
 }

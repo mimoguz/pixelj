@@ -120,9 +120,8 @@ public class MainActions {
 
     private void saveAs(final ActionEvent event, final Action action) {
         final var path = showSaveDialog();
-        if (path != null && path.getFileName() != null) {
-            if (!FileService.writeFile(project, path))
-                showInfo(Resources.get().getString("saveFailed"));
+        if (path == null || path.getFileName() == null || !FileService.writeFile(project, path)) {
+            showInfo(Resources.get().getString("saveFailed"));
         }
     }
 
