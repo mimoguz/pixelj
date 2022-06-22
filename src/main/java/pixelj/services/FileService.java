@@ -39,7 +39,7 @@ public class FileService {
                 if (e.getPropertyName() == "progress") {
                     switch (worker.getProgress()) {
                         case 100 -> System.out.println("Done");
-                        case -1 -> System.err.println("Save failed! Path: " + path);
+                        case 1 -> System.err.println("Save failed! Path: " + path);
                     }
                 }
             });
@@ -53,6 +53,6 @@ public class FileService {
     }
 
     public static Project loadFile(Path path) {
-        return null;
+        return LoadService.load(path);
     }
 }

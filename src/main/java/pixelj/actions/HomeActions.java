@@ -2,6 +2,7 @@ package pixelj.actions;
 
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
@@ -21,13 +22,11 @@ import pixelj.models.ExampleData;
 import pixelj.models.Project;
 import pixelj.resources.Icons;
 import pixelj.resources.Resources;
+import pixelj.services.FileService;
 import pixelj.views.NewProjectDialog;
 import pixelj.views.ProjectView;
 
 public class HomeActions {
-    // private static final String EXTENSION = "pixj";
-    private static final String EXTENSION = "h2.db";
-
     public final Collection<ApplicationAction> all;
     public final ApplicationAction loadProjectAction;
     private final Logger logger;
@@ -101,20 +100,15 @@ public class HomeActions {
         }
     }
 
+    // TODO: Inform if fails
     private void openProject(final ActionEvent event, final Action action) {
-        log(action);
-        final var outPath = MemoryUtil.memAllocPointer(1);
-        try {
-            if (NativeFileDialog.NFD_OpenDialog(EXTENSION, null, outPath) == NativeFileDialog.NFD_OKAY) {
-                logger.log(Level.INFO, "Selected {0}", outPath.getStringUTF8());
-                NativeFileDialog.nNFD_Free(outPath.get(0));
-            } else {
-                logger.log(Level.INFO, "Cancelled or error");
-            }
-        } finally {
-            if (outPath != null) {
-                MemoryUtil.memFree(outPath);
-            }
+        final var path = showOpenDialog();
+        if (path == null || path.getFileName() == null) {
+            return;
+        }
+        final var project = FileService.loadFile(path);
+        if (project != null) {
+            showProject(project);
         }
     }
 
@@ -137,5 +131,28 @@ public class HomeActions {
         projectView.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         projectView.setVisible(true);
         frame.setVisible(false);
+    }
+
+    private Path showOpenDialog() {
+        final var outPath = MemoryUtil.memAllocPointer(1);
+        try {
+            if (
+                NativeFileDialog
+                        .NFD_OpenDialog(FileService.EXTENSION, null, outPath) == NativeFileDialog.NFD_OKAY
+            ) {
+                final var pathStr = outPath.getStringUTF8();
+                NativeFileDialog.nNFD_Free(outPath.get(0));
+                return Path.of(pathStr);
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            if (outPath != null) {
+                MemoryUtil.memFree(outPath);
+            }
+        }
     }
 }

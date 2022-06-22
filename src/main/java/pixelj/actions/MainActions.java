@@ -139,7 +139,7 @@ public class MainActions {
                 return null;
             }
         } catch (Exception e) {
-            logger.log(Level.SEVERE, e.getMessage());
+            e.printStackTrace();
             return null;
         } finally {
             if (outPath != null) {

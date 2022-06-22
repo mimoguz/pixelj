@@ -45,9 +45,9 @@ class SaveWorker extends SwingWorker<Boolean, Void> {
 
             final var statement = connection.createStatement();
 
-            statement.executeUpdate(Queries.DROP_GLYPHS_TABLE_QUERY);
+            statement.executeUpdate(Queries.DROP_GLYPHS_TABLE);
             statement.executeUpdate(Queries.CREATE_GLYPHS_TABLE_QUERY);
-            final var insertGlyph = connection.prepareStatement(Queries.INSERT_GLYPH_QUERY);
+            final var insertGlyph = connection.prepareStatement(Queries.INSERT_GLYPH);
             for (var glyph : glyphs) {
                 insertGlyph.setInt(1, glyph.codePoint());
                 insertGlyph.setInt(2, glyph.width());
@@ -55,9 +55,9 @@ class SaveWorker extends SwingWorker<Boolean, Void> {
                 insertGlyph.executeUpdate();
             }
 
-            statement.executeUpdate(Queries.DROP_K_PAIRS_TABLE_QUERY);
-            statement.executeUpdate(Queries.CREATE_K_PAIRS_TABLE_QUERY);
-            final var insertKerningPair = connection.prepareStatement(Queries.INSERT_K_PAIR_QUERY);
+            statement.executeUpdate(Queries.DROP_K_PAIRS_TABLE);
+            statement.executeUpdate(Queries.CREATE_KERNING_PAIRS_TABLE);
+            final var insertKerningPair = connection.prepareStatement(Queries.INSERT_KERNING_PAIR);
             for (var pair : kerningPairs) {
                 insertKerningPair.setInt(1, pair.id());
                 insertKerningPair.setInt(2, pair.left());
@@ -66,9 +66,9 @@ class SaveWorker extends SwingWorker<Boolean, Void> {
                 insertKerningPair.executeUpdate();
             }
 
-            statement.executeUpdate(Queries.DROP_METRICS_TABLE_QUERY);
-            statement.executeUpdate(Queries.CREATE_METRICS_TABLE_QUERY);
-            final var insertMetrics = connection.prepareStatement(Queries.INSERT_METRICS_QUERY);
+            statement.executeUpdate(Queries.DROP_METRICS_TABLE);
+            statement.executeUpdate(Queries.CREATE_METRICS_TABLE);
+            final var insertMetrics = connection.prepareStatement(Queries.INSERT_METRICS);
             insertMetrics.setInt(1, metrics.canvasWidth());
             insertMetrics.setInt(2, metrics.canvasHeight());
             insertMetrics.setInt(3, metrics.ascender());
@@ -82,16 +82,16 @@ class SaveWorker extends SwingWorker<Boolean, Void> {
             insertMetrics.setBoolean(11, metrics.isMonospaced());
             insertMetrics.executeUpdate();
 
-            statement.executeUpdate(Queries.DROP_TITLE_TABLE_QUERY);
-            statement.executeUpdate(Queries.CREATE_TITLE_TABLE_QUERY);
-            final var insertTitle = connection.prepareStatement(Queries.INSERT_TITLE_QUERY);
+            statement.executeUpdate(Queries.DROP_TITLE_TABLE);
+            statement.executeUpdate(Queries.CREATE_TITLE_TABLE);
+            final var insertTitle = connection.prepareStatement(Queries.INSERT_TITLE);
             insertTitle.setString(1, title);
             insertTitle.executeUpdate();
 
             connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
-            setProgress(-1);
+            setProgress(1);
             return false;
         }
 
