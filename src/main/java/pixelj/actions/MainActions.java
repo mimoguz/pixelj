@@ -3,6 +3,7 @@ package pixelj.actions;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
@@ -85,6 +86,12 @@ public class MainActions {
                 .setIcon(Icons.SETTINGS, res.colors.icon(), res.colors.disabledIcon())
                 .setAccelerator(KeyEvent.VK_PERIOD, ActionEvent.CTRL_MASK);
 
+        project.pathProperty.addChangeListener((sender, args) -> {
+            saveAction.setEnabled(args != null);
+        });
+
+        saveAction.setEnabled(project.getPath() != null);
+
         all = List.of(
                 returnToProjectManagerAction,
                 exportAction,
@@ -115,12 +122,30 @@ public class MainActions {
     }
 
     private void save(final ActionEvent event, final Action action) {
-        logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
+        final var path = project.getPath();
+        try {
+            if (path == null || path.getFileName() == null) {
+                saveAs(event, action);
+            } else if (!FileService.writeFile(project, path)) {
+                showInfo(Resources.get().getString("saveFailed"));
+            }
+        } catch (IOException e) {
+            showInfo(Resources.get().getString("saveFailed"));
+        }
     }
 
     private void saveAs(final ActionEvent event, final Action action) {
         final var path = showSaveDialog();
-        if (path == null || path.getFileName() == null || !FileService.writeFile(project, path)) {
+        if (path == null) {
+            return;
+        }
+        try {
+            if (path.getFileName() == null || !FileService.writeFile(project, path)) {
+                showInfo(Resources.get().getString("saveFailed"));
+            } else {
+                project.setPath(path);
+            }
+        } catch (IOException e) {
             showInfo(Resources.get().getString("saveFailed"));
         }
     }
@@ -128,9 +153,14 @@ public class MainActions {
     private Path showSaveDialog() {
         final var outPath = MemoryUtil.memAllocPointer(1);
         try {
+            final var defaultPath = project.getPath() != null ? project.getPath().toAbsolutePath().toString()
+                    : null;
             if (
-                NativeFileDialog
-                        .NFD_SaveDialog(FileService.EXTENSION, null, outPath) == NativeFileDialog.NFD_OKAY
+                NativeFileDialog.NFD_SaveDialog(
+                        FileService.EXTENSION,
+                        defaultPath,
+                        outPath
+                ) == NativeFileDialog.NFD_OKAY
             ) {
                 final var pathStr = outPath.getStringUTF8();
                 NativeFileDialog.nNFD_Free(outPath.get(0));
@@ -165,7 +195,6 @@ public class MainActions {
         logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
     }
 
-    // TODO: That doesn't work??
     private void showInfo(String message) {
         JOptionPane.showMessageDialog((Frame) SwingUtilities.getWindowAncestor(root), message);
     }

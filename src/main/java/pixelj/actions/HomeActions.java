@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
@@ -100,15 +101,15 @@ public class HomeActions {
         }
     }
 
-    // TODO: Inform if fails
     private void openProject(final ActionEvent event, final Action action) {
         final var path = showOpenDialog();
         if (path == null || path.getFileName() == null) {
             return;
         }
-        final var project = FileService.loadFile(path);
-        if (project != null) {
-            showProject(project);
+        try {
+            showProject(FileService.loadFile(path));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(SwingUtilities.getWindowAncestor(root), e.getMessage());
         }
     }
 

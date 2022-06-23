@@ -150,7 +150,8 @@ public class NewProjectDialog extends JDialog {
                         title,
                         new SortedList<>(),
                         new SortedList<>(),
-                        metricsPanel.getMetrics()
+                        metricsPanel.getMetrics(),
+                        null
                 );
             } catch (Metrics.ValidatedBuilder.InvalidStateException exception) {
                 project = null;

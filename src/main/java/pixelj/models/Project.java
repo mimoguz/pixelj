@@ -1,5 +1,6 @@
 package pixelj.models;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,16 +15,19 @@ public class Project {
     private final SortedList<KerningPair> kerningPairs;
     public final ChangeableValue<Metrics> metricsProperty;
     public final ChangeableValue<String> titleProperty;
+    public final ChangeableValue<Path> pathProperty;
 
     public Project(
             final String title,
             final SortedList<Glyph> glyphs,
             final SortedList<KerningPair> kerningPairs,
-            final Metrics metrics
+            final Metrics metrics,
+            final Path path
     ) {
         titleProperty = new ChangeableValue<>(title);
         this.glyphs = glyphs;
         this.kerningPairs = kerningPairs;
+        pathProperty = new ChangeableValue<>(path);
         metricsProperty = new ChangeableValue<>(metrics);
 
         // Ignore
@@ -83,6 +87,14 @@ public class Project {
 
     public Metrics getMetrics() {
         return metricsProperty.getValue();
+    }
+
+    public Path getPath() {
+        return pathProperty.getValue();
+    }
+
+    public void setPath(Path value) {
+        pathProperty.setValue(value);
     }
 
     public String getTitle() {

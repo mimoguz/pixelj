@@ -6,8 +6,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.swing.SwingWorker;
-
 import pixelj.models.CompressedGlyph;
 import pixelj.models.CompressedGlyph.MisshapenDataException;
 import pixelj.models.Glyph;
@@ -17,9 +15,8 @@ import pixelj.models.Metrics.ValidatedBuilder.InvalidStateException;
 import pixelj.models.Project;
 import pixelj.models.SortedList;
 
-// TODO: Better error handling.
 class LoadService {
-    public static Project load(final Path path) {
+    public static Project load(final Path path) throws IOException {
         final var pathStr = path.toAbsolutePath().toString();
         final var url = pathStr.endsWith("." + Queries.EXTENSION)
                 ? pathStr.substring(0, pathStr.length() - Queries.EXTENSION.length() - 1)
@@ -33,11 +30,17 @@ class LoadService {
                     statement.executeQuery(Queries.SELECT_KERNING_PAIRS),
                     glyphs
             );
-            return new Project(title, glyphs, kerningPairs, metrics);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            return new Project(title, glyphs, kerningPairs, metrics, path);
+        } catch (SQLException | IOException e) {
+            throw new IOException(
+                    String.format("Can't open or read the file %s:\n%s", path.toString(), e.getMessage())
+            );
+        } catch (NullPointerException | MisshapenDataException | InvalidStateException e) {
+            throw new IOException(
+                    String.format("%s file is corrupted:\n%s", path.toString(), e.getMessage())
+            );
         }
+
     }
 
     private static SortedList<KerningPair> extractKerningPairs(ResultSet result, SortedList<Glyph> glyphs)
