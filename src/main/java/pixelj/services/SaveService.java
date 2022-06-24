@@ -10,6 +10,10 @@ import pixelj.models.CompressedGlyph;
 import pixelj.models.KerningPairRecord;
 import pixelj.models.Metrics;
 import pixelj.models.Project;
+import pixelj.services.Queries.GlyphsColumn;
+import pixelj.services.Queries.KerningPairsColumn;
+import pixelj.services.Queries.MetricsColumn;
+import pixelj.services.Queries.TitleColumn;
 
 class SaveService {
 
@@ -46,9 +50,9 @@ class SaveService {
             statement.executeUpdate(Queries.CREATE_GLYPHS_TABLE_QUERY);
             final var insertGlyph = connection.prepareStatement(Queries.INSERT_GLYPH);
             for (var glyph : glyphs) {
-                insertGlyph.setInt(1, glyph.codePoint());
-                insertGlyph.setInt(2, glyph.width());
-                insertGlyph.setBytes(3, glyph.imageBytes());
+                insertGlyph.setInt(GlyphsColumn.CODE_POINT.getIndex(), glyph.codePoint());
+                insertGlyph.setInt(GlyphsColumn.WIDTH.getIndex(), glyph.width());
+                insertGlyph.setBytes(GlyphsColumn.IMAGE_BYTES.getIndex(), glyph.imageBytes());
                 insertGlyph.executeUpdate();
             }
 
@@ -56,33 +60,33 @@ class SaveService {
             statement.executeUpdate(Queries.CREATE_KERNING_PAIRS_TABLE);
             final var insertKerningPair = connection.prepareStatement(Queries.INSERT_KERNING_PAIR);
             for (var pair : kerningPairs) {
-                insertKerningPair.setInt(1, pair.id());
-                insertKerningPair.setInt(2, pair.left());
-                insertKerningPair.setInt(3, pair.right());
-                insertKerningPair.setInt(4, pair.value());
+                insertKerningPair.setInt(KerningPairsColumn.ID.getIndex(), pair.id());
+                insertKerningPair.setInt(KerningPairsColumn.LEFT_CODE_POINT.getIndex(), pair.left());
+                insertKerningPair.setInt(KerningPairsColumn.RIGHT_CODE_POINT.getIndex(), pair.right());
+                insertKerningPair.setInt(KerningPairsColumn.KERNING_VALUE.getIndex(), pair.value());
                 insertKerningPair.executeUpdate();
             }
 
             statement.executeUpdate(Queries.DROP_METRICS_TABLE);
             statement.executeUpdate(Queries.CREATE_METRICS_TABLE);
             final var insertMetrics = connection.prepareStatement(Queries.INSERT_METRICS);
-            insertMetrics.setInt(1, metrics.canvasWidth());
-            insertMetrics.setInt(2, metrics.canvasHeight());
-            insertMetrics.setInt(3, metrics.ascender());
-            insertMetrics.setInt(4, metrics.descender());
-            insertMetrics.setInt(5, metrics.capHeight());
-            insertMetrics.setInt(6, metrics.xHeight());
-            insertMetrics.setInt(7, metrics.defaultWidth());
-            insertMetrics.setInt(8, metrics.letterSpacing());
-            insertMetrics.setInt(9, metrics.spaceSize());
-            insertMetrics.setInt(10, metrics.lineSpacing());
-            insertMetrics.setBoolean(11, metrics.isMonospaced());
+            insertMetrics.setInt(MetricsColumn.CANVAS_WIDTH.getIndex(), metrics.canvasWidth());
+            insertMetrics.setInt(MetricsColumn.CANVAS_HEIGHT.getIndex(), metrics.canvasHeight());
+            insertMetrics.setInt(MetricsColumn.ASCENDER.getIndex(), metrics.ascender());
+            insertMetrics.setInt(MetricsColumn.DESCENDER.getIndex(), metrics.descender());
+            insertMetrics.setInt(MetricsColumn.CAP_HEIGHT.getIndex(), metrics.capHeight());
+            insertMetrics.setInt(MetricsColumn.X_HEIGHT.getIndex(), metrics.xHeight());
+            insertMetrics.setInt(MetricsColumn.DEFAULT_WIDTH.getIndex(), metrics.defaultWidth());
+            insertMetrics.setInt(MetricsColumn.LETTER_SPACING.getIndex(), metrics.letterSpacing());
+            insertMetrics.setInt(MetricsColumn.SPACE_SIZE.getIndex(), metrics.spaceSize());
+            insertMetrics.setInt(MetricsColumn.LINE_SPACING.getIndex(), metrics.lineSpacing());
+            insertMetrics.setBoolean(MetricsColumn.IS_MONOSPACED.getIndex(), metrics.isMonospaced());
             insertMetrics.executeUpdate();
 
             statement.executeUpdate(Queries.DROP_TITLE_TABLE);
             statement.executeUpdate(Queries.CREATE_TITLE_TABLE);
             final var insertTitle = connection.prepareStatement(Queries.INSERT_TITLE);
-            insertTitle.setString(1, title);
+            insertTitle.setString(TitleColumn.TITLE.getIndex(), title);
             insertTitle.executeUpdate();
 
             connection.commit();

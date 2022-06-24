@@ -14,6 +14,10 @@ import pixelj.models.Metrics;
 import pixelj.models.Metrics.ValidatedBuilder.InvalidStateException;
 import pixelj.models.Project;
 import pixelj.models.SortedList;
+import pixelj.services.Queries.GlyphsColumn;
+import pixelj.services.Queries.KerningPairsColumn;
+import pixelj.services.Queries.MetricsColumn;
+import pixelj.services.Queries.TitleColumn;
 
 class LoadService {
     public static Project load(final Path path) throws IOException {
@@ -48,8 +52,8 @@ class LoadService {
             IllegalArgumentException {
         final var list = new SortedList<KerningPair>();
         while (result.next()) {
-            final var left = glyphs.findHash(result.getInt(2));
-            final var right = glyphs.findHash(result.getInt(3));
+            final var left = glyphs.findHash(result.getInt(KerningPairsColumn.LEFT_CODE_POINT.getIndex()));
+            final var right = glyphs.findHash(result.getInt(KerningPairsColumn.RIGHT_CODE_POINT.getIndex()));
             if (left == null || right == null) {
                 throw new IllegalArgumentException("Left or right glyph is missing");
             }
@@ -65,9 +69,9 @@ class LoadService {
         final var list = new SortedList<Glyph>();
         while (result.next()) {
             final var zipped = new CompressedGlyph(
-                    result.getInt(1),
-                    result.getInt(2),
-                    result.getBinaryStream(3).readAllBytes()
+                    result.getInt(GlyphsColumn.CODE_POINT.getIndex()),
+                    result.getInt(GlyphsColumn.WIDTH.getIndex()),
+                    result.getBinaryStream(GlyphsColumn.IMAGE_BYTES.getIndex()).readAllBytes()
             );
             list.add(zipped.decompress(metrics.canvasWidth(), metrics.canvasHeight()));
         }
@@ -77,23 +81,23 @@ class LoadService {
     private static Metrics extractMetrics(final ResultSet result) throws InvalidStateException, SQLException {
         result.next();
         return Metrics.ValidatedBuilder.getDefaultBuilder()
-                .setCanvasWidth(result.getInt(1))
-                .setCapHeight(result.getInt(2))
-                .setAscender(result.getInt(3))
-                .setDescender(result.getInt(4))
-                .setCapHeight(result.getInt(5))
-                .setXHeight(result.getInt(6))
-                .setDefaultWidth(result.getInt(7))
-                .setSpacing(result.getInt(8))
-                .setSpaceSize(result.getInt(9))
-                .setLineSpacing(result.getInt(10))
-                .setMonospaced(result.getBoolean(11))
+                .setCanvasWidth(result.getInt(MetricsColumn.CANVAS_WIDTH.getIndex()))
+                .setCanvasHeight(result.getInt(MetricsColumn.CANVAS_HEIGHT.getIndex()))
+                .setAscender(result.getInt(MetricsColumn.ASCENDER.getIndex()))
+                .setDescender(result.getInt(MetricsColumn.DESCENDER.getIndex()))
+                .setCapHeight(result.getInt(MetricsColumn.CAP_HEIGHT.getIndex()))
+                .setXHeight(result.getInt(MetricsColumn.X_HEIGHT.getIndex()))
+                .setDefaultWidth(result.getInt(MetricsColumn.DEFAULT_WIDTH.getIndex()))
+                .setSpacing(result.getInt(MetricsColumn.LETTER_SPACING.getIndex()))
+                .setSpaceSize(result.getInt(MetricsColumn.SPACE_SIZE.getIndex()))
+                .setLineSpacing(result.getInt(MetricsColumn.LINE_SPACING.getIndex()))
+                .setMonospaced(result.getBoolean(MetricsColumn.IS_MONOSPACED.getIndex()))
                 .build();
     }
 
     private static String extractTitle(final ResultSet result) throws SQLException, NullPointerException {
         result.next();
-        final var title = result.getString(1);
+        final var title = result.getString(TitleColumn.TITLE.getIndex());
         if (title == null) {
             throw new NullPointerException("Project title is null");
         }

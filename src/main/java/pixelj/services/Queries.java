@@ -80,6 +80,48 @@ class Queries {
     public static final String SELECT_METRICS = "SELECT * FROM " + METRICS_TABLE + ";";
     public static final String SELECT_TITLE = "SELECT * FROM " + TITLE_TABLE + ";";
 
+    public enum MetricsColumn {
+        CANVAS_WIDTH,
+        CANVAS_HEIGHT,
+        ASCENDER,
+        DESCENDER,
+        CAP_HEIGHT,
+        X_HEIGHT,
+        DEFAULT_WIDTH,
+        LETTER_SPACING,
+        SPACE_SIZE,
+        LINE_SPACING,
+        IS_MONOSPACED;
+
+        public int getIndex() {
+            return this.ordinal() + 1;
+        }
+    }
+
+    public enum KerningPairsColumn {
+        ID, LEFT_CODE_POINT, RIGHT_CODE_POINT, KERNING_VALUE;
+
+        public int getIndex() {
+            return this.ordinal() + 1;
+        }
+    }
+
+    public enum GlyphsColumn {
+        CODE_POINT, WIDTH, IMAGE_BYTES;
+
+        public int getIndex() {
+            return this.ordinal() + 1;
+        }
+    }
+
+    public enum TitleColumn {
+        TITLE;
+
+        public int getIndex() {
+            return this.ordinal() + 1;
+        }
+    }
+
     private Queries() {
     }
 }
