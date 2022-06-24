@@ -74,4 +74,8 @@ public class ApplicationAction extends AbstractAction {
         putValue(Action.ACCELERATOR_KEY, accelerator);
         return this;
     }
+
+    public ApplicationAction withText() {
+        return setTextKey(key);
+    }
 }
