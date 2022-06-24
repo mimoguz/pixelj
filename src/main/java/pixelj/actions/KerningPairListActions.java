@@ -40,12 +40,11 @@ public class KerningPairListActions {
 
         addDialog = new AddDialog(project.getGlyphs(), (Frame) SwingUtilities.getWindowAncestor(root));
 
-        showAddDialogAction = new ApplicationAction("showAddDialog", this::showAddDialog)
-                .setTextKey("kerningPairsShowAddDialogAction")
+        showAddDialogAction = new ApplicationAction("addKerningPairsAction", this::showAddDialog).withText()
                 .setAccelerator(KeyEvent.VK_PLUS, InputEvent.ALT_DOWN_MASK);
 
-        showRemoveDialogAction = new ApplicationAction("showRemoveDialog", this::showRemoveDialog)
-                .setTextKey("kerningPairsShowRemoveDialogAction")
+        showRemoveDialogAction = new ApplicationAction("removeKerningPairsAction", this::showRemoveDialog)
+                .withText()
                 .setAccelerator(KeyEvent.VK_MINUS, InputEvent.ALT_DOWN_MASK);
 
         selectionModel.addListSelectionListener(

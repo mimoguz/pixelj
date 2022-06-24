@@ -34,11 +34,9 @@ public class PreviewScreenActions {
         this.input = input;
         this.container = container;
 
-        clearAction = new ApplicationAction("previewClearAction", this::clearPreview)
-                .setTextKey("previewClearAction");
+        clearAction = new ApplicationAction("previewClearAction", this::clearPreview).withText();
 
-        refreshAction = new ApplicationAction("previewRefreshAction", this::refreshPreview)
-                .setTextKey("previewRefreshAction")
+        refreshAction = new ApplicationAction("previewRefreshAction", this::refreshPreview).withText()
                 .setAccelerator(KeyEvent.VK_F5, 0);
 
         all.add(clearAction);

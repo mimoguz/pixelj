@@ -49,12 +49,11 @@ public class GlyphListActions {
 
         addDialog = new AddDialog((JFrame) SwingUtilities.getWindowAncestor(root));
 
-        showAddDialogAction = new ApplicationAction("addGlyphsAction", this::showAddDialog)
-                .setTextKey("addGlyphsAction")
+        showAddDialogAction = new ApplicationAction("addGlyphsAction", this::showAddDialog).withText()
                 .setAccelerator(KeyEvent.VK_PLUS, InputEvent.ALT_DOWN_MASK);
 
         showRemoveDialogAction = new ApplicationAction("removeGlyphsAction", this::showRemoveDialog)
-                .setTextKey("removeGlyphsAction")
+                .withText()
                 .setAccelerator(KeyEvent.VK_MINUS, InputEvent.ALT_DOWN_MASK);
 
         all = List.of(showAddDialogAction, showRemoveDialogAction);
