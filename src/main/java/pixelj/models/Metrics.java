@@ -38,7 +38,7 @@ public record Metrics(
         public final ChangeableInt letterSpacing = new ChangeableInt(0);
 
         public final ReadOnlyBoolean validAscender = new ReadOnlyInt(descender)
-                .le(canvasHeight.subtract(ascender))
+                .le(canvasHeight.subtract(descender))
                 .and(ascender.gt(ZERO));
         public final ReadOnlyBoolean validCanvasHeight = canvasHeight.gt(ZERO);
         public final ReadOnlyBoolean validCanvasWidth = canvasWidth.gt(ZERO);
