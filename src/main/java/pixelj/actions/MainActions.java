@@ -86,11 +86,11 @@ public class MainActions {
                 .setIcon(Icons.SETTINGS, res.colors.icon(), res.colors.disabledIcon())
                 .setAccelerator(KeyEvent.VK_PERIOD, ActionEvent.CTRL_MASK);
 
-        project.pathProperty.addChangeListener((sender, args) -> {
-            saveAction.setEnabled(args != null);
+        project.pathProperty.addChangeListener((sender, path) -> {
+            saveAction.setEnabled(enabled && path != null);
         });
 
-        saveAction.setEnabled(project.getPath() != null);
+        saveAction.setEnabled(enabled && project.getPath() != null);
 
         all = List.of(
                 returnToProjectManagerAction,
@@ -110,7 +110,8 @@ public class MainActions {
 
     public void setEnabled(final boolean value) {
         enabled = value;
-        Actions.setEnabled(all, enabled);
+        Actions.setEnabled(all, value);
+        saveAction.setEnabled(value && project.getPath() != null);
     }
 
     private void export(final ActionEvent event, final Action action) {
