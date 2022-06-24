@@ -14,7 +14,6 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
 
 import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.util.nfd.NativeFileDialog;
@@ -26,6 +25,7 @@ import pixelj.resources.Resources;
 import pixelj.services.FileService;
 import pixelj.views.NewProjectDialog;
 import pixelj.views.ProjectView;
+import pixelj.views.shared.Components;
 
 public class HomeActions {
     public final Collection<ApplicationAction> all;
@@ -48,20 +48,17 @@ public class HomeActions {
 
         final var res = Resources.get();
 
-        newProjectAction = new ApplicationAction("newProjectAction", this::newProject)
-                .setTextKey("newProjectAction")
+        newProjectAction = new ApplicationAction("newProjectAction", this::newProject).withText()
                 .setIcon(Icons.FILE_NEW, res.colors.icon(), res.colors.disabledIcon());
 
-        openSelectedAction = new ApplicationAction("openSelectedAction", this::openSelectedProject)
-                .setTextKey("openSelectedAction")
+        openSelectedAction = new ApplicationAction("openSelectedAction", this::openSelectedProject).withText()
                 .setIcon(Icons.FILE_OPEN_SELECTED, res.colors.icon(), res.colors.disabledIcon());
 
         quitAction = new ApplicationAction("quitAction", this::quit)
                 .setTooltip(res.getString("quitActionTooltip"))
                 .setIcon(Icons.EXIT, res.colors.icon(), res.colors.disabledIcon());
 
-        loadProjectAction = new ApplicationAction("loadProjectAction", this::openProject)
-                .setTextKey("loadProjectAction")
+        loadProjectAction = new ApplicationAction("loadProjectAction", this::openProject).withText()
                 .setIcon(Icons.FILE_OPEN, res.colors.icon(), res.colors.disabledIcon());
 
         showOptionsDialogAction = new ApplicationAction("showOptionsDialogAction", this::showOptionsDialog)
@@ -69,7 +66,7 @@ public class HomeActions {
                 .setIcon(Icons.SETTINGS, res.colors.icon(), res.colors.disabledIcon());
 
         removeRecentItemAction = new ApplicationAction("removeRecentItemAction", this::showOptionsDialog)
-                .setTextKey("removeRecentItemAction");
+                .withText();
 
         openContainingFolderAction = new ApplicationAction(
                 "openContainingFolderAction",
@@ -126,12 +123,7 @@ public class HomeActions {
     }
 
     private void showProject(final Project project) {
-        final var frame = ((JFrame) SwingUtilities.getWindowAncestor(root));
-        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        final var projectView = new ProjectView(project);
-        projectView.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        projectView.setVisible(true);
-        frame.setVisible(false);
+        Components.switchFrames((JFrame) SwingUtilities.getWindowAncestor(root), new ProjectView(project));
     }
 
     private Path showOpenDialog() {

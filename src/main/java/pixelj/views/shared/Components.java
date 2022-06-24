@@ -4,6 +4,8 @@ import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.WindowConstants;
 import javax.swing.border.Border;
 
 public class Components {
@@ -21,5 +23,12 @@ public class Components {
         component.setPreferredSize(size);
         component.setSize(size);
         component.revalidate();
+    }
+
+    public static void switchFrames(JFrame oldFrame, JFrame newFrame) {
+        oldFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        newFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        newFrame.setVisible(true);
+        oldFrame.setVisible(false);
     }
 }
