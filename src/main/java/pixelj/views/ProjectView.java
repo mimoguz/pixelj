@@ -269,7 +269,7 @@ public class ProjectView extends JFrame {
         menu.add(new JSeparator(SwingConstants.HORIZONTAL));
         menu.add(actions.showHelpAction);
         menu.add(new JSeparator(SwingConstants.HORIZONTAL));
-        menu.add(actions.returnToProjectManagerAction);
+        menu.add(actions.returnHomeAction);
         menu.add(actions.quitAction);
         return menu;
     }
