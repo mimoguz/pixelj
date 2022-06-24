@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 
 import javax.swing.Action;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
@@ -23,11 +24,13 @@ import pixelj.models.Project;
 import pixelj.resources.Icons;
 import pixelj.resources.Resources;
 import pixelj.services.FileService;
+import pixelj.views.HomeView;
 import pixelj.views.MetricsDialog;
+import pixelj.views.shared.Components;
 
 public class MainActions {
     public final Collection<ApplicationAction> all;
-    public final ApplicationAction returnToProjectManagerAction;
+    public final ApplicationAction returnHomeAction;
     public final ApplicationAction exportAction;
     public final ApplicationAction quitAction;
     public final ApplicationAction saveAction;
@@ -51,38 +54,35 @@ public class MainActions {
 
         final var res = Resources.get();
 
-        returnToProjectManagerAction = new ApplicationAction("returnToProjectManagerAction", this::export)
-                .setTextKey("returnToProjectManagerAction")
+        returnHomeAction = new ApplicationAction("returnHomeAction", this::returnHome).withText()
                 .setIcon(Icons.PROJECT_MANAGER, res.colors.icon(), res.colors.disabledIcon())
                 .setAccelerator(KeyEvent.VK_W, ActionEvent.CTRL_MASK);
 
-        exportAction = new ApplicationAction("exportAction", this::export).setTextKey("exportAction")
+        exportAction = new ApplicationAction("exportAction", this::export).withText()
                 .setIcon(Icons.FILE_EXPORT, res.colors.icon(), res.colors.disabledIcon())
                 .setAccelerator(KeyEvent.VK_E, ActionEvent.CTRL_MASK);
 
-        quitAction = new ApplicationAction("quitAction", this::quit).setTextKey("quitAction")
+        quitAction = new ApplicationAction("quitAction", this::quit).withText()
                 .setIcon(Icons.EXIT, res.colors.icon(), res.colors.disabledIcon())
                 .setAccelerator(KeyEvent.VK_Q, ActionEvent.CTRL_MASK);
 
-        saveAction = new ApplicationAction("saveProjectAction", this::save).setTextKey("saveAction")
+        saveAction = new ApplicationAction("saveAction", this::save).withText()
                 .setIcon(Icons.FILE_SAVE, res.colors.icon(), res.colors.disabledIcon())
                 .setAccelerator(KeyEvent.VK_S, ActionEvent.CTRL_MASK);
 
-        saveAsAction = new ApplicationAction("saveAsAction", this::saveAs).setTextKey("saveAsAction")
+        saveAsAction = new ApplicationAction("saveAsAction", this::saveAs).withText()
                 .setIcon(Icons.FILE_SAVE_AS, res.colors.icon(), res.colors.disabledIcon())
                 .setAccelerator(KeyEvent.VK_S, ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK);
 
-        showHelpAction = new ApplicationAction("showHelpAction", this::showHelp).setTextKey("showHelpAction")
+        showHelpAction = new ApplicationAction("showHelpAction", this::showHelp).withText()
                 .setIcon(Icons.HELP, res.colors.icon(), res.colors.disabledIcon())
                 .setAccelerator(KeyEvent.VK_F1, 0);
 
-        showMetricsAction = new ApplicationAction("showMetricsAction", this::showMetrics)
-                .setTextKey("showMetricsAction")
+        showMetricsAction = new ApplicationAction("showMetricsAction", this::showMetrics).withText()
                 .setIcon(Icons.METRICS, res.colors.icon(), res.colors.disabledIcon())
                 .setAccelerator(KeyEvent.VK_M, ActionEvent.CTRL_MASK);
 
-        showSettingsAction = new ApplicationAction("showSettingsAction", this::showSettings)
-                .setTextKey("showSettingsAction")
+        showSettingsAction = new ApplicationAction("showSettingsAction", this::showSettings).withText()
                 .setIcon(Icons.SETTINGS, res.colors.icon(), res.colors.disabledIcon())
                 .setAccelerator(KeyEvent.VK_PERIOD, ActionEvent.CTRL_MASK);
 
@@ -93,7 +93,7 @@ public class MainActions {
         saveAction.setEnabled(enabled && project.getPath() != null);
 
         all = List.of(
-                returnToProjectManagerAction,
+                returnHomeAction,
                 exportAction,
                 quitAction,
                 saveAction,
@@ -119,7 +119,11 @@ public class MainActions {
     }
 
     private void quit(final ActionEvent event, final Action action) {
-        logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
+        System.exit(0);
+    }
+
+    private void returnHome(final ActionEvent event, final Action action) {
+        Components.switchFrames((JFrame) SwingUtilities.getWindowAncestor(root), new HomeView());
     }
 
     private void save(final ActionEvent event, final Action action) {
