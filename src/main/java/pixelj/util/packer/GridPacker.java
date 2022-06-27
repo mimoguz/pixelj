@@ -24,7 +24,7 @@ public class GridPacker extends Packer {
                 col = 0;
             }
         }
-        return imageSz;
+        return fixedSize(imageSz, forceSquare, forcePowerOfTwo);
     }
 
     private Dimension cellSize() {
@@ -40,6 +40,7 @@ public class GridPacker extends Packer {
         return result;
     }
 
+    // TODO: This is a terrible algorithm.
     private Dimension boxSize(final Dimension cellSize) {
         final var result = new Dimension(cellSize.width * rectangles.size(), cellSize.height);
         var cols = rectangles.size();
