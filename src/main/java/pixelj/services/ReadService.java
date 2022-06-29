@@ -19,7 +19,7 @@ import pixelj.services.Queries.KerningPairsColumn;
 import pixelj.services.Queries.MetricsColumn;
 import pixelj.services.Queries.TitleColumn;
 
-class LoadService {
+class ReadService {
     public static Project load(final Path path) throws IOException {
         final var pathStr = path.toAbsolutePath().toString();
         final var url = pathStr.endsWith("." + Queries.EXTENSION)
@@ -104,6 +104,6 @@ class LoadService {
         return title;
     }
 
-    private LoadService() {
+    private ReadService() {
     }
 }

@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
@@ -14,7 +13,6 @@ import java.util.logging.Logger;
 
 import javax.swing.Action;
 import javax.swing.JComponent;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -25,8 +23,9 @@ import org.lwjgl.util.nfd.NativeFileDialog;
 import pixelj.models.Project;
 import pixelj.resources.Icons;
 import pixelj.resources.Resources;
-import pixelj.services.ExportService;
+import pixelj.services.ExportServiceImpl;
 import pixelj.services.FileService;
+import pixelj.services.FileServiceImpl;
 import pixelj.views.HomeView;
 import pixelj.views.MetricsDialog;
 import pixelj.views.shared.Components;
@@ -120,13 +119,13 @@ public class MainActions {
     // TODO: Not finished yet.
     private void export(final ActionEvent event, final Action action) {
         logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
-        final var path = Paths.get(
-                new JFileChooser().getFileSystemView().getDefaultDirectory().toString(),
-                "pixelj_out.png"
-        );
-
+        final var path = showSaveDialog("fnt");
+        if (path == null || path.getFileName() == null) {
+            return;
+        }
         try {
-            ExportService.export(project, path);
+            // TODO: DI
+            new ExportServiceImpl().export(project, path, false, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -145,8 +144,9 @@ public class MainActions {
         try {
             if (path == null || path.getFileName() == null) {
                 saveAs(event, action);
-            } else if (!FileService.writeFile(project, path)) {
-                showInfo(Resources.get().getString("saveFailed"));
+            } else {
+                // TODO: DI
+                new FileServiceImpl().writeFile(project, path);
             }
         } catch (IOException e) {
             showInfo(Resources.get().getString("saveFailed"));
@@ -154,13 +154,14 @@ public class MainActions {
     }
 
     private void saveAs(final ActionEvent event, final Action action) {
-        final var path = showSaveDialog();
+        final var path = showSaveDialog(FileService.EXTENSION);
         if (path == null) {
             return;
         }
         try {
-            if (path.getFileName() == null || !FileService.writeFile(project, path)) {
-                showInfo(Resources.get().getString("saveFailed"));
+            if (path.getFileName() == null) {
+                // TODO: DI
+                new FileServiceImpl().writeFile(project, path);
             } else {
                 project.setPath(path);
             }
@@ -169,18 +170,12 @@ public class MainActions {
         }
     }
 
-    private Path showSaveDialog() {
+    private Path showSaveDialog(String filter) {
         final var outPath = MemoryUtil.memAllocPointer(1);
         try {
             final var defaultPath = project.getPath() != null ? project.getPath().toAbsolutePath().toString()
                     : null;
-            if (
-                NativeFileDialog.NFD_SaveDialog(
-                        FileService.EXTENSION,
-                        defaultPath,
-                        outPath
-                ) == NativeFileDialog.NFD_OKAY
-            ) {
+            if (NativeFileDialog.NFD_SaveDialog(filter, defaultPath, outPath) == NativeFileDialog.NFD_OKAY) {
                 final var pathStr = outPath.getStringUTF8();
                 NativeFileDialog.nNFD_Free(outPath.get(0));
                 return Path.of(pathStr);

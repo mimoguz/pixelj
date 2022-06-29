@@ -15,10 +15,8 @@ import pixelj.services.Queries.KerningPairsColumn;
 import pixelj.services.Queries.MetricsColumn;
 import pixelj.services.Queries.TitleColumn;
 
-class SaveService {
-
-    // TODO: Use enums for field indices
-    public static Boolean save(final Path path, final Project project) throws IOException {
+class WriteService {
+    public static void save(final Path path, final Project project) throws IOException {
         List<CompressedGlyph> glyphs;
         List<KerningPairRecord> kerningPairs;
         String title;
@@ -90,13 +88,12 @@ class SaveService {
             insertTitle.executeUpdate();
 
             connection.commit();
-            return true;
         } catch (SQLException e) {
             // TODO: Move the message to the resources.
             throw new IOException(String.format("Can't save file %s:\n%s", pathStr, e.getMessage()));
         }
     }
 
-    private SaveService() {
+    private WriteService() {
     }
 }

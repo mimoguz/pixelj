@@ -1,17 +1,16 @@
 package pixelj.util.packer;
 
 import java.awt.Dimension;
-import java.util.List;
 
 // TODO: Write tests
-public class GridPacker extends Packer {
-
-    public GridPacker(final List<Rectangle> rectangles) {
-        super(rectangles);
-    }
+public class GridPacker extends AbstractPacker {
 
     @Override
-    public Dimension packInPlace(final boolean forceSquare, final boolean forcePowerOfTwo) {
+    public Dimension packInPlace(final boolean forceSquare, final boolean forcePowerOfTwo)
+            throws IllegalStateException {
+        if (rectangles == null) {
+            throw new IllegalStateException("GridPacker input is not set yet");
+        }
         final var cellSz = cellSize();
         final var imageSz = boxSize(cellSz);
         var col = 0;

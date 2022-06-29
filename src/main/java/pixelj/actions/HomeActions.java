@@ -22,7 +22,7 @@ import pixelj.models.ExampleData;
 import pixelj.models.Project;
 import pixelj.resources.Icons;
 import pixelj.resources.Resources;
-import pixelj.services.FileService;
+import pixelj.services.FileServiceImpl;
 import pixelj.views.NewProjectDialog;
 import pixelj.views.ProjectView;
 import pixelj.views.shared.Components;
@@ -104,7 +104,8 @@ public class HomeActions {
             return;
         }
         try {
-            showProject(FileService.loadFile(path));
+            // TODO: DI
+            showProject(new FileServiceImpl().readFile(path));
         } catch (Exception e) {
             JOptionPane.showMessageDialog(SwingUtilities.getWindowAncestor(root), e.getMessage());
         }
@@ -131,7 +132,7 @@ public class HomeActions {
         try {
             if (
                 NativeFileDialog
-                        .NFD_OpenDialog(FileService.EXTENSION, null, outPath) == NativeFileDialog.NFD_OKAY
+                        .NFD_OpenDialog(FileServiceImpl.EXTENSION, null, outPath) == NativeFileDialog.NFD_OKAY
             ) {
                 final var pathStr = outPath.getStringUTF8();
                 NativeFileDialog.nNFD_Free(outPath.get(0));

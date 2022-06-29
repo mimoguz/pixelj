@@ -19,9 +19,9 @@ public interface ImageWriter {
     }
 
     BufferedImage getImage(
-            final Dimension imageSize,
-            final Collection<Rectangle> rectangles,
-            final SortedList<Glyph> glyphs,
-            final Metrics metrics
+            Dimension imageSize,
+            Collection<Rectangle> rectangles,
+            SortedList<Glyph> glyphs,
+            Metrics metrics
     );
 }

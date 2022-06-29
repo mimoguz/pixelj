@@ -10,7 +10,7 @@ import pixelj.models.Metrics;
 import pixelj.models.SortedList;
 import pixelj.util.packer.Rectangle;
 
-public class SingleThreadedImageWriter implements ImageWriter {
+public class BasicImageWriter implements ImageWriter {
     @Override
     public BufferedImage getImage(
             final Dimension imageSize,
@@ -39,7 +39,6 @@ public class SingleThreadedImageWriter implements ImageWriter {
             final int sourceWidth,
             final int sourceHeight
     ) {
-
         for (var py = 0; py < sourceHeight; py++) {
             for (var px = 0; px < sourceWidth; px++) {
                 target.setRGB(targetX + px, targetY + py, getARGB(source, px + sourceX, py + sourceY));
