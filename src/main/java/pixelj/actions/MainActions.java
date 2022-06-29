@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
@@ -13,6 +14,7 @@ import java.util.logging.Logger;
 
 import javax.swing.Action;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -23,6 +25,7 @@ import org.lwjgl.util.nfd.NativeFileDialog;
 import pixelj.models.Project;
 import pixelj.resources.Icons;
 import pixelj.resources.Resources;
+import pixelj.services.ExportService;
 import pixelj.services.FileService;
 import pixelj.views.HomeView;
 import pixelj.views.MetricsDialog;
@@ -114,8 +117,19 @@ public class MainActions {
         saveAction.setEnabled(value && project.getPath() != null);
     }
 
+    // TODO: Not finished yet.
     private void export(final ActionEvent event, final Action action) {
         logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
+        final var path = Paths.get(
+                new JFileChooser().getFileSystemView().getDefaultDirectory().toString(),
+                "pixelj_out.png"
+        );
+
+        try {
+            ExportService.export(project, path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void quit(final ActionEvent event, final Action action) {
