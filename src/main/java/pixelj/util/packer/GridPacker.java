@@ -17,12 +17,12 @@ public class GridPacker extends Packer {
         var col = 0;
         var row = 0;
         for (var rect : rectangles) {
-            rect.moveTo(cellSz.width * col, cellSz.height * row);
-            col += 1;
-            if (col * cellSz.width > imageSz.width) {
+            if (col * cellSz.width >= imageSz.width) {
                 row += 1;
                 col = 0;
             }
+            rect.moveTo(cellSz.width * col, cellSz.height * row);
+            col += 1;
         }
         return fixedSize(imageSz, forceSquare, forcePowerOfTwo);
     }

@@ -26,7 +26,7 @@ public class ExportService {
         final var packer = new GridPacker(rectangles);
         final var imageSize = packer.packInPlace(false, false);
         final var image = new SingleThreadedImageWriter()
-                .getImage(imageSize, rectangles, project.getGlyphs());
+                .getImage(imageSize, rectangles, project.getGlyphs(), metrics);
         final var pathStr = path.toAbsolutePath().toString();
         // if (!pathStr.endsWith(".png")) {
         // pathStr += ".png";
