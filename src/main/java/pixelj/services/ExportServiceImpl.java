@@ -2,8 +2,10 @@ package pixelj.services;
 
 import java.awt.Dimension;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -39,11 +41,38 @@ public class ExportServiceImpl implements ExportService {
         // TODO: DI
         final var image = new BasicImageWriter()
                 .getImage(imageSize, rectangles, project.getGlyphs(), metrics);
+
+        final var dir = path.getParent();
+        final var fileName = path.getFileName().toString();
+        final var dotPosition = fileName.lastIndexOf('.');
+        final var baseName = dotPosition > 0 ? fileName.substring(0, dotPosition) : fileName;
+
         var pathStr = path.toAbsolutePath().toString();
         pathStr = pathStr.endsWith("." + EXTENSION)
                 ? pathStr.substring(0, pathStr.length() - EXTENSION.length())
                 : pathStr;
-        ImageIO.write(image, "png", new File(pathStr + ".png"));
+
+        ImageIO.write(
+                image,
+                "png",
+                Paths.get(dir.toAbsolutePath().toString(), imageName(0, baseName)).toFile()
+        );
+
+        try (
+                var writer = new FileWriter(
+                        Paths.get(dir.toAbsolutePath().toString(), baseName + "." + EXTENSION).toFile()
+                )
+        ) {
+            fnt(project, baseName, rectangles, imageSize).forEach(block -> {
+                try {
+                    writer.write(block);
+                } catch (IOException e) {
+                    throw new RuntimeException(e.getMessage());
+                }
+            });
+        } catch (RuntimeException e) {
+            throw new IOException(e.getMessage());
+        }
     }
 
     private static Stream<String> fnt(
@@ -55,7 +84,7 @@ public class ExportServiceImpl implements ExportService {
         final var builder = new StringBuilder();
         infoLine(builder, project.getTitle(), project.getMetrics()).append('\n');
         commonLine(builder, project.getMetrics(), imageSize).append('\n');
-        pageLine(null, 0, baseName).append('\n');
+        pageLine(builder, 0, baseName).append('\n');
         charsLine(builder, rectangles.size()).append('\n');
 
         final var headerStream = Stream.of(builder.toString());
@@ -76,7 +105,7 @@ public class ExportServiceImpl implements ExportService {
 
         builder.append(" face=\"");
         builder.append(title);
-        builder.append("\"");
+        builder.append('"');
 
         builder.append(" size=");
         builder.append(-metrics.capHeight());
@@ -125,6 +154,7 @@ public class ExportServiceImpl implements ExportService {
         builder.append(page);
         builder.append(" file=\"");
         builder.append(imageName(page, baseName));
+        builder.append('"');
         return builder;
     }
 
@@ -156,7 +186,7 @@ public class ExportServiceImpl implements ExportService {
         builder.append(rect.height() - 1);
 
         // TODO: Put padding info to Rectangle
-        builder.append(" xoffset=0 yOffset=0");
+        builder.append(" xoffset=0 yoffset=0");
 
         // TODO: Put padding info to Rectangle
         builder.append(" xadvance=");
