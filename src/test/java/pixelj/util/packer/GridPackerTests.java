@@ -14,7 +14,8 @@ public class GridPackerTests {
         final var rectangles = IntStream.range(0, cols * cols)
                 .mapToObj(i -> new Rectangle(i, width, width))
                 .toList();
-        final var packer = new GridPacker(rectangles);
+        final var packer = new GridPacker();
+        packer.setRectangles(rectangles);
         final var size = packer.packInPlace(false, false);
         assertEquals(size.width, size.height);
         assertEquals(size.width, cols * width);
@@ -28,7 +29,8 @@ public class GridPackerTests {
         final var rectangles = IntStream.range(0, cols * (rows - 1) + 1)
                 .mapToObj(i -> new Rectangle(i, width, width))
                 .toList();
-        final var packer = new GridPacker(rectangles);
+        final var packer = new GridPacker();
+        packer.setRectangles(rectangles);
         final var size = packer.packInPlace(false, false);
         assertEquals(size.width, size.height);
         assertEquals(size.width, cols * width);
@@ -39,7 +41,8 @@ public class GridPackerTests {
         final var width = 7;
         final var height = 20;
         final var rectangles = IntStream.range(0, n).mapToObj(i -> new Rectangle(i, width, height)).toList();
-        final var packer = new GridPacker(rectangles);
+        final var packer = new GridPacker();
+        packer.setRectangles(rectangles);
         final var size = packer.packInPlace(false, false);
         System.out.println(size);
         assertEquals(size.width, 56); // 8 columns
@@ -52,7 +55,8 @@ public class GridPackerTests {
         final var width = 7;
         final var height = 20;
         final var rectangles = IntStream.range(0, n).mapToObj(i -> new Rectangle(i, width, height)).toList();
-        final var packer = new GridPacker(rectangles);
+        final var packer = new GridPacker();
+        packer.setRectangles(rectangles);
         final var size = packer.packInPlace(true, true);
         System.out.println(size);
         assertEquals(64, size.width);
