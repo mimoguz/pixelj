@@ -4,9 +4,12 @@ import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
 
+import pixelj.models.Glyph;
 import pixelj.models.Metrics;
 import pixelj.models.Project;
 import pixelj.util.packer.GridPacker;
@@ -41,6 +44,27 @@ public class ExportServiceImpl implements ExportService {
                 ? pathStr.substring(0, pathStr.length() - EXTENSION.length())
                 : pathStr;
         ImageIO.write(image, "png", new File(pathStr + ".png"));
+    }
+
+    private static Stream<String> fnt(
+            final Project project,
+            final String baseName,
+            final List<Rectangle> rectangles,
+            final Dimension imageSize
+    ) {
+        final var builder = new StringBuilder();
+        infoLine(builder, project.getTitle(), project.getMetrics()).append('\n');
+        commonLine(builder, project.getMetrics(), imageSize).append('\n');
+        pageLine(null, 0, baseName).append('\n');
+        charsLine(builder, rectangles.size()).append('\n');
+
+        final var headerStream = Stream.of(builder.toString());
+        final var charStream = rectangles.stream().map(rect -> {
+            final var glyph = project.getGlyphs().findHash(rect.id());
+            return characterLineStr(glyph, project.getMetrics(), rect, 0);
+        });
+
+        return Stream.concat(headerStream, charStream);
     }
 
     private static StringBuilder infoLine(
@@ -89,5 +113,73 @@ public class ExportServiceImpl implements ExportService {
         builder.append(" packed=0 alphaChnl=0 redChnl=4 greenChnl=4 blueChnl=4");
 
         return builder;
+    }
+
+    private static StringBuilder pageLine(
+            final StringBuilder builder,
+            final int page,
+            final String baseName
+    ) {
+        builder.append("page");
+        builder.append(" id=");
+        builder.append(page);
+        builder.append(" file=\"");
+        builder.append(imageName(page, baseName));
+        return builder;
+    }
+
+    private static StringBuilder charsLine(final StringBuilder builder, final int charCount) {
+        builder.append("chars count=");
+        builder.append(charCount);
+
+        return builder;
+    }
+
+    private static StringBuilder characterLine(
+            final StringBuilder builder,
+            final Glyph glyph,
+            final Metrics metrics,
+            final Rectangle rect,
+            final int page
+    ) {
+        builder.append("char id=");
+        builder.append(glyph.getCodePoint());
+        builder.append(" x=");
+        builder.append(rect.x());
+        builder.append(" y=");
+        builder.append(rect.y());
+
+        // TODO: Put actual image size info to Rectangle
+        builder.append(" width=");
+        builder.append(glyph.getWidth());
+        builder.append(" height=");
+        builder.append(rect.height() - 1);
+
+        // TODO: Put padding info to Rectangle
+        builder.append(" xoffset=0 yOffset=0");
+
+        // TODO: Put padding info to Rectangle
+        builder.append(" xadvance=");
+        builder.append(metrics.letterSpacing());
+
+        builder.append(" page=");
+        builder.append(page);
+
+        builder.append(" chnl=15");
+
+        return builder;
+    }
+
+    private static String characterLineStr(
+            final Glyph glyph,
+            final Metrics metrics,
+            final Rectangle rect,
+            final int page
+    ) {
+        return characterLine(new StringBuilder(), glyph, metrics, rect, page).append('\n').toString();
+    }
+
+    private static String imageName(final int page, final String base) {
+        return base + "_" + page + ".png";
     }
 }
