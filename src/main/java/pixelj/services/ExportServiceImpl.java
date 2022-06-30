@@ -1,7 +1,6 @@
 package pixelj.services;
 
 import java.awt.Dimension;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -11,7 +10,7 @@ import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
 
-import pixelj.models.Glyph;
+import pixelj.models.KerningPair;
 import pixelj.models.Metrics;
 import pixelj.models.Project;
 import pixelj.util.packer.GridPacker;
@@ -21,6 +20,7 @@ public class ExportServiceImpl implements ExportService {
     // TODO: Which packer? Which ImageWriter? Other params?
     // TODO: Make this testable.
     // TODO: Not finished yet.
+    // TODO: Space size?
     public void export(
             final Project project,
             final Path path,
@@ -29,15 +29,13 @@ public class ExportServiceImpl implements ExportService {
     )
             throws IOException {
         final var metrics = project.getMetrics();
-        final var rectHeight = metrics.ascender() + metrics.descender();
-        final var rectangles = project.getGlyphs().getElements().stream().map(g -> {
-            final var rectWidth = (metrics.isMonospaced() ? metrics.defaultWidth() : g.getWidth()) + 1;
-            return new Rectangle(g.getCodePoint(), rectWidth, rectHeight);
-        }).toList();
+        final var rectangles = getRectangles(project);
+
         // TODO: DI
         final var packer = new GridPacker();
         packer.setRectangles(rectangles);
         final var imageSize = packer.packInPlace(false, false);
+
         // TODO: DI
         final var image = new BasicImageWriter()
                 .getImage(imageSize, rectangles, project.getGlyphs(), metrics);
@@ -75,6 +73,17 @@ public class ExportServiceImpl implements ExportService {
         }
     }
 
+    private static List<Rectangle> getRectangles(final Project project) {
+        final var metrics = project.getMetrics();
+        final var innerHeight = metrics.ascender() + metrics.descender();
+        final var height = innerHeight + 1;
+        return project.getGlyphs().getElements().stream().map(glyph -> {
+            final var innerWidth = metrics.isMonospaced() ? Math.min(glyph.getWidth(), metrics.defaultWidth())
+                    : glyph.getWidth();
+            return new Rectangle(glyph.getCodePoint(), innerWidth + 1, height, innerWidth, innerHeight);
+        }).toList();
+    }
+
     private static Stream<String> fnt(
             final Project project,
             final String baseName,
@@ -86,14 +95,21 @@ public class ExportServiceImpl implements ExportService {
         commonLine(builder, project.getMetrics(), imageSize).append('\n');
         pageLine(builder, 0, baseName).append('\n');
         charsLine(builder, rectangles.size()).append('\n');
-
         final var headerStream = Stream.of(builder.toString());
         final var charStream = rectangles.stream().map(rect -> {
-            final var glyph = project.getGlyphs().findHash(rect.id());
-            return characterLineStr(glyph, project.getMetrics(), rect, 0);
+            return characterStr(project.getMetrics(), rect, 0);
         });
-
-        return Stream.concat(headerStream, charStream);
+        final var kerningPairStream = project.getKerningPairs()
+                .getElements()
+                .stream()
+                .map(ExportServiceImpl::kerningPairStr);
+        return Stream.concat(
+                Stream.concat(headerStream, charStream),
+                Stream.concat(
+                        Stream.of("kernings count=" + project.getKerningPairs().getSize() + '\n'),
+                        kerningPairStream
+                )
+        );
     }
 
     private static StringBuilder infoLine(
@@ -101,20 +117,13 @@ public class ExportServiceImpl implements ExportService {
             final String title,
             final Metrics metrics
     ) {
-        builder.append("info ");
-
-        builder.append(" face=\"");
-        builder.append(title);
-        builder.append('"');
-
-        builder.append(" size=");
-        builder.append(-metrics.capHeight());
-
         // TODO: Add isBold and isItalic to export options
-        builder.append(" bold=0 italic=0");
-
-        builder.append(" unicode=1 stretchH=100 smooth=0 aa=1 padding=0,0,0,0 spacing=1,1 outline=0");
-
+        builder.append("info face=\"")
+                .append(title)
+                .append(" size=")
+                .append(-metrics.capHeight())
+                .append(" bold=0 italic=0")
+                .append(" unicode=1 stretchH=100 smooth=0 aa=1 padding=0,0,0,0 spacing=1,1 outline=0");
         return builder;
     }
 
@@ -123,24 +132,17 @@ public class ExportServiceImpl implements ExportService {
             final Metrics metrics,
             final Dimension imageSize
     ) {
-        builder.append("common");
-
-        builder.append(" lineHeight=");
-        builder.append(metrics.ascender() + metrics.descender() + metrics.lineSpacing());
-
-        builder.append(" base=");
-        builder.append(metrics.ascender());
-
-        builder.append(" scaleW=");
-        builder.append(imageSize.width);
-        builder.append(" scaleH=");
-        builder.append(imageSize.height);
-
         // TODO: How to handle multiple pages?
-        builder.append(" pages=1");
-
-        builder.append(" packed=0 alphaChnl=0 redChnl=4 greenChnl=4 blueChnl=4");
-
+        builder.append("common lineHeight=")
+                .append(metrics.ascender() + metrics.descender() + metrics.lineSpacing())
+                .append(" base=")
+                .append(metrics.ascender())
+                .append(" scaleW=")
+                .append(imageSize.width)
+                .append(" scaleH=")
+                .append(imageSize.height)
+                .append(" pages=1")
+                .append(" packed=0 alphaChnl=0 redChnl=4 greenChnl=4 blueChnl=4");
         return builder;
     }
 
@@ -149,64 +151,62 @@ public class ExportServiceImpl implements ExportService {
             final int page,
             final String baseName
     ) {
-        builder.append("page");
-        builder.append(" id=");
-        builder.append(page);
-        builder.append(" file=\"");
-        builder.append(imageName(page, baseName));
-        builder.append('"');
+        builder.append("page id=")
+                .append(page)
+                .append(" file=\"")
+                .append(imageName(page, baseName))
+                .append('"');
         return builder;
     }
 
     private static StringBuilder charsLine(final StringBuilder builder, final int charCount) {
-        builder.append("chars count=");
-        builder.append(charCount);
-
+        builder.append("chars count=").append(charCount);
         return builder;
     }
 
     private static StringBuilder characterLine(
             final StringBuilder builder,
-            final Glyph glyph,
             final Metrics metrics,
             final Rectangle rect,
             final int page
     ) {
-        builder.append("char id=");
-        builder.append(glyph.getCodePoint());
-        builder.append(" x=");
-        builder.append(rect.x());
-        builder.append(" y=");
-        builder.append(rect.y());
-
-        // TODO: Put actual image size info to Rectangle
-        builder.append(" width=");
-        builder.append(glyph.getWidth());
-        builder.append(" height=");
-        builder.append(rect.height() - 1);
-
-        // TODO: Put padding info to Rectangle
-        builder.append(" xoffset=0 yoffset=0");
-
-        // TODO: Put padding info to Rectangle
-        builder.append(" xadvance=");
-        builder.append(metrics.letterSpacing());
-
-        builder.append(" page=");
-        builder.append(page);
-
-        builder.append(" chnl=15");
-
+        final var advance = (metrics.isMonospaced() ? metrics.defaultWidth() : rect.innerWidth())
+                + metrics.letterSpacing();
+        builder.append("char id=")
+                .append(rect.id())
+                .append(" x=")
+                .append(rect.x())
+                .append(" y=")
+                .append(rect.y())
+                .append(" width=")
+                .append(rect.innerWidth())
+                .append(" height=")
+                .append(rect.innerHeight())
+                .append(" xoffset=0 yoffset=0")
+                .append(" xadvance=")
+                .append(advance)
+                .append(" page=")
+                .append(page)
+                .append(" chnl=15");
         return builder;
     }
 
-    private static String characterLineStr(
-            final Glyph glyph,
-            final Metrics metrics,
-            final Rectangle rect,
-            final int page
-    ) {
-        return characterLine(new StringBuilder(), glyph, metrics, rect, page).append('\n').toString();
+    private static String characterStr(final Metrics metrics, final Rectangle rect, final int page) {
+        return characterLine(new StringBuilder(100), metrics, rect, page).append('\n').toString();
+    }
+
+    private static StringBuilder kerningPairLine(final StringBuilder builder, final KerningPair pair) {
+        builder.append("kerning first=")
+                .append(pair.getLeft().getCodePoint())
+                .append(" second=")
+                .append(pair.getRight().getCodePoint())
+                .append(" amount=")
+                .append(pair.getKerningValue());
+        return builder;
+    }
+
+    private static String kerningPairStr(final KerningPair pair) {
+        return kerningPairLine(new StringBuilder(60), pair).append('\n').toString();
     }
 
     private static String imageName(final int page, final String base) {

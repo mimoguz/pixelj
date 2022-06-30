@@ -159,10 +159,9 @@ public class MainActions {
             return;
         }
         try {
-            if (path.getFileName() == null) {
+            if (path.getFileName() != null) {
                 // TODO: DI
                 new FileServiceImpl().writeFile(project, path);
-            } else {
                 project.setPath(path);
             }
         } catch (IOException e) {

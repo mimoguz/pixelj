@@ -2,12 +2,17 @@
     "cSpell.words": [
         "argb",
         "BORDERLESS",
+        "Chnl",
         "codespace",
         "jdbc",
+        "kernings",
         "Noto",
         "pixelj",
         "pixj",
-        "Undoable"
+        "Undoable",
+        "xadvance",
+        "xoffset",
+        "yoffset"
     ],
     "java.format.settings.url": "eclipse-formatter.xml",
     "java.configuration.updateBuildConfiguration": "automatic",

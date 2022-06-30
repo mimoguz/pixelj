@@ -12,7 +12,7 @@ public class GridPackerTests {
         final var cols = 4;
         final var width = 10;
         final var rectangles = IntStream.range(0, cols * cols)
-                .mapToObj(i -> new Rectangle(i, width, width))
+                .mapToObj(i -> new Rectangle(i, width, width, width, width))
                 .toList();
         final var packer = new GridPacker();
         packer.setRectangles(rectangles);
@@ -27,7 +27,7 @@ public class GridPackerTests {
         final var rows = 4;
         final var width = 10;
         final var rectangles = IntStream.range(0, cols * (rows - 1) + 1)
-                .mapToObj(i -> new Rectangle(i, width, width))
+                .mapToObj(i -> new Rectangle(i, width, width, width, width))
                 .toList();
         final var packer = new GridPacker();
         packer.setRectangles(rectangles);
@@ -40,7 +40,9 @@ public class GridPackerTests {
         final var n = 15;
         final var width = 7;
         final var height = 20;
-        final var rectangles = IntStream.range(0, n).mapToObj(i -> new Rectangle(i, width, height)).toList();
+        final var rectangles = IntStream.range(0, n)
+                .mapToObj(i -> new Rectangle(i, width, height, width, height))
+                .toList();
         final var packer = new GridPacker();
         packer.setRectangles(rectangles);
         final var size = packer.packInPlace(false, false);
@@ -54,7 +56,9 @@ public class GridPackerTests {
         final var n = 15;
         final var width = 7;
         final var height = 20;
-        final var rectangles = IntStream.range(0, n).mapToObj(i -> new Rectangle(i, width, height)).toList();
+        final var rectangles = IntStream.range(0, n)
+                .mapToObj(i -> new Rectangle(i, width, height, width, height))
+                .toList();
         final var packer = new GridPacker();
         packer.setRectangles(rectangles);
         final var size = packer.packInPlace(true, true);
