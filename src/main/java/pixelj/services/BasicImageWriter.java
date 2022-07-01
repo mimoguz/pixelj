@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 
 import pixelj.graphics.BinaryImage;
 import pixelj.models.Glyph;
-import pixelj.models.Metrics;
+import pixelj.models.DocumentSettings;
 import pixelj.models.SortedList;
 import pixelj.util.packer.Rectangle;
 
@@ -16,14 +16,14 @@ public class BasicImageWriter implements ImageWriter {
             final Dimension imageSize,
             final Collection<Rectangle> rectangles,
             final SortedList<Glyph> glyphs,
-            final Metrics metrics
+            final DocumentSettings settings
     ) {
         final var image = new BufferedImage(imageSize.width, imageSize.height, BufferedImage.TYPE_INT_ARGB);
-        final var sourceY = metrics.canvasHeight() - metrics.ascender() - metrics.descender();
-        final var sourceHeight = metrics.ascender() + metrics.descender();
+        final var sourceY = settings.canvasHeight() - settings.ascender() - settings.descender();
+        final var sourceHeight = settings.ascender() + settings.descender();
         for (var rect : rectangles) {
             final var glyph = glyphs.findHash(rect.id());
-            final var sourceWidth = metrics.isMonospaced() ? metrics.defaultWidth() : glyph.getWidth();
+            final var sourceWidth = settings.isMonospaced() ? settings.defaultWidth() : glyph.getWidth();
             writeRect(image, rect.x(), rect.y(), glyph.getImage(), 0, sourceY, sourceWidth, sourceHeight);
         }
         return image;

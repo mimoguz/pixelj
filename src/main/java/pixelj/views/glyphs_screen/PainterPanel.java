@@ -25,7 +25,7 @@ import pixelj.actions.Actions;
 import pixelj.actions.PainterActions;
 import pixelj.graphics.Snapshot;
 import pixelj.models.Glyph;
-import pixelj.models.Metrics;
+import pixelj.models.DocumentSettings;
 import pixelj.models.Project;
 import pixelj.resources.Resources;
 import pixelj.util.Detachable;
@@ -164,7 +164,7 @@ public class PainterPanel extends JPanel implements Detachable {
     /**
      * @param metrics May be null.
      */
-    public void setMetrics(final Metrics metrics) {
+    public void setMetrics(final DocumentSettings metrics) {
         painter.removeLines();
         if (metrics == null) {
             return;

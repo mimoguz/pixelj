@@ -5,7 +5,7 @@ import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 
-import pixelj.models.Metrics;
+import pixelj.models.DocumentSettings;
 import pixelj.models.Project;
 import pixelj.util.Detachable;
 import pixelj.views.controls.GlyphView;
@@ -20,10 +20,10 @@ public class GlyphsScreen extends JSplitPane implements Detachable {
         selectionModel = new DefaultListSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-        listPanel = new ListPanel(project, selectionModel, project.getMetrics(), root);
+        listPanel = new ListPanel(project, selectionModel, project.getDocumentSettings(), root);
 
         painterPanel = new PainterPanel(project, root);
-        painterPanel.setMetrics(project.getMetrics());
+        painterPanel.setMetrics(project.getDocumentSettings());
 
         // Connect the listModel to the painter
         selectionModel.addListSelectionListener(e -> {
@@ -68,8 +68,8 @@ public class GlyphsScreen extends JSplitPane implements Detachable {
         super.setEnabled(value);
     }
 
-    public void updateMetrics(final Metrics metrics) {
+    public void updateMetrics(final DocumentSettings metrics) {
         painterPanel.setMetrics(metrics);
-        listPanel.getActions().updateMetrics(metrics);
+        listPanel.getActions().updateDocumentSettings(metrics);
     }
 }

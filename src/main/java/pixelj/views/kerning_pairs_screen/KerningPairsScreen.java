@@ -5,7 +5,7 @@ import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 
-import pixelj.models.Metrics;
+import pixelj.models.DocumentSettings;
 import pixelj.models.Project;
 import pixelj.util.Detachable;
 import pixelj.views.shared.Dimensions;
@@ -36,7 +36,7 @@ public class KerningPairsScreen extends JSplitPane implements Detachable {
             }
         });
 
-        updateMetrics(project.getMetrics());
+        updateMetrics(project.getDocumentSettings());
 
         setMaximumSize(Dimensions.MAXIMUM);
         setLeftComponent(editorPanel);
@@ -60,7 +60,7 @@ public class KerningPairsScreen extends JSplitPane implements Detachable {
         }
     }
 
-    public void updateMetrics(final Metrics metrics) {
+    public void updateMetrics(final DocumentSettings metrics) {
         editorPanel.setLetterSpacing(metrics.letterSpacing());
         editorPanel.getPreview().setMaxY(metrics.descender() + metrics.ascender());
     }

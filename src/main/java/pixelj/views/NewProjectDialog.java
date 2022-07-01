@@ -2,7 +2,7 @@ package pixelj.views;
 
 import pixelj.actions.Actions;
 import pixelj.actions.ApplicationAction;
-import pixelj.models.Metrics;
+import pixelj.models.DocumentSettings;
 import pixelj.models.Project;
 import pixelj.models.SortedList;
 import pixelj.resources.Icons;
@@ -12,7 +12,7 @@ import pixelj.util.ReadOnlyBoolean;
 import pixelj.views.shared.Borders;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
-import pixelj.views.shared.MetricsPanel;
+import pixelj.views.shared.DocumentSettingsPanel;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
@@ -23,8 +23,8 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class NewProjectDialog extends JDialog {
-    private static final Metrics DEFAULT_METRICS = Metrics.getDefault();
-    final MetricsPanel metricsPanel = new MetricsPanel(DEFAULT_METRICS, true);
+    private static final DocumentSettings DEFAULT_METRICS = DocumentSettings.getDefault();
+    final DocumentSettingsPanel metricsPanel = new DocumentSettingsPanel(DEFAULT_METRICS, true);
     private final JButton createButton = new JButton(Resources.get().getString("create"));
     private final JTextField titleField = new JTextField();
     private Project project;
@@ -39,7 +39,7 @@ public class NewProjectDialog extends JDialog {
         final var cancelButton = new JButton(Resources.get().getString("cancel"));
         final var helpButton = new JButton();
         final var isTitleValid = getTitleValid();
-        final var areInputsValid = metricsPanel.metricsValidProperty().and(isTitleValid);
+        final var areInputsValid = metricsPanel.settingsValidProperty().and(isTitleValid);
 
         final var content = new JPanel(
                 new BorderLayout(Dimensions.SMALL_PADDING, Dimensions.LARGE_PADDING * 2)
@@ -72,7 +72,7 @@ public class NewProjectDialog extends JDialog {
         if (value) {
             project = null;
             titleField.setText("");
-            metricsPanel.setMetrics(DEFAULT_METRICS, true);
+            metricsPanel.setSettings(DEFAULT_METRICS, true);
             titleField.putClientProperty(FlatClientProperties.OUTLINE, FlatClientProperties.OUTLINE_ERROR);
             createButton.setEnabled(false);
         }
@@ -129,10 +129,10 @@ public class NewProjectDialog extends JDialog {
         Components.setFixedSize(cancelButton, Dimensions.TEXT_BUTTON_SIZE);
     }
 
-    private void setupCenterPanel(final JPanel content, final MetricsPanel metricsPanel) {
+    private void setupCenterPanel(final JPanel content, final DocumentSettingsPanel metricsPanel) {
         final var centerPanel = new JPanel(new BorderLayout(0, Dimensions.MEDIUM_PADDING));
 
-        final var metricsLabel = new JLabel(Resources.get().getString("metricsPanelTitle"));
+        final var metricsLabel = new JLabel(Resources.get().getString("documentSettingsPanelTitle"));
         setupPanelTitle(metricsLabel);
         centerPanel.add(metricsLabel, BorderLayout.NORTH);
 
@@ -142,7 +142,7 @@ public class NewProjectDialog extends JDialog {
         content.add(centerPanel, BorderLayout.CENTER);
     }
 
-    private void setupCreateButton(final MetricsPanel metricsPanel, ReadOnlyBoolean areInputsValid) {
+    private void setupCreateButton(final DocumentSettingsPanel metricsPanel, ReadOnlyBoolean areInputsValid) {
         createButton.addActionListener(e -> {
             final var title = titleField.getText().trim();
             try {
@@ -150,10 +150,10 @@ public class NewProjectDialog extends JDialog {
                         title,
                         new SortedList<>(),
                         new SortedList<>(),
-                        metricsPanel.getMetrics(),
+                        metricsPanel.getDocumentSettings(),
                         null
                 );
-            } catch (Metrics.ValidatedBuilder.InvalidStateException exception) {
+            } catch (DocumentSettings.Builder.InvalidStateException exception) {
                 project = null;
             }
             setVisible(false);
@@ -164,7 +164,7 @@ public class NewProjectDialog extends JDialog {
 
     private void setupHelpButton(final JPanel content, final JButton helpButton) {
         final var res = Resources.get();
-        final var helpAction = new ApplicationAction("metricsDialogHelpAction", (event, action) -> {
+        final var helpAction = new ApplicationAction("documentSettingsDialogHelpAction", (event, action) -> {
         }).setIcon(Icons.HELP, res.colors.icon(), res.colors.disabledIcon())
                 .setAccelerator(KeyEvent.VK_F1, 0);
         helpButton.setAction(helpAction);

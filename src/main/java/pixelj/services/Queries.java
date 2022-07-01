@@ -3,8 +3,8 @@ package pixelj.services;
 class Queries {
     private static final String GLYPHS_TABLE = "glyphs";
     private static final String KERNING_PAIRS_TABLE = "kerning_pairs";
-    private static final String METRICS_TABLE = "metrics";
-    private static final String TITLE_TABLE = "title";
+    private static final String SETTINGS_TABLE = "settings";
+    private static final String PROJECT_TABLE = "project";
 
     public static final String EXTENSION = "pixj";
     public static final String PIXELJ = "pixelj";
@@ -12,8 +12,8 @@ class Queries {
 
     public static final String DROP_GLYPHS_TABLE = "DROP TABLE IF EXISTS " + GLYPHS_TABLE + ";";
     public static final String DROP_K_PAIRS_TABLE = "DROP TABLE IF EXISTS " + KERNING_PAIRS_TABLE + ";";
-    public static final String DROP_METRICS_TABLE = "DROP TABLE IF EXISTS " + METRICS_TABLE + ";";
-    public static final String DROP_TITLE_TABLE = "DROP TABLE IF EXISTS " + TITLE_TABLE + ";";
+    public static final String DROP_SETTINGS_TABLE = "DROP TABLE IF EXISTS " + SETTINGS_TABLE + ";";
+    public static final String DROP_PROJECT_TABLE = "DROP TABLE IF EXISTS " + PROJECT_TABLE + ";";
 
     public static final String CREATE_GLYPHS_TABLE_QUERY = "CREATE TABLE " + GLYPHS_TABLE + "(" + """
                 code_point INT NOT NULL,
@@ -32,25 +32,27 @@ class Queries {
             );
             """;
 
-    public static final String CREATE_METRICS_TABLE = "CREATE TABLE " + METRICS_TABLE + "(" + """
-                canvas_width INT NOT NULL ,
-                canvas_height INT NOT NULL ,
-                ascender INT NOT NULL ,
-                descender INT NOT NULL ,
-                cap_height INT NOT NULL ,
-                x_height INT NOT NULL ,
-                default_width INT NOT NULL ,
-                letter_spacing INT NOT NULL ,
-                space_size INT NOT NULL ,
-                line_spacing INT NOT NULL ,
-                is_monospaced BOOLEAN NOT NULL
+    public static final String CREATE_SETTINGS_TABLE = "CREATE TABLE " + SETTINGS_TABLE + "(" + """
+                canvas_width INT NOT NULL,
+                canvas_height INT NOT NULL,
+                ascender INT NOT NULL,
+                descender INT NOT NULL,
+                cap_height INT NOT NULL,
+                x_height INT NOT NULL,
+                default_width INT NOT NULL,
+                letter_spacing INT NOT NULL,
+                space_size INT NOT NULL,
+                line_spacing INT NOT NULL,
+                is_monospaced BOOLEAN NOT NULL,
+                is_bold BOOLEAN NOT NULL,
+                is_italic BOOLEAN NOT NULL
             );
             """;
 
-    public static final String CREATE_TITLE_TABLE = "CREATE TABLE " + TITLE_TABLE
-            + "(title CHARACTER VARYING(100) NOT NULL);";
+    public static final String CREATE_PROJECT_TABLE = "CREATE TABLE " + PROJECT_TABLE
+            + "(title CHARACTER VARYING(100) NOT NULL, save_version INT NOT NULL);";
 
-    public static final String INSERT_METRICS = "INSERT INTO " + METRICS_TABLE + " " + """
+    public static final String INSERT_SETTINGS = "INSERT INTO " + SETTINGS_TABLE + " " + """
             (
                 canvas_width,
                 canvas_height,
@@ -62,25 +64,28 @@ class Queries {
                 letter_spacing,
                 space_size,
                 line_spacing,
-                is_monospaced
+                is_monospaced,
+                is_bold,
+                is_italic
             )
-            VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
             """;
 
     public static final String INSERT_GLYPH = "INSERT INTO " + GLYPHS_TABLE
             + " (code_point, width, image_bytes) VALUES (?, ?, ?);";
 
-    public static final String INSERT_TITLE = "INSERT INTO " + TITLE_TABLE + " (title) VALUES (?);";
+    public static final String INSERT_PROJECT = "INSERT INTO " + PROJECT_TABLE
+            + " (title, save_version) VALUES (?, ?);";
 
     public static final String INSERT_KERNING_PAIR = "INSERT INTO " + KERNING_PAIRS_TABLE
             + " (id, left_code_point, right_code_point, kerning_value) VALUES (?, ?, ?, ?);";
 
     public static final String SELECT_GLYPHS = "SELECT * FROM " + GLYPHS_TABLE + ";";
     public static final String SELECT_KERNING_PAIRS = "SELECT * FROM " + KERNING_PAIRS_TABLE + ";";
-    public static final String SELECT_METRICS = "SELECT * FROM " + METRICS_TABLE + ";";
-    public static final String SELECT_TITLE = "SELECT * FROM " + TITLE_TABLE + ";";
+    public static final String SELECT_SETTINGS = "SELECT * FROM " + SETTINGS_TABLE + ";";
+    public static final String SELECT_TITLE = "SELECT * FROM " + PROJECT_TABLE + ";";
 
-    public enum MetricsColumn {
+    public enum SettingsColumn {
         CANVAS_WIDTH,
         CANVAS_HEIGHT,
         ASCENDER,
@@ -91,7 +96,9 @@ class Queries {
         LETTER_SPACING,
         SPACE_SIZE,
         LINE_SPACING,
-        IS_MONOSPACED;
+        IS_MONOSPACED,
+        IS_BOLD,
+        IS_ITALIC;
 
         public int getIndex() {
             return this.ordinal() + 1;
@@ -115,7 +122,7 @@ class Queries {
     }
 
     public enum TitleColumn {
-        TITLE;
+        TITLE, SAVE_VERSION;
 
         public int getIndex() {
             return this.ordinal() + 1;

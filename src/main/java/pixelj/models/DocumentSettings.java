@@ -5,7 +5,7 @@ import pixelj.util.ChangeableInt;
 import pixelj.util.ReadOnlyBoolean;
 import pixelj.util.ReadOnlyInt;
 
-public record Metrics(
+public record DocumentSettings(
         int canvasWidth,
         int canvasHeight,
         int ascender,
@@ -16,14 +16,16 @@ public record Metrics(
         int letterSpacing,
         int spaceSize,
         int lineSpacing,
-        boolean isMonospaced
+        boolean isMonospaced,
+        boolean isBold,
+        boolean isItalic
 ) {
 
-    public static Metrics getDefault() {
-        return new Metrics(24, 24, 16, 4, 11, 7, 7, 1, 4, 2, false);
+    public static DocumentSettings getDefault() {
+        return new DocumentSettings(24, 24, 16, 4, 11, 7, 7, 1, 4, 2, false, false, false);
     }
 
-    public static class ValidatedBuilder {
+    public static class Builder {
         private static final ChangeableInt ZERO = new ChangeableInt(0);
 
         public final ChangeableInt ascender = new ChangeableInt(0);
@@ -36,6 +38,8 @@ public record Metrics(
         public final ChangeableInt lineSpacing = new ChangeableInt(0);
         public final ChangeableInt spaceSize = new ChangeableInt(0);
         public final ChangeableInt letterSpacing = new ChangeableInt(0);
+        public final ChangeableBoolean isBold = new ChangeableBoolean(false);
+        public final ChangeableBoolean isItalic = new ChangeableBoolean(false);
 
         public final ReadOnlyBoolean validAscender = new ReadOnlyInt(descender)
                 .le(canvasHeight.subtract(descender))
@@ -61,14 +65,14 @@ public record Metrics(
                 .and(validLineSpacing)
                 .and(validSpaceSize);
 
-        public ValidatedBuilder() {
+        public Builder() {
         }
 
-        public Metrics build() throws InvalidStateException {
+        public DocumentSettings build() throws InvalidStateException {
             if (!validAll.getValue()) {
                 throw new InvalidStateException("Not all fields are valid");
             }
-            return new Metrics(
+            return new DocumentSettings(
                     canvasWidth.getValue(),
                     canvasHeight.getValue(),
                     ascender.getValue(),
@@ -79,83 +83,95 @@ public record Metrics(
                     letterSpacing.getValue(),
                     spaceSize.getValue(),
                     lineSpacing.getValue(),
-                    isMonospaced.getValue()
+                    isMonospaced.getValue(),
+                    isBold.getValue(),
+                    isItalic.getValue()
             );
         }
 
-        public ValidatedBuilder setAscender(int value) {
+        public Builder setAscender(int value) {
             ascender.setValue(value);
             return this;
         }
 
-        public ValidatedBuilder setCanvasHeight(int value) {
+        public Builder setBold(boolean value) {
+            isBold.setValue(value);
+            return this;
+        }
+
+        public Builder setCanvasHeight(int value) {
             canvasHeight.setValue(value);
             return this;
         }
 
-        public ValidatedBuilder setCanvasWidth(int value) {
+        public Builder setCanvasWidth(int value) {
             canvasWidth.setValue(value);
             return this;
         }
 
-        public ValidatedBuilder setCapHeight(int value) {
+        public Builder setCapHeight(int value) {
             capHeight.setValue(value);
             return this;
         }
 
-        public ValidatedBuilder setDefaultWidth(int value) {
+        public Builder setDefaultWidth(int value) {
             defaultWidth.setValue(value);
             return this;
         }
 
-        public ValidatedBuilder setDescender(int value) {
+        public Builder setDescender(int value) {
             descender.setValue(value);
             return this;
         }
 
-        public ValidatedBuilder setLineSpacing(int value) {
+        public Builder setItalic(boolean value) {
+            isItalic.setValue(value);
+            return this;
+        }
+
+        public Builder setLineSpacing(int value) {
             lineSpacing.setValue(value);
             return this;
         }
 
-        public ValidatedBuilder setMonospaced(boolean value) {
+        public Builder setMonospaced(boolean value) {
             isMonospaced.setValue(value);
             return this;
         }
 
-        public ValidatedBuilder setSpaceSize(int value) {
+        public Builder setSpaceSize(int value) {
             spaceSize.setValue(value);
             return this;
         }
 
-        public ValidatedBuilder setSpacing(int value) {
+        public Builder setLetterSpacing(int value) {
             letterSpacing.setValue(value);
             return this;
         }
 
-        public ValidatedBuilder setXHeight(int value) {
+        public Builder setXHeight(int value) {
             xHeight.setValue(value);
             return this;
         }
 
-        public static ValidatedBuilder from(Metrics metrics) {
-            final var builder = new ValidatedBuilder();
-            builder.ascender.setValue(metrics.ascender());
-            builder.canvasHeight.setValue(metrics.canvasHeight());
-            builder.canvasWidth.setValue(metrics.canvasWidth());
-            builder.capHeight.setValue(metrics.capHeight());
-            builder.defaultWidth.setValue(metrics.defaultWidth);
-            builder.descender.setValue(metrics.descender());
-            builder.isMonospaced.setValue(metrics.isMonospaced());
-            builder.lineSpacing.setValue(metrics.lineSpacing());
-            builder.spaceSize.setValue(metrics.spaceSize());
-            builder.letterSpacing.setValue(metrics.letterSpacing);
-            builder.xHeight.setValue(metrics.xHeight());
-            return builder;
+        public static Builder from(DocumentSettings settings) {
+            return new Builder().setAscender(settings.ascender())
+                    .setBold(settings.isBold())
+                    .setCanvasHeight(settings.canvasHeight())
+                    .setCanvasWidth(settings.canvasWidth())
+                    .setCapHeight(settings.capHeight())
+                    .setDefaultWidth(settings.defaultWidth)
+                    .setDescender(settings.descender())
+                    .setItalic(settings.isItalic)
+                    .setLineSpacing(settings.lineSpacing())
+                    .setMonospaced(settings.isMonospaced())
+                    .setSpaceSize(settings.spaceSize())
+                    .setLetterSpacing(settings.letterSpacing)
+                    .setXHeight(settings.xHeight());
         }
 
-        public static ValidatedBuilder getDefaultBuilder() {
-            return ValidatedBuilder.from(Metrics.getDefault());
+        public static Builder getDefaultBuilder() {
+            return Builder.from(DocumentSettings.getDefault());
         }
 
         public static final class InvalidStateException extends Exception {

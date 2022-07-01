@@ -70,14 +70,14 @@ public class PreviewScreenActions {
             return java.util.Collections.emptyList();
         }
 
-        final var letterSpacing = project.getMetrics().letterSpacing();
+        final var letterSpacing = project.getDocumentSettings().letterSpacing();
         final var kerningPairs = project.getKerningPairs();
         final var pairs = characters.size() - 1;
         final var spaces = new ArrayList<Integer>(pairs);
         for (var index = 0; index < pairs; index++) {
             final var left = characters.get(index);
             if (left.getCodePoint() == SPACE) {
-                spaces.add(project.getMetrics().spaceSize());
+                spaces.add(project.getDocumentSettings().spaceSize());
                 continue;
             }
 
@@ -95,7 +95,7 @@ public class PreviewScreenActions {
 
     private StringView getView(final String line) {
         final var view = new StringView(Color.WHITE);
-        view.setMaxY(project.getMetrics().descender() + project.getMetrics().ascender());
+        view.setMaxY(project.getDocumentSettings().descender() + project.getDocumentSettings().ascender());
         final var characters = getCharactersOfLine(line);
         final var spaces = getSpaces(characters);
         view.set(characters, spaces);
@@ -116,7 +116,7 @@ public class PreviewScreenActions {
                     view.setZoom(zoom);
                     view.setPadding(0);
                     if (lineIndex < lines - 1) {
-                        view.setLineSpacing(project.getMetrics().lineSpacing());
+                        view.setLineSpacing(project.getDocumentSettings().lineSpacing());
                     }
                     view.setAlignmentX(0f);
                     container.add(view);

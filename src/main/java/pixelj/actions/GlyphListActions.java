@@ -19,7 +19,7 @@ import javax.swing.SwingUtilities;
 import pixelj.graphics.BinaryImage;
 import pixelj.models.Glyph;
 import pixelj.models.KerningPair;
-import pixelj.models.Metrics;
+import pixelj.models.DocumentSettings;
 import pixelj.models.Project;
 import pixelj.resources.Resources;
 import pixelj.views.glyphs_screen.AddDialog;
@@ -40,7 +40,6 @@ public class GlyphListActions {
     public GlyphListActions(
             final Project project,
             final ListSelectionModel selectionModel,
-            final Metrics metrics,
             final JComponent root
     ) {
         this.project = project;
@@ -58,8 +57,9 @@ public class GlyphListActions {
 
         all = List.of(showAddDialogAction, showRemoveDialogAction);
 
-        canvasSize = new Dimension(metrics.canvasWidth(), metrics.canvasHeight());
-        defaultWidth = metrics.defaultWidth();
+        final var documentSettings = project.getDocumentSettings();
+        canvasSize = new Dimension(documentSettings.canvasWidth(), documentSettings.canvasHeight());
+        defaultWidth = documentSettings.defaultWidth();
 
         selectionModel.addListSelectionListener(
                 e -> showRemoveDialogAction.setEnabled(selectionModel.getMinSelectionIndex() >= 0)
@@ -150,8 +150,8 @@ public class GlyphListActions {
         listModel.removeAll(removed);
     }
 
-    public void updateMetrics(final Metrics metrics) {
-        canvasSize = new Dimension(metrics.canvasWidth(), metrics.canvasHeight());
-        defaultWidth = metrics.defaultWidth();
+    public void updateDocumentSettings(final DocumentSettings settings) {
+        canvasSize = new Dimension(settings.canvasWidth(), settings.canvasHeight());
+        defaultWidth = settings.defaultWidth();
     }
 }

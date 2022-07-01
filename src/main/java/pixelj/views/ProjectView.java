@@ -31,7 +31,7 @@ import pixelj.actions.Actions;
 import pixelj.actions.ApplicationAction;
 import pixelj.actions.MainActions;
 import pixelj.graphics.FontIcon;
-import pixelj.models.Metrics;
+import pixelj.models.DocumentSettings;
 import pixelj.models.Project;
 import pixelj.resources.Icons;
 import pixelj.resources.Resources;
@@ -66,8 +66,10 @@ public class ProjectView extends JFrame {
         final var mainActions = new MainActions(project, root);
         Actions.registerShortcuts(mainActions.all, root);
 
-        final ChangeableValue.Listener<Metrics> metricsListener = (sender, value) -> metricsChanged(value);
-        project.metricsProperty.addChangeListener(metricsListener);
+        final ChangeableValue.Listener<DocumentSettings> metricsListener = (sender, value) -> metricsChanged(
+                value
+        );
+        project.documentSettingsProperty.addChangeListener(metricsListener);
 
         final ChangeableValue.Listener<String> titleListener = (sender, value) -> titleChanged(value);
         project.titleProperty.addChangeListener(titleListener);
@@ -246,7 +248,7 @@ public class ProjectView extends JFrame {
         root.putClientProperty(FlatClientProperties.TABBED_PANE_TRAILING_COMPONENT, trailingContainer);
     }
 
-    private void metricsChanged(final Metrics newValue) {
+    private void metricsChanged(final DocumentSettings newValue) {
         charactersScreen.updateMetrics(newValue);
         kerningPairsScreen.updateMetrics(newValue);
         if (previewScreen.isEnabled()) {
@@ -264,7 +266,7 @@ public class ProjectView extends JFrame {
         menu.add(actions.saveAsAction);
         menu.add(actions.exportAction);
         menu.add(new JSeparator(SwingConstants.HORIZONTAL));
-        menu.add(actions.showMetricsAction);
+        menu.add(actions.showDocumentSettingsAction);
         menu.add(actions.showSettingsAction);
         menu.add(new JSeparator(SwingConstants.HORIZONTAL));
         menu.add(actions.showHelpAction);

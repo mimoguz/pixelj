@@ -17,7 +17,7 @@ import pixelj.actions.GlyphListActions;
 import pixelj.models.BlockRecord;
 import pixelj.models.Glyph;
 import pixelj.models.FilteredList;
-import pixelj.models.Metrics;
+import pixelj.models.DocumentSettings;
 import pixelj.models.Project;
 import pixelj.models.SortedList;
 import pixelj.resources.Resources;
@@ -40,14 +40,14 @@ public class ListPanel extends JPanel implements Detachable {
     public ListPanel(
             final Project project,
             final ListSelectionModel selectionModel,
-            final Metrics metrics,
+            final DocumentSettings metrics,
             final JComponent root
     ) {
         this.selectionModel = selectionModel;
 
         final var res = Resources.get();
 
-        actions = new GlyphListActions(project, selectionModel, metrics, root);
+        actions = new GlyphListActions(project, selectionModel, root);
         actions.showRemoveDialogAction.setEnabled(false);
         Actions.registerShortcuts(actions.all, root);
 

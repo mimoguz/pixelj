@@ -2,14 +2,14 @@ package pixelj.views;
 
 import pixelj.actions.Actions;
 import pixelj.actions.ApplicationAction;
-import pixelj.models.Metrics;
+import pixelj.models.DocumentSettings;
 import pixelj.resources.Icons;
 import pixelj.resources.Resources;
 import pixelj.util.ChangeableBoolean;
 import pixelj.views.shared.Borders;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
-import pixelj.views.shared.MetricsPanel;
+import pixelj.views.shared.DocumentSettingsPanel;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
@@ -21,18 +21,22 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class MetricsDialog extends JDialog {
+public class DocumentSettingsDialog extends JDialog {
     private final JButton applyButton;
-    private final MetricsPanel inputPanel;
-    private Metrics result;
+    private final DocumentSettingsPanel inputPanel;
+    private DocumentSettings result;
 
-    public MetricsDialog(final Frame owner) {
-        super(owner, Resources.get().getString("metricsDialogTitle"), Dialog.ModalityType.APPLICATION_MODAL);
+    public DocumentSettingsDialog(final Frame owner) {
+        super(
+                owner,
+                Resources.get().getString("documentSettingsDialogTitle"),
+                Dialog.ModalityType.APPLICATION_MODAL
+        );
 
         final var logger = Logger.getLogger(this.getClass().getName());
         logger.addHandler(new ConsoleHandler());
 
-        inputPanel = new MetricsPanel(Metrics.getDefault(), false);
+        inputPanel = new DocumentSettingsPanel(DocumentSettings.getDefault(), false);
 
         final var res = Resources.get();
 
@@ -40,7 +44,7 @@ public class MetricsDialog extends JDialog {
         Components.setFixedSize(applyButton, Dimensions.TEXT_BUTTON_SIZE);
         applyButton.addActionListener(this::onApply);
         final ChangeableBoolean.Listener validationListener = (sender, args) -> applyButton.setEnabled(args);
-        inputPanel.metricsValidProperty().addChangeListener(validationListener);
+        inputPanel.settingsValidProperty().addChangeListener(validationListener);
 
         final var cancelButton = new JButton(res.getString("cancel"));
         Components.setFixedSize(cancelButton, Dimensions.TEXT_BUTTON_SIZE);
@@ -52,8 +56,8 @@ public class MetricsDialog extends JDialog {
         content.setBorder(Borders.LARGE_EMPTY);
 
         final var helpAction = new ApplicationAction(
-                "metricsDialogHelpAction",
-                (event, action) -> logger.log(Level.INFO, "Metrics help")
+                "documentSettingsDialogHelpAction",
+                (event, action) -> logger.log(Level.INFO, "Document settings help")
         ).setIcon(Icons.HELP, res.colors.icon(), res.colors.disabledIcon()).setAccelerator(KeyEvent.VK_F1, 0);
         Actions.registerShortcuts(java.util.List.of(helpAction), content);
         final var helpButton = new JButton(helpAction);
@@ -88,12 +92,12 @@ public class MetricsDialog extends JDialog {
         setLocationRelativeTo(owner);
     }
 
-    public Metrics getResult() {
+    public DocumentSettings getResult() {
         return result;
     }
 
-    public void set(final Metrics metrics) {
-        inputPanel.setMetrics(metrics, false);
+    public void set(final DocumentSettings settings) {
+        inputPanel.setSettings(settings, false);
     }
 
     @Override
@@ -107,8 +111,8 @@ public class MetricsDialog extends JDialog {
 
     private void onApply(final ActionEvent e) {
         try {
-            result = inputPanel.getMetrics();
-        } catch (Metrics.ValidatedBuilder.InvalidStateException exception) {
+            result = inputPanel.getDocumentSettings();
+        } catch (DocumentSettings.Builder.InvalidStateException exception) {
             result = null;
         }
         setVisible(false);

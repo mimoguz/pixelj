@@ -9,88 +9,88 @@ public class ExampleData {
     }
 
     public static Project createProject() {
-        final var metrics = Metrics.getDefault();
+        final var settings = DocumentSettings.getDefault();
 
         final var glyphs = List.of(
                 new Glyph(
                         65,
-                        metrics.defaultWidth(),
-                        BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
+                        settings.defaultWidth(),
+                        BinaryImage.of(settings.canvasWidth(), settings.canvasHeight(), true)
                 ),
                 new Glyph(
                         66,
-                        metrics.defaultWidth(),
-                        BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
+                        settings.defaultWidth(),
+                        BinaryImage.of(settings.canvasWidth(), settings.canvasHeight(), true)
                 ),
                 new Glyph(
                         67,
-                        metrics.defaultWidth(),
-                        BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
+                        settings.defaultWidth(),
+                        BinaryImage.of(settings.canvasWidth(), settings.canvasHeight(), true)
                 ),
                 new Glyph(
                         68,
-                        metrics.defaultWidth(),
-                        BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
+                        settings.defaultWidth(),
+                        BinaryImage.of(settings.canvasWidth(), settings.canvasHeight(), true)
                 ),
                 new Glyph(
                         69,
-                        metrics.defaultWidth(),
-                        BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
+                        settings.defaultWidth(),
+                        BinaryImage.of(settings.canvasWidth(), settings.canvasHeight(), true)
                 ),
                 new Glyph(
                         70,
-                        metrics.defaultWidth(),
-                        BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
+                        settings.defaultWidth(),
+                        BinaryImage.of(settings.canvasWidth(), settings.canvasHeight(), true)
                 ),
                 new Glyph(
                         71,
-                        metrics.defaultWidth(),
-                        BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
+                        settings.defaultWidth(),
+                        BinaryImage.of(settings.canvasWidth(), settings.canvasHeight(), true)
                 ),
                 new Glyph(
                         72,
-                        metrics.defaultWidth(),
-                        BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
+                        settings.defaultWidth(),
+                        BinaryImage.of(settings.canvasWidth(), settings.canvasHeight(), true)
                 ),
                 new Glyph(
                         73,
-                        metrics.defaultWidth(),
-                        BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
+                        settings.defaultWidth(),
+                        BinaryImage.of(settings.canvasWidth(), settings.canvasHeight(), true)
                 ),
                 new Glyph(
                         74,
-                        metrics.defaultWidth(),
-                        BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
+                        settings.defaultWidth(),
+                        BinaryImage.of(settings.canvasWidth(), settings.canvasHeight(), true)
                 ),
                 new Glyph(
                         75,
-                        metrics.defaultWidth(),
-                        BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
+                        settings.defaultWidth(),
+                        BinaryImage.of(settings.canvasWidth(), settings.canvasHeight(), true)
                 ),
                 new Glyph(
                         76,
-                        metrics.defaultWidth(),
-                        BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
+                        settings.defaultWidth(),
+                        BinaryImage.of(settings.canvasWidth(), settings.canvasHeight(), true)
                 ),
                 new Glyph(
                         77,
-                        metrics.defaultWidth(),
-                        BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
+                        settings.defaultWidth(),
+                        BinaryImage.of(settings.canvasWidth(), settings.canvasHeight(), true)
                 ),
                 new Glyph(
                         78,
-                        metrics.defaultWidth(),
-                        BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
+                        settings.defaultWidth(),
+                        BinaryImage.of(settings.canvasWidth(), settings.canvasHeight(), true)
                 ),
                 new Glyph(
                         79,
-                        metrics.defaultWidth(),
-                        BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
+                        settings.defaultWidth(),
+                        BinaryImage.of(settings.canvasWidth(), settings.canvasHeight(), true)
                 ),
                 new Glyph(
                         80,
-                        metrics.defaultWidth(),
-                        BinaryImage.of(metrics.canvasWidth(), metrics.canvasHeight(), true)
+                        settings.defaultWidth(),
+                        BinaryImage.of(settings.canvasWidth(), settings.canvasHeight(), true)
                 )
         );
 
@@ -107,7 +107,7 @@ public class ExampleData {
                 "Example project",
                 new SortedList<>(glyphs),
                 new SortedList<>(kerningPairs),
-                metrics,
+                settings,
                 null
         );
     }

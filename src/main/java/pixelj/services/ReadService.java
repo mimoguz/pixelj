@@ -10,16 +10,17 @@ import pixelj.models.CompressedGlyph;
 import pixelj.models.CompressedGlyph.MisshapenDataException;
 import pixelj.models.Glyph;
 import pixelj.models.KerningPair;
-import pixelj.models.Metrics;
-import pixelj.models.Metrics.ValidatedBuilder.InvalidStateException;
+import pixelj.models.DocumentSettings;
+import pixelj.models.DocumentSettings.Builder.InvalidStateException;
 import pixelj.models.Project;
 import pixelj.models.SortedList;
 import pixelj.services.Queries.GlyphsColumn;
 import pixelj.services.Queries.KerningPairsColumn;
-import pixelj.services.Queries.MetricsColumn;
+import pixelj.services.Queries.SettingsColumn;
 import pixelj.services.Queries.TitleColumn;
 
 class ReadService {
+    // TODO: Check save version first
     public static Project load(final Path path) throws IOException {
         final var pathStr = path.toAbsolutePath().toString();
         final var url = pathStr.endsWith("." + Queries.EXTENSION)
@@ -28,13 +29,13 @@ class ReadService {
         try (var connection = DriverManager.getConnection(Queries.URL_PREFIX + url, Queries.PIXELJ, "")) {
             final var statement = connection.createStatement();
             final var title = extractTitle(statement.executeQuery(Queries.SELECT_TITLE));
-            final var metrics = extractMetrics(statement.executeQuery(Queries.SELECT_METRICS));
-            final var glyphs = extractGlyphs(statement.executeQuery(Queries.SELECT_GLYPHS), metrics);
+            final var settings = extractMetrics(statement.executeQuery(Queries.SELECT_SETTINGS));
+            final var glyphs = extractGlyphs(statement.executeQuery(Queries.SELECT_GLYPHS), settings);
             final var kerningPairs = extractKerningPairs(
                     statement.executeQuery(Queries.SELECT_KERNING_PAIRS),
                     glyphs
             );
-            return new Project(title, glyphs, kerningPairs, metrics, path);
+            return new Project(title, glyphs, kerningPairs, settings, path);
         } catch (SQLException | IOException e) {
             throw new IOException(
                     String.format("Can't open or read the file %s:\n%s", path.toString(), e.getMessage())
@@ -62,7 +63,7 @@ class ReadService {
         return list;
     }
 
-    private static SortedList<Glyph> extractGlyphs(ResultSet result, Metrics metrics)
+    private static SortedList<Glyph> extractGlyphs(ResultSet result, DocumentSettings metrics)
             throws SQLException,
             IOException,
             MisshapenDataException {
@@ -78,20 +79,24 @@ class ReadService {
         return list;
     }
 
-    private static Metrics extractMetrics(final ResultSet result) throws InvalidStateException, SQLException {
+    private static DocumentSettings extractMetrics(final ResultSet result)
+            throws InvalidStateException,
+            SQLException {
         result.next();
-        return Metrics.ValidatedBuilder.getDefaultBuilder()
-                .setCanvasWidth(result.getInt(MetricsColumn.CANVAS_WIDTH.getIndex()))
-                .setCanvasHeight(result.getInt(MetricsColumn.CANVAS_HEIGHT.getIndex()))
-                .setAscender(result.getInt(MetricsColumn.ASCENDER.getIndex()))
-                .setDescender(result.getInt(MetricsColumn.DESCENDER.getIndex()))
-                .setCapHeight(result.getInt(MetricsColumn.CAP_HEIGHT.getIndex()))
-                .setXHeight(result.getInt(MetricsColumn.X_HEIGHT.getIndex()))
-                .setDefaultWidth(result.getInt(MetricsColumn.DEFAULT_WIDTH.getIndex()))
-                .setSpacing(result.getInt(MetricsColumn.LETTER_SPACING.getIndex()))
-                .setSpaceSize(result.getInt(MetricsColumn.SPACE_SIZE.getIndex()))
-                .setLineSpacing(result.getInt(MetricsColumn.LINE_SPACING.getIndex()))
-                .setMonospaced(result.getBoolean(MetricsColumn.IS_MONOSPACED.getIndex()))
+        return DocumentSettings.Builder.getDefaultBuilder()
+                .setCanvasWidth(result.getInt(SettingsColumn.CANVAS_WIDTH.getIndex()))
+                .setCanvasHeight(result.getInt(SettingsColumn.CANVAS_HEIGHT.getIndex()))
+                .setAscender(result.getInt(SettingsColumn.ASCENDER.getIndex()))
+                .setDescender(result.getInt(SettingsColumn.DESCENDER.getIndex()))
+                .setCapHeight(result.getInt(SettingsColumn.CAP_HEIGHT.getIndex()))
+                .setXHeight(result.getInt(SettingsColumn.X_HEIGHT.getIndex()))
+                .setDefaultWidth(result.getInt(SettingsColumn.DEFAULT_WIDTH.getIndex()))
+                .setLetterSpacing(result.getInt(SettingsColumn.LETTER_SPACING.getIndex()))
+                .setSpaceSize(result.getInt(SettingsColumn.SPACE_SIZE.getIndex()))
+                .setLineSpacing(result.getInt(SettingsColumn.LINE_SPACING.getIndex()))
+                .setMonospaced(result.getBoolean(SettingsColumn.IS_MONOSPACED.getIndex()))
+                .setBold(result.getBoolean(SettingsColumn.IS_BOLD.getIndex()))
+                .setItalic(result.getBoolean(SettingsColumn.IS_ITALIC.getIndex()))
                 .build();
     }
 

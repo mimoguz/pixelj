@@ -13,7 +13,7 @@ public class Project {
 
     private final SortedList<Glyph> glyphs;
     private final SortedList<KerningPair> kerningPairs;
-    public final ChangeableValue<Metrics> metricsProperty;
+    public final ChangeableValue<DocumentSettings> documentSettingsProperty;
     public final ChangeableValue<String> titleProperty;
     public final ChangeableValue<Path> pathProperty;
 
@@ -21,14 +21,14 @@ public class Project {
             final String title,
             final SortedList<Glyph> glyphs,
             final SortedList<KerningPair> kerningPairs,
-            final Metrics metrics,
+            final DocumentSettings settings,
             final Path path
     ) {
         titleProperty = new ChangeableValue<>(title);
         this.glyphs = glyphs;
         this.kerningPairs = kerningPairs;
         pathProperty = new ChangeableValue<>(path);
-        metricsProperty = new ChangeableValue<>(metrics);
+        documentSettingsProperty = new ChangeableValue<>(settings);
 
         // Ignore
         // Kerning pairs which depend on non-existing characters
@@ -85,8 +85,8 @@ public class Project {
         return kerningPairs;
     }
 
-    public Metrics getMetrics() {
-        return metricsProperty.getValue();
+    public DocumentSettings getDocumentSettings() {
+        return documentSettingsProperty.getValue();
     }
 
     public Path getPath() {
@@ -101,8 +101,8 @@ public class Project {
         return titleProperty.getValue();
     }
 
-    public void setMetrics(final Metrics value) {
-        metricsProperty.setValue(value);
+    public void setDocumentSettings(final DocumentSettings value) {
+        documentSettingsProperty.setValue(value);
     }
 
     public void setTitle(final String value) {

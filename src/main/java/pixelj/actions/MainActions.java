@@ -27,7 +27,7 @@ import pixelj.services.ExportServiceImpl;
 import pixelj.services.FileService;
 import pixelj.services.FileServiceImpl;
 import pixelj.views.HomeView;
-import pixelj.views.MetricsDialog;
+import pixelj.views.DocumentSettingsDialog;
 import pixelj.views.shared.Components;
 
 public class MainActions {
@@ -38,18 +38,18 @@ public class MainActions {
     public final ApplicationAction saveAction;
     public final ApplicationAction saveAsAction;
     public final ApplicationAction showHelpAction;
-    public final ApplicationAction showMetricsAction;
+    public final ApplicationAction showDocumentSettingsAction;
     public final ApplicationAction showSettingsAction;
     private boolean enabled = true;
     private final Logger logger;
-    private final MetricsDialog metricsDialog;
+    private final DocumentSettingsDialog documentSettingsDialog;
     private final Project project;
     private final JComponent root;
 
     public MainActions(final Project project, final JComponent root) {
         this.project = project;
         this.root = root;
-        metricsDialog = new MetricsDialog((Frame) SwingUtilities.windowForComponent(root));
+        documentSettingsDialog = new DocumentSettingsDialog((Frame) SwingUtilities.windowForComponent(root));
 
         logger = Logger.getLogger(this.getClass().getName());
         logger.addHandler(new ConsoleHandler());
@@ -80,7 +80,10 @@ public class MainActions {
                 .setIcon(Icons.HELP, res.colors.icon(), res.colors.disabledIcon())
                 .setAccelerator(KeyEvent.VK_F1, 0);
 
-        showMetricsAction = new ApplicationAction("showMetricsAction", this::showMetrics).withText()
+        showDocumentSettingsAction = new ApplicationAction(
+                "showDocumentSettingsAction",
+                this::showDocumentSettings
+        ).withText()
                 .setIcon(Icons.METRICS, res.colors.icon(), res.colors.disabledIcon())
                 .setAccelerator(KeyEvent.VK_M, ActionEvent.CTRL_MASK);
 
@@ -101,7 +104,7 @@ public class MainActions {
                 saveAction,
                 saveAsAction,
                 showHelpAction,
-                showMetricsAction,
+                showDocumentSettingsAction,
                 showSettingsAction
         );
     }
@@ -149,6 +152,7 @@ public class MainActions {
                 new FileServiceImpl().writeFile(project, path);
             }
         } catch (IOException e) {
+            e.printStackTrace();
             showInfo(Resources.get().getString("saveFailed"));
         }
     }
@@ -165,6 +169,7 @@ public class MainActions {
                 project.setPath(path);
             }
         } catch (IOException e) {
+            e.printStackTrace();
             showInfo(Resources.get().getString("saveFailed"));
         }
     }
@@ -195,12 +200,12 @@ public class MainActions {
         logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
     }
 
-    private void showMetrics(final ActionEvent event, final Action action) {
-        metricsDialog.set(project.getMetrics());
-        metricsDialog.setVisible(true);
-        final var result = metricsDialog.getResult();
-        if (result != null && !project.getMetrics().equals(result)) {
-            project.setMetrics(result);
+    private void showDocumentSettings(final ActionEvent event, final Action action) {
+        documentSettingsDialog.set(project.getDocumentSettings());
+        documentSettingsDialog.setVisible(true);
+        final var result = documentSettingsDialog.getResult();
+        if (result != null && !project.getDocumentSettings().equals(result)) {
+            project.setDocumentSettings(result);
         }
     }
 

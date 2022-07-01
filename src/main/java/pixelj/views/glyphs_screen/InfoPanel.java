@@ -17,7 +17,7 @@ import javax.swing.SpinnerNumberModel;
 import com.formdev.flatlaf.FlatClientProperties;
 
 import pixelj.models.Glyph;
-import pixelj.models.Metrics;
+import pixelj.models.DocumentSettings;
 import pixelj.models.Project;
 import pixelj.resources.Resources;
 import pixelj.views.shared.Components;
@@ -116,7 +116,7 @@ public class InfoPanel extends JPanel {
         cons.insets = new Insets(0, pad - focusWidth, pad * 2, pad - divWidth);
         add(showLinesCheckBox, cons);
 
-        setMetrics(project.getMetrics());
+        setMetrics(project.getDocumentSettings());
     }
 
     public Glyph getModel() {
@@ -131,7 +131,7 @@ public class InfoPanel extends JPanel {
         return showLinesCheckBox;
     }
 
-    public void setMetrics(final Metrics metrics) {
+    public void setMetrics(final DocumentSettings metrics) {
         widthSpinner.setModel(
                 new SpinnerNumberModel(
                         model != null ? model.getWidth() : metrics.defaultWidth(),

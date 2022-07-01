@@ -13,27 +13,29 @@ import javax.swing.SpinnerNumberModel;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
-import pixelj.models.Metrics;
+import pixelj.models.DocumentSettings;
 import pixelj.resources.Resources;
 import pixelj.util.ChangeableInt;
 import pixelj.util.ReadOnlyBoolean;
 
-public class MetricsPanel extends JPanel {
+public class DocumentSettingsPanel extends JPanel {
     private final JSpinner ascenderIn;
-    private final Metrics.ValidatedBuilder builder;
+    private final DocumentSettings.Builder builder;
     private final JSpinner canvasHeightIn;
     private final JSpinner canvasWidthIn;
     private final JSpinner capHeightIn;
     private final JSpinner defaultWidthIn;
     private final JSpinner descenderIn;
-    private final JCheckBox isMonospaced;
+    private final JCheckBox isBoldIn;
+    private final JCheckBox isItalicIn;
+    private final JCheckBox isMonospacedIn;
     private final JSpinner lineSpacingIn;
     private final JSpinner spaceSizeIn;
     private final JSpinner letterSpacingIn;
     private final JSpinner xHeightIn;
 
-    public MetricsPanel(final Metrics init, final boolean canEditCanvasSize) {
-        builder = Metrics.ValidatedBuilder.from(init);
+    public DocumentSettingsPanel(final DocumentSettings init, final boolean canEditCanvasSize) {
+        builder = DocumentSettings.Builder.from(init);
         ascenderIn = getSpinner(builder.ascender, builder.validAscender);
         canvasHeightIn = getSpinner(builder.canvasHeight, builder.validCanvasHeight);
         canvasWidthIn = getSpinner(builder.canvasWidth, builder.validCanvasWidth);
@@ -45,8 +47,12 @@ public class MetricsPanel extends JPanel {
         letterSpacingIn = getSpinner(0, builder.letterSpacing, builder.validLetterSpacing);
         xHeightIn = getSpinner(0, builder.spaceSize, builder.validSpaceSize);
 
-        isMonospaced = new JCheckBox();
-        isMonospaced.addChangeListener(e -> builder.isMonospaced.setValue(isMonospaced.isSelected()));
+        isBoldIn = new JCheckBox();
+        isBoldIn.addChangeListener(e -> builder.isBold.setValue(isBoldIn.isSelected()));
+        isItalicIn = new JCheckBox();
+        isItalicIn.addChangeListener(e -> builder.isItalic.setValue(isItalicIn.isSelected()));
+        isMonospacedIn = new JCheckBox();
+        isMonospacedIn.addChangeListener(e -> builder.isMonospaced.setValue(isMonospacedIn.isSelected()));
 
         final var res = Resources.get();
 
@@ -59,20 +65,27 @@ public class MetricsPanel extends JPanel {
         cons.weightx = 1.0;
         cons.insets = new Insets(0, 0, Dimensions.SMALL_PADDING, Dimensions.MEDIUM_PADDING);
         cons.anchor = GridBagConstraints.LINE_START;
-        add(new JLabel(res.getString("metricsCanvasWidth")), cons);
+        add(new JLabel(res.getString("documentCanvasWidth")), cons);
         cons.gridy = GridBagConstraints.RELATIVE;
-        add(new JLabel(res.getString("metricsCanvasHeight")), cons);
-        add(new JLabel(res.getString("metricsAscender")), cons);
-        add(new JLabel(res.getString("metricsDescender")), cons);
-        add(new JLabel(res.getString("metricsCapHeight")), cons);
-        add(new JLabel(res.getString("metricsXHeight")), cons);
-        add(new JLabel(res.getString("metricsDefaultWidth")), cons);
-        add(new JLabel(res.getString("metricsLetterSpacing")), cons);
-        add(new JLabel(res.getString("metricsSpaceSize")), cons);
-        add(new JLabel(res.getString("metricsLineSpacing")), cons);
-        final var isMonospacedLabel = new JLabel(res.getString("metricsIsMonospaced"));
-        isMonospacedLabel.setBorder(BorderFactory.createEmptyBorder(8, 0, 8, 0));
+        add(new JLabel(res.getString("documentCanvasHeight")), cons);
+        add(new JLabel(res.getString("documentAscender")), cons);
+        add(new JLabel(res.getString("documentDescender")), cons);
+        add(new JLabel(res.getString("documentCapHeight")), cons);
+        add(new JLabel(res.getString("documentXHeight")), cons);
+        add(new JLabel(res.getString("documentDefaultWidth")), cons);
+        add(new JLabel(res.getString("documentLetterSpacing")), cons);
+        add(new JLabel(res.getString("documentSpaceSize")), cons);
+        add(new JLabel(res.getString("documentLineSpacing")), cons);
+        final var labelBorder = BorderFactory.createEmptyBorder(8, 0, 8, 0);
+        final var isMonospacedLabel = new JLabel(res.getString("documentIsMonospaced"));
+        isMonospacedLabel.setBorder(labelBorder);
         add(isMonospacedLabel, cons);
+        final var isBoldLabel = new JLabel(res.getString("documentIsBold"));
+        isBoldLabel.setBorder(labelBorder);
+        add(isBoldLabel, cons);
+        final var isItalicLabel = new JLabel(res.getString("documentIsItalic"));
+        isItalicLabel.setBorder(labelBorder);
+        add(isItalicLabel, cons);
 
         cons.gridx = 1;
         cons.gridy = 0;
@@ -91,12 +104,14 @@ public class MetricsPanel extends JPanel {
         add(letterSpacingIn, cons);
         add(spaceSizeIn, cons);
         add(lineSpacingIn, cons);
-        add(isMonospaced, cons);
+        add(isMonospacedIn, cons);
+        add(isBoldIn, cons);
+        add(isItalicIn, cons);
 
-        setMetrics(init, canEditCanvasSize);
+        setSettings(init, canEditCanvasSize);
     }
 
-    public Metrics getMetrics() throws Metrics.ValidatedBuilder.InvalidStateException {
+    public DocumentSettings getDocumentSettings() throws DocumentSettings.Builder.InvalidStateException {
         return builder.build();
     }
 
@@ -104,22 +119,22 @@ public class MetricsPanel extends JPanel {
         return builder.validAll.getValue();
     }
 
-    public ReadOnlyBoolean metricsValidProperty() {
+    public ReadOnlyBoolean settingsValidProperty() {
         return builder.validAll;
     }
 
-    public void setMetrics(final Metrics metrics, final boolean canEditCanvasSize) {
-        canvasWidthIn.setValue(metrics.canvasWidth());
-        canvasHeightIn.setValue(metrics.canvasHeight());
-        ascenderIn.setValue(metrics.ascender());
-        descenderIn.setValue(metrics.descender());
-        capHeightIn.setValue(metrics.capHeight());
-        xHeightIn.setValue(metrics.xHeight());
-        defaultWidthIn.setValue(metrics.defaultWidth());
-        letterSpacingIn.setValue(metrics.letterSpacing());
-        spaceSizeIn.setValue(metrics.spaceSize());
-        lineSpacingIn.setValue(metrics.lineSpacing());
-        isMonospaced.setSelected(metrics.isMonospaced());
+    public void setSettings(final DocumentSettings settings, final boolean canEditCanvasSize) {
+        canvasWidthIn.setValue(settings.canvasWidth());
+        canvasHeightIn.setValue(settings.canvasHeight());
+        ascenderIn.setValue(settings.ascender());
+        descenderIn.setValue(settings.descender());
+        capHeightIn.setValue(settings.capHeight());
+        xHeightIn.setValue(settings.xHeight());
+        defaultWidthIn.setValue(settings.defaultWidth());
+        letterSpacingIn.setValue(settings.letterSpacing());
+        spaceSizeIn.setValue(settings.spaceSize());
+        lineSpacingIn.setValue(settings.lineSpacing());
+        isMonospacedIn.setSelected(settings.isMonospaced());
 
         canvasHeightIn.setEnabled(canEditCanvasSize);
         canvasWidthIn.setEnabled(canEditCanvasSize);

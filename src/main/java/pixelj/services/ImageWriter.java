@@ -6,7 +6,7 @@ import java.util.Collection;
 
 import pixelj.graphics.BinaryImage;
 import pixelj.models.Glyph;
-import pixelj.models.Metrics;
+import pixelj.models.DocumentSettings;
 import pixelj.models.SortedList;
 import pixelj.util.packer.Rectangle;
 
@@ -22,6 +22,6 @@ public interface ImageWriter {
             Dimension imageSize,
             Collection<Rectangle> rectangles,
             SortedList<Glyph> glyphs,
-            Metrics metrics
+            DocumentSettings settings
     );
 }

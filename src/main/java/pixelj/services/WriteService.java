@@ -8,23 +8,25 @@ import java.util.List;
 
 import pixelj.models.CompressedGlyph;
 import pixelj.models.KerningPairRecord;
-import pixelj.models.Metrics;
+import pixelj.models.DocumentSettings;
 import pixelj.models.Project;
 import pixelj.services.Queries.GlyphsColumn;
 import pixelj.services.Queries.KerningPairsColumn;
-import pixelj.services.Queries.MetricsColumn;
+import pixelj.services.Queries.SettingsColumn;
 import pixelj.services.Queries.TitleColumn;
 
 class WriteService {
+    public static final int VERSION = 1;
+
     public static void save(final Path path, final Project project) throws IOException {
         List<CompressedGlyph> glyphs;
         List<KerningPairRecord> kerningPairs;
         String title;
-        Metrics metrics;
+        DocumentSettings settings;
 
         synchronized (project) {
             title = project.getTitle();
-            metrics = project.getMetrics();
+            settings = project.getDocumentSettings();
             glyphs = project.getGlyphs().getElements().parallelStream().map(CompressedGlyph::from).toList();
             kerningPairs = project.getKerningPairs()
                     .getElements()
@@ -39,10 +41,16 @@ class WriteService {
                 : pathStr;
 
         try (var connection = DriverManager.getConnection(Queries.URL_PREFIX + url, Queries.PIXELJ, "")) {
-
             connection.setAutoCommit(false);
 
             final var statement = connection.createStatement();
+
+            statement.executeUpdate(Queries.DROP_PROJECT_TABLE);
+            statement.executeUpdate(Queries.CREATE_PROJECT_TABLE);
+            final var insertTitle = connection.prepareStatement(Queries.INSERT_PROJECT);
+            insertTitle.setString(TitleColumn.TITLE.getIndex(), title);
+            insertTitle.setInt(TitleColumn.SAVE_VERSION.getIndex(), VERSION);
+            insertTitle.executeUpdate();
 
             statement.executeUpdate(Queries.DROP_GLYPHS_TABLE);
             statement.executeUpdate(Queries.CREATE_GLYPHS_TABLE_QUERY);
@@ -65,27 +73,23 @@ class WriteService {
                 insertKerningPair.executeUpdate();
             }
 
-            statement.executeUpdate(Queries.DROP_METRICS_TABLE);
-            statement.executeUpdate(Queries.CREATE_METRICS_TABLE);
-            final var insertMetrics = connection.prepareStatement(Queries.INSERT_METRICS);
-            insertMetrics.setInt(MetricsColumn.CANVAS_WIDTH.getIndex(), metrics.canvasWidth());
-            insertMetrics.setInt(MetricsColumn.CANVAS_HEIGHT.getIndex(), metrics.canvasHeight());
-            insertMetrics.setInt(MetricsColumn.ASCENDER.getIndex(), metrics.ascender());
-            insertMetrics.setInt(MetricsColumn.DESCENDER.getIndex(), metrics.descender());
-            insertMetrics.setInt(MetricsColumn.CAP_HEIGHT.getIndex(), metrics.capHeight());
-            insertMetrics.setInt(MetricsColumn.X_HEIGHT.getIndex(), metrics.xHeight());
-            insertMetrics.setInt(MetricsColumn.DEFAULT_WIDTH.getIndex(), metrics.defaultWidth());
-            insertMetrics.setInt(MetricsColumn.LETTER_SPACING.getIndex(), metrics.letterSpacing());
-            insertMetrics.setInt(MetricsColumn.SPACE_SIZE.getIndex(), metrics.spaceSize());
-            insertMetrics.setInt(MetricsColumn.LINE_SPACING.getIndex(), metrics.lineSpacing());
-            insertMetrics.setBoolean(MetricsColumn.IS_MONOSPACED.getIndex(), metrics.isMonospaced());
-            insertMetrics.executeUpdate();
-
-            statement.executeUpdate(Queries.DROP_TITLE_TABLE);
-            statement.executeUpdate(Queries.CREATE_TITLE_TABLE);
-            final var insertTitle = connection.prepareStatement(Queries.INSERT_TITLE);
-            insertTitle.setString(TitleColumn.TITLE.getIndex(), title);
-            insertTitle.executeUpdate();
+            statement.executeUpdate(Queries.DROP_SETTINGS_TABLE);
+            statement.executeUpdate(Queries.CREATE_SETTINGS_TABLE);
+            final var insertSettings = connection.prepareStatement(Queries.INSERT_SETTINGS);
+            insertSettings.setInt(SettingsColumn.CANVAS_WIDTH.getIndex(), settings.canvasWidth());
+            insertSettings.setInt(SettingsColumn.CANVAS_HEIGHT.getIndex(), settings.canvasHeight());
+            insertSettings.setInt(SettingsColumn.ASCENDER.getIndex(), settings.ascender());
+            insertSettings.setInt(SettingsColumn.DESCENDER.getIndex(), settings.descender());
+            insertSettings.setInt(SettingsColumn.CAP_HEIGHT.getIndex(), settings.capHeight());
+            insertSettings.setInt(SettingsColumn.X_HEIGHT.getIndex(), settings.xHeight());
+            insertSettings.setInt(SettingsColumn.DEFAULT_WIDTH.getIndex(), settings.defaultWidth());
+            insertSettings.setInt(SettingsColumn.LETTER_SPACING.getIndex(), settings.letterSpacing());
+            insertSettings.setInt(SettingsColumn.SPACE_SIZE.getIndex(), settings.spaceSize());
+            insertSettings.setInt(SettingsColumn.LINE_SPACING.getIndex(), settings.lineSpacing());
+            insertSettings.setBoolean(SettingsColumn.IS_MONOSPACED.getIndex(), settings.isMonospaced());
+            insertSettings.setBoolean(SettingsColumn.IS_BOLD.getIndex(), settings.isBold());
+            insertSettings.setBoolean(SettingsColumn.IS_ITALIC.getIndex(), settings.isMonospaced());
+            insertSettings.executeUpdate();
 
             connection.commit();
         } catch (SQLException e) {

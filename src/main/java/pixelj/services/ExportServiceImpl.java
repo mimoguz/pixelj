@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 import javax.imageio.ImageIO;
 
 import pixelj.models.KerningPair;
-import pixelj.models.Metrics;
+import pixelj.models.DocumentSettings;
 import pixelj.models.Project;
 import pixelj.util.packer.GridPacker;
 import pixelj.util.packer.Rectangle;
@@ -28,7 +28,7 @@ public class ExportServiceImpl implements ExportService {
             final boolean forcePowerOfTwo
     )
             throws IOException {
-        final var metrics = project.getMetrics();
+        final var settings = project.getDocumentSettings();
         final var rectangles = getRectangles(project);
 
         // TODO: DI
@@ -38,7 +38,7 @@ public class ExportServiceImpl implements ExportService {
 
         // TODO: DI
         final var image = new BasicImageWriter()
-                .getImage(imageSize, rectangles, project.getGlyphs(), metrics);
+                .getImage(imageSize, rectangles, project.getGlyphs(), settings);
 
         final var dir = path.getParent();
         final var fileName = path.getFileName().toString();
@@ -74,11 +74,12 @@ public class ExportServiceImpl implements ExportService {
     }
 
     private static List<Rectangle> getRectangles(final Project project) {
-        final var metrics = project.getMetrics();
-        final var innerHeight = metrics.ascender() + metrics.descender();
+        final var settings = project.getDocumentSettings();
+        final var innerHeight = settings.ascender() + settings.descender();
         final var height = innerHeight + 1;
         return project.getGlyphs().getElements().stream().map(glyph -> {
-            final var innerWidth = metrics.isMonospaced() ? Math.min(glyph.getWidth(), metrics.defaultWidth())
+            final var innerWidth = settings.isMonospaced()
+                    ? Math.min(glyph.getWidth(), settings.defaultWidth())
                     : glyph.getWidth();
             return new Rectangle(glyph.getCodePoint(), innerWidth + 1, height, innerWidth, innerHeight);
         }).toList();
@@ -91,13 +92,13 @@ public class ExportServiceImpl implements ExportService {
             final Dimension imageSize
     ) {
         final var builder = new StringBuilder();
-        infoLine(builder, project.getTitle(), project.getMetrics()).append('\n');
-        commonLine(builder, project.getMetrics(), imageSize).append('\n');
+        infoLine(builder, project.getTitle(), project.getDocumentSettings()).append('\n');
+        commonLine(builder, project.getDocumentSettings(), imageSize).append('\n');
         pageLine(builder, 0, baseName).append('\n');
         charsLine(builder, rectangles.size()).append('\n');
         final var headerStream = Stream.of(builder.toString());
         final var charStream = rectangles.stream().map(rect -> {
-            return characterStr(project.getMetrics(), rect, 0);
+            return characterStr(project.getDocumentSettings(), rect, 0);
         });
         final var kerningPairStream = project.getKerningPairs()
                 .getElements()
@@ -115,28 +116,30 @@ public class ExportServiceImpl implements ExportService {
     private static StringBuilder infoLine(
             final StringBuilder builder,
             final String title,
-            final Metrics metrics
+            final DocumentSettings settings
     ) {
-        // TODO: Add isBold and isItalic to export options
         builder.append("info face=\"")
                 .append(title)
                 .append(" size=")
-                .append(-metrics.capHeight())
-                .append(" bold=0 italic=0")
+                .append(-settings.capHeight())
+                .append(" bold=")
+                .append(settings.isBold() ? 1 : 0)
+                .append("  italic=")
+                .append(settings.isItalic() ? 1 : 0)
                 .append(" unicode=1 stretchH=100 smooth=0 aa=1 padding=0,0,0,0 spacing=1,1 outline=0");
         return builder;
     }
 
     private static StringBuilder commonLine(
             final StringBuilder builder,
-            final Metrics metrics,
+            final DocumentSettings settings,
             final Dimension imageSize
     ) {
         // TODO: How to handle multiple pages?
         builder.append("common lineHeight=")
-                .append(metrics.ascender() + metrics.descender() + metrics.lineSpacing())
+                .append(settings.ascender() + settings.descender() + settings.lineSpacing())
                 .append(" base=")
-                .append(metrics.ascender())
+                .append(settings.ascender())
                 .append(" scaleW=")
                 .append(imageSize.width)
                 .append(" scaleH=")
@@ -166,12 +169,12 @@ public class ExportServiceImpl implements ExportService {
 
     private static StringBuilder characterLine(
             final StringBuilder builder,
-            final Metrics metrics,
+            final DocumentSettings settings,
             final Rectangle rect,
             final int page
     ) {
-        final var advance = (metrics.isMonospaced() ? metrics.defaultWidth() : rect.innerWidth())
-                + metrics.letterSpacing();
+        final var advance = (settings.isMonospaced() ? settings.defaultWidth() : rect.innerWidth())
+                + settings.letterSpacing();
         builder.append("char id=")
                 .append(rect.id())
                 .append(" x=")
@@ -191,8 +194,12 @@ public class ExportServiceImpl implements ExportService {
         return builder;
     }
 
-    private static String characterStr(final Metrics metrics, final Rectangle rect, final int page) {
-        return characterLine(new StringBuilder(100), metrics, rect, page).append('\n').toString();
+    private static String characterStr(
+            final DocumentSettings settings,
+            final Rectangle rect,
+            final int page
+    ) {
+        return characterLine(new StringBuilder(100), settings, rect, page).append('\n').toString();
     }
 
     private static StringBuilder kerningPairLine(final StringBuilder builder, final KerningPair pair) {
