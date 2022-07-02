@@ -7,20 +7,20 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Stream;
-
 import javax.imageio.ImageIO;
-
-import pixelj.models.KerningPair;
 import pixelj.models.DocumentSettings;
+import pixelj.models.KerningPair;
 import pixelj.models.Project;
 import pixelj.util.packer.GridPacker;
 import pixelj.util.packer.Rectangle;
 
-public class ExportServiceImpl implements ExportService {
-    // TODO: Which packer? Which ImageWriter? Other params?
-    // TODO: Make this testable.
-    // TODO: Not finished yet.
-    // TODO: Space size?
+// TODO: Which packer? Which ImageWriter? Other params?
+// TODO: Make this testable.
+// TODO: Not finished yet.
+// TODO: Space size?
+// TODO: How to handle multiple pages?
+public final class ExportServiceImpl implements ExportService {
+    @Override
     public void export(
             final Project project,
             final Path path,
@@ -44,11 +44,6 @@ public class ExportServiceImpl implements ExportService {
         final var fileName = path.getFileName().toString();
         final var dotPosition = fileName.lastIndexOf('.');
         final var baseName = dotPosition > 0 ? fileName.substring(0, dotPosition) : fileName;
-
-        var pathStr = path.toAbsolutePath().toString();
-        pathStr = pathStr.endsWith("." + EXTENSION)
-                ? pathStr.substring(0, pathStr.length() - EXTENSION.length())
-                : pathStr;
 
         ImageIO.write(
                 image,
@@ -91,34 +86,33 @@ public class ExportServiceImpl implements ExportService {
             final List<Rectangle> rectangles,
             final Dimension imageSize
     ) {
-        final var builder = new StringBuilder();
-        infoLine(builder, project.getTitle(), project.getDocumentSettings()).append('\n');
-        commonLine(builder, project.getDocumentSettings(), imageSize).append('\n');
-        pageLine(builder, 0, baseName).append('\n');
-        charsLine(builder, rectangles.size()).append('\n');
-        final var headerStream = Stream.of(builder.toString());
-        final var charStream = rectangles.stream().map(rect -> {
-            return characterStr(project.getDocumentSettings(), rect, 0);
-        });
-        final var kerningPairStream = project.getKerningPairs()
+        final var info = infoLine(project);
+        final var common = commonLine(project, imageSize);
+        final var page = pageLine(0, baseName);
+        final var chars = charsLine(project);
+        final var characterLineStream = rectangles.stream()
+                .map(rect -> characterLine(project.getDocumentSettings(), rect, 0));
+        final var kerningPairLineStream = project.getKerningPairs()
                 .getElements()
                 .stream()
-                .map(ExportServiceImpl::kerningPairStr);
-        return Stream.concat(
-                Stream.concat(headerStream, charStream),
-                Stream.concat(
-                        Stream.of("kernings count=" + project.getKerningPairs().getSize() + '\n'),
-                        kerningPairStream
+                .map(ExportServiceImpl::kerningPairLine);
+
+        return Stream
+                .of(
+                        Stream.of(info),
+                        Stream.of(common),
+                        Stream.of(page),
+                        Stream.of(chars),
+                        characterLineStream,
+                        kerningPairLineStream
                 )
-        );
+                .flatMap(a -> a);
     }
 
-    private static StringBuilder infoLine(
-            final StringBuilder builder,
-            final String title,
-            final DocumentSettings settings
-    ) {
-        builder.append("info face=\"")
+    private static String infoLine(final Project project) {
+        final var title = project.getTitle();
+        final var settings = project.getDocumentSettings();
+        return new StringBuilder(120 + title.length()).append("info face=\"")
                 .append(title)
                 .append(" size=")
                 .append(-settings.capHeight())
@@ -126,17 +120,13 @@ public class ExportServiceImpl implements ExportService {
                 .append(settings.isBold() ? 1 : 0)
                 .append("  italic=")
                 .append(settings.isItalic() ? 1 : 0)
-                .append(" unicode=1 stretchH=100 smooth=0 aa=1 padding=0,0,0,0 spacing=1,1 outline=0");
-        return builder;
+                .append(" unicode=1 stretchH=100 smooth=0 aa=1 padding=0,0,0,0 spacing=1,1 outline=0")
+                .toString();
     }
 
-    private static StringBuilder commonLine(
-            final StringBuilder builder,
-            final DocumentSettings settings,
-            final Dimension imageSize
-    ) {
-        // TODO: How to handle multiple pages?
-        builder.append("common lineHeight=")
+    private static String commonLine(final Project project, final Dimension imageSize) {
+        final var settings = project.getDocumentSettings();
+        return new StringBuilder(120).append("common lineHeight=")
                 .append(settings.ascender() + settings.descender() + settings.lineSpacing())
                 .append(" base=")
                 .append(settings.ascender())
@@ -145,37 +135,27 @@ public class ExportServiceImpl implements ExportService {
                 .append(" scaleH=")
                 .append(imageSize.height)
                 .append(" pages=1")
-                .append(" packed=0 alphaChnl=0 redChnl=4 greenChnl=4 blueChnl=4");
-        return builder;
+                .append(" packed=0 alphaChnl=0 redChnl=4 greenChnl=4 blueChnl=4")
+                .toString();
     }
 
-    private static StringBuilder pageLine(
-            final StringBuilder builder,
-            final int page,
-            final String baseName
-    ) {
-        builder.append("page id=")
-                .append(page)
-                .append(" file=\"")
-                .append(imageName(page, baseName))
-                .append('"');
-        return builder;
+    private static String pageLine(final int page, final String baseName) {
+        return "page id=" + page + " file=\"" + imageName(page, baseName) + '"';
     }
 
-    private static StringBuilder charsLine(final StringBuilder builder, final int charCount) {
-        builder.append("chars count=").append(charCount);
-        return builder;
+    private static String charsLine(final Project project) {
+        return "chars count=" + project.getGlyphs().countWhere(a -> true);
     }
 
-    private static StringBuilder characterLine(
-            final StringBuilder builder,
+    private static String characterLine(
             final DocumentSettings settings,
             final Rectangle rect,
             final int page
     ) {
         final var advance = (settings.isMonospaced() ? settings.defaultWidth() : rect.innerWidth())
                 + settings.letterSpacing();
-        builder.append("char id=")
+
+        return new StringBuilder(100).append("char id=")
                 .append(rect.id())
                 .append(" x=")
                 .append(rect.x())
@@ -190,30 +170,18 @@ public class ExportServiceImpl implements ExportService {
                 .append(advance)
                 .append(" page=")
                 .append(page)
-                .append(" chnl=15");
-        return builder;
+                .append(" chnl=15")
+                .toString();
     }
 
-    private static String characterStr(
-            final DocumentSettings settings,
-            final Rectangle rect,
-            final int page
-    ) {
-        return characterLine(new StringBuilder(100), settings, rect, page).append('\n').toString();
-    }
-
-    private static StringBuilder kerningPairLine(final StringBuilder builder, final KerningPair pair) {
-        builder.append("kerning first=")
+    private static String kerningPairLine(final KerningPair pair) {
+        return new StringBuilder(50).append("kerning first=")
                 .append(pair.getLeft().getCodePoint())
                 .append(" second=")
                 .append(pair.getRight().getCodePoint())
                 .append(" amount=")
-                .append(pair.getKerningValue());
-        return builder;
-    }
-
-    private static String kerningPairStr(final KerningPair pair) {
-        return kerningPairLine(new StringBuilder(60), pair).append('\n').toString();
+                .append(pair.getKerningValue())
+                .toString();
     }
 
     private static String imageName(final int page, final String base) {
