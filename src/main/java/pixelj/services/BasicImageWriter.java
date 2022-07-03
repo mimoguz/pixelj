@@ -10,7 +10,7 @@ import pixelj.models.DocumentSettings;
 import pixelj.models.SortedList;
 import pixelj.util.packer.Rectangle;
 
-public class BasicImageWriter implements ImageWriter {
+public final class BasicImageWriter implements ImageWriter {
     @Override
     public BufferedImage getImage(
             final Dimension imageSize,
@@ -24,15 +24,14 @@ public class BasicImageWriter implements ImageWriter {
         for (var rect : rectangles) {
             final var glyph = glyphs.findHash(rect.id());
             final var sourceWidth = settings.isMonospaced() ? settings.defaultWidth() : glyph.getWidth();
-            writeRect(image, rect.x(), rect.y(), glyph.getImage(), 0, sourceY, sourceWidth, sourceHeight);
+            writeRect(image, rect, glyph.getImage(), 0, sourceY, sourceWidth, sourceHeight);
         }
         return image;
     }
 
     private void writeRect(
-            BufferedImage target,
-            final int targetX,
-            final int targetY,
+            final BufferedImage target,
+            final Rectangle rect,
             final BinaryImage source,
             final int sourceX,
             final int sourceY,
@@ -41,7 +40,7 @@ public class BasicImageWriter implements ImageWriter {
     ) {
         for (var py = 0; py < sourceHeight; py++) {
             for (var px = 0; px < sourceWidth; px++) {
-                target.setRGB(targetX + px, targetY + py, getARGB(source, px + sourceX, py + sourceY));
+                target.setRGB(rect.x() + px, rect.y() + py, getARGB(source, px + sourceX, py + sourceY));
             }
         }
     }

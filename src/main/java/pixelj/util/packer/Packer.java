@@ -1,17 +1,16 @@
 package pixelj.util.packer;
 
-import java.awt.Dimension;
 import java.util.List;
 
 public interface Packer {
-    void setRectangles(List<Rectangle> rectangles);
-
-    List<Rectangle> getRectangles();
-
     /**
-     * Calculate box size and move inputs
-     * 
-     * @return Box size
+     * Calculate box size and move inputs.
+     *
+     * @param input     Rectangles to be packed into boxes
+     * @param boxWith   Width of each box
+     * @param boxHeight Height of each box
+     * @return List of rectangles per box.
      */
-    Dimension packInPlace(boolean forceSquare, boolean forcePowerOfTwo) throws IllegalStateException;
+    List<List<Rectangle>> pack(List<Rectangle> input, int boxWith, int boxHeight)
+            throws IllegalStateException;
 }
