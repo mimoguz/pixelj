@@ -23,13 +23,8 @@ import pixelj.util.packer.Rectangle;
 // TODO: Space size?
 public abstract class AbstractExportService implements ExportService {
     @Override
-    public final void export(
-            final Project project,
-            final Path path,
-            final int textureWidth,
-            final int textureHeight
-    )
-            throws IOException {
+    public final void export(final Project project, final Path path, final int textureWidth,
+            final int textureHeight) throws IOException {
         final var settings = project.getDocumentSettings();
         final var glyphs = project.getGlyphs();
         final var packedRectangles = pack(project, textureWidth, textureHeight);
@@ -38,10 +33,12 @@ public abstract class AbstractExportService implements ExportService {
         // Get images
         final var imageWriter = new BasicImageWriter();
         final var imageSize = new Dimension(textureWidth, textureHeight);
-        final var images = IntStream.range(0, packedRectangles.size()).parallel().mapToObj(index -> {
-            final var segment = packedRectangles.get(index);
-            return new PageImage(index, imageWriter.getImage(imageSize, segment, glyphs, settings));
-        });
+        final var images =
+                IntStream.range(0, packedRectangles.size()).parallel().mapToObj(index -> {
+                    final var segment = packedRectangles.get(index);
+                    return new PageImage(index,
+                            imageWriter.getImage(imageSize, segment, glyphs, settings));
+                });
 
         // Get out path
         final var dir = path.getParent();
@@ -53,11 +50,8 @@ public abstract class AbstractExportService implements ExportService {
         try {
             images.forEach(img -> {
                 try {
-                    ImageIO.write(
-                            img.image,
-                            "png",
-                            new File(Paths.get(dirStr, imageName(img.page, baseName)).toString())
-                    );
+                    ImageIO.write(img.image, "png",
+                            new File(Paths.get(dirStr, imageName(img.page, baseName)).toString()));
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -66,11 +60,8 @@ public abstract class AbstractExportService implements ExportService {
             throw new IOException(e.getMessage(), e.getCause());
         }
 
-        try (
-                var writer = new FileWriter(
-                        Paths.get(dir.toAbsolutePath().toString(), baseName + "." + EXTENSION).toFile()
-                )
-        ) {
+        try (var writer = new FileWriter(
+                Paths.get(dir.toAbsolutePath().toString(), baseName + "." + EXTENSION).toFile())) {
             fnt(project, baseName, packedRectangles, imageSize).forEach(block -> {
                 try {
                     writer.write(block);
@@ -84,61 +75,42 @@ public abstract class AbstractExportService implements ExportService {
         }
     }
 
-    protected abstract List<List<Rectangle>> pack(Project project, int textureWidth, int textureHeight);
+    protected abstract List<List<Rectangle>> pack(Project project, int textureWidth,
+            int textureHeight);
 
-    protected static Stream<String> fnt(
-            final Project project,
-            final String baseName,
-            final List<List<Rectangle>> rectangles,
-            final Dimension imageSize
-    ) {
+    protected static Stream<String> fnt(final Project project, final String baseName,
+            final List<List<Rectangle>> rectangles, final Dimension imageSize) {
         final var info = infoLine(project);
         final var common = commonLine(project, imageSize, rectangles.size());
         final var chars = charsLine(project);
         final var pages = pageStream(rectangles, baseName);
         final var characters = characterStream(rectangles, project.getDocumentSettings());
-        final var kerningPairs = project.getKerningPairs()
-                .getElements()
-                .stream()
+        final var kerningPairs = project.getKerningPairs().getElements().stream()
                 .map(AbstractExportService::kerningPairLine);
-        return Stream
-                .of(Stream.of(info), Stream.of(common), pages, Stream.of(chars), characters, kerningPairs)
-                .flatMap(a -> a);
+        return Stream.of(Stream.of(info), Stream.of(common), pages, Stream.of(chars), characters,
+                kerningPairs).flatMap(a -> a);
     }
 
     protected static String infoLine(final Project project) {
         final var title = project.getTitle();
         final var settings = project.getDocumentSettings();
-        return new StringBuilder(120 + title.length()).append("info face=\"")
-                .append(title)
-                .append(" size=")
-                .append(-settings.capHeight())
-                .append(" bold=")
-                .append(settings.isBold() ? 1 : 0)
-                .append("  italic=")
+        return new StringBuilder(120 + title.length()).append("info face=\"").append(title)
+                .append(" size=").append(-settings.capHeight()).append(" bold=")
+                .append(settings.isBold() ? 1 : 0).append("  italic=")
                 .append(settings.isItalic() ? 1 : 0)
                 .append(" unicode=1 stretchH=100 smooth=0 aa=1 padding=0,0,0,0 spacing=1,1 outline=0")
                 .toString();
     }
 
-    protected static String commonLine(
-            final Project project,
-            final Dimension imageSize,
-            final int pageCount
-    ) {
+    protected static String commonLine(final Project project, final Dimension imageSize,
+            final int pageCount) {
         final var settings = project.getDocumentSettings();
         return new StringBuilder(120).append("common lineHeight=")
                 .append(settings.ascender() + settings.descender() + settings.lineSpacing())
-                .append(" base=")
-                .append(settings.ascender())
-                .append(" scaleW=")
-                .append(imageSize.width)
-                .append(" scaleH=")
-                .append(imageSize.height)
-                .append(" pages=")
-                .append(pageCount)
-                .append(" packed=0 alphaChnl=0 redChnl=4 greenChnl=4 blueChnl=4")
-                .toString();
+                .append(" base=").append(settings.ascender()).append(" scaleW=")
+                .append(imageSize.width).append(" scaleH=").append(imageSize.height)
+                .append(" pages=").append(pageCount)
+                .append(" packed=0 alphaChnl=0 redChnl=4 greenChnl=4 blueChnl=4").toString();
     }
 
     protected static String pageLine(final int page, final String baseName) {
@@ -149,61 +121,35 @@ public abstract class AbstractExportService implements ExportService {
         return "chars count=" + project.getGlyphs().countWhere(a -> true);
     }
 
-    protected static String characterLine(
-            final DocumentSettings settings,
-            final Rectangle rect,
-            final int page
-    ) {
+    protected static String characterLine(final DocumentSettings settings, final Rectangle rect,
+            final int page) {
         final var advance = (settings.isMonospaced() ? settings.defaultWidth() : rect.innerWidth())
                 + settings.letterSpacing();
 
-        return new StringBuilder(100).append("char id=")
-                .append(rect.id())
-                .append(" x=")
-                .append(rect.x())
-                .append(" y=")
-                .append(rect.y())
-                .append(" width=")
-                .append(rect.innerWidth())
-                .append(" height=")
-                .append(rect.innerHeight())
-                .append(" xoffset=0 yoffset=0")
-                .append(" xadvance=")
-                .append(advance)
-                .append(" page=")
-                .append(page)
-                .append(" chnl=15")
-                .toString();
+        return new StringBuilder(100).append("char id=").append(rect.id()).append(" x=")
+                .append(rect.x()).append(" y=").append(rect.y()).append(" width=")
+                .append(rect.innerWidth()).append(" height=").append(rect.innerHeight())
+                .append(" xoffset=0 yoffset=0").append(" xadvance=").append(advance)
+                .append(" page=").append(page).append(" chnl=15").toString();
     }
 
     protected static String kerningPairLine(final KerningPair pair) {
-        return new StringBuilder(50).append("kerning first=")
-                .append(pair.getLeft().getCodePoint())
-                .append(" second=")
-                .append(pair.getRight().getCodePoint())
-                .append(" amount=")
-                .append(pair.getKerningValue())
-                .toString();
+        return new StringBuilder(50).append("kerning first=").append(pair.getLeft().getCodePoint())
+                .append(" second=").append(pair.getRight().getCodePoint()).append(" amount=")
+                .append(pair.getKerningValue()).toString();
     }
 
-    protected static Stream<String> pageStream(
-            final List<List<Rectangle>> rectangles,
-            final String baseName
-    ) {
+    protected static Stream<String> pageStream(final List<List<Rectangle>> rectangles,
+            final String baseName) {
         final var pageCount = rectangles.size();
         return IntStream.range(0, pageCount).mapToObj(page -> pageLine(page, baseName));
     }
 
-    protected static Stream<String> characterStream(
-            final List<List<Rectangle>> rectangles,
-            final DocumentSettings settings
-    ) {
+    protected static Stream<String> characterStream(final List<List<Rectangle>> rectangles,
+            final DocumentSettings settings) {
         final var pageCount = rectangles.size();
-        return IntStream.range(0, pageCount)
-                .mapToObj(
-                        page -> rectangles.get(page).stream().map(rect -> characterLine(settings, rect, page))
-                )
-                .flatMap(a -> a);
+        return IntStream.range(0, pageCount).mapToObj(page -> rectangles.get(page).stream()
+                .map(rect -> characterLine(settings, rect, page))).flatMap(a -> a);
     }
 
     protected static String imageName(final int page, final String base) {
