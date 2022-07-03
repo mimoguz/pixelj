@@ -21,11 +21,14 @@ public record DocumentSettings(
         boolean isItalic
 ) {
 
+    /**
+     * @return Default settings
+     */
     public static DocumentSettings getDefault() {
         return new DocumentSettings(24, 24, 16, 4, 11, 7, 7, 1, 4, 2, false, false, false);
     }
 
-    public static class Builder {
+    public static final class Builder {
         private static final ChangeableInt ZERO = new ChangeableInt(0);
 
         public final ChangeableInt ascender = new ChangeableInt(0);
@@ -65,9 +68,10 @@ public record DocumentSettings(
                 .and(validLineSpacing)
                 .and(validSpaceSize);
 
-        public Builder() {
-        }
-
+        /**
+         * @return Document settings
+         * @throws InvalidStateException
+         */
         public DocumentSettings build() throws InvalidStateException {
             if (!validAll.getValue()) {
                 throw new InvalidStateException("Not all fields are valid");
@@ -89,72 +93,128 @@ public record DocumentSettings(
             );
         }
 
-        public Builder setAscender(int value) {
+        /**
+         * @param value Ascender
+         * @return This
+         */
+        public Builder setAscender(final int value) {
             ascender.setValue(value);
             return this;
         }
 
-        public Builder setBold(boolean value) {
+        /**
+         * @param value Is bold
+         * @return This
+         */
+        public Builder setBold(final boolean value) {
             isBold.setValue(value);
             return this;
         }
 
-        public Builder setCanvasHeight(int value) {
+        /**
+         * @param value Canvas height
+         * @return This
+         */
+        public Builder setCanvasHeight(final int value) {
             canvasHeight.setValue(value);
             return this;
         }
 
-        public Builder setCanvasWidth(int value) {
+        /**
+         * @param value Canvas width
+         * @return This
+         */
+        public Builder setCanvasWidth(final int value) {
             canvasWidth.setValue(value);
             return this;
         }
 
-        public Builder setCapHeight(int value) {
+        /**
+         * @param value Cap height
+         * @return This
+         */
+        public Builder setCapHeight(final int value) {
             capHeight.setValue(value);
             return this;
         }
 
-        public Builder setDefaultWidth(int value) {
+        /**
+         * @param value Default glyph width
+         * @return This
+         */
+        public Builder setDefaultWidth(final int value) {
             defaultWidth.setValue(value);
             return this;
         }
 
-        public Builder setDescender(int value) {
+        /**
+         * @param value Descender
+         * @return This
+         */
+        public Builder setDescender(final int value) {
             descender.setValue(value);
             return this;
         }
 
-        public Builder setItalic(boolean value) {
+        /**
+         * @param value Is italic
+         * @return This
+         */
+        public Builder setItalic(final boolean value) {
             isItalic.setValue(value);
             return this;
         }
 
-        public Builder setLineSpacing(int value) {
+        /**
+         * @param value Extra line spacing
+         * @return This
+         */
+        public Builder setLineSpacing(final int value) {
             lineSpacing.setValue(value);
             return this;
         }
 
-        public Builder setMonospaced(boolean value) {
+        /**
+         * @param value Is monospaced
+         * @return This
+         */
+        public Builder setMonospaced(final boolean value) {
             isMonospaced.setValue(value);
             return this;
         }
 
-        public Builder setSpaceSize(int value) {
+        /**
+         * @param value Space width
+         * @return This
+         */
+        public Builder setSpaceSize(final int value) {
             spaceSize.setValue(value);
             return this;
         }
 
-        public Builder setLetterSpacing(int value) {
+        /**
+         * @param value Letter spacing
+         * @return This
+         */
+        public Builder setLetterSpacing(final int value) {
             letterSpacing.setValue(value);
             return this;
         }
 
-        public Builder setXHeight(int value) {
+        /**
+         * @param value x Height
+         * @return This
+         */
+        public Builder setXHeight(final int value) {
             xHeight.setValue(value);
             return this;
         }
 
-        public static Builder from(DocumentSettings settings) {
+        /**
+         * @param settings Source
+         * @return A builder using the values from the source
+         */
+        public static Builder from(final DocumentSettings settings) {
             return new Builder().setAscender(settings.ascender())
                     .setBold(settings.isBold())
                     .setCanvasHeight(settings.canvasHeight())
@@ -170,11 +230,17 @@ public record DocumentSettings(
                     .setXHeight(settings.xHeight());
         }
 
+        /**
+         * @return A builder using the values from the default settings
+         */
         public static Builder getDefaultBuilder() {
             return Builder.from(DocumentSettings.getDefault());
         }
 
         public static final class InvalidStateException extends Exception {
+            /**
+             * @param message
+             */
             public InvalidStateException(final String message) {
                 super(message);
             }

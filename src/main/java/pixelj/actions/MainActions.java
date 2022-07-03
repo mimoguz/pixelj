@@ -23,14 +23,14 @@ import org.lwjgl.util.nfd.NativeFileDialog;
 import pixelj.models.Project;
 import pixelj.resources.Icons;
 import pixelj.resources.Resources;
-import pixelj.services.ExportServiceImpl;
+import pixelj.services.GridExportService;
 import pixelj.services.FileService;
 import pixelj.services.FileServiceImpl;
 import pixelj.views.HomeView;
 import pixelj.views.DocumentSettingsDialog;
 import pixelj.views.shared.Components;
 
-public class MainActions {
+public final class MainActions {
     public final Collection<ApplicationAction> all;
     public final ApplicationAction returnHomeAction;
     public final ApplicationAction exportAction;
@@ -127,8 +127,8 @@ public class MainActions {
             return;
         }
         try {
-            // TODO: DI
-            new ExportServiceImpl().export(project, path, false, false);
+            // TODO: DI and export options
+            new GridExportService().export(project, path, 20, 30);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -174,7 +174,7 @@ public class MainActions {
         }
     }
 
-    private Path showSaveDialog(String filter) {
+    private Path showSaveDialog(final String filter) {
         final var outPath = MemoryUtil.memAllocPointer(1);
         try {
             final var defaultPath = project.getPath() != null ? project.getPath().toAbsolutePath().toString()
@@ -213,7 +213,7 @@ public class MainActions {
         logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
     }
 
-    private void showInfo(String message) {
+    private void showInfo(final String message) {
         JOptionPane.showMessageDialog((Frame) SwingUtilities.getWindowAncestor(root), message);
     }
 }

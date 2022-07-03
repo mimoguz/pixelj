@@ -13,10 +13,10 @@ public interface ExportService {
      * Generate fnt file and associated images from project.
      *
      * @param project
-     * @param path            Save path
-     * @param forceSquare     Image width and height must be equal
-     * @param forcePowerOfTwo Image width and height must be powers of two
+     * @param path          Save path
+     * @param textureWidth
+     * @param textureHeight
      * @throws IOException
      */
-    void export(Project project, Path path, boolean forceSquare, boolean forcePowerOfTwo) throws IOException;
+    void export(Project project, Path path, int textureWidth, int textureHeight) throws IOException;
 }

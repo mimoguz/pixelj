@@ -1,32 +1,40 @@
 package pixelj.util.packer;
 
 import java.awt.Dimension;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.IntStream;
 
 // TODO: Write tests
-public class GridPacker extends AbstractPacker {
-
+public final class GridPacker implements Packer {
     @Override
-    public Dimension packInPlace(final boolean forceSquare, final boolean forcePowerOfTwo)
+    public List<List<Rectangle>> pack(final List<Rectangle> input, final int boxWith, final int boxHeight)
             throws IllegalStateException {
-        if (rectangles == null) {
+        if (input == null) {
             throw new IllegalStateException("GridPacker input is not set yet");
         }
-        final var cellSz = cellSize();
-        final var imageSz = boxSize(cellSz);
-        var col = 0;
-        var row = 0;
-        for (var rect : rectangles) {
-            if (col * cellSz.width >= imageSz.width) {
-                row += 1;
-                col = 0;
-            }
-            rect.moveTo(cellSz.width * col, cellSz.height * row);
-            col += 1;
-        }
-        return fixedSize(imageSz, forceSquare, forcePowerOfTwo);
+        final var cellSz = cellSize(input);
+        final var columnsPerBox = boxWith / cellSz.width;
+        final var rowsPerBox = boxHeight / cellSz.height;
+        final var rectanglesPerBox = columnsPerBox * rowsPerBox;
+        final var boxCount = Math.ceilDiv(input.size(), rectanglesPerBox);
+        final var result = IntStream.range(0, boxCount)
+                .mapToObj(
+                        box -> input.subList(
+                                box * rectanglesPerBox,
+                                Math.min((box + 1) * rectanglesPerBox, input.size())
+                        )
+                )
+                .parallel()
+                .map(segment -> {
+                    arrange(segment, rowsPerBox, columnsPerBox, cellSz);
+                    return segment;
+                })
+                .toList();
+        return result;
     }
 
-    private Dimension cellSize() {
+    private Dimension cellSize(final Collection<Rectangle> rectangles) {
         final var result = new Dimension(0, 0);
         for (var rect : rectangles) {
             if (rect.width() > result.width) {
@@ -39,28 +47,20 @@ public class GridPacker extends AbstractPacker {
         return result;
     }
 
-    // TODO: This is a terrible algorithm.
-    private Dimension boxSize(final Dimension cellSize) {
-        final var result = new Dimension(cellSize.width * rectangles.size(), cellSize.height);
-        var cols = rectangles.size();
-        var rows = 1;
-        while (true) {
-            final var newCols = (cols + 1) / 2;
-            final var newRows = rows * 2;
-            final var width = newCols * cellSize.width;
-            final var height = newRows * cellSize.height;
-            if (newRows > 0 && distance(width, height) < distance(result.width, result.height)) {
-                rows = newRows;
-                cols = newCols;
-                result.setSize(cols * cellSize.width, rows * cellSize.height);
-            } else {
-                break;
+    private void arrange(
+            final List<Rectangle> input,
+            final int rowCount,
+            final int columnCount,
+            final Dimension cellSize
+    ) {
+        for (var row = 0; row < rowCount; row++) {
+            for (var column = 0; column < columnCount; column++) {
+                final var index = row * columnCount + column;
+                if (index >= input.size()) {
+                    return;
+                }
+                input.get(index).moveTo(column * cellSize.width, row * cellSize.height);
             }
         }
-        return result;
-    }
-
-    private double distance(final int w, final int h) {
-        return Math.abs(((double) w) / ((double) h) - 1.0);
     }
 }
