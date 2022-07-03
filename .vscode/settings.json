@@ -17,7 +17,9 @@
     ],
     "java.format.settings.url": "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml",
     "java.checkstyle.version": "10.3.1",
-    "java.checkstyle.configuration": "checkstyle.xml",
+    "java.checkstyle.configuration": "${workspaceFolder}\\checkstyle-config.xml",
     "java.configuration.updateBuildConfiguration": "automatic",
-    "editor.rulers": [100]
+    "editor.rulers": [
+        100
+    ]
 }

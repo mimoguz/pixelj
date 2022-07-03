@@ -15,7 +15,7 @@ import pixelj.services.Queries.KerningPairsColumn;
 import pixelj.services.Queries.SettingsColumn;
 import pixelj.services.Queries.TitleColumn;
 
-class WriteService {
+final class WriteService {
     public static final int VERSION = 1;
 
     public static void save(final Path path, final Project project) throws IOException {
@@ -27,12 +27,10 @@ class WriteService {
         synchronized (project) {
             title = project.getTitle();
             settings = project.getDocumentSettings();
-            glyphs = project.getGlyphs().getElements().parallelStream().map(CompressedGlyph::from).toList();
-            kerningPairs = project.getKerningPairs()
-                    .getElements()
-                    .stream()
-                    .map(KerningPairRecord::from)
+            glyphs = project.getGlyphs().getElements().parallelStream().map(CompressedGlyph::from)
                     .toList();
+            kerningPairs = project.getKerningPairs().getElements().stream()
+                    .map(KerningPairRecord::from).toList();
         }
 
         final var pathStr = path.toAbsolutePath().toString();
@@ -40,7 +38,8 @@ class WriteService {
                 ? pathStr.substring(0, pathStr.length() - Queries.EXTENSION.length() - 1)
                 : pathStr;
 
-        try (var connection = DriverManager.getConnection(Queries.URL_PREFIX + url, Queries.PIXELJ, "")) {
+        try (var connection =
+                DriverManager.getConnection(Queries.URL_PREFIX + url, Queries.PIXELJ, "")) {
             connection.setAutoCommit(false);
 
             final var statement = connection.createStatement();
@@ -67,8 +66,10 @@ class WriteService {
             final var insertKerningPair = connection.prepareStatement(Queries.INSERT_KERNING_PAIR);
             for (var pair : kerningPairs) {
                 insertKerningPair.setInt(KerningPairsColumn.ID.getIndex(), pair.id());
-                insertKerningPair.setInt(KerningPairsColumn.LEFT_CODE_POINT.getIndex(), pair.left());
-                insertKerningPair.setInt(KerningPairsColumn.RIGHT_CODE_POINT.getIndex(), pair.right());
+                insertKerningPair.setInt(KerningPairsColumn.LEFT_CODE_POINT.getIndex(),
+                        pair.left());
+                insertKerningPair.setInt(KerningPairsColumn.RIGHT_CODE_POINT.getIndex(),
+                        pair.right());
                 insertKerningPair.setInt(KerningPairsColumn.KERNING_VALUE.getIndex(), pair.value());
                 insertKerningPair.executeUpdate();
             }
@@ -83,10 +84,12 @@ class WriteService {
             insertSettings.setInt(SettingsColumn.CAP_HEIGHT.getIndex(), settings.capHeight());
             insertSettings.setInt(SettingsColumn.X_HEIGHT.getIndex(), settings.xHeight());
             insertSettings.setInt(SettingsColumn.DEFAULT_WIDTH.getIndex(), settings.defaultWidth());
-            insertSettings.setInt(SettingsColumn.LETTER_SPACING.getIndex(), settings.letterSpacing());
+            insertSettings.setInt(SettingsColumn.LETTER_SPACING.getIndex(),
+                    settings.letterSpacing());
             insertSettings.setInt(SettingsColumn.SPACE_SIZE.getIndex(), settings.spaceSize());
             insertSettings.setInt(SettingsColumn.LINE_SPACING.getIndex(), settings.lineSpacing());
-            insertSettings.setBoolean(SettingsColumn.IS_MONOSPACED.getIndex(), settings.isMonospaced());
+            insertSettings.setBoolean(SettingsColumn.IS_MONOSPACED.getIndex(),
+                    settings.isMonospaced());
             insertSettings.setBoolean(SettingsColumn.IS_BOLD.getIndex(), settings.isBold());
             insertSettings.setBoolean(SettingsColumn.IS_ITALIC.getIndex(), settings.isMonospaced());
             insertSettings.executeUpdate();
@@ -94,10 +97,10 @@ class WriteService {
             connection.commit();
         } catch (SQLException e) {
             // TODO: Move the message to the resources.
-            throw new IOException(String.format("Can't save file %s:\n%s", pathStr, e.getMessage()));
+            throw new IOException(
+                    String.format("Can't save file %s:\n%s", pathStr, e.getMessage()));
         }
     }
 
-    private WriteService() {
-    }
+    private WriteService() {}
 }
