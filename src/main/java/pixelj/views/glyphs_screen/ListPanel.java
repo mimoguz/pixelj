@@ -48,15 +48,15 @@ public class ListPanel extends JPanel implements Detachable {
         final var res = Resources.get();
 
         actions = new GlyphListActions(project, selectionModel, root);
-        actions.showRemoveDialogAction.setEnabled(false);
+        actions.removeGlyphsAction.setEnabled(false);
         Actions.registerShortcuts(actions.all, root);
 
         final var addButton = new JButton();
-        addButton.setAction(actions.showAddDialogAction);
+        addButton.setAction(actions.addGlyphsAction);
         Components.setFixedSize(addButton, Dimensions.TEXT_BUTTON_SIZE);
 
         final var removeButton = new JButton();
-        removeButton.setAction(actions.showRemoveDialogAction);
+        removeButton.setAction(actions.removeGlyphsAction);
         Components.setFixedSize(removeButton, Dimensions.TEXT_BUTTON_SIZE);
 
         final var listModel = new FilteredList<>(project.getGlyphs());
@@ -127,7 +127,7 @@ public class ListPanel extends JPanel implements Detachable {
     @Override
     public void setEnabled(final boolean value) {
         super.setEnabled(value);
-        actions.showAddDialogAction.setEnabled(value);
-        actions.showRemoveDialogAction.setEnabled(value && (selectionModel.getMinSelectionIndex() >= 0));
+        actions.addGlyphsAction.setEnabled(value);
+        actions.removeGlyphsAction.setEnabled(value && (selectionModel.getMinSelectionIndex() >= 0));
     }
 }

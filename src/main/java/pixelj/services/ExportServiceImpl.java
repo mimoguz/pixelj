@@ -19,15 +19,17 @@ import pixelj.util.IOExceptionWrapper;
 import pixelj.util.packer.Packer;
 import pixelj.util.packer.Rectangle;
 
-// TODO: Which packer? Which ImageWriter? Other params? Use DI instead of an abstract class.
+// TODO: How can I make the export method testable?
 // TODO: Make this testable.
 // TODO: Not finished yet.
 // TODO: Space size?
 public final class ExportServiceImpl implements ExportService {
     private final Packer<GlyphImageData> packer;
+    private final ImageWriter imageWriter;
 
-    public ExportServiceImpl(final Packer<GlyphImageData> packer) {
+    public ExportServiceImpl(final Packer<GlyphImageData> packer, final ImageWriter imageWriter) {
         this.packer = packer;
+        this.imageWriter = imageWriter; 
     }
 
     @Override
@@ -41,9 +43,7 @@ public final class ExportServiceImpl implements ExportService {
         final var glyphs = project.getGlyphs();
         final var packedRectangles = pack(project, textureWidth, textureHeight);
 
-        // TODO: DI
         // Get images
-        final var imageWriter = new BasicImageWriter();
         final var imageSize = new Dimension(textureWidth, textureHeight);
         final var images = IntStream.range(0, packedRectangles.size())
                 .parallel()
@@ -60,6 +60,7 @@ public final class ExportServiceImpl implements ExportService {
         final var dirStr = dir.toAbsolutePath().toString();
         final var baseName = extensionRemoved(path.getFileName().toString());
 
+        // Save images
         try {
             images.forEach(img -> {
                 try {
@@ -73,6 +74,7 @@ public final class ExportServiceImpl implements ExportService {
             throw new IOException(e.getMessage(), e.getCause());
         }
 
+        // Create and save fnt file
         try (var writer = new FileWriter(Paths.get(dirStr, baseName + "." + EXTENSION).toFile())) {
             fnt(project, baseName, packedRectangles, imageSize).forEach(block -> {
                 try {
@@ -230,7 +232,9 @@ public final class ExportServiceImpl implements ExportService {
         final var pageCount = rectangles.size();
         return IntStream.range(0, pageCount)
                 .mapToObj(page -> 
-                    rectangles.get(page).stream().map(rect -> characterLine(settings, rect, page))
+                        rectangles.get(page)
+                                .stream()
+                                .map(rect -> characterLine(settings, rect, page))
                 )
                 .flatMap(a -> a);
     }

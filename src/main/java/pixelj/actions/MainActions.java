@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOError;
 import java.io.IOException;
+import java.nio.BufferUnderflowException;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
@@ -27,14 +29,15 @@ import pixelj.resources.Resources;
 import pixelj.util.packer.GridPacker;
 import pixelj.services.ExportServiceImpl;
 import pixelj.services.FileService;
-import pixelj.services.FileServiceImpl;
+import pixelj.services.BasicImageWriter;
+import pixelj.services.DBFileService;
 import pixelj.views.HomeView;
 import pixelj.views.DocumentSettingsDialog;
 import pixelj.views.shared.Components;
 
 public final class MainActions {
     /**
-     * A collection of all actions.
+     * Collection of all actions.
      */
     public final Collection<ApplicationAction> all;
     /**
@@ -160,7 +163,8 @@ public final class MainActions {
         }
         try {
             // TODO: DI and export options
-            new ExportServiceImpl(new GridPacker<>()).export(project, path, 20, 30);
+            new ExportServiceImpl(new GridPacker<>(), new BasicImageWriter())
+                    .export(project, path, 20, 30);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -181,11 +185,11 @@ public final class MainActions {
                 saveAs(event, action);
             } else {
                 // TODO: DI
-                new FileServiceImpl().writeFile(project, path);
+                new DBFileService().writeFile(project, path);
             }
         } catch (IOException e) {
-           e.printStackTrace();
-           showLoadFailure(e.getLocalizedMessage());
+            e.printStackTrace();
+            showLoadFailure(e.getLocalizedMessage());
         }
     }
 
@@ -197,7 +201,7 @@ public final class MainActions {
         try {
             if (path.getFileName() != null) {
                 // TODO: DI
-                new FileServiceImpl().writeFile(project, path);
+                new DBFileService().writeFile(project, path);
                 project.setPath(path);
             }
         } catch (IOException e) {
@@ -219,7 +223,7 @@ public final class MainActions {
             } else {
                 return null;
             }
-        } catch (IOError | SecurityException e) {
+        } catch (IOError | SecurityException | BufferUnderflowException | InvalidPathException e) {
             e.printStackTrace();
             return null;
         } finally {

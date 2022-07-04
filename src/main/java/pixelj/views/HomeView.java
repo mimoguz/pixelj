@@ -116,7 +116,7 @@ public class HomeView extends JFrame {
         top.add(buttonBox, BorderLayout.WEST);
 
         final var toolBar = new JToolBar();
-        toolBar.add(actions.showOptionsDialogAction);
+        toolBar.add(actions.showSettingsDialogAction);
         toolBar.add(actions.quitAction);
         top.add(toolBar, BorderLayout.EAST);
 

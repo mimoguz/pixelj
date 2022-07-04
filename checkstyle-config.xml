@@ -33,6 +33,8 @@
     <!-- Block checks -->
     <!-- https://checkstyle.org/config_blocks.html -->
     <module name="NeedBraces" />
+    <module name="LeftCurly" />
+    <module name="RightCurly" />
 
     <!-- Class design -->
     <!-- https://checkstyle.org/config_design.html -->
@@ -120,6 +122,13 @@
     <module name="TodoComment">
       <property name="format" value="(TODO)|(FIXME)" />
     </module>
+    <module name="Indentation">
+      <property name="throwsIndent" value="8" />
+      <property name="arrayInitIndent" value="8" />
+      <property name="lineWrappingIndentation" value="8" />
+      <property name="forceStrictCondition" value="false" />
+    </module>
+
 
     <!-- Modifiers -->
     <!-- https://checkstyle.org/config_modifier.html -->
@@ -150,6 +159,7 @@
 
     <!-- Whitespace -->
     <!-- https://checkstyle.org/config_whitespace.html -->
+    <module name="EmptyForInitializerPad" />
     <module name="EmptyForIteratorPad" />
     <module name="EmptyLineSeparator">
       <property name="allowNoEmptyLineBetweenFields" value="true" />
@@ -160,6 +170,7 @@
     <module name="NoWhitespaceBefore"/>
     <module name="OperatorWrap"/>
     <module name="ParenPad"/>
+    <module name="SingleSpaceSeparator"/>
     <module name="TypecastParenPad"/>
     <module name="WhitespaceAfter"/>
     <module name="WhitespaceAround"/>

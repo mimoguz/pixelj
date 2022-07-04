@@ -19,23 +19,31 @@ import javax.swing.SwingUtilities;
 import pixelj.graphics.BinaryImage;
 import pixelj.models.Glyph;
 import pixelj.models.KerningPair;
-import pixelj.models.DocumentSettings;
 import pixelj.models.Project;
 import pixelj.resources.Resources;
 import pixelj.views.glyphs_screen.AddDialog;
 
-public class GlyphListActions {
-    private final AddDialog addDialog;
+public final class GlyphListActions {
+    /**
+     * A collection of all actions.
+     */
     public final Collection<ApplicationAction> all;
-    private Dimension canvasSize;
+    /**
+     * Display a dialog to add new glyphs to the project.
+     */
+    public final ApplicationAction addGlyphsAction;
+    /**
+     * Remove the selected glyphs.
+     */
+    public final ApplicationAction removeGlyphsAction;
 
+    private Dimension canvasSize;
     private int defaultWidth;
     private boolean enabled = true;
+    private final AddDialog addDialog;
     private final Project project;
     private final JComponent root;
     private final ListSelectionModel selectionModel;
-    public final ApplicationAction showAddDialogAction;
-    public final ApplicationAction showRemoveDialogAction;
 
     public GlyphListActions(
             final Project project,
@@ -45,38 +53,37 @@ public class GlyphListActions {
         this.project = project;
         this.selectionModel = selectionModel;
         this.root = root;
-
         addDialog = new AddDialog((JFrame) SwingUtilities.getWindowAncestor(root));
 
-        showAddDialogAction = new ApplicationAction("addGlyphsAction", this::showAddDialog).withText()
+        addGlyphsAction = new ApplicationAction("addGlyphsAction", this::showAddDialog)
+                .withText()
                 .setAccelerator(KeyEvent.VK_PLUS, InputEvent.ALT_DOWN_MASK);
 
-        showRemoveDialogAction = new ApplicationAction("removeGlyphsAction", this::showRemoveDialog)
+        removeGlyphsAction = new ApplicationAction("removeGlyphsAction", this::showRemoveDialog)
                 .withText()
                 .setAccelerator(KeyEvent.VK_MINUS, InputEvent.ALT_DOWN_MASK);
 
-        all = List.of(showAddDialogAction, showRemoveDialogAction);
+        all = List.of(addGlyphsAction, removeGlyphsAction);
 
         final var documentSettings = project.getDocumentSettings();
         canvasSize = new Dimension(documentSettings.canvasWidth(), documentSettings.canvasHeight());
         defaultWidth = documentSettings.defaultWidth();
+        project.documentSettingsProperty.addChangeListener((source, settings) -> {
+            canvasSize = new Dimension(settings.canvasWidth(), settings.canvasHeight());
+            defaultWidth = settings.defaultWidth();
+        });
 
-        selectionModel.addListSelectionListener(
-                e -> showRemoveDialogAction.setEnabled(selectionModel.getMinSelectionIndex() >= 0)
+        selectionModel.addListSelectionListener(e -> 
+                removeGlyphsAction.setEnabled(selectionModel.getMinSelectionIndex() >= 0)
         );
     }
 
     @SuppressWarnings("unused")
     private void addCharacters(final int... codePoints) {
         for (final var codePoint : codePoints) {
-            project.getGlyphs()
-                    .add(
-                            new Glyph(
-                                    codePoint,
-                                    defaultWidth,
-                                    BinaryImage.of(canvasSize.width, canvasSize.height)
-                            )
-                    );
+            project.getGlyphs().add(
+                    new Glyph(codePoint, defaultWidth, BinaryImage.of(canvasSize.width, canvasSize.height))
+            );
         }
     }
 
@@ -92,14 +99,17 @@ public class GlyphListActions {
         return defaultWidth;
     }
 
-    public boolean isEnabled() {
-        return enabled;
-    }
-
     public void setDefaultCharacterWidth(final int defaultCharacterWidth) {
         this.defaultWidth = defaultCharacterWidth;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    /**
+     * @param value Is enabled
+     */
     public void setEnabled(final boolean value) {
         enabled = value;
         Actions.setEnabled(all, enabled);
@@ -112,14 +122,13 @@ public class GlyphListActions {
             return;
         }
         for (final var characterData : result) {
-            project.getGlyphs()
-                    .add(
-                            new Glyph(
-                                    characterData.codePoint(),
-                                    defaultWidth,
-                                    BinaryImage.of(canvasSize.width, canvasSize.height, true)
-                            )
-                    );
+            project.getGlyphs().add(
+                    new Glyph(
+                        characterData.codePoint(),
+                        defaultWidth,
+                        BinaryImage.of(canvasSize.width, canvasSize.height, true)
+                    )
+            );
         }
     }
 
@@ -132,10 +141,11 @@ public class GlyphListActions {
         final var listModel = project.getGlyphs();
         final var removed = Arrays.stream(indices).mapToObj(listModel::getElementAt).toList();
         final var affected = countAffectedKerningPairs(removed);
-
         final var res = Resources.get();
-        final var message = affected == 0 ? res.formatString("removingGlyphsMessage", indices.length)
+        final var message = affected == 0 
+                ? res.formatString("removingGlyphsMessage", indices.length)
                 : res.formatString("removingGlyphsAndKerningPairsMessage", indices.length, affected);
+
         final var result = JOptionPane.showConfirmDialog(
                 root,
                 message,
@@ -143,15 +153,12 @@ public class GlyphListActions {
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.WARNING_MESSAGE
         );
+
         if (result != JOptionPane.OK_OPTION) {
             return;
         }
+
         // Project model should take care of removing the affected kerning pairs.
         listModel.removeAll(removed);
-    }
-
-    public void updateDocumentSettings(final DocumentSettings settings) {
-        canvasSize = new Dimension(settings.canvasWidth(), settings.canvasHeight());
-        defaultWidth = settings.defaultWidth();
     }
 }

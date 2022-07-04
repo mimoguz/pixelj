@@ -2,6 +2,7 @@ package pixelj.actions;
 
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
@@ -22,23 +23,47 @@ import pixelj.models.ExampleData;
 import pixelj.models.Project;
 import pixelj.resources.Icons;
 import pixelj.resources.Resources;
-import pixelj.services.FileServiceImpl;
+import pixelj.services.DBFileService;
 import pixelj.views.NewProjectDialog;
 import pixelj.views.ProjectView;
 import pixelj.views.shared.Components;
 
-public class HomeActions {
+public final class HomeActions {
+    /**
+     * Collection of all actions.
+     */
     public final Collection<ApplicationAction> all;
+    /**
+     * Display an open dialog and load the selected project.
+     */
     public final ApplicationAction loadProjectAction;
-    private final Logger logger;
+    /**
+     * Display the new project dialog.
+     */
     public final ApplicationAction newProjectAction;
+    /**
+     * Context action: Open the parent folder of the selected recent item.
+     */
     public final ApplicationAction openContainingFolderAction;
+    /**
+     * Open the selected recent item.
+     */
     public final ApplicationAction openSelectedAction;
+    /**
+     * Quit the application.
+     */
     public final ApplicationAction quitAction;
+    /**
+     * Context action: Remove the selected recent item from the list.
+     */
     public final ApplicationAction removeRecentItemAction;
-    private final JComponent root;
+    /**
+     * Display the application settings dialog.
+     */
+    public final ApplicationAction showSettingsDialogAction;
 
-    public final ApplicationAction showOptionsDialogAction;
+    private final JComponent root;
+    private final Logger logger;
 
     public HomeActions(final JComponent root) {
 
@@ -48,20 +73,23 @@ public class HomeActions {
 
         final var res = Resources.get();
 
-        newProjectAction = new ApplicationAction("newProjectAction", this::newProject).withText()
+        newProjectAction = new ApplicationAction("newProjectAction", this::newProject)
+                .withText()
                 .setIcon(Icons.FILE_NEW, res.colors.icon(), res.colors.disabledIcon());
 
-        openSelectedAction = new ApplicationAction("openSelectedAction", this::openSelectedProject).withText()
+        openSelectedAction = new ApplicationAction("openSelectedAction", this::openSelectedProject)
+                .withText()
                 .setIcon(Icons.FILE_OPEN_SELECTED, res.colors.icon(), res.colors.disabledIcon());
 
         quitAction = new ApplicationAction("quitAction", this::quit)
                 .setTooltip(res.getString("quitActionTooltip"))
                 .setIcon(Icons.EXIT, res.colors.icon(), res.colors.disabledIcon());
 
-        loadProjectAction = new ApplicationAction("loadProjectAction", this::openProject).withText()
+        loadProjectAction = new ApplicationAction("loadProjectAction", this::openProject)
+                .withText()
                 .setIcon(Icons.FILE_OPEN, res.colors.icon(), res.colors.disabledIcon());
 
-        showOptionsDialogAction = new ApplicationAction("showOptionsDialogAction", this::showOptionsDialog)
+        showSettingsDialogAction = new ApplicationAction("showOptionsDialogAction", this::showOptionsDialog)
                 .setTooltip(res.getString("showOptionsDialogActionTooltip"))
                 .setIcon(Icons.SETTINGS, res.colors.icon(), res.colors.disabledIcon());
 
@@ -71,14 +99,14 @@ public class HomeActions {
         openContainingFolderAction = new ApplicationAction(
                 "openContainingFolderAction",
                 this::showOptionsDialog
-        ).setTextKey("openContainingFolderAction");
+        ).withText();
 
         all = List.of(
                 newProjectAction,
                 openSelectedAction,
                 quitAction,
                 loadProjectAction,
-                showOptionsDialogAction
+                showSettingsDialogAction
         );
     }
 
@@ -105,8 +133,8 @@ public class HomeActions {
         }
         try {
             // TODO: DI
-            showProject(new FileServiceImpl().readFile(path));
-        } catch (Exception e) {
+            showProject(new DBFileService().readFile(path));
+        } catch (IOException e) {
             JOptionPane.showMessageDialog(SwingUtilities.getWindowAncestor(root), e.getMessage());
         }
     }
@@ -130,19 +158,18 @@ public class HomeActions {
     private Path showOpenDialog() {
         final var outPath = MemoryUtil.memAllocPointer(1);
         try {
-            if (
-                NativeFileDialog
-                        .NFD_OpenDialog(FileServiceImpl.EXTENSION, null, outPath) == NativeFileDialog.NFD_OKAY
-            ) {
+            final var dialogResult = NativeFileDialog.NFD_OpenDialog(
+                    DBFileService.EXTENSION, 
+                    null, 
+                    outPath
+            );
+            if (dialogResult == NativeFileDialog.NFD_OKAY) {
                 final var pathStr = outPath.getStringUTF8();
                 NativeFileDialog.nNFD_Free(outPath.get(0));
                 return Path.of(pathStr);
             } else {
                 return null;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
         } finally {
             if (outPath != null) {
                 MemoryUtil.memFree(outPath);
