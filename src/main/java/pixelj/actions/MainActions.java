@@ -3,6 +3,7 @@ package pixelj.actions;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.io.IOError;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
@@ -23,7 +24,8 @@ import org.lwjgl.util.nfd.NativeFileDialog;
 import pixelj.models.Project;
 import pixelj.resources.Icons;
 import pixelj.resources.Resources;
-import pixelj.services.GridExportService;
+import pixelj.util.packer.GridPacker;
+import pixelj.services.ExportServiceImpl;
 import pixelj.services.FileService;
 import pixelj.services.FileServiceImpl;
 import pixelj.views.HomeView;
@@ -31,15 +33,43 @@ import pixelj.views.DocumentSettingsDialog;
 import pixelj.views.shared.Components;
 
 public final class MainActions {
+    /**
+     * A collection of all actions.
+     */
     public final Collection<ApplicationAction> all;
+    /**
+     * Return to home screen.
+     */
     public final ApplicationAction returnHomeAction;
+    /**
+     * Export project.
+     */
     public final ApplicationAction exportAction;
+    /**
+     * Quit the application.
+     */
     public final ApplicationAction quitAction;
+    /**
+     * Save project. Calls saveAsAction if no path was set for the project.
+     */
     public final ApplicationAction saveAction;
+    /**
+     * Display a save dialog.
+     */
     public final ApplicationAction saveAsAction;
+    /**
+     * Display online help.
+     */
     public final ApplicationAction showHelpAction;
+    /**
+     * Display the document settings dialog.
+     */
     public final ApplicationAction showDocumentSettingsAction;
+    /**
+     * Display the application settings dialog.
+     */
     public final ApplicationAction showSettingsAction;
+
     private boolean enabled = true;
     private final Logger logger;
     private final DocumentSettingsDialog documentSettingsDialog;
@@ -113,6 +143,9 @@ public final class MainActions {
         return enabled;
     }
 
+    /**
+     * @param value Is enabled
+     */
     public void setEnabled(final boolean value) {
         enabled = value;
         Actions.setEnabled(all, value);
@@ -121,14 +154,13 @@ public final class MainActions {
 
     // TODO: Not finished yet.
     private void export(final ActionEvent event, final Action action) {
-        logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
         final var path = showSaveDialog("fnt");
         if (path == null || path.getFileName() == null) {
             return;
         }
         try {
             // TODO: DI and export options
-            new GridExportService().export(project, path, 20, 30);
+            new ExportServiceImpl(new GridPacker<>()).export(project, path, 20, 30);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -152,8 +184,8 @@ public final class MainActions {
                 new FileServiceImpl().writeFile(project, path);
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            showInfo(Resources.get().getString("saveFailed"));
+           e.printStackTrace();
+           showLoadFailure(e.getLocalizedMessage());
         }
     }
 
@@ -170,14 +202,15 @@ public final class MainActions {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            showInfo(Resources.get().getString("saveFailed"));
+            showLoadFailure(e.getLocalizedMessage());
         }
     }
 
     private Path showSaveDialog(final String filter) {
         final var outPath = MemoryUtil.memAllocPointer(1);
         try {
-            final var defaultPath = project.getPath() != null ? project.getPath().toAbsolutePath().toString()
+            final var defaultPath = project.getPath() != null 
+                    ? project.getPath().toAbsolutePath().toString()
                     : null;
             if (NativeFileDialog.NFD_SaveDialog(filter, defaultPath, outPath) == NativeFileDialog.NFD_OKAY) {
                 final var pathStr = outPath.getStringUTF8();
@@ -186,7 +219,7 @@ public final class MainActions {
             } else {
                 return null;
             }
-        } catch (Exception e) {
+        } catch (IOError | SecurityException e) {
             e.printStackTrace();
             return null;
         } finally {
@@ -197,7 +230,7 @@ public final class MainActions {
     }
 
     private void showHelp(final ActionEvent event, final Action action) {
-        logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
+        logAction(action);
     }
 
     private void showDocumentSettings(final ActionEvent event, final Action action) {
@@ -210,10 +243,18 @@ public final class MainActions {
     }
 
     private void showSettings(final ActionEvent event, final Action action) {
-        logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
+        logAction(action);
     }
 
     private void showInfo(final String message) {
         JOptionPane.showMessageDialog((Frame) SwingUtilities.getWindowAncestor(root), message);
+    }
+
+    private void showLoadFailure(final String cause) {
+        showInfo(Resources.get().getString("saveFailed") + ":\n" + cause);
+    }
+
+    private void logAction(final Action action) {
+        logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
     }
 }

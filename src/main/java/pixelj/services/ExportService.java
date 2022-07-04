@@ -13,7 +13,7 @@ public interface ExportService {
      * Generate fnt file and associated images from project.
      *
      * @param project
-     * @param path          Save path
+     * @param path Save path
      * @param textureWidth
      * @param textureHeight
      * @throws IOException

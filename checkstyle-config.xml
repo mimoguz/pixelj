@@ -13,10 +13,6 @@
     <property name="fileNamePattern" value="module\-info\.java$" />
   </module>
 
-  <!-- Javadoc Comments -->
-  <!-- https://checkstyle.org/config_javadoc.html -->
-  <module name="JavadocPackage" />
-
   <!-- Miscellaneous -->
   <!-- https://checkstyle.org/config_misc.html -->
   <module name="NewlineAtEndOfFile" />
@@ -24,7 +20,9 @@
   <!-- Size Violations -->
   <!-- https://checkstyle.org/config_sizes.html -->
   <module name="FileLength" />
-  <module name="LineLength" />
+  <module name="LineLength">
+    <property name="max" value="110"/>
+  </module>
 
   <!-- Whitespace -->
   <!-- https://checkstyle.org/config_whitespace.html -->
@@ -44,7 +42,9 @@
     <module name="InnerTypeLast" />
     <module name="MutableException" />
     <module name="OneTopLevelClass" />
-    <module name="VisibilityModifier" />
+    <module name="VisibilityModifier">
+      <property name="allowPublicFinalFields" value="true" />
+    </module>
 
     <!-- Coding -->
     <!-- https://checkstyle.org/config_coding.html -->
@@ -109,6 +109,7 @@
     </module>
     <module name="MissingJavadocMethod">
       <property name="allowMissingPropertyJavadoc" value="true" />
+      <property name="tokens" value="METHOD_DEF, ANNOTATION_FIELD_DEF" />
     </module>
 
     <!-- Miscellaneous -->
@@ -150,7 +151,9 @@
     <!-- Whitespace -->
     <!-- https://checkstyle.org/config_whitespace.html -->
     <module name="EmptyForIteratorPad" />
-    <module name="EmptyLineSeparator" />
+    <module name="EmptyLineSeparator">
+      <property name="allowNoEmptyLineBetweenFields" value="true" />
+    </module>
     <module name="GenericWhitespace" />
     <module name="MethodParamPad" />
     <module name="NoWhitespaceAfter"/>

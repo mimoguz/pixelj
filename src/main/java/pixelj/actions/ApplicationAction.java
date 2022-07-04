@@ -11,7 +11,7 @@ import javax.swing.KeyStroke;
 import pixelj.resources.Icons;
 import pixelj.resources.Resources;
 
-public class ApplicationAction extends AbstractAction {
+public final class ApplicationAction extends AbstractAction {
     private final BiConsumer<ActionEvent, Action> consumer;
     private final String key;
 
@@ -34,19 +34,46 @@ public class ApplicationAction extends AbstractAction {
         return key;
     }
 
-    public ApplicationAction setAccelerator(final int key, final int mask) {
-        return setAccelerator(KeyStroke.getKeyStroke(key, mask));
+    /**
+     * Create KeyStroke using the key code and the modifiers, assign it as the shortcut key for the action.
+     * 
+     * @param keyCode   Key codes defined in java.awt.event.KeyEvent class
+     * @param modifiers Modifiers defined in java.awt.event.InputEvent class
+     * @return This action
+     */
+    public ApplicationAction setAccelerator(final int keyCode, final int modifiers) {
+        return setAccelerator(KeyStroke.getKeyStroke(keyCode, modifiers));
     }
 
+    /**
+     * Assign key stroke as the shortcut key for the action.
+     * 
+     * @param value Key stroke
+     * @return This action
+     */
     public ApplicationAction setAccelerator(final KeyStroke value) {
         putValue(Action.ACCELERATOR_KEY, value);
         return this;
     }
 
+    /**
+     * Create a font icon using the icon variant, set it as both small and large icons.
+     * 
+     * @param iconVariant Icon variant
+     * @return This action
+     */
     public ApplicationAction setIcon(final Icons iconVariant) {
         return setIcon(iconVariant, null, null);
     }
 
+    /**
+     * Create a font icon using the icon variant and the colors, set it as both small and large icons.
+     * 
+     * @param iconVariant   Icon variant
+     * @param color         Icon color
+     * @param disabledColor Disabled icon color
+     * @return This action
+     */
     public ApplicationAction setIcon(final Icons iconVariant, final Color color, final Color disabledColor) {
         final var res = Resources.get();
         final var icon = res.getIcon(iconVariant, color, disabledColor);
@@ -55,26 +82,53 @@ public class ApplicationAction extends AbstractAction {
         return this;
     }
 
+    /**
+     * Set the action's NAME value. This value is used as label text if a control needs one.
+     * 
+     * @param value The key for the strings resource.
+     * @return This action
+     */
     public ApplicationAction setTextKey(final String value) {
         putValue(Action.NAME, Resources.get().getString(value));
         return this;
     }
 
+    /**
+     * Set the action's SHORT_DESCRIPTION value. This value is used as tooltip text.
+     * 
+     * @param value Text value
+     * @return This action
+     */
     public ApplicationAction setTooltip(final String value) {
         putValue(Action.SHORT_DESCRIPTION, value);
         return this;
     }
 
+    /**
+     * Set both tooltip and shortcut key. This will add shortcut info to the tooltip.
+     * 
+     * @param tooltip     Tooltip text
+     * @param accelerator Shortcut
+     * @return This action
+     */
     public ApplicationAction setTooltipWithAccelerator(final String tooltip, final KeyStroke accelerator) {
         putValue(
                 Action.SHORT_DESCRIPTION,
-                "<html><body>" + tooltip + "<br /><strong>" + accelerator.toString().replace("pressed", "+")
-                        + "</strong><body></html>"
+                String.format(
+                        "<html><body>%s<br /><strong>%s</strong><body></html>",
+                        tooltip,
+                        accelerator.toString().replace("pressed", "+")
+                )
         );
         putValue(Action.ACCELERATOR_KEY, accelerator);
         return this;
     }
 
+    /**
+     * Use action's key to get its text from the strings resource.
+     * 
+     * @return This action
+     */
     public ApplicationAction withText() {
         return setTextKey(key);
     }
