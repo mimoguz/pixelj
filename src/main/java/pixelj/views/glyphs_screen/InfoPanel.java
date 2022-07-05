@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 
 import javax.swing.BoxLayout;
@@ -13,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
@@ -25,22 +27,25 @@ import pixelj.views.shared.Dimensions;
 
 public final class InfoPanel extends JPanel {
     private static final Color LABEL_FOREGROUND = new Color(50, 55, 65);
+    private static final String BLANK = " ";
+    private static final String SUBTITLE_STYLE = "small";
+    private static final int GLYPH_LABEL_SIZE = 120;
 
     private final JLabel widthLabel = new JLabel(Resources.get().getString("widthSpinnerLabel"));
     private final JSpinner widthSpinner = new JSpinner();
-    private final JLabel codePointLabel = new JLabel(" ");
-    private final JLabel blockNamePanel = new JLabel(" ");
-    private final JLabel glyphLabel = new JLabel(" ");
+    private final JLabel codePointLabel = new JLabel(BLANK);
+    private final JLabel blockNamePanel = new JLabel(BLANK);
+    private final JLabel glyphLabel = new JLabel(BLANK);
     private Glyph model;
-    private final JLabel nameLabel = new JLabel(" ");
+    private final JLabel nameLabel = new JLabel(BLANK);
     private final JCheckBox showGridCheckBox = new JCheckBox(Resources.get().getString("showGrid"));
     private final JCheckBox showLinesCheckBox = new JCheckBox(Resources.get().getString("showGuides"));
 
     public InfoPanel(final Project project) {
-        glyphLabel.setFont(glyphLabel.getFont().deriveFont(Font.PLAIN, 120));
+        glyphLabel.setHorizontalAlignment(SwingConstants.CENTER);
         glyphLabel.setForeground(LABEL_FOREGROUND);
-        codePointLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
-        blockNamePanel.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
+        codePointLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, SUBTITLE_STYLE);
+        blockNamePanel.putClientProperty(FlatClientProperties.STYLE_CLASS, SUBTITLE_STYLE);
         Components.setFixedSize(widthSpinner, Dimensions.SPINNER_SIZE);
         widthSpinner.setEnabled(false);
         widthLabel.setEnabled(false);
@@ -72,10 +77,10 @@ public final class InfoPanel extends JPanel {
         cons.gridwidth = 2;
         cons.weighty = 0.0;
         cons.insets = new Insets(pad - focusWidth, pad, pad, pad - divWidth);
-        final var glyphBackground = new JPanel(new GridBagLayout());
+        final var glyphBackground = new JPanel(new GridLayout());
         // noinspection SuspiciousNameCombination
         Components.setFixedSize(glyphBackground, new Dimension(innerWidth, innerWidth));
-        glyphBackground.add(glyphLabel, new GridBagConstraints());
+        glyphBackground.add(glyphLabel);
         glyphBackground.setBackground(Color.WHITE);
         add(glyphBackground, cons);
 
@@ -151,23 +156,31 @@ public final class InfoPanel extends JPanel {
                 widthLabel.setEnabled(true);
             }
         } else {
-            nameLabel.setText(" ");
-            codePointLabel.setText(" ");
-            blockNamePanel.setText(" ");
-            glyphLabel.setText(" ");
+            nameLabel.setText(BLANK);
+            codePointLabel.setText(BLANK);
+            blockNamePanel.setText(BLANK);
+            glyphLabel.setText(BLANK);
             widthSpinner.setEnabled(false);
             widthLabel.setEnabled(false);
         }
     }
 
-    private void setMetrics(final DocumentSettings metrics) {
+    private void setMetrics(final DocumentSettings settings) {
         widthSpinner.setModel(
                 new SpinnerNumberModel(
-                        model != null ? model.getWidth() : metrics.defaultWidth(),
+                        model != null ? model.getWidth() : settings.defaultWidth(),
                         0,
-                        metrics.canvasWidth(),
+                        settings.canvasWidth(),
                         1
                 )
         );
+        setGlyphLabelFont(settings);
+    }
+
+    private void setGlyphLabelFont(final DocumentSettings settings) {
+        final var style = settings.isBold() 
+                ? (settings.isItalic() ? Font.BOLD | Font.ITALIC : Font.BOLD)
+                : (settings.isItalic() ? Font.ITALIC : Font.PLAIN);
+        glyphLabel.setFont(glyphLabel.getFont().deriveFont(style, GLYPH_LABEL_SIZE));
     }
 }

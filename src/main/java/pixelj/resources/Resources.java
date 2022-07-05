@@ -30,14 +30,20 @@ import pixelj.graphics.FontIcon;
 import pixelj.models.BlockRecord;
 import pixelj.models.ScalarRecord;
 
-public class Resources {
+public final class Resources {
 
     private static final String BASE = "pixelj/resources/";
-    private static Resources instance = null;
+    private static Resources instance;
 
+    /**
+     * List of application icons for different sizes.
+     */
     public final List<Image> applicationIcons;
+    /**
+     * Theme colors.
+     */
     public final Colors colors;
-
+    
     private final Collection<BlockRecord> blocks;
     private final ImmutableIntObjectMap<BlockRecord> blocksTable;
     private final ImmutableIntObjectMap<ScalarRecord> scalarsTable;
@@ -158,19 +164,24 @@ public class Resources {
     }
 
     private static void registerUIFonts() {
-        try (final var stream = Resources.class.getResourceAsStream("fonts/NotoSans-Regular.ttf")) {
+        try (var stream = Resources.class.getResourceAsStream("fonts/NotoSans-Regular.ttf")) {
             loadFont(stream, Font.PLAIN, 13);
-        } catch (final IOException e) {
+        } catch (IOException e) {
             throw new ResourceInitializationException("Can't read the font file:\n" + e.getMessage());
         }
-        try (final var stream = Resources.class.getResourceAsStream("fonts/NotoSans-Bold.ttf")) {
+        try (var stream = Resources.class.getResourceAsStream("fonts/NotoSans-Bold.ttf")) {
             loadFont(stream, Font.BOLD, 13);
-        } catch (final IOException e) {
+        } catch (IOException e) {
             throw new ResourceInitializationException("Can't read the font file:\n" + e.getMessage());
         }
-        try (final var stream = Resources.class.getResourceAsStream("fonts/NotoSans-Italic.ttf")) {
+        try (var stream = Resources.class.getResourceAsStream("fonts/NotoSans-Italic.ttf")) {
             loadFont(stream, Font.ITALIC, 13);
-        } catch (final IOException e) {
+        } catch (IOException e) {
+            throw new ResourceInitializationException("Can't read the font file:\n" + e.getMessage());
+        }
+        try (var stream = Resources.class.getResourceAsStream("fonts/NotoSans-BoldItalic.ttf")) {
+            loadFont(stream, Font.BOLD | Font.ITALIC, 13);
+        } catch (IOException e) {
             throw new ResourceInitializationException("Can't read the font file:\n" + e.getMessage());
         }
     }
@@ -181,7 +192,8 @@ public class Resources {
             GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
             return font;
         } catch (final IOException | FontFormatException e) {
-            throw new ResourceInitializationException("Can't read the font file: \n" + e.getMessage());
+            e.printStackTrace();
+            throw new ResourceInitializationException("Can't read the font file:\n" + e.getMessage());
         }
     }
 
