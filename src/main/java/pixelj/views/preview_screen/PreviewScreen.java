@@ -32,7 +32,7 @@ import pixelj.views.shared.Borders;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 
-public class PreviewScreen extends JPanel implements Detachable {
+public final class PreviewScreen extends JPanel implements Detachable {
     private static final int INITIAL_ZOOM = 4;
     private final PreviewScreenActions actions;
     private final PromptTextArea textInput = new PromptTextArea();
@@ -121,6 +121,12 @@ public class PreviewScreen extends JPanel implements Detachable {
             }
         });
         add(zoomStrip);
+
+        project.documentSettingsProperty.addChangeListener((source, settings) -> {
+            if (isEnabled()) {
+                refresh();
+            }
+        });
     }
 
     private JPopupMenu makeContextMenu() {

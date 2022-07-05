@@ -33,7 +33,7 @@ import pixelj.views.shared.Borders;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 
-public class ListPanel extends JPanel implements Detachable {
+public final class ListPanel extends JPanel implements Detachable {
     private final KerningPairListActions actions;
     private final Predicate<KerningPair> filterRight = model -> true;
     private final JList<KerningPair> list;

@@ -13,7 +13,9 @@ import javax.swing.SpinnerNumberModel;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
+import pixelj.models.DocumentSettings;
 import pixelj.models.KerningPair;
+import pixelj.models.Project;
 import pixelj.resources.Resources;
 import pixelj.util.Detachable;
 import pixelj.views.controls.StringView;
@@ -22,7 +24,7 @@ import pixelj.views.shared.Borders;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 
-public class EditorPanel extends JPanel implements Detachable {
+public final class EditorPanel extends JPanel implements Detachable {
     private static final int INITIAL_ZOOM = 4;
     private final StringView preview = new StringView(Resources.get().colors.disabledIcon());
     private final JLabel pxLabel;
@@ -33,7 +35,7 @@ public class EditorPanel extends JPanel implements Detachable {
     private KerningPair model;
     private int spacing;
 
-    public EditorPanel() {
+    public EditorPanel(final Project project) {
         final var res = Resources.get();
 
         preview.setPadding(Dimensions.MEDIUM_PADDING);
@@ -102,6 +104,8 @@ public class EditorPanel extends JPanel implements Detachable {
 
         add(zoomStrip);
 
+        setMetrics(project.getDocumentSettings());
+        project.documentSettingsProperty.addChangeListener((source, settings) -> setMetrics(settings));
         setEnabled(false);
     }
 
@@ -112,27 +116,6 @@ public class EditorPanel extends JPanel implements Detachable {
 
     public StringView getPreview() {
         return preview;
-    }
-
-    public int getSpacing() {
-        return spacing;
-    }
-
-    public void setLetterSpacing(final int value) {
-        spacing = value;
-        if (model == null) {
-            return;
-        }
-        valueSpinner.setModel(
-                new SpinnerNumberModel(
-                        model.getKerningValue(),
-                        -model.getLeft().getWidth() - spacing,
-                        model.getRight().getWidth(),
-                        1
-                )
-        );
-        spaces.set(0, model.getKerningValue() + spacing);
-        preview.setSpaces(spaces);
     }
 
     @Override
@@ -172,5 +155,23 @@ public class EditorPanel extends JPanel implements Detachable {
             );
             setEnabled(true);
         }
+    }
+
+    private void setMetrics(final DocumentSettings settings) {
+        spacing = settings.letterSpacing();
+        if (model == null) {
+            return;
+        }
+        valueSpinner.setModel(
+                new SpinnerNumberModel(
+                        model.getKerningValue(),
+                        -model.getLeft().getWidth() - spacing,
+                        model.getRight().getWidth(),
+                        1
+                )
+        );
+        spaces.set(0, model.getKerningValue() + spacing);
+        preview.setMaxY(settings.descender() + settings.ascender());
+        preview.setSpaces(spaces);
     }
 }

@@ -5,12 +5,11 @@ import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 
-import pixelj.models.DocumentSettings;
 import pixelj.models.Project;
 import pixelj.util.Detachable;
 import pixelj.views.shared.Dimensions;
 
-public class KerningPairsScreen extends JSplitPane implements Detachable {
+public final class KerningPairsScreen extends JSplitPane implements Detachable {
     private final EditorPanel editorPanel;
     private final ListPanel listPanel;
     private final ListSelectionModel selectionModel;
@@ -20,14 +19,12 @@ public class KerningPairsScreen extends JSplitPane implements Detachable {
         selectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
         listPanel = new ListPanel(project, selectionModel, root);
-        editorPanel = new EditorPanel();
+        editorPanel = new EditorPanel(project);
 
         // Connect the listModel to the editor
         selectionModel.addListSelectionListener(e -> {
-            if (
-                selectionModel.getMinSelectionIndex() == selectionModel.getMaxSelectionIndex()
-                        && selectionModel.getMinSelectionIndex() >= 0
-            ) {
+            final var index = selectionModel.getMinSelectionIndex();
+            if (index == selectionModel.getMaxSelectionIndex() && index >= 0) {
                 editorPanel.setModel(
                         listPanel.getListModel().getElementAt(selectionModel.getMinSelectionIndex())
                 );
@@ -35,8 +32,6 @@ public class KerningPairsScreen extends JSplitPane implements Detachable {
                 editorPanel.setModel(null);
             }
         });
-
-        updateMetrics(project.getDocumentSettings());
 
         setMaximumSize(Dimensions.MAXIMUM);
         setLeftComponent(editorPanel);
@@ -58,10 +53,5 @@ public class KerningPairsScreen extends JSplitPane implements Detachable {
         if (value) {
             listPanel.getList().requestFocus();
         }
-    }
-
-    public void updateMetrics(final DocumentSettings metrics) {
-        editorPanel.setLetterSpacing(metrics.letterSpacing());
-        editorPanel.getPreview().setMaxY(metrics.descender() + metrics.ascender());
     }
 }

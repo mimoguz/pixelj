@@ -66,11 +66,6 @@ public class ProjectView extends JFrame {
         final var mainActions = new MainActions(project, root);
         Actions.registerShortcuts(mainActions.all, root);
 
-        final ChangeableValue.Listener<DocumentSettings> metricsListener = (sender, value) -> metricsChanged(
-                value
-        );
-        project.documentSettingsProperty.addChangeListener(metricsListener);
-
         final ChangeableValue.Listener<String> titleListener = (sender, value) -> titleChanged(value);
         project.titleProperty.addChangeListener(titleListener);
 
@@ -80,7 +75,7 @@ public class ProjectView extends JFrame {
         applyUITweaks();
 
         setContentPane(root);
-        setTitle(project.getTitle() + " - " + res.getString("applicationName"));
+        setTitle(res.formatString("projectViewTitle", project.getTitle()));
         setIconImages(res.applicationIcons);
         pack();
         setSize(1200, 720);
@@ -123,7 +118,7 @@ public class ProjectView extends JFrame {
             }
         })
                 .setTooltipWithAccelerator(
-                        res.getString("menuButtonAction"),
+                        res.getString("menuButtonActionTooltip"),
                         KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.ALT_DOWN_MASK)
                 )
                 .setIcon(Icons.ELLIPSIS, res.colors.accent(), res.colors.disabledIcon());
@@ -191,35 +186,7 @@ public class ProjectView extends JFrame {
         );
         Actions.registerShortcuts(tabActions, root);
 
-        root.addChangeListener(e -> {
-            // Activate-deactivate actions
-            switch (root.getSelectedIndex()) {
-                case 0 -> {
-                    charactersScreen.setEnabled(true);
-                    kerningPairsScreen.setEnabled(false);
-                    previewScreen.setEnabled(false);
-                }
-                case 1 -> {
-                    charactersScreen.setEnabled(false);
-                    kerningPairsScreen.setEnabled(true);
-                    previewScreen.setEnabled(false);
-                }
-                default -> {
-                    charactersScreen.setEnabled(false);
-                    kerningPairsScreen.setEnabled(false);
-                    previewScreen.setEnabled(true);
-                }
-            }
-
-            // Fix icon color
-            for (var index = 0; index < 3; index++) {
-                if (root.getIconAt(index) instanceof final FontIcon icn) {
-                    icn.setForeground(
-                            index == root.getSelectedIndex() ? res.colors.active() : res.colors.inactive()
-                    );
-                }
-            }
-        });
+        root.addChangeListener(e -> setCurrentScreen(root.getSelectedIndex()));
     }
 
     private void setupTrailing(final MainActions mainActions) {
@@ -248,16 +215,38 @@ public class ProjectView extends JFrame {
         root.putClientProperty(FlatClientProperties.TABBED_PANE_TRAILING_COMPONENT, trailingContainer);
     }
 
-    private void metricsChanged(final DocumentSettings newValue) {
-        charactersScreen.updateMetrics(newValue);
-        kerningPairsScreen.updateMetrics(newValue);
-        if (previewScreen.isEnabled()) {
-            previewScreen.refresh();
-        }
+    private void titleChanged(final String newValue) {
+        setTitle(Resources.get().formatString("projectViewTitle", newValue));
     }
 
-    private void titleChanged(final String newValue) {
-        setTitle(newValue + " - " + Resources.get().getString("applicationName"));
+    private void setCurrentScreen(final int index) {
+        switch (index) {
+            case 0 -> {
+                charactersScreen.setEnabled(true);
+                kerningPairsScreen.setEnabled(false);
+                previewScreen.setEnabled(false);
+            }
+            case 1 -> {
+                charactersScreen.setEnabled(false);
+                kerningPairsScreen.setEnabled(true);
+                previewScreen.setEnabled(false);
+            }
+            default -> {
+                charactersScreen.setEnabled(false);
+                kerningPairsScreen.setEnabled(false);
+                previewScreen.setEnabled(true);
+            }
+        }
+
+        // Fix icon color
+        final var res = Resources.get();
+        for (var tab = 0; tab < 3; tab++) {
+            if (root.getIconAt(tab) instanceof final FontIcon icn) {
+                icn.setForeground(
+                        tab == index ? res.colors.active() : res.colors.inactive()
+                );
+            }
+        }
     }
 
     private static JPopupMenu makeMainMenu(final MainActions actions) {
