@@ -5,13 +5,12 @@ import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 
-import pixelj.models.DocumentSettings;
 import pixelj.models.Project;
 import pixelj.util.Detachable;
 import pixelj.views.controls.GlyphView;
 import pixelj.views.shared.Dimensions;
 
-public class GlyphsScreen extends JSplitPane implements Detachable {
+public final class GlyphsScreen extends JSplitPane implements Detachable {
     private final ListPanel listPanel;
     private final PainterPanel painterPanel;
     private final ListSelectionModel selectionModel;
@@ -19,21 +18,14 @@ public class GlyphsScreen extends JSplitPane implements Detachable {
     public GlyphsScreen(final Project project, final JComponent root) {
         selectionModel = new DefaultListSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-
         listPanel = new ListPanel(project, selectionModel, project.getDocumentSettings(), root);
-
         painterPanel = new PainterPanel(project, root);
-        painterPanel.setMetrics(project.getDocumentSettings());
 
         // Connect the listModel to the painter
         selectionModel.addListSelectionListener(e -> {
-            if (
-                selectionModel.getMinSelectionIndex() == selectionModel.getMaxSelectionIndex()
-                        && selectionModel.getMinSelectionIndex() >= 0
-            ) {
-                painterPanel.setModel(
-                        listPanel.getListModel().getElementAt(selectionModel.getMinSelectionIndex())
-                );
+            final var index = selectionModel.getMinSelectionIndex();
+            if (index == selectionModel.getMaxSelectionIndex() && index >= 0) {
+                painterPanel.setModel(listPanel.getListModel().getElementAt(index));
             } else {
                 painterPanel.setModel(null);
             }
@@ -66,10 +58,5 @@ public class GlyphsScreen extends JSplitPane implements Detachable {
         listPanel.setEnabled(value);
         painterPanel.setEnabled(value);
         super.setEnabled(value);
-    }
-
-    public void updateMetrics(final DocumentSettings metrics) {
-        painterPanel.setMetrics(metrics);
-        listPanel.getActions().updateDocumentSettings(metrics);
     }
 }

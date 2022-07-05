@@ -36,7 +36,7 @@ import pixelj.views.controls.ZoomStrip;
 import pixelj.views.shared.Borders;
 import pixelj.views.shared.Dimensions;
 
-public class PainterPanel extends JPanel implements Detachable {
+public final class PainterPanel extends JPanel implements Detachable {
     private static final Color BASELINE = new Color(45, 147, 173);
     private static final int BLACK_SQUARE = 0x10_00_00_00;
     private static final Color CAP_HEIGHT = new Color(41, 191, 18);
@@ -117,6 +117,8 @@ public class PainterPanel extends JPanel implements Detachable {
 
         add(centerPanel, BorderLayout.CENTER);
 
+        setMetrics(project.getDocumentSettings());
+        project.documentSettingsProperty.addChangeListener((source, settings) -> setMetrics(settings));  
         setEnabled(false);
     }
 
@@ -162,28 +164,27 @@ public class PainterPanel extends JPanel implements Detachable {
     }
 
     /**
-     * @param metrics May be null.
+     * Create the guides.
      */
-    public void setMetrics(final DocumentSettings metrics) {
+    private void setMetrics(final DocumentSettings settings) {
         painter.removeLines();
-        if (metrics == null) {
+        if (settings == null) {
             return;
         }
-        infoPanel.setMetrics(metrics);
-        painter.setTop(metrics.descender() + metrics.ascender());
+        painter.setTop(settings.descender() + settings.ascender());
         final var capHeight = new Line(
                 Orientation.HORIZONTAL,
-                metrics.canvasHeight() - metrics.descender() - metrics.capHeight(),
+                settings.canvasHeight() - settings.descender() - settings.capHeight(),
                 CAP_HEIGHT
         );
         final var xHeight = new Line(
                 Orientation.HORIZONTAL,
-                metrics.canvasHeight() - metrics.descender() - metrics.xHeight(),
+                settings.canvasHeight() - settings.descender() - settings.xHeight(),
                 X_HEIGHT
         );
         final var baseLine = new Line(
                 Orientation.HORIZONTAL,
-                metrics.canvasHeight() - metrics.descender(),
+                settings.canvasHeight() - settings.descender(),
                 BASELINE
         );
         painter.addLines(capHeight, xHeight, baseLine);

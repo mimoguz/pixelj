@@ -28,7 +28,7 @@ import pixelj.views.shared.GlyphCellRenderer;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 
-public class ListPanel extends JPanel implements Detachable {
+public final class ListPanel extends JPanel implements Detachable {
     private final GlyphListActions actions;
     private final SearchableComboBox<BlockRecord> filterBox = new SearchableComboBox<>(
             Resources.get().getBlocks()
@@ -59,8 +59,8 @@ public class ListPanel extends JPanel implements Detachable {
         removeButton.setAction(actions.removeGlyphsAction);
         Components.setFixedSize(removeButton, Dimensions.TEXT_BUTTON_SIZE);
 
-        final var listModel = new FilteredList<>(project.getGlyphs());
-        list = new JList<>(listModel);
+        final var filteredListModel = new FilteredList<>(project.getGlyphs());
+        list = new JList<>(filteredListModel);
         list.setSelectionModel(selectionModel);
         list.setCellRenderer(new GlyphCellRenderer(48));
         list.setMaximumSize(Dimensions.MAXIMUM);
@@ -70,15 +70,15 @@ public class ListPanel extends JPanel implements Detachable {
         filterBox.setMinimumSize(Dimensions.MINIMUM_COMBO_BOX_SIZE);
         filterBox.addActionListener(event -> {
             if (filterBox.getSelectedItem() instanceof final BlockRecord block) {
-                listModel.setFilter(
+                filteredListModel.setFilter(
                         chr -> chr.getCodePoint() >= block.starts() && chr.getCodePoint() <= block.ends()
                 );
             } else {
-                listModel.setFilter(chr -> true);
+                filteredListModel.setFilter(chr -> true);
             }
         });
 
-        this.listModel = listModel;
+        this.listModel = filteredListModel;
 
         setPreferredSize(new Dimension(300, 100));
         setMinimumSize(new Dimension(220, 100));

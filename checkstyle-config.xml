@@ -129,7 +129,6 @@
       <property name="forceStrictCondition" value="false" />
     </module>
 
-
     <!-- Modifiers -->
     <!-- https://checkstyle.org/config_modifier.html -->
     <module name="ModifierOrder" />
@@ -145,7 +144,7 @@
     <module name="MemberName" />
     <module name="MethodName" />
     <module name="PackageName">
-      <property name="format" value="^[a-z]+(\.[a-z_][a-z0-9]*)*$" />
+      <property name="format" value="^[a-z]+(\.[a-z_][a-z0-9_]*)*$" />
     </module>
     <module name="ParameterName" />
     <module name="TypeName" />

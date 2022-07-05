@@ -28,7 +28,7 @@ import pixelj.views.shared.GlyphCell;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 
-public class AddDialog extends JDialog {
+public final class AddDialog extends JDialog {
     private final ListSelectionModel selectionModel = new DefaultListSelectionModel();
     private Glyph left;
     private KerningPair result;

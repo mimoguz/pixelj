@@ -23,7 +23,7 @@ import pixelj.resources.Resources;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 
-public class InfoPanel extends JPanel {
+public final class InfoPanel extends JPanel {
     private static final Color LABEL_FOREGROUND = new Color(50, 55, 65);
 
     private final JLabel widthLabel = new JLabel(Resources.get().getString("widthSpinnerLabel"));
@@ -117,10 +117,7 @@ public class InfoPanel extends JPanel {
         add(showLinesCheckBox, cons);
 
         setMetrics(project.getDocumentSettings());
-    }
-
-    public Glyph getModel() {
-        return model;
+        project.documentSettingsProperty.addChangeListener((source, settings) -> setMetrics(settings));
     }
 
     public JCheckBox getShowGridCheckBox() {
@@ -131,15 +128,8 @@ public class InfoPanel extends JPanel {
         return showLinesCheckBox;
     }
 
-    public void setMetrics(final DocumentSettings metrics) {
-        widthSpinner.setModel(
-                new SpinnerNumberModel(
-                        model != null ? model.getWidth() : metrics.defaultWidth(),
-                        0,
-                        metrics.canvasWidth(),
-                        1
-                )
-        );
+    public Glyph getModel() {
+        return model;
     }
 
     public void setModel(final Glyph value) {
@@ -168,5 +158,16 @@ public class InfoPanel extends JPanel {
             widthSpinner.setEnabled(false);
             widthLabel.setEnabled(false);
         }
+    }
+
+    private void setMetrics(final DocumentSettings metrics) {
+        widthSpinner.setModel(
+                new SpinnerNumberModel(
+                        model != null ? model.getWidth() : metrics.defaultWidth(),
+                        0,
+                        metrics.canvasWidth(),
+                        1
+                )
+        );
     }
 }
