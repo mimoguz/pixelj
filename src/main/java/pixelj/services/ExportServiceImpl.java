@@ -140,8 +140,9 @@ public final class ExportServiceImpl implements ExportService {
         final var title = project.getTitle();
         final var settings = project.getDocumentSettings();
         return new StringBuilder(120 + title.length())
-                .append("info face=\"").append(title)
-                .append(" size=")
+                .append("info face=\"")
+                .append(title)
+                .append("\" size=")
                 .append(-settings.capHeight())
                 .append(" bold=")
                 .append(settings.isBold() ? 1 : 0)
