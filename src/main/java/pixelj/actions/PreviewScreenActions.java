@@ -21,12 +21,23 @@ import pixelj.views.controls.StringView;
 public class PreviewScreenActions {
     private static final int SPACE = 32;
 
-    public final Collection<ApplicationAction> all = new ArrayList<>();
+    /**
+     * Clear the preview panel and the input field.
+     */
     public final ApplicationAction clearAction;
+    /**
+     * Refresh the preview panel.
+     */
+    public final ApplicationAction refreshAction;
+    /**
+     * Collection of all actions.
+     */
+    public final Collection<ApplicationAction> all = new ArrayList<>();
+
+
     private final JPanel container;
     private final JTextArea input;
     private final Project project;
-    public final ApplicationAction refreshAction;
     private int zoom = 1;
 
     public PreviewScreenActions(final Project project, final JTextArea input, final JPanel container) {
@@ -41,6 +52,19 @@ public class PreviewScreenActions {
 
         all.add(clearAction);
         all.add(refreshAction);
+    }
+
+    /**
+     * @param value Zoom value
+     */
+    public final void setZoom(final int value) {
+        zoom = value;
+        for (final var child : container.getComponents()) {
+            if (child instanceof final StringView view) {
+                view.setZoom(value);
+            }
+        }
+        container.revalidate();
     }
 
     private void clearContainer() {
@@ -128,15 +152,5 @@ public class PreviewScreenActions {
 
         container.revalidate();
         container.repaint();
-    }
-
-    public void setZoom(final int value) {
-        zoom = value;
-        for (final var child : container.getComponents()) {
-            if (child instanceof final StringView view) {
-                view.setZoom(value);
-            }
-        }
-        container.revalidate();
     }
 }

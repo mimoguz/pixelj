@@ -138,7 +138,7 @@ public final class PainterPanel extends JPanel implements Detachable {
         painter.setModel(value);
         infoPanel.setModel(value);
         if (value != null) {
-            Actions.setEnabled(actions.all, true);
+            actions.setEnabled(true);
             zoomStrip.setEnabled(true);
             final var gw = value.getImage().getWidth();
             final var gh = value.getImage().getHeight();
@@ -147,7 +147,7 @@ public final class PainterPanel extends JPanel implements Detachable {
             }
             painter.setOverlay(overlay);
         } else {
-            Actions.setEnabled(actions.all, false);
+            actions.setEnabled(false);
             zoomStrip.setEnabled(false);
             painter.setOverlay(null);
         }
@@ -160,7 +160,7 @@ public final class PainterPanel extends JPanel implements Detachable {
     @Override
     public void setEnabled(final boolean value) {
         super.setEnabled(value);
-        Actions.setEnabled(actions.all, value && (painter.getModel() != null));
+        actions.setEnabled(value);
     }
 
     /**

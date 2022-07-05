@@ -30,10 +30,6 @@ import pixelj.views.shared.Components;
 
 public final class HomeActions {
     /**
-     * Collection of all actions.
-     */
-    public final Collection<ApplicationAction> all;
-    /**
      * Display an open dialog and load the selected project.
      */
     public final ApplicationAction loadProjectAction;
@@ -61,6 +57,10 @@ public final class HomeActions {
      * Display the application settings dialog.
      */
     public final ApplicationAction showSettingsDialogAction;
+    /**
+     * Collection of all actions.
+     */
+    public final Collection<ApplicationAction> all;
 
     private final JComponent root;
     private final Logger logger;

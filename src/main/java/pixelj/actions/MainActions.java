@@ -37,10 +37,6 @@ import pixelj.views.shared.Components;
 
 public final class MainActions {
     /**
-     * Collection of all actions.
-     */
-    public final Collection<ApplicationAction> all;
-    /**
      * Return to home screen.
      */
     public final ApplicationAction returnHomeAction;
@@ -72,6 +68,10 @@ public final class MainActions {
      * Display the application settings dialog.
      */
     public final ApplicationAction showSettingsAction;
+    /**
+     * Collection of all actions.
+     */
+    public final Collection<ApplicationAction> all;
 
     private boolean enabled = true;
     private final Logger logger;
