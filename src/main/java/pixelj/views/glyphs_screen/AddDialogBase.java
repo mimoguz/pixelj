@@ -25,7 +25,7 @@ import pixelj.views.shared.ScalarCellRenderer;
 /**
  * AddDialog design. This should be extended to add functionality.
  */
-abstract class AbstractAddDialog extends JDialog {
+abstract class AddDialogBase extends JDialog {
     /**
      * List of scalars.
      */
@@ -43,7 +43,7 @@ abstract class AbstractAddDialog extends JDialog {
      */
     protected final JButton cancelButton;
 
-    AbstractAddDialog(final Frame owner) {
+    AddDialogBase(final Frame owner) {
         super(owner, Resources.get().getString("addGlyphsTitle"), Dialog.ModalityType.APPLICATION_MODAL);
 
         final var res = Resources.get();

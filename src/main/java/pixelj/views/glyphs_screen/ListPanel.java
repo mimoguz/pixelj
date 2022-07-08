@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JList;
@@ -17,7 +18,6 @@ import pixelj.actions.GlyphListActions;
 import pixelj.models.BlockRecord;
 import pixelj.models.Glyph;
 import pixelj.models.FilteredList;
-import pixelj.models.DocumentSettings;
 import pixelj.models.Project;
 import pixelj.models.SortedList;
 import pixelj.resources.Resources;
@@ -39,11 +39,9 @@ public final class ListPanel extends JPanel implements Detachable {
 
     public ListPanel(
             final Project project,
-            final ListSelectionModel selectionModel,
-            final DocumentSettings metrics,
             final JComponent root
     ) {
-        this.selectionModel = selectionModel;
+        selectionModel = new DefaultListSelectionModel();
 
         final var res = Resources.get();
 
@@ -122,6 +120,10 @@ public final class ListPanel extends JPanel implements Detachable {
 
     public SortedList<Glyph> getListModel() {
         return listModel;
+    }
+
+    public ListSelectionModel getSelectionModel() {
+        return selectionModel;
     }
 
     @Override

@@ -136,7 +136,9 @@
 
     <!-- Naming Conventions -->
     <!-- https://checkstyle.org/config_naming.html -->
-    <module name="AbstractClassName" />
+    <module name="AbstractClassName">
+      <property name="format" value="(^Abstract.+$|^.+Base$)"/>
+    </module>
     <module name="ConstantName" />
     <module name="IllegalIdentifierName" />
     <module name="LambdaParameterName" />

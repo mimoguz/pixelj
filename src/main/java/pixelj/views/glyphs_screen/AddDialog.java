@@ -19,7 +19,7 @@ import pixelj.views.shared.ScalarCellRenderer;
 /**
  * A dialog to select scalars to add. Application modal.
  */
-public final class AddDialog extends AbstractAddDialog {
+public final class AddDialog extends AddDialogBase {
     private final DefaultListModel<ScalarRecord> listModel = new DefaultListModel<>();
     private final ArrayList<ScalarRecord> result = new ArrayList<>();
     private final ListSelectionModel selectionModel = new DefaultListSelectionModel();
