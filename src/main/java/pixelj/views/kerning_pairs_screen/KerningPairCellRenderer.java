@@ -11,7 +11,7 @@ import pixelj.models.KerningPair;
 import pixelj.views.shared.GlyphCell;
 import pixelj.views.shared.Dimensions;
 
-public class KerningPairCellRenderer implements ListCellRenderer<KerningPair> {
+public final class KerningPairCellRenderer implements ListCellRenderer<KerningPair> {
     private final JPanel component = new JPanel(new GridLayout(1, 2));
     private final GlyphCell left;
     private final GlyphCell right;
