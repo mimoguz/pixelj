@@ -75,15 +75,14 @@ public final class PainterPanel extends JPanel implements Detachable {
         setLayout(new BorderLayout());
 
         infoPanel = new InfoPanel(project);
-        infoPanel.getShowGridCheckBox()
-                .addChangeListener(
-                        e -> painter.setOverlayVisible(infoPanel.getShowGridCheckBox().isSelected())
-                );
-        infoPanel.getShowLinesCheckBox().addChangeListener(e -> {
-            final var visible = infoPanel.getShowLinesCheckBox().isSelected();
-            painter.setLinesVisible(visible);
-            painter.setShaded(visible);
+        infoPanel.gridVisibleProperty.addChangeListener((source, isVisible) -> 
+                painter.setOverlayVisible(isVisible)
+        );
+        infoPanel.guidesVisibleProperty.addChangeListener((source, isVisible) -> {
+            painter.setLinesVisible(isVisible);
+            painter.setShaded(isVisible);
         });
+
         add(infoPanel, BorderLayout.EAST);
 
         actions.setPainter(painter);
