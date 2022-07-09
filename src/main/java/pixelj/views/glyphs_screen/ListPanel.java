@@ -1,11 +1,7 @@
 package pixelj.views.glyphs_screen;
 
-import java.util.Vector;
-
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JComponent;
-import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 
 import pixelj.actions.Actions;
@@ -15,7 +11,6 @@ import pixelj.models.FilteredList;
 import pixelj.models.Glyph;
 import pixelj.models.Project;
 import pixelj.models.SortedList;
-import pixelj.resources.Resources;
 
 public final class ListPanel extends ListPanelBase {
     private final GlyphListActions actions;
@@ -24,8 +19,6 @@ public final class ListPanel extends ListPanelBase {
 
     public ListPanel(final Project project, final JComponent root) {
         selectionModel = new DefaultListSelectionModel();
-
-        final var res = Resources.get();
 
         actions = new GlyphListActions(project, selectionModel, root);
         actions.removeGlyphsAction.setEnabled(false);
@@ -38,7 +31,6 @@ public final class ListPanel extends ListPanelBase {
         list.setModel(filteredListModel);
         list.setSelectionModel(selectionModel);
 
-        filterBox.setModel(new DefaultComboBoxModel<>(new Vector<>(res.getBlocks())));
         filterBox.addActionListener(event -> {
             if (filterBox.getSelectedItem() instanceof final BlockRecord block) {
                 filteredListModel.setFilter(

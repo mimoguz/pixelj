@@ -23,24 +23,17 @@ import pixelj.views.shared.Dimensions;
 import pixelj.views.shared.ScalarCellRenderer;
 
 /**
- * AddDialog design. This should be extended to add functionality.
+ * AddDialog design.
  */
 abstract class AddDialogBase extends JDialog {
-    /**
-     * List of scalars.
-     */
     protected final JList<ScalarRecord> listView = new JList<>();
     /**
-     * Block selection.
+     * Filter scalars by block.
      */
-    protected final JComboBox<BlockRecord> filterBox = new SearchableComboBox<>();
-    /**
-     * Positive action.
-     */
+    protected final JComboBox<BlockRecord> filterBox = new SearchableComboBox<>(
+            Resources.get().getBlocks().stream().skip(1).toList()
+    );
     protected final JButton addButton;
-    /**
-     * Negative action. Default.
-     */
     protected final JButton cancelButton;
 
     AddDialogBase(final Frame owner) {

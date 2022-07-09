@@ -13,10 +13,8 @@ import pixelj.util.ReadOnlyBoolean;
 
 public final class InfoPanel extends InfoPanelBase {
 
-    private Glyph model;
-    private final ChangeableBoolean gridVisible = new ChangeableBoolean(true);
-    private final ChangeableBoolean guidesVisible = new ChangeableBoolean(true);
-
+    protected final ChangeableBoolean gridVisible = new ChangeableBoolean(true);
+    protected final ChangeableBoolean guidesVisible = new ChangeableBoolean(true);
     /**
      * Show/hide grid.
      */
@@ -26,13 +24,15 @@ public final class InfoPanel extends InfoPanelBase {
      */
     public final ReadOnlyBoolean guidesVisibleProperty = new ReadOnlyBoolean(guidesVisible);
 
+    private Glyph model;
+
     public InfoPanel(final Project project) {
         showGridCheckBox.addItemListener(e -> gridVisible.setValue(showGridCheckBox.isSelected()));
         showGridCheckBox.setSelected(true);
 
         showGuidesCheckBox.addItemListener(e -> guidesVisible.setValue(showGuidesCheckBox.isSelected()));
         showGuidesCheckBox.setSelected(true);
-
+        
         widthSpinner.addChangeListener(e -> {
             if (model != null && widthSpinner.getModel() instanceof final SpinnerNumberModel numberModel) {
                 final var value = numberModel.getNumber().intValue();

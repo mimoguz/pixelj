@@ -4,9 +4,7 @@ import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Vector;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.ListSelectionModel;
@@ -31,12 +29,9 @@ public final class AddDialog extends AddDialogBase {
         listView.setModel(listModel);
         listView.setSelectionModel(selectionModel);
         listView.setCellRenderer(new ScalarCellRenderer());
-        
+
         final var res = Resources.get();
 
-        filterBox.setModel(
-                new DefaultComboBoxModel<>(new Vector<>(res.getBlocks().stream().skip(1).toList()))
-        );
         filterBox.setSelectedIndex(0);
         if (filterBox.getSelectedItem() instanceof final BlockRecord block) {
             listModel.addAll(res.getScalars(block.id()));

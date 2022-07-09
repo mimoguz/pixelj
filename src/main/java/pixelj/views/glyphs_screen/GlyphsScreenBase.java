@@ -7,7 +7,7 @@ import pixelj.models.Project;
 import pixelj.views.shared.Dimensions;
 
 /**
- * GlyphsScreen design. This should be extended to add functionality.
+ * GlyphsScreen design.
  */
 abstract class GlyphsScreenBase extends JSplitPane {
     protected final ListPanel listPanel;

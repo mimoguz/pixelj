@@ -20,6 +20,9 @@ import pixelj.resources.Resources;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 
+/**
+ * InfoPanel design.
+ */
 public abstract class InfoPanelBase extends JPanel {
     /**
      * Blank string.

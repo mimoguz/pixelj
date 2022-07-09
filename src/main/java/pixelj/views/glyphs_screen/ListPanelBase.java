@@ -20,22 +20,16 @@ import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 import pixelj.views.shared.GlyphCellRenderer;
 
+/**
+ * ListPanel design.
+ */
 abstract class ListPanelBase extends JPanel {
     /**
      * Filter glyphs by block.
      */
-    protected final JComboBox<BlockRecord> filterBox = new SearchableComboBox<>();
-    /**
-     * List of glyphs.
-     */
+    protected final JComboBox<BlockRecord> filterBox = new SearchableComboBox<>(Resources.get().getBlocks());
     protected final JList<Glyph> list = new JList<>();
-    /**
-     * Call add action.
-     */
     protected final JButton addButton = new JButton();
-    /**
-     * Call remove action.
-     */
     protected final JButton removeButton = new JButton();
 
     ListPanelBase() {
