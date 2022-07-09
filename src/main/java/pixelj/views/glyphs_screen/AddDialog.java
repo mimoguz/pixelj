@@ -26,9 +26,9 @@ public final class AddDialog extends AddDialogBase {
         super(owner);
 
         selectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        listView.setModel(listModel);
-        listView.setSelectionModel(selectionModel);
-        listView.setCellRenderer(new ScalarCellRenderer());
+        scalarList.setModel(listModel);
+        scalarList.setSelectionModel(selectionModel);
+        scalarList.setCellRenderer(new ScalarCellRenderer());
 
         final var res = Resources.get();
 

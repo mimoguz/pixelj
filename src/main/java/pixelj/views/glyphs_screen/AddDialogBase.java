@@ -26,7 +26,7 @@ import pixelj.views.shared.ScalarCellRenderer;
  * AddDialog design.
  */
 abstract class AddDialogBase extends JDialog {
-    protected final JList<ScalarRecord> listView = new JList<>();
+    protected final JList<ScalarRecord> scalarList = new JList<>();
     /**
      * Filter scalars by block.
      */
@@ -41,9 +41,9 @@ abstract class AddDialogBase extends JDialog {
 
         final var res = Resources.get();
 
-        listView.setCellRenderer(new ScalarCellRenderer());
+        scalarList.setCellRenderer(new ScalarCellRenderer());
         
-        final var scrollPanel = new JScrollPane(listView);
+        final var scrollPanel = new JScrollPane(scalarList);
         scrollPanel.setMaximumSize(Dimensions.MAXIMUM);
         
         addButton = new JButton(res.getString("add"));
@@ -70,7 +70,7 @@ abstract class AddDialogBase extends JDialog {
         getRootPane().setDefaultButton(cancelButton);
 
         pack();
-        listView.requestFocusInWindow();
+        scalarList.requestFocusInWindow();
         setSize(400, 600);
         setResizable(true);
     }
@@ -82,7 +82,7 @@ abstract class AddDialogBase extends JDialog {
     public void setVisible(final boolean visible) {
         if (visible) {
             setLocationRelativeTo(getOwner());
-            listView.requestFocusInWindow();
+            scalarList.requestFocusInWindow();
         }
         super.setVisible(visible);
     }
