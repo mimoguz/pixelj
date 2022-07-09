@@ -4,13 +4,12 @@ import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 
 import pixelj.models.Project;
-import pixelj.util.Detachable;
 import pixelj.views.shared.Dimensions;
 
 /**
  * GlyphsScreen design. This should be extended to add functionality.
  */
-abstract class GlyphsScreenBase extends JSplitPane implements Detachable {
+abstract class GlyphsScreenBase extends JSplitPane {
     protected final ListPanel listPanel;
     protected final PainterPanel painterPanel;
 
