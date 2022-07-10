@@ -24,9 +24,7 @@ import pixelj.views.shared.GlyphCellRenderer;
  * ListPanel design.
  */
 abstract class ListPanelBase extends JPanel {
-    /**
-     * Filter glyphs by block.
-     */
+
     protected final JComboBox<BlockRecord> filterBox = new SearchableComboBox<>(Resources.get().getBlocks());
     protected final JList<Glyph> list = new JList<>();
     protected final JButton addButton = new JButton();

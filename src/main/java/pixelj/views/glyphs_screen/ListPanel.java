@@ -2,6 +2,7 @@ package pixelj.views.glyphs_screen;
 
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JComponent;
+import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 
 import pixelj.actions.Actions;
@@ -13,13 +14,12 @@ import pixelj.models.Project;
 import pixelj.models.SortedList;
 
 public final class ListPanel extends ListPanelBase {
+
     private final GlyphListActions actions;
-    private final ListSelectionModel selectionModel;
+    private final ListSelectionModel selectionModel = new DefaultListSelectionModel();
     private final SortedList<Glyph> listModel;
 
     public ListPanel(final Project project, final JComponent root) {
-        selectionModel = new DefaultListSelectionModel();
-
         actions = new GlyphListActions(project, selectionModel, root);
         actions.removeGlyphsAction.setEnabled(false);
         Actions.registerShortcuts(actions.all, root);
@@ -30,6 +30,7 @@ public final class ListPanel extends ListPanelBase {
         listModel = filteredListModel;
         list.setModel(filteredListModel);
         list.setSelectionModel(selectionModel);
+        selectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
         filterBox.addActionListener(event -> {
             if (filterBox.getSelectedItem() instanceof final BlockRecord block) {

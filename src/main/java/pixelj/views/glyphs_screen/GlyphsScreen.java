@@ -12,7 +12,6 @@ public final class GlyphsScreen extends GlyphsScreenBase {
     public GlyphsScreen(final Project project, final JComponent root) {
         super(project, root, new ListPanel(project, root), new PainterPanel(project, root));
         selectionModel = listPanel.getSelectionModel();
-        selectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
         // Connect the listModel to the painter
         selectionModel.addListSelectionListener(e -> {
