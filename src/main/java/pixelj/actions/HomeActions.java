@@ -19,14 +19,16 @@ import javax.swing.SwingUtilities;
 import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.util.nfd.NativeFileDialog;
 
+import pixelj.models.DocumentSettings;
 import pixelj.models.ExampleData;
 import pixelj.models.Project;
+import pixelj.models.SortedList;
 import pixelj.resources.Icons;
 import pixelj.resources.Resources;
 import pixelj.services.DBFileService;
-import pixelj.views.NewProjectDialog;
 import pixelj.views.ProjectView;
 import pixelj.views.shared.Components;
+import pixelj.views.shared.DocumentSettingsDialog;
 
 public final class HomeActions {
     /**
@@ -117,11 +119,24 @@ public final class HomeActions {
     }
 
     private void newProject(final ActionEvent event, final Action action) {
-        final var dialog = new NewProjectDialog((Frame) SwingUtilities.getWindowAncestor(root));
+        final var res = Resources.get();
+        final var dialog = new DocumentSettingsDialog(
+                (Frame) SwingUtilities.getWindowAncestor(root),
+                res.getString("newProjectDialogTitle"),
+                res.getString("create"),
+                true
+        );
+        dialog.set(DocumentSettings.getDefault());
         dialog.setVisible(true);
-        final var project = dialog.getProject();
+        final var settings = dialog.getResult();
         dialog.dispose();
-        if (project != null) {
+        if (settings != null) {
+            final var project = new Project(
+                    new SortedList<>(),
+                    new SortedList<>(),
+                    settings,
+                    null
+            );
             showProject(project);
         }
     }

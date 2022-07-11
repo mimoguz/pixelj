@@ -9,24 +9,39 @@ import javax.swing.event.ListDataListener;
 
 import pixelj.util.ChangeableBoolean;
 import pixelj.util.ChangeableValue;
+import pixelj.util.ReadOnlyValue;
 
 public class Project {
 
-    private final SortedList<Glyph> glyphs;
-    private final SortedList<KerningPair> kerningPairs;
+    /**
+     * Document settings.
+     */
     public final ChangeableValue<DocumentSettings> documentSettingsProperty;
-    public final ChangeableValue<String> titleProperty;
+    /**
+     * Read only view for document title.
+     */
+    public final ReadOnlyValue<String> titleProperty;
+    /**
+     * Save path. Its value will be null if the project is not yet saved.
+     */
     public final ChangeableValue<Path> pathProperty;
+    /**
+     * Save state.
+     */
     public final ChangeableBoolean dirtyProperty = new ChangeableBoolean(false);
 
+    private final SortedList<Glyph> glyphs;
+    private final SortedList<KerningPair> kerningPairs;
+    private final ChangeableValue<String> title;
+
     public Project(
-            final String title,
             final SortedList<Glyph> glyphs,
             final SortedList<KerningPair> kerningPairs,
             final DocumentSettings settings,
             final Path path
     ) {
-        titleProperty = new ChangeableValue<>(title);
+        title = new ChangeableValue<>(settings.title());
+        titleProperty = new ReadOnlyValue<>(title);
         this.glyphs = glyphs;
         this.kerningPairs = kerningPairs;
         pathProperty = new ChangeableValue<>(path);
@@ -113,9 +128,6 @@ public class Project {
 
     public void setDocumentSettings(final DocumentSettings value) {
         documentSettingsProperty.setValue(value);
-    }
-
-    public void setTitle(final String value) {
-        titleProperty.setValue(value);
+        title.setValue(value.title());
     }
 }

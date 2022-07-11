@@ -144,10 +144,8 @@ public class NewProjectDialog extends JDialog {
 
     private void setupCreateButton(final DocumentSettingsPanel metricsPanel, ReadOnlyBoolean areInputsValid) {
         createButton.addActionListener(e -> {
-            final var title = titleField.getText().trim();
             try {
                 project = new Project(
-                        title,
                         new SortedList<>(),
                         new SortedList<>(),
                         metricsPanel.getDocumentSettings(),

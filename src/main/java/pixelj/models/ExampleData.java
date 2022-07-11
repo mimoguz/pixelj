@@ -104,7 +104,6 @@ public class ExampleData {
         );
 
         return new Project(
-                "Example project",
                 new SortedList<>(glyphs),
                 new SortedList<>(kerningPairs),
                 settings,

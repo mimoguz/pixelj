@@ -13,19 +13,18 @@ import pixelj.models.Project;
 import pixelj.services.Queries.GlyphsColumn;
 import pixelj.services.Queries.KerningPairsColumn;
 import pixelj.services.Queries.SettingsColumn;
-import pixelj.services.Queries.TitleColumn;
 
 final class WriteService {
-    public static final int VERSION = 1;
+
+    private WriteService() {
+    }
 
     public static void save(final Path path, final Project project) throws IOException {
-        List<CompressedGlyph> glyphs;
-        List<KerningPairRecord> kerningPairs;
-        String title;
-        DocumentSettings settings;
+        final List<CompressedGlyph> glyphs;
+        final List<KerningPairRecord> kerningPairs;
+        final DocumentSettings settings;
 
         synchronized (project) {
-            title = project.getTitle();
             settings = project.getDocumentSettings();
             glyphs = project.getGlyphs().getElements().parallelStream().map(CompressedGlyph::from)
                     .toList();
@@ -43,13 +42,6 @@ final class WriteService {
             connection.setAutoCommit(false);
 
             final var statement = connection.createStatement();
-
-            statement.executeUpdate(Queries.DROP_PROJECT_TABLE);
-            statement.executeUpdate(Queries.CREATE_PROJECT_TABLE);
-            final var insertTitle = connection.prepareStatement(Queries.INSERT_PROJECT);
-            insertTitle.setString(TitleColumn.TITLE.getIndex(), title);
-            insertTitle.setInt(TitleColumn.SAVE_VERSION.getIndex(), VERSION);
-            insertTitle.executeUpdate();
 
             statement.executeUpdate(Queries.DROP_GLYPHS_TABLE);
             statement.executeUpdate(Queries.CREATE_GLYPHS_TABLE_QUERY);
@@ -77,6 +69,10 @@ final class WriteService {
             statement.executeUpdate(Queries.DROP_SETTINGS_TABLE);
             statement.executeUpdate(Queries.CREATE_SETTINGS_TABLE);
             final var insertSettings = connection.prepareStatement(Queries.INSERT_SETTINGS);
+            insertSettings.setString(
+                    SettingsColumn.TITLE.getIndex(), 
+                    substring(settings.title(), Queries.TITLE_LENGTH)
+            );
             insertSettings.setInt(SettingsColumn.CANVAS_WIDTH.getIndex(), settings.canvasWidth());
             insertSettings.setInt(SettingsColumn.CANVAS_HEIGHT.getIndex(), settings.canvasHeight());
             insertSettings.setInt(SettingsColumn.ASCENDER.getIndex(), settings.ascender());
@@ -102,5 +98,7 @@ final class WriteService {
         }
     }
 
-    private WriteService() {}
+    private static String substring(final String source, final int length) {
+        return length >= source.length() ? source : source.substring(0, length);
+    }
 }

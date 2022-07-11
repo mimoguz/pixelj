@@ -17,10 +17,12 @@ import pixelj.models.SortedList;
 import pixelj.services.Queries.GlyphsColumn;
 import pixelj.services.Queries.KerningPairsColumn;
 import pixelj.services.Queries.SettingsColumn;
-import pixelj.services.Queries.TitleColumn;
 
-class ReadService {
-    // TODO: Check save version first
+final class ReadService {
+
+    private ReadService() {
+    }
+
     public static Project load(final Path path) throws IOException {
         final var pathStr = path.toAbsolutePath().toString();
         final var url = pathStr.endsWith("." + Queries.EXTENSION)
@@ -28,14 +30,13 @@ class ReadService {
                 : path;
         try (var connection = DriverManager.getConnection(Queries.URL_PREFIX + url, Queries.PIXELJ, "")) {
             final var statement = connection.createStatement();
-            final var title = extractTitle(statement.executeQuery(Queries.SELECT_TITLE));
-            final var settings = extractMetrics(statement.executeQuery(Queries.SELECT_SETTINGS));
+            final var settings = extractSettings(statement.executeQuery(Queries.SELECT_SETTINGS));
             final var glyphs = extractGlyphs(statement.executeQuery(Queries.SELECT_GLYPHS), settings);
             final var kerningPairs = extractKerningPairs(
                     statement.executeQuery(Queries.SELECT_KERNING_PAIRS),
                     glyphs
             );
-            return new Project(title, glyphs, kerningPairs, settings, path);
+            return new Project(glyphs, kerningPairs, settings, path);
         } catch (SQLException | IOException e) {
             throw new IOException(
                     String.format("Can't open or read the file %s:\n%s", path.toString(), e.getMessage())
@@ -48,9 +49,10 @@ class ReadService {
 
     }
 
-    private static SortedList<KerningPair> extractKerningPairs(ResultSet result, SortedList<Glyph> glyphs)
-            throws SQLException,
-            IllegalArgumentException {
+    private static SortedList<KerningPair> extractKerningPairs(
+            final ResultSet result, 
+            final SortedList<Glyph> glyphs
+    ) throws SQLException, IllegalArgumentException {
         final var list = new SortedList<KerningPair>();
         while (result.next()) {
             final var left = glyphs.findHash(result.getInt(KerningPairsColumn.LEFT_CODE_POINT.getIndex()));
@@ -63,10 +65,8 @@ class ReadService {
         return list;
     }
 
-    private static SortedList<Glyph> extractGlyphs(ResultSet result, DocumentSettings metrics)
-            throws SQLException,
-            IOException,
-            MisshapenDataException {
+    private static SortedList<Glyph> extractGlyphs(final ResultSet result, final DocumentSettings settings)
+            throws SQLException, IOException, MisshapenDataException {
         final var list = new SortedList<Glyph>();
         while (result.next()) {
             final var zipped = new CompressedGlyph(
@@ -74,16 +74,16 @@ class ReadService {
                     result.getInt(GlyphsColumn.WIDTH.getIndex()),
                     result.getBinaryStream(GlyphsColumn.IMAGE_BYTES.getIndex()).readAllBytes()
             );
-            list.add(zipped.decompress(metrics.canvasWidth(), metrics.canvasHeight()));
+            list.add(zipped.decompress(settings.canvasWidth(), settings.canvasHeight()));
         }
         return list;
     }
 
-    private static DocumentSettings extractMetrics(final ResultSet result)
-            throws InvalidStateException,
-            SQLException {
+    private static DocumentSettings extractSettings(final ResultSet result)
+            throws InvalidStateException, SQLException {
         result.next();
-        return DocumentSettings.Builder.getDefaultBuilder()
+        return new DocumentSettings.Builder()
+                .setTile(result.getString(SettingsColumn.TITLE.getIndex()))
                 .setCanvasWidth(result.getInt(SettingsColumn.CANVAS_WIDTH.getIndex()))
                 .setCanvasHeight(result.getInt(SettingsColumn.CANVAS_HEIGHT.getIndex()))
                 .setAscender(result.getInt(SettingsColumn.ASCENDER.getIndex()))
@@ -98,17 +98,5 @@ class ReadService {
                 .setBold(result.getBoolean(SettingsColumn.IS_BOLD.getIndex()))
                 .setItalic(result.getBoolean(SettingsColumn.IS_ITALIC.getIndex()))
                 .build();
-    }
-
-    private static String extractTitle(final ResultSet result) throws SQLException, NullPointerException {
-        result.next();
-        final var title = result.getString(TitleColumn.TITLE.getIndex());
-        if (title == null) {
-            throw new NullPointerException("Project title is null");
-        }
-        return title;
-    }
-
-    private ReadService() {
     }
 }

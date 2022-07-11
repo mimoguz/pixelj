@@ -2,10 +2,12 @@ package pixelj.models;
 
 import pixelj.util.ChangeableBoolean;
 import pixelj.util.ChangeableInt;
+import pixelj.util.ChangeableValue;
 import pixelj.util.ReadOnlyBoolean;
 import pixelj.util.ReadOnlyInt;
 
 public record DocumentSettings(
+        String title,
         int canvasWidth,
         int canvasHeight,
         int ascender,
@@ -25,40 +27,122 @@ public record DocumentSettings(
      * @return Default settings
      */
     public static DocumentSettings getDefault() {
-        return new DocumentSettings(24, 24, 16, 4, 11, 7, 7, 1, 4, 2, false, false, false);
+        return new DocumentSettings("My Font", 24, 24, 16, 4, 11, 7, 7, 1, 4, 2, false, false, false);
     }
 
     public static final class Builder {
         private static final ChangeableInt ZERO = new ChangeableInt(0);
 
+        /**
+         * Document title.
+         */
+        public final ChangeableValue<String> title = new ChangeableValue<>(null);
+        /**
+         * From baseline to highest possible point of a glyph.
+         */
         public final ChangeableInt ascender = new ChangeableInt(0);
+        /**
+         * Canvas height.
+         */
         public final ChangeableInt canvasHeight = new ChangeableInt(0);
+        /**
+         * Canvas width.
+         */
         public final ChangeableInt canvasWidth = new ChangeableInt(0);
+        /**
+         * Height of the capital letters, not counting accents.
+         */
         public final ChangeableInt capHeight = new ChangeableInt(0);
+         /**
+         * Height of the lowercase x.
+         */
+        public final ChangeableInt xHeight = new ChangeableInt(0);
+        /**
+         * Default glyph width.
+         */
         public final ChangeableInt defaultWidth = new ChangeableInt(0);
+        /**
+         * From baseline to lowest possible point of a glyph.
+         */
         public final ChangeableInt descender = new ChangeableInt(0);
+        /**
+         * Is the font monospaced?
+         */
         public final ChangeableBoolean isMonospaced = new ChangeableBoolean(false);
+        /**
+         * Extra line spacing.
+         */
         public final ChangeableInt lineSpacing = new ChangeableInt(0);
+        /**
+         * Size of the space character.
+         */
         public final ChangeableInt spaceSize = new ChangeableInt(0);
+        /**
+         * The space between two adjacent letters. 
+         */
         public final ChangeableInt letterSpacing = new ChangeableInt(0);
+        /**
+         * Font weight.
+         */
         public final ChangeableBoolean isBold = new ChangeableBoolean(false);
+        /**
+         * Font style.
+         */
         public final ChangeableBoolean isItalic = new ChangeableBoolean(false);
 
+        /**
+         * Check title.
+         */
+        public final ReadOnlyBoolean validTitle = title.test(t -> t != null && !t.isBlank());
+        /**
+         * Check ascender.
+         */
         public final ReadOnlyBoolean validAscender = new ReadOnlyInt(descender)
                 .le(canvasHeight.subtract(descender))
                 .and(ascender.gt(ZERO));
+        /**
+         * Check canvas height.
+         */
         public final ReadOnlyBoolean validCanvasHeight = canvasHeight.gt(ZERO);
+        /**
+         * Check canvas width.
+         */
         public final ReadOnlyBoolean validCanvasWidth = canvasWidth.gt(ZERO);
+        /**
+         * Check cap height.
+         */
         public final ReadOnlyBoolean validCapHeight = capHeight.le(ascender).and(capHeight.gt(ZERO));
-        public final ReadOnlyBoolean validDefaultWidth = defaultWidth.le(canvasWidth);
-        public final ReadOnlyBoolean validDescender = descender.le(canvasHeight).and(descender.gt(ZERO));
-        public final ReadOnlyBoolean validLineSpacing = lineSpacing.ge(ZERO);
-        public final ReadOnlyBoolean validSpaceSize = spaceSize.ge(ZERO);
-        public final ReadOnlyBoolean validLetterSpacing = letterSpacing.ge(ZERO);
-        private final ChangeableInt xHeight = new ChangeableInt(0);
+        /**
+         * Check x height.
+         */
         public final ReadOnlyBoolean validXHeight = xHeight.le(capHeight).and(xHeight.gt(ZERO));
+        /**
+         * Check default glyph width.
+         */
+        public final ReadOnlyBoolean validDefaultWidth = defaultWidth.le(canvasWidth);
+        /**
+         * Check descender.
+         */
+        public final ReadOnlyBoolean validDescender = descender.le(canvasHeight).and(descender.gt(ZERO));
+        /**
+         * Check line spacing.
+         */
+        public final ReadOnlyBoolean validLineSpacing = lineSpacing.ge(ZERO);
+        /**
+         * Check space size.
+         */
+        public final ReadOnlyBoolean validSpaceSize = spaceSize.ge(ZERO);
+        /**
+         * Check letter spacing.
+         */
+        public final ReadOnlyBoolean validLetterSpacing = letterSpacing.ge(ZERO);
 
-        public final ReadOnlyBoolean validAll = validCanvasHeight.and(validCanvasWidth)
+        /**
+         * Check all.
+         */
+        public final ReadOnlyBoolean validAll = validTitle
+                .and(validCanvasHeight)
+                .and(validCanvasWidth)
                 .and(validAscender)
                 .and(validDescender)
                 .and(validCapHeight)
@@ -77,6 +161,7 @@ public record DocumentSettings(
                 throw new InvalidStateException("Not all fields are valid");
             }
             return new DocumentSettings(
+                    title.getValue(),
                     canvasWidth.getValue(),
                     canvasHeight.getValue(),
                     ascender.getValue(),
@@ -91,6 +176,15 @@ public record DocumentSettings(
                     isBold.getValue(),
                     isItalic.getValue()
             );
+        }
+
+        /**
+         * @param value Project title
+         * @return This
+         */
+        public Builder setTile(final String value) {
+            title.setValue(value);
+            return this;
         }
 
         /**
@@ -211,11 +305,15 @@ public record DocumentSettings(
         }
 
         /**
+         * Copy all settings from the source.
+         * 
          * @param settings Source
-         * @return A builder using the values from the source
+         * @return This
          */
-        public static Builder from(final DocumentSettings settings) {
-            return new Builder().setAscender(settings.ascender())
+        public Builder set(final DocumentSettings settings) {
+            this
+                    .setTile(settings.title())
+                    .setAscender(settings.ascender())
                     .setBold(settings.isBold())
                     .setCanvasHeight(settings.canvasHeight())
                     .setCanvasWidth(settings.canvasWidth())
@@ -228,6 +326,16 @@ public record DocumentSettings(
                     .setSpaceSize(settings.spaceSize())
                     .setLetterSpacing(settings.letterSpacing)
                     .setXHeight(settings.xHeight());
+
+            return this;
+        }
+
+        /**
+         * @param settings Source
+         * @return A builder using the values from the source
+         */
+        public static Builder from(final DocumentSettings settings) {
+            return new Builder().set(settings);
         }
 
         /**
