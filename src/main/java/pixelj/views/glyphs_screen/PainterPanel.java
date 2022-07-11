@@ -31,7 +31,7 @@ public final class PainterPanel extends PainterPanelBase {
     private BufferedImage overlay;
 
     public PainterPanel(final Project project, final JComponent root) {
-        super(project, root, new InfoPanel(project));
+        super(new InfoPanel(project));
 
         painter.setZoom(INITIAL_ZOOM);
         painter.setOverlayVisible(true);
