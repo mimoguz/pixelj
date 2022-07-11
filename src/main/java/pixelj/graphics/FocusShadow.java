@@ -14,8 +14,8 @@ import java.io.IOException;
 
 public final class FocusShadow implements Border {
 
-    private static final int SIZE = 8;
-    private static final int TILE_SIZE = 16;
+    private static final int SIZE = 4;
+    private static final int TILE_SIZE = 8;
     private static final int TOP_LEFT = 0;
     private static final int TOP = 1;
     private static final int TOP_RIGHT = 2;

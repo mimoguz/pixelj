@@ -128,8 +128,6 @@ public final class MainActions {
             saveAction.setEnabled(enabled && path != null);
         });
 
-        saveAction.setEnabled(enabled && project.getPath() != null);
-
         all = List.of(
                 returnHomeAction,
                 exportAction,
@@ -152,17 +150,16 @@ public final class MainActions {
     public void setEnabled(final boolean value) {
         enabled = value;
         Actions.setEnabled(all, value);
-        saveAction.setEnabled(value && project.getPath() != null);
     }
 
-    // TODO: Not finished yet.
+    // TODO: Export dialog
     private void export(final ActionEvent event, final Action action) {
         final var path = showSaveDialog("fnt");
         if (path == null || path.getFileName() == null) {
             return;
         }
         try {
-            // TODO: DI and export options
+            // TODO: DI
             new ExportServiceImpl(new GridPacker<>(), new BasicImageWriter())
                     .export(project, path, 20, 30);
         } catch (IOException e) {
