@@ -52,6 +52,9 @@ public final class FocusShadow implements Border {
     ) {
         final var g2d = (Graphics2D) g.create();
 
+        g2d.setColor(c.getBackground());
+        g2d.fillRect(x, y, width, height);
+
         // Draw top and bottom
         final var hDim = width;
         final var bottomY = height - SIZE;
@@ -73,7 +76,6 @@ public final class FocusShadow implements Border {
         }
 
         // Draw corners
-        g2d.setColor(c.getBackground());
         g2d.fillRect(x, y, SIZE, SIZE);
         g2d.drawImage(images.get(TOP_LEFT), x, y, null);
         g2d.fillRect(x + width - SIZE, y, SIZE, SIZE);
@@ -97,6 +99,6 @@ public final class FocusShadow implements Border {
 
     @Override
     public boolean isBorderOpaque() {
-        return false;
+        return true;
     }
 }
