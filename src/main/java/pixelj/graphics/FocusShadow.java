@@ -30,6 +30,7 @@ public final class FocusShadow implements Border {
     private final IntObjectHashMap<Image> images;
 
     public FocusShadow() throws IOException {
+        // TODO: Better graphics
         this.images = new IntObjectHashMap<Image>(8);
         images.put(TOP_LEFT, ImageIO.read(getClass().getResourceAsStream("shadow/top_left.png")));
         images.put(TOP, ImageIO.read(getClass().getResourceAsStream("shadow/top.png")));
