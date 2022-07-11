@@ -49,9 +49,9 @@ public class ProjectView extends JFrame {
     private final JTabbedPane root;
 
     public ProjectView(final Project project) {
-        final var res = Resources.get();
-
         root = new JTabbedPane();
+
+        final var res = Resources.get();
 
         charactersScreen = new GlyphsScreen(project, root);
         kerningPairsScreen = new KerningPairsScreen(project, root);
@@ -63,8 +63,8 @@ public class ProjectView extends JFrame {
         final var mainActions = new MainActions(project, root);
         Actions.registerShortcuts(mainActions.all, root);
 
-        final ChangeableValue.Listener<String> titleListener = (sender, value) -> titleChanged(value);
-        project.titleProperty.addChangeListener(titleListener);
+        project.titleProperty.addChangeListener((sender, value) -> setFrameTitle(value, project.isDirty()));
+        project.dirtyProperty.addChangeListener((sender, value) -> setFrameTitle(project.getTitle(), value));
 
         setupTabs();
         setupLeading(mainActions, root);
@@ -72,7 +72,7 @@ public class ProjectView extends JFrame {
         applyUITweaks();
 
         setContentPane(root);
-        setTitle(res.formatString("projectViewTitle", project.getTitle()));
+        setFrameTitle(project.getTitle(), false);
         setIconImages(res.applicationIcons);
         pack();
         setSize(1200, 720);
@@ -101,7 +101,7 @@ public class ProjectView extends JFrame {
         root.setFocusable(false);
     }
 
-    private void setupLeading(final MainActions mainActions, final JComponent root) {
+    private void setupLeading(final MainActions mainActions, final JComponent component) {
         final var res = Resources.get();
         final var mainMenu = makeMainMenu(mainActions);
         final var leadingContainer = new JPanel();
@@ -137,11 +137,11 @@ public class ProjectView extends JFrame {
             }
         });
 
-        Actions.registerShortcuts(java.util.List.of(menuButtonAction), root);
+        Actions.registerShortcuts(java.util.List.of(menuButtonAction), component);
         setupTabBarButton(menuButton, menuButtonAction);
         leadingContainer.setLayout(new BoxLayout(leadingContainer, BoxLayout.Y_AXIS));
         leadingContainer.add(menuButton);
-        root.putClientProperty(FlatClientProperties.TABBED_PANE_LEADING_COMPONENT, leadingContainer);
+        component.putClientProperty(FlatClientProperties.TABBED_PANE_LEADING_COMPONENT, leadingContainer);
     }
 
     private void setupTabs() {
@@ -212,8 +212,12 @@ public class ProjectView extends JFrame {
         root.putClientProperty(FlatClientProperties.TABBED_PANE_TRAILING_COMPONENT, trailingContainer);
     }
 
-    private void titleChanged(final String newValue) {
-        setTitle(Resources.get().formatString("projectViewTitle", newValue));
+    private void setFrameTitle(final String titleText, final boolean isDirty) {
+        if (isDirty) {
+            setTitle(Resources.get().formatString("projectViewTitleUnsaved", titleText));
+        } else {
+            setTitle(Resources.get().formatString("projectViewTitle", titleText));
+        }
     }
 
     private void setCurrentScreen(final int index) {

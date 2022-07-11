@@ -183,6 +183,7 @@ public final class MainActions {
             } else {
                 // TODO: DI
                 new DBFileService().writeFile(project, path);
+                project.setDirty(false);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -200,6 +201,7 @@ public final class MainActions {
                 // TODO: DI
                 new DBFileService().writeFile(project, path);
                 project.setPath(path);
+                project.setDirty(false);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -240,6 +242,7 @@ public final class MainActions {
         final var result = documentSettingsDialog.getResult();
         if (result != null && !project.getDocumentSettings().equals(result)) {
             project.setDocumentSettings(result);
+            project.setDirty(true);
         }
     }
 

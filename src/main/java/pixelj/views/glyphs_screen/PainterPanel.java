@@ -23,11 +23,9 @@ public final class PainterPanel extends PainterPanelBase {
     private static final Color BASELINE = new Color(45, 147, 173);
     private static final Color CAP_HEIGHT = new Color(41, 191, 18);
     private static final int INITIAL_ZOOM = 12;
-    private static final int MAX_UNDO = 64;
     private static final Color X_HEIGHT = CAP_HEIGHT;
 
     private final PainterActions actions = new PainterActions();
-    private final ArrayList<Snapshot> undoBuffer = new ArrayList<>();
     private BufferedImage overlay;
 
     public PainterPanel(final Project project, final JComponent root) {
@@ -37,12 +35,6 @@ public final class PainterPanel extends PainterPanelBase {
         painter.setOverlayVisible(true);
         painter.setLinesVisible(true);
         painter.setShaded(true);
-        painter.setSnapshotConsumer(snapshot -> {
-            undoBuffer.add(snapshot);
-            if (undoBuffer.size() > MAX_UNDO) {
-                undoBuffer.remove(0);
-            }
-        });
 
         final var zoomSlider = zoomStrip.getSlider();
         zoomSlider.addChangeListener(e -> {
@@ -62,8 +54,10 @@ public final class PainterPanel extends PainterPanelBase {
         });
 
         actions.setPainter(painter);
-        // TODO: Use snapshot consumer to track changes.
-        painter.setSnapshotConsumer(actions.snapshotConsumer);
+        painter.setSnapshotConsumer(s -> {
+            actions.snapshotConsumer.accept(s);
+            project.setDirty(true);
+        });
         Actions.registerShortcuts(actions.all, root);
         fillToolbar(toolBar, actions);
   

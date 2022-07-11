@@ -85,6 +85,7 @@ public final class GlyphListActions {
                     new Glyph(codePoint, defaultWidth, BinaryImage.of(canvasSize.width, canvasSize.height))
             );
         }
+        project.setDirty(true);
     }
 
     private int countAffectedKerningPairs(final Collection<Glyph> characters) {
@@ -130,6 +131,7 @@ public final class GlyphListActions {
                     )
             );
         }
+        project.setDirty(true);
     }
 
     private void showRemoveDialog(final ActionEvent event, final Action action) {
@@ -160,5 +162,6 @@ public final class GlyphListActions {
 
         // Project model should take care of removing the affected kerning pairs.
         listModel.removeAll(removed);
+        project.setDirty(true);
     }
 }

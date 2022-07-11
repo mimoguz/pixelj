@@ -7,6 +7,7 @@ import java.util.List;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
+import pixelj.util.ChangeableBoolean;
 import pixelj.util.ChangeableValue;
 
 public class Project {
@@ -16,6 +17,7 @@ public class Project {
     public final ChangeableValue<DocumentSettings> documentSettingsProperty;
     public final ChangeableValue<String> titleProperty;
     public final ChangeableValue<Path> pathProperty;
+    public final ChangeableBoolean dirtyProperty = new ChangeableBoolean(false);
 
     public Project(
             final String title,
@@ -88,6 +90,14 @@ public class Project {
     public DocumentSettings getDocumentSettings() {
         return documentSettingsProperty.getValue();
     }
+
+    public boolean isDirty() {
+        return dirtyProperty.getValue();
+    }
+
+    public void setDirty(boolean value) {
+        dirtyProperty.setValue(value);
+    } 
 
     public Path getPath() {
         return pathProperty.getValue();

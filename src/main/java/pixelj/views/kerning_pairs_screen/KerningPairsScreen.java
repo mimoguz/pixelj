@@ -20,5 +20,7 @@ public final class KerningPairsScreen extends KerningPairsScreenBase {
                 editorPanel.setModel(null);
             }
         });
+
+        editorPanel.valueSpinner.addChangeListener(e -> project.setDirty(true));
     }
 }

@@ -59,6 +59,7 @@ public class KerningPairListActions {
         final var result = addDialog.getResult();
         if (result != null) {
             project.getKerningPairs().add(result);
+            project.setDirty(true);
         }
     }
 
@@ -81,5 +82,6 @@ public class KerningPairListActions {
         }
         final var listModel = project.getKerningPairs();
         listModel.removeAll(Arrays.stream(indices).mapToObj(listModel::getElementAt).toList());
+        project.setDirty(true);
     }
 }

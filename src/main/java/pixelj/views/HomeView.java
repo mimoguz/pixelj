@@ -35,7 +35,6 @@ import pixelj.views.shared.Dimensions;
 public class HomeView extends JFrame {
 
     public HomeView() {
-        super();
         final var res = Resources.get();
         final var root = new JPanel(new BorderLayout());
         final var actions = new HomeActions(root);
@@ -71,7 +70,7 @@ public class HomeView extends JFrame {
         final var removeRecent = new JMenuItem(actions.removeRecentItemAction);
         final var openContainingFolder = new JMenuItem(actions.openContainingFolderAction);
         if (
-            actions.removeRecentItemAction.getValue(Action.SMALL_ICON) == null
+                actions.removeRecentItemAction.getValue(Action.SMALL_ICON) == null
                     || actions.openContainingFolderAction.getValue(Action.SMALL_ICON) == null
         ) {
             removeRecent.setIconTextGap(0);
@@ -138,7 +137,7 @@ public class HomeView extends JFrame {
         private final JLabel path = new JLabel(" ");
         private final JLabel title = new JLabel(" ");
 
-        public RecentItemCellRenderer() {
+        RecentItemCellRenderer() {
             component.add(title, BorderLayout.NORTH);
             path.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
             component.add(path, BorderLayout.SOUTH);

@@ -31,8 +31,10 @@ public class ChangeableBoolean {
     }
 
     public void setValue(final boolean value) {
-        this.value = value;
-        fireChangeEvent();
+        if (value != this.value) {
+            this.value = value;
+            fireChangeEvent();
+        }
     }
 
     public ReadOnlyBoolean not() {

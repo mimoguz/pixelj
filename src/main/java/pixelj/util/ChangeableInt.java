@@ -39,8 +39,10 @@ public class ChangeableInt {
     }
 
     public void setValue(final int value) {
-        this.value = value;
-        fireChangeEvent();
+        if (value != this.value) {
+            this.value = value;
+            fireChangeEvent();
+        }
     }
 
     public ReadOnlyBoolean gt(ChangeableInt that) {
