@@ -1,6 +1,5 @@
 package pixelj.graphics;
 
-
 import javax.imageio.ImageIO;
 import javax.swing.border.Border;
 
