@@ -43,7 +43,7 @@ public final class Resources {
      * Theme colors.
      */
     public final Colors colors;
-    
+
     private final Collection<BlockRecord> blocks;
     private final ImmutableIntObjectMap<BlockRecord> blocksTable;
     private final ImmutableIntObjectMap<ScalarRecord> scalarsTable;
@@ -159,7 +159,7 @@ public final class Resources {
         try (final var stream = Resources.class.getResourceAsStream("fonts/pxf16.otf")) {
             return loadFont(stream, Font.PLAIN, 16);
         } catch (final IOException e) {
-            throw new ResourceInitializationException("Can't read the icon font file:\n" + e.getMessage());
+            throw new ResourceInitializationException(e);
         }
     }
 
@@ -167,22 +167,22 @@ public final class Resources {
         try (var stream = Resources.class.getResourceAsStream("fonts/NotoSans-Regular.ttf")) {
             loadFont(stream, Font.PLAIN, 13);
         } catch (IOException e) {
-            throw new ResourceInitializationException("Can't read the font file:\n" + e.getMessage());
+            throw new ResourceInitializationException(e);
         }
         try (var stream = Resources.class.getResourceAsStream("fonts/NotoSans-Bold.ttf")) {
             loadFont(stream, Font.BOLD, 13);
         } catch (IOException e) {
-            throw new ResourceInitializationException("Can't read the font file:\n" + e.getMessage());
+            throw new ResourceInitializationException(e);
         }
         try (var stream = Resources.class.getResourceAsStream("fonts/NotoSans-Italic.ttf")) {
             loadFont(stream, Font.ITALIC, 13);
         } catch (IOException e) {
-            throw new ResourceInitializationException("Can't read the font file:\n" + e.getMessage());
+            throw new ResourceInitializationException(e);
         }
         try (var stream = Resources.class.getResourceAsStream("fonts/NotoSans-BoldItalic.ttf")) {
             loadFont(stream, Font.BOLD | Font.ITALIC, 13);
         } catch (IOException e) {
-            throw new ResourceInitializationException("Can't read the font file:\n" + e.getMessage());
+            throw new ResourceInitializationException(e);
         }
     }
 
@@ -193,7 +193,7 @@ public final class Resources {
             return font;
         } catch (final IOException | FontFormatException e) {
             e.printStackTrace();
-            throw new ResourceInitializationException("Can't read the font file:\n" + e.getMessage());
+            throw new ResourceInitializationException(e);
         }
     }
 
@@ -225,13 +225,17 @@ public final class Resources {
         try (var source = Resources.class.getResourceAsStream(resource)) {
             return Collections.unmodifiableCollection(objectMapper.readValue(source, typeRef));
         } catch (final IOException e) {
-            throw new ResourceInitializationException("Can't read " + resource + "\n" + e.getMessage());
+            throw new ResourceInitializationException(e);
         }
     }
 
     public static class ResourceInitializationException extends RuntimeException {
         public ResourceInitializationException(final String message) {
             super(message);
+        }
+
+        public ResourceInitializationException(final Exception e) {
+            super(e);
         }
     }
 }

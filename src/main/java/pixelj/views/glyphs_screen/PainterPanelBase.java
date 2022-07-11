@@ -7,6 +7,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -20,6 +21,7 @@ import javax.swing.border.Border;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
+import pixelj.graphics.FocusShadow;
 import pixelj.resources.Resources;
 import pixelj.views.controls.GlyphPainter;
 import pixelj.views.controls.ZoomStrip;
@@ -40,11 +42,25 @@ public abstract class PainterPanelBase extends JPanel {
     protected final InfoPanel infoPanel;
     protected final JToolBar toolBar = new JToolBar();
 
-    private final Border unfocusedBorder = BorderFactory.createEmptyBorder(BW, BW, BW, BW);
-    private final Border focusedBorder = BorderFactory.createLineBorder(Resources.get().colors.accent(), BW);
+    private Border unfocusedBorder;
+    private Border focusedBorder;
 
     public PainterPanelBase(final InfoPanel infoPanel) {
         this.infoPanel = infoPanel;
+
+        try {
+            final var focusShadow = new FocusShadow();
+            focusedBorder = focusShadow;
+            unfocusedBorder = BorderFactory.createEmptyBorder(
+                    focusShadow.getSize(),
+                    focusShadow.getSize(),
+                    focusShadow.getSize(),
+                    focusShadow.getSize()
+            );
+        } catch (IOException e) {
+            focusedBorder = BorderFactory.createLineBorder(Resources.get().colors.accent(), BW);
+            unfocusedBorder = BorderFactory.createEmptyBorder(BW, BW, BW, BW);
+        }
 
         setLayout(new BorderLayout());
         add(infoPanel, BorderLayout.EAST);
