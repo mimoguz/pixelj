@@ -135,6 +135,8 @@ public class DocumentSettingsPanel extends JPanel {
         spaceSizeIn.setValue(settings.spaceSize());
         lineSpacingIn.setValue(settings.lineSpacing());
         isMonospacedIn.setSelected(settings.isMonospaced());
+        isBoldIn.setSelected(settings.isBold());
+        isItalicIn.setSelected(settings.isItalic());
 
         canvasHeightIn.setEnabled(canEditCanvasSize);
         canvasWidthIn.setEnabled(canEditCanvasSize);
