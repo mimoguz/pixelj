@@ -1,46 +1,19 @@
 package pixelj.views.kerning_pairs_screen;
 
-import java.awt.GridBagLayout;
 import java.util.ArrayList;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-
-import com.formdev.flatlaf.FlatClientProperties;
 
 import pixelj.models.DocumentSettings;
 import pixelj.models.KerningPair;
 import pixelj.models.Project;
-import pixelj.resources.Resources;
-import pixelj.util.Detachable;
-import pixelj.views.controls.StringView;
-import pixelj.views.controls.ZoomStrip;
-import pixelj.views.shared.Borders;
-import pixelj.views.shared.Components;
-import pixelj.views.shared.Dimensions;
 
-public final class EditorPanel extends JPanel implements Detachable {
-    private static final int INITIAL_ZOOM = 4;
-    private final StringView preview = new StringView(Resources.get().colors.disabledIcon());
-    private final JLabel pxLabel;
+public final class EditorPanel extends EditorPanelBase {
     private final ArrayList<Integer> spaces = new ArrayList<>(java.util.List.of(0));
-    private final JLabel spinnerLabel;
-    private final JSpinner valueSpinner;
-    private final ZoomStrip zoomStrip = new ZoomStrip(1, 48, INITIAL_ZOOM);
     private KerningPair model;
     private int spacing;
 
     public EditorPanel(final Project project) {
-        final var res = Resources.get();
-
-        preview.setPadding(Dimensions.MEDIUM_PADDING);
-        preview.setZoom(INITIAL_ZOOM);
-
         final var zoomSlider = zoomStrip.getSlider();
         zoomSlider.addChangeListener(e -> {
             if (zoomSlider.getValueIsAdjusting()) {
@@ -49,9 +22,6 @@ public final class EditorPanel extends JPanel implements Detachable {
         });
         zoomStrip.setEnabled(false);
 
-        valueSpinner = new JSpinner();
-        Components.setFixedSize(valueSpinner, Dimensions.SPINNER_SIZE);
-        valueSpinner.setAlignmentY(0.5f);
         valueSpinner.addChangeListener(e -> {
             if (model == null) {
                 return;
@@ -63,59 +33,9 @@ public final class EditorPanel extends JPanel implements Detachable {
             }
         });
 
-        spinnerLabel = new JLabel(res.getString("kerningValue"));
-        spinnerLabel.setAlignmentY(0.5f);
-
-        pxLabel = new JLabel(res.getString("pixels"));
-        pxLabel.setAlignmentY(0.5f);
-
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-        final var title = new JLabel(res.getString("kerningValueEditorTitle"));
-        title.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
-        final var titlePanel = new JPanel();
-        titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.X_AXIS));
-        titlePanel.setBorder(Borders.TITLE_CENTER);
-        // titlePanel.add(Box.createHorizontalGlue());
-        titlePanel.add(Box.createHorizontalStrut(Dimensions.LARGE_PADDING));
-        titlePanel.add(title);
-        titlePanel.add(Box.createHorizontalGlue());
-        add(titlePanel);
-
-        final var previewPanel = new JPanel(new GridBagLayout());
-        previewPanel.add(preview);
-        final var scrollPanel = new JScrollPane(previewPanel);
-        // To balance the split pane divider
-        scrollPanel.setBorder(Borders.SMALL_EMPTY_CUP_CENTER);
-        scrollPanel.setMaximumSize(Dimensions.MAXIMUM);
-        add(scrollPanel);
-
-        final var spinnerPanel = new JPanel();
-        spinnerPanel.setLayout(new BoxLayout(spinnerPanel, BoxLayout.X_AXIS));
-        spinnerPanel.setBorder(Borders.SMALL_EMPTY_BOTTOM_CENTER_PANEL);
-        spinnerPanel.add(Box.createHorizontalGlue());
-        spinnerPanel.add(spinnerLabel);
-        spinnerPanel.add(Box.createRigidArea(Dimensions.SMALL_SQUARE));
-        spinnerPanel.add(valueSpinner);
-        spinnerPanel.add(Box.createRigidArea(Dimensions.SMALL_SQUARE));
-        spinnerPanel.add(pxLabel);
-        spinnerPanel.add(Box.createHorizontalGlue());
-        add(spinnerPanel);
-
-        add(zoomStrip);
-
         setMetrics(project.getDocumentSettings());
         project.documentSettingsProperty.addChangeListener((source, settings) -> setMetrics(settings));
         setEnabled(false);
-    }
-
-    @Override
-    public void detach() {
-        setModel(null);
-    }
-
-    public StringView getPreview() {
-        return preview;
     }
 
     @Override
