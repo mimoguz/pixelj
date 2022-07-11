@@ -90,7 +90,7 @@ public final class MainActions {
         final var res = Resources.get();
 
         returnHomeAction = new ApplicationAction("returnHomeAction", this::returnHome).withText()
-                .setIcon(Icons.PROJECT_MANAGER, res.colors.icon(), res.colors.disabledIcon())
+                .setIcon(Icons.HOME, res.colors.icon(), res.colors.disabledIcon())
                 .setAccelerator(KeyEvent.VK_W, ActionEvent.CTRL_MASK);
 
         exportAction = new ApplicationAction("exportAction", this::export).withText()

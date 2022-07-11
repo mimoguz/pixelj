@@ -1,6 +1,7 @@
 package pixelj.resources;
 
 public enum Icons {
+    BURGER(0xe926),
     CLIPBOARD_COPY(0xe900),
     CLIPBOARD_CUT(0xe901),
     CLIPBOARD_IMPORT(0xe902),
@@ -22,6 +23,7 @@ public enum Icons {
     HELP(0xe90c),
     HISTORY_REDO(0xe90d),
     HISTORY_UNDO(0xe90e),
+    HOME(0xe927),
     KERNING(0xe91b),
     KERNING_WIDE(0xe920),
     LIST(0xe91a),
@@ -40,9 +42,12 @@ public enum Icons {
     ZOOM_OUT(0xe923),
     ZOOM_OUT_FILLED(0xe924);
 
+    /**
+     * Code point in the pxf16 font.
+     */
     public final int codePoint;
 
-    Icons(int codePoint) {
+    Icons(final int codePoint) {
         this.codePoint = codePoint;
     }
 }

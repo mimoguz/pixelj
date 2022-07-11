@@ -31,7 +31,6 @@ import pixelj.actions.Actions;
 import pixelj.actions.ApplicationAction;
 import pixelj.actions.MainActions;
 import pixelj.graphics.FontIcon;
-import pixelj.models.DocumentSettings;
 import pixelj.models.Project;
 import pixelj.resources.Icons;
 import pixelj.resources.Resources;
@@ -50,8 +49,6 @@ public class ProjectView extends JFrame {
     private final JTabbedPane root;
 
     public ProjectView(final Project project) {
-        super();
-
         final var res = Resources.get();
 
         root = new JTabbedPane();
@@ -121,7 +118,7 @@ public class ProjectView extends JFrame {
                         res.getString("menuButtonActionTooltip"),
                         KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.ALT_DOWN_MASK)
                 )
-                .setIcon(Icons.ELLIPSIS, res.colors.accent(), res.colors.disabledIcon());
+                .setIcon(Icons.BURGER, res.colors.accent(), res.colors.disabledIcon());
 
         mainMenu.addPopupMenuListener(new PopupMenuListener() {
             @Override
