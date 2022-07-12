@@ -1,4 +1,4 @@
-package pixelj.views.preview_screen;
+package pixelj.views.previewscreen;
 
 import java.awt.event.ActionEvent;
 

@@ -16,7 +16,7 @@ import javax.swing.SwingUtilities;
 
 import pixelj.models.Project;
 import pixelj.resources.Resources;
-import pixelj.views.kerning_pairs_screen.AddDialog;
+import pixelj.views.kerningpairsscreen.AddDialog;
 
 public class KerningPairListActions {
     private final AddDialog addDialog;

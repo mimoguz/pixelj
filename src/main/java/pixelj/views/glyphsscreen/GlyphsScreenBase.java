@@ -1,4 +1,4 @@
-package pixelj.views.glyphs_screen;
+package pixelj.views.glyphsscreen;
 
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;

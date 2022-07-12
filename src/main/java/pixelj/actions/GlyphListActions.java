@@ -21,7 +21,7 @@ import pixelj.models.Glyph;
 import pixelj.models.KerningPair;
 import pixelj.models.Project;
 import pixelj.resources.Resources;
-import pixelj.views.glyphs_screen.AddDialog;
+import pixelj.views.glyphsscreen.AddDialog;
 
 public final class GlyphListActions {
     /**

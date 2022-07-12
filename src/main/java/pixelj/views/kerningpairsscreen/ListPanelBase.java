@@ -1,4 +1,4 @@
-package pixelj.views.kerning_pairs_screen;
+package pixelj.views.kerningpairsscreen;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;

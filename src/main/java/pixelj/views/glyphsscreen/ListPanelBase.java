@@ -1,4 +1,4 @@
-package pixelj.views.glyphs_screen;
+package pixelj.views.glyphsscreen;
 
 import java.awt.Dimension;
 

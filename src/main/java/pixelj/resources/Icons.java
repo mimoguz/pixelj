@@ -33,6 +33,7 @@ public enum Icons {
     MOVE_RIGHT(0xe913),
     MOVE_UP(0xe914),
     PROJECT_MANAGER(0xe91f),
+    REMOVE_ITEM(0xe928),
     ROTATE_LEFT(0xe915),
     ROTATE_RIGHT(0xe916),
     SETTINGS(0xe917),
