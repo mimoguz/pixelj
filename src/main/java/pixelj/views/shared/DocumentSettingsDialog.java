@@ -126,7 +126,6 @@ public final class DocumentSettingsDialog extends DocumentSettingsDialogBase {
             final ChangeableInt value,
             final ReadOnlyBoolean valid
     ) {
-        Components.setFixedSize(spinner, Dimensions.SPINNER_SIZE);
         final var numberModel = new SpinnerNumberModel(value.getValue(), minimum, 512, 1);
         spinner.setModel(numberModel);
         spinner.addChangeListener(e -> value.setValue(numberModel.getNumber().intValue()));

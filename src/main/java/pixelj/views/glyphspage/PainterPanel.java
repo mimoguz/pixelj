@@ -1,4 +1,4 @@
-package pixelj.views.glyphsscreen;
+package pixelj.views.glyphspage;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;

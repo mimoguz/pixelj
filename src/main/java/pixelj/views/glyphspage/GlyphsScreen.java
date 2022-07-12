@@ -1,4 +1,4 @@
-package pixelj.views.glyphsscreen;
+package pixelj.views.glyphspage;
 
 import javax.swing.JComponent;
 import javax.swing.ListSelectionModel;

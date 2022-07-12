@@ -1,4 +1,4 @@
-package pixelj.views.kerningpairsscreen;
+package pixelj.views.kerningpairspage;
 
 import java.awt.Component;
 import java.awt.GridLayout;

@@ -7,6 +7,7 @@ import java.util.stream.IntStream;
 
 // TODO: Write tests
 public final class GridPacker<M> implements Packer<M> {
+
     @Override
     public List<List<Rectangle<M>>> pack(final List<Rectangle<M>> input, final int boxWith,
             final int boxHeight) throws IllegalStateException {

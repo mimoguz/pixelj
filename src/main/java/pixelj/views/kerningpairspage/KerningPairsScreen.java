@@ -1,4 +1,4 @@
-package pixelj.views.kerningpairsscreen;
+package pixelj.views.kerningpairspage;
 
 import javax.swing.JComponent;
 

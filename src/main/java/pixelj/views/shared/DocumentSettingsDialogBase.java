@@ -66,9 +66,8 @@ abstract class DocumentSettingsDialogBase extends JDialog {
         addButtons(content);
 
         setContentPane(content);
-        getRootPane().setDefaultButton(cancelButton);
+        getRootPane().setDefaultButton(applyButton);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
-
         pack();
         metricsPanel.doLayout();
         setSize(300, 680);
@@ -89,6 +88,17 @@ abstract class DocumentSettingsDialogBase extends JDialog {
         panel.setBorder(Borders.EMPTY);
         final var cons = new GridBagConstraints();
         final var res = Resources.get();
+
+        Components.setFixedSize(ascenderIn, Dimensions.SPINNER_SIZE);
+        Components.setFixedSize(canvasHeightIn, Dimensions.SPINNER_SIZE);
+        Components.setFixedSize(canvasWidthIn, Dimensions.SPINNER_SIZE);
+        Components.setFixedSize(capHeightIn, Dimensions.SPINNER_SIZE);
+        Components.setFixedSize(defaultWidthIn, Dimensions.SPINNER_SIZE);
+        Components.setFixedSize(descenderIn, Dimensions.SPINNER_SIZE);
+        Components.setFixedSize(lineSpacingIn, Dimensions.SPINNER_SIZE);
+        Components.setFixedSize(spaceSizeIn, Dimensions.SPINNER_SIZE);
+        Components.setFixedSize(letterSpacingIn, Dimensions.SPINNER_SIZE);
+        Components.setFixedSize(xHeightIn, Dimensions.SPINNER_SIZE);
 
         /* --------------------------------- Labels --------------------------------- */
         cons.gridx = 0;

@@ -1,4 +1,4 @@
-package pixelj.views.glyphsscreen;
+package pixelj.views.glyphspage;
 
 import java.awt.Frame;
 import java.util.ArrayList;

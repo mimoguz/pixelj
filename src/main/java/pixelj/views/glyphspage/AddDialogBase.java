@@ -1,4 +1,4 @@
-package pixelj.views.glyphsscreen;
+package pixelj.views.glyphspage;
 
 import java.awt.BorderLayout;
 import java.awt.Dialog;
