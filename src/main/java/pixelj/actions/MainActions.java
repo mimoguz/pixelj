@@ -33,6 +33,7 @@ import pixelj.services.ExportServiceImpl;
 import pixelj.services.FileService;
 import pixelj.util.packer.GridPacker;
 import pixelj.views.homewindow.HomeWindow;
+import pixelj.views.projectwindow.ExportDialog;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.DocumentSettingsDialog;
 
@@ -169,16 +170,25 @@ public final class MainActions {
         Actions.setEnabled(all, value);
     }
 
-    // TODO: Export dialog
     private void export(final ActionEvent event, final Action action) {
+        final var exportDialog = new ExportDialog(
+                    (Frame) SwingUtilities.getWindowAncestor(root), 
+                    project.getDocumentSettings()
+        );
+        exportDialog.setVisible(true);
+        final var exportOptions = exportDialog.getResult();
+        if (exportOptions == null) {
+            return;
+        }
+
         final var path = showSaveDialog("fnt");
         if (path == null || path.getFileName() == null) {
             return;
         }
         try {
-            // TODO: DI
+            // TODO: Select layout strategy
             new ExportServiceImpl(new GridPacker<>(), new BasicImageWriter())
-                    .export(project, path, 20, 30);
+                    .export(project, path, exportOptions.width(), exportOptions.height());
         } catch (IOException e) {
             e.printStackTrace();
         }
