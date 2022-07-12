@@ -47,14 +47,17 @@ abstract class ExportDialogBase extends JDialog {
         inputPanel.setBorder(Borders.LARGE_EMPTY);
         final var res = Resources.get();
         final var cons = new GridBagConstraints();
+        final var rowHeightDelta = Dimensions.SPINNER_SIZE.height 
+                - layoutStrategyIn.getPreferredSize().height;
         cons.fill = GridBagConstraints.NONE;
 
         cons.gridx = 0;
         cons.gridy = 0;
         cons.weightx = 1.0;
         cons.anchor = GridBagConstraints.LINE_START;
-        cons.insets = new Insets(0, 0, Dimensions.SMALL_PADDING, Dimensions.MEDIUM_PADDING);
+        cons.insets = new Insets(0, 0, Dimensions.SMALL_PADDING + rowHeightDelta, Dimensions.MEDIUM_PADDING);
         inputPanel.add(new JLabel(res.getString("layoutStrategy")), cons);
+        cons.insets = new Insets(0, 0, Dimensions.SMALL_PADDING, Dimensions.MEDIUM_PADDING);
         cons.gridy = GridBagConstraints.RELATIVE;
         inputPanel.add(new JLabel(res.getString("exportImageWidth")), cons);
         inputPanel.add(new JLabel(res.getString("exportImageHeight")), cons);
@@ -63,8 +66,9 @@ abstract class ExportDialogBase extends JDialog {
         cons.gridy = 0;
         cons.weightx = 0.0;
         cons.anchor = GridBagConstraints.LINE_END;
-        cons.insets = new Insets(0, 0, Dimensions.SMALL_PADDING, Dimensions.MEDIUM_PADDING);
+        cons.insets = new Insets(0, Dimensions.MEDIUM_PADDING, Dimensions.SMALL_PADDING + rowHeightDelta, 0);
         inputPanel.add(layoutStrategyIn, cons);
+        cons.insets = new Insets(0, Dimensions.MEDIUM_PADDING, Dimensions.SMALL_PADDING, 0);
         cons.gridy = GridBagConstraints.RELATIVE;
         inputPanel.add(widthIn, cons);
         inputPanel.add(heightIn, cons);
