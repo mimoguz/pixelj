@@ -32,7 +32,7 @@ import pixelj.services.DBFileService;
 import pixelj.services.ExportServiceImpl;
 import pixelj.services.FileService;
 import pixelj.util.packer.GridPacker;
-import pixelj.views.HomeView;
+import pixelj.views.homewindow.HomeWindow;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.DocumentSettingsDialog;
 
@@ -190,7 +190,7 @@ public final class MainActions {
     }
 
     private void returnHome(final ActionEvent event, final Action action) {
-        Components.switchFrames((JFrame) SwingUtilities.getWindowAncestor(root), new HomeView());
+        Components.switchFrames((JFrame) SwingUtilities.getWindowAncestor(root), new HomeWindow());
     }
 
     private void save(final ActionEvent event, final Action action) {

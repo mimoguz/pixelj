@@ -7,7 +7,7 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 
 import pixelj.resources.Resources;
-import pixelj.views.HomeView;
+import pixelj.views.homewindow.HomeWindow;
 
 public final class Main {
     private static final boolean USE_DARK_THEME = false;
@@ -25,7 +25,7 @@ public final class Main {
         }
         Resources.initialize(USE_DARK_THEME);
 
-        final var view = new HomeView();
+        final var view = new HomeWindow();
         view.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         view.setVisible(true);
     }

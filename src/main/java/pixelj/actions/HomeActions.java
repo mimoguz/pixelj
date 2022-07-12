@@ -33,7 +33,7 @@ public final class HomeActions {
     /**
      * Display an open dialog and load the selected project.
      */
-    public final ApplicationAction loadProjectAction;
+    public final ApplicationAction openProjectAction;
     /**
      * Display the new project dialog.
      */
@@ -45,7 +45,7 @@ public final class HomeActions {
     /**
      * Open the selected recent item.
      */
-    public final ApplicationAction openSelectedAction;
+    public final ApplicationAction loadSelectedAction;
     /**
      * Quit the application.
      */
@@ -75,38 +75,35 @@ public final class HomeActions {
         final var res = Resources.get();
 
         newProjectAction = new ApplicationAction("newProjectAction", this::newProject)
-                .withText()
-                .setIcon(Icons.FILE_NEW, res.colors.icon(), res.colors.disabledIcon());
+                .withText();
 
-        openSelectedAction = new ApplicationAction("openSelectedAction", this::openSelectedProject)
-                .withText()
-                .setIcon(Icons.FILE_OPEN_SELECTED, res.colors.icon(), res.colors.disabledIcon());
+        loadSelectedAction = new ApplicationAction("loadSelectedAction", this::openSelectedProject)
+                .withText();
+
+        openProjectAction = new ApplicationAction("openProjectAction", this::openProject)
+                .withText();
 
         quitAction = new ApplicationAction("quitAction", this::quit)
                 .setTooltip(res.getString("quit"))
                 .setIcon(Icons.EXIT, res.colors.icon(), res.colors.disabledIcon());
 
-        loadProjectAction = new ApplicationAction("loadProjectAction", this::openProject)
-                .withText()
-                .setIcon(Icons.FILE_OPEN, res.colors.icon(), res.colors.disabledIcon());
-
         showOptionsDialogAction = new ApplicationAction("showOptionsDialogAction", this::showOptionsDialog)
                 .setTooltip(res.getString("options"))
                 .setIcon(Icons.SETTINGS, res.colors.icon(), res.colors.disabledIcon());
 
-        removeRecentItemAction = new ApplicationAction("removeRecentItemAction", this::showOptionsDialog)
-                .withText();
+        removeRecentItemAction = new ApplicationAction("removeRecentItemAction", this::removeItem)
+                .withText()
+                .setIcon(Icons.REMOVE_ITEM, res.colors.icon(), res.colors.disabledIcon());
 
-        openContainingFolderAction = new ApplicationAction(
-                "openContainingFolderAction",
-                this::showOptionsDialog
-        ).withText();
+        openContainingFolderAction = new ApplicationAction("openContainingFolderAction", this::openFolder)
+                .withText()
+                .setIcon(Icons.FILE_OPEN, res.colors.icon(), res.colors.disabledIcon());
 
         all = List.of(
                 newProjectAction,
-                openSelectedAction,
+                loadSelectedAction,
                 quitAction,
-                loadProjectAction,
+                openProjectAction,
                 showOptionsDialogAction
         );
     }
@@ -170,6 +167,14 @@ public final class HomeActions {
     }
 
     private void showOptionsDialog(final ActionEvent event, final Action action) {
+        log(action);
+    }
+
+    private void openFolder(final ActionEvent event, final Action action) {
+        log(action);
+    }
+
+    private void removeItem(final ActionEvent event, final Action action) {
         log(action);
     }
 
