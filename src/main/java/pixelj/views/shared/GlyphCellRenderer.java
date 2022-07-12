@@ -7,7 +7,7 @@ import javax.swing.ListCellRenderer;
 
 import pixelj.models.Glyph;
 
-public class GlyphCellRenderer implements ListCellRenderer<Glyph> {
+public final class GlyphCellRenderer implements ListCellRenderer<Glyph> {
     private final GlyphCell component;
 
     public GlyphCellRenderer(final int maxPictureSize) {

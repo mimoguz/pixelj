@@ -84,6 +84,11 @@ public final class Resources {
         registerUIFonts();
     }
 
+    /**
+     * @param key       Resource key
+     * @param arguments Format arguments
+     * @return Formatted string resource
+     */
     public String formatString(final String key, final Object... arguments) {
         return strings.format(key, arguments);
     }
@@ -120,6 +125,9 @@ public final class Resources {
         return strings.get(key);
     }
 
+    /**
+     * @return Resources instance
+     */
     public static Resources get() {
         if (instance == null) {
             initialize(true);
@@ -127,6 +135,11 @@ public final class Resources {
         return instance;
     }
 
+    /**
+     * Initialize instance.
+     * 
+     * @param useDarkTheme
+     */
     public static void initialize(final boolean useDarkTheme) {
         instance = new Resources(useDarkTheme);
     }
@@ -156,7 +169,7 @@ public final class Resources {
     }
 
     private static Font loadIconFont() {
-        try (final var stream = Resources.class.getResourceAsStream("fonts/pxf16.otf")) {
+        try (var stream = Resources.class.getResourceAsStream("fonts/pxf16.otf")) {
             return loadFont(stream, Font.PLAIN, 16);
         } catch (final IOException e) {
             throw new ResourceInitializationException(e);

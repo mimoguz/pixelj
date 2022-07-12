@@ -11,7 +11,7 @@ import pixelj.models.Glyph;
 import pixelj.resources.Resources;
 import pixelj.views.controls.GlyphView;
 
-public class GlyphCell extends JPanel {
+public final class GlyphCell extends JPanel {
     private final ScalarCell scalarCell = new ScalarCell();
     private final int maxPictureSize;
     private final GlyphView picture = new GlyphView(Resources.get().colors.disabledIcon());
