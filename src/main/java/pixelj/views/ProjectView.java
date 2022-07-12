@@ -34,7 +34,6 @@ import pixelj.graphics.FontIcon;
 import pixelj.models.Project;
 import pixelj.resources.Icons;
 import pixelj.resources.Resources;
-import pixelj.util.ChangeableValue;
 import pixelj.views.glyphsscreen.GlyphsScreen;
 import pixelj.views.kerningpairsscreen.KerningPairsScreen;
 import pixelj.views.previewscreen.PreviewScreen;
