@@ -4,6 +4,8 @@ import java.awt.Frame;
 
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
@@ -42,6 +44,23 @@ public final class DocumentSettingsDialog extends DocumentSettingsDialogBase {
         isItalicIn.addChangeListener(e -> builder.isItalic.setValue(isItalicIn.isSelected()));
         isMonospacedIn.addChangeListener(e -> builder.isMonospaced.setValue(isMonospacedIn.isSelected()));
 
+        titleIn.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(final DocumentEvent e) {
+                builder.setTitle(titleIn.getText());
+            }
+
+            @Override
+            public void removeUpdate(final DocumentEvent e) {
+                builder.setTitle(titleIn.getText());
+            }
+
+            @Override
+            public void changedUpdate(final DocumentEvent e) {
+                builder.setTitle(titleIn.getText());
+            }
+        });
+
         builder.validAll.addChangeListener((sender, value) -> applyButton.setEnabled(value));
         applyButton.addActionListener(event -> {
             if (builder.validAll.getValue()) {
@@ -61,7 +80,7 @@ public final class DocumentSettingsDialog extends DocumentSettingsDialogBase {
 
     /**
      * Set the dialog fields copying the source.
-     * 
+     *
      * @param settings Source
      */
     public void set(final DocumentSettings settings) {

@@ -182,7 +182,7 @@ public record DocumentSettings(
          * @param value Project title
          * @return This
          */
-        public Builder setTile(final String value) {
+        public Builder setTitle(final String value) {
             title.setValue(value);
             return this;
         }
@@ -312,7 +312,7 @@ public record DocumentSettings(
          */
         public Builder set(final DocumentSettings settings) {
             this
-                    .setTile(settings.title())
+                    .setTitle(settings.title())
                     .setAscender(settings.ascender())
                     .setBold(settings.isBold())
                     .setCanvasHeight(settings.canvasHeight())

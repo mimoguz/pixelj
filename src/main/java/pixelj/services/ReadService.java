@@ -83,7 +83,7 @@ final class ReadService {
             throws InvalidStateException, SQLException {
         result.next();
         return new DocumentSettings.Builder()
-                .setTile(result.getString(SettingsColumn.TITLE.getIndex()))
+                .setTitle(result.getString(SettingsColumn.TITLE.getIndex()))
                 .setCanvasWidth(result.getInt(SettingsColumn.CANVAS_WIDTH.getIndex()))
                 .setCanvasHeight(result.getInt(SettingsColumn.CANVAS_HEIGHT.getIndex()))
                 .setAscender(result.getInt(SettingsColumn.ASCENDER.getIndex()))

@@ -42,6 +42,7 @@ public final class ChangeableValue<T>
     public <U> ReadOnlyValue<U> map(final Function<T, U> function) {
         final var result = new ChangeableValue<>(function.apply(value));
         final ChangeableValue.Listener<T> listener = (sender, v) -> result.setValue(function.apply(v));
+        this.addChangeListener(listener);
         return new ReadOnlyValue<>(result, () -> removeChangeListener(listener));
     }
 
@@ -52,6 +53,7 @@ public final class ChangeableValue<T>
     public ReadOnlyBoolean test(final Predicate<T> predicate) {
         final var result = new ChangeableBoolean(predicate.test(value));
         final ChangeableValue.Listener<T> listener = (sender, v) -> result.setValue(predicate.test(v));
+        this.addChangeListener(listener);
         return new ReadOnlyBoolean(result, () -> removeChangeListener(listener));
     }
 
