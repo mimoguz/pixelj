@@ -2,6 +2,6 @@
 
 My toy pixel font editor (redux), still in its very early stages.
 
-![Home screen](.github/new_project2.png)
+![New project dialog](.github/new_project_2022_07_12.png)
 
-![Project view](.github/screenshot.png)
+![Project view](.github/glyphs_screen_2022_07_12.png)
