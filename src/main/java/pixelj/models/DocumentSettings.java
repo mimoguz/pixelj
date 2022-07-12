@@ -31,7 +31,6 @@ public record DocumentSettings(
     }
 
     public static final class Builder {
-        private static final ChangeableInt ZERO = new ChangeableInt(0);
 
         /**
          * Document title.
@@ -98,24 +97,24 @@ public record DocumentSettings(
          * Check ascender.
          */
         public final ReadOnlyBoolean validAscender = new ReadOnlyInt(descender)
-                .le(canvasHeight.subtract(descender))
-                .and(ascender.gt(ZERO));
+                .le(canvasHeight.subtract(ascender))
+                .and(ascender.gt(0));
         /**
          * Check canvas height.
          */
-        public final ReadOnlyBoolean validCanvasHeight = canvasHeight.gt(ZERO);
+        public final ReadOnlyBoolean validCanvasHeight = canvasHeight.gt(0);
         /**
          * Check canvas width.
          */
-        public final ReadOnlyBoolean validCanvasWidth = canvasWidth.gt(ZERO);
+        public final ReadOnlyBoolean validCanvasWidth = canvasWidth.gt(0);
         /**
          * Check cap height.
          */
-        public final ReadOnlyBoolean validCapHeight = capHeight.le(ascender).and(capHeight.gt(ZERO));
+        public final ReadOnlyBoolean validCapHeight = capHeight.le(ascender).and(capHeight.gt(0));
         /**
          * Check x height.
          */
-        public final ReadOnlyBoolean validXHeight = xHeight.le(capHeight).and(xHeight.gt(ZERO));
+        public final ReadOnlyBoolean validXHeight = xHeight.le(capHeight).and(xHeight.gt(0));
         /**
          * Check default glyph width.
          */
@@ -123,19 +122,19 @@ public record DocumentSettings(
         /**
          * Check descender.
          */
-        public final ReadOnlyBoolean validDescender = descender.le(canvasHeight).and(descender.gt(ZERO));
+        public final ReadOnlyBoolean validDescender = descender.le(canvasHeight).and(descender.gt(0));
         /**
          * Check line spacing.
          */
-        public final ReadOnlyBoolean validLineSpacing = lineSpacing.ge(ZERO);
+        public final ReadOnlyBoolean validLineSpacing = lineSpacing.ge(0);
         /**
          * Check space size.
          */
-        public final ReadOnlyBoolean validSpaceSize = spaceSize.ge(ZERO);
+        public final ReadOnlyBoolean validSpaceSize = spaceSize.ge(0);
         /**
          * Check letter spacing.
          */
-        public final ReadOnlyBoolean validLetterSpacing = letterSpacing.ge(ZERO);
+        public final ReadOnlyBoolean validLetterSpacing = letterSpacing.ge(0);
 
         /**
          * Check all.

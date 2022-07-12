@@ -26,6 +26,7 @@ import pixelj.views.shared.ScalarCellRenderer;
  * AddDialog design.
  */
 abstract class AddDialogBase extends JDialog {
+
     protected final JList<ScalarRecord> scalarList = new JList<>();
     /**
      * Filter scalars by block.
@@ -37,15 +38,19 @@ abstract class AddDialogBase extends JDialog {
     protected final JButton cancelButton;
 
     AddDialogBase(final Frame owner) {
-        super(owner, Resources.get().getString("addGlyphsTitle"), Dialog.ModalityType.APPLICATION_MODAL);
+        super(
+                owner,
+                Resources.get().getString("addGlyphsDialogTitle"),
+                Dialog.ModalityType.APPLICATION_MODAL
+        );
 
         final var res = Resources.get();
 
         scalarList.setCellRenderer(new ScalarCellRenderer());
-        
+
         final var scrollPanel = new JScrollPane(scalarList);
         scrollPanel.setMaximumSize(Dimensions.MAXIMUM);
-        
+
         addButton = new JButton(res.getString("add"));
         Components.setFixedSize(addButton, Dimensions.TEXT_BUTTON_SIZE);
 

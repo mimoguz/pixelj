@@ -11,7 +11,7 @@ import pixelj.util.ChangeableBoolean;
 import pixelj.util.ChangeableValue;
 import pixelj.util.ReadOnlyValue;
 
-public class Project {
+public final class Project {
 
     /**
      * Document settings.
@@ -86,12 +86,20 @@ public class Project {
         glyphs.addListDataListener(kerningPairRemover);
     }
 
-    public int countDependent(final Glyph model) {
-        return kerningPairs.countWhere(p -> p.getLeft().equals(model) || p.getRight().equals(model));
+    /**
+     * @param glyph
+     * @return Number of the kerning pairs that includes the glyphs
+     */
+    public int countDependent(final Glyph glyph) {
+        return kerningPairs.countWhere(p -> p.getLeft().equals(glyph) || p.getRight().equals(glyph));
     }
 
-    public List<KerningPair> findDependent(final Glyph model) {
-        return kerningPairs.find(p -> p.getLeft().equals(model) || p.getRight().equals(model));
+    /**
+     * @param glyph
+     * @return List of the kerning pairs that includes the glyphs
+     */
+    public List<KerningPair> findDependent(final Glyph glyph) {
+        return kerningPairs.find(p -> p.getLeft().equals(glyph) || p.getRight().equals(glyph));
     }
 
     public SortedList<Glyph> getGlyphs() {
@@ -106,11 +114,16 @@ public class Project {
         return documentSettingsProperty.getValue();
     }
 
+    public void setDocumentSettings(final DocumentSettings value) {
+        documentSettingsProperty.setValue(value);
+        title.setValue(value.title());
+    }
+
     public boolean isDirty() {
         return dirtyProperty.getValue();
     }
 
-    public void setDirty(boolean value) {
+    public void setDirty(final boolean value) {
         dirtyProperty.setValue(value);
     } 
 
@@ -118,16 +131,11 @@ public class Project {
         return pathProperty.getValue();
     }
 
-    public void setPath(Path value) {
+    public void setPath(final Path value) {
         pathProperty.setValue(value);
     }
 
     public String getTitle() {
         return titleProperty.getValue();
-    }
-
-    public void setDocumentSettings(final DocumentSettings value) {
-        documentSettingsProperty.setValue(value);
-        title.setValue(value.title());
     }
 }

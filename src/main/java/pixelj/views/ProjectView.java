@@ -201,7 +201,7 @@ public class ProjectView extends JFrame {
         constraints.gridy = 0;
         trailingContainer.add(emptyBox, constraints);
 
-        final var settingsButton = setupTabBarButton(new JButton(), mainActions.showSettingsAction);
+        final var settingsButton = setupTabBarButton(new JButton(), mainActions.showOptionsAction);
         constraints.weighty = 0.0;
         constraints.gridy += 1;
         trailingContainer.add(settingsButton, constraints);
@@ -257,7 +257,7 @@ public class ProjectView extends JFrame {
         menu.add(actions.exportAction);
         menu.add(new JSeparator(SwingConstants.HORIZONTAL));
         menu.add(actions.showDocumentSettingsAction);
-        menu.add(actions.showSettingsAction);
+        menu.add(actions.showOptionsAction);
         menu.add(new JSeparator(SwingConstants.HORIZONTAL));
         menu.add(actions.showHelpAction);
         menu.add(new JSeparator(SwingConstants.HORIZONTAL));

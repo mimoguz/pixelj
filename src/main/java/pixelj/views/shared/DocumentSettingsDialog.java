@@ -9,7 +9,10 @@ import javax.swing.event.DocumentListener;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
+import pixelj.actions.ApplicationAction;
 import pixelj.models.DocumentSettings;
+import pixelj.resources.Icons;
+import pixelj.resources.Resources;
 import pixelj.util.ChangeableInt;
 import pixelj.util.ReadOnlyBoolean;
 
@@ -28,17 +31,17 @@ public final class DocumentSettingsDialog extends DocumentSettingsDialogBase {
         canvasWidthIn.setEnabled(canEditCanvasSize);
         canvasHeightIn.setEnabled(canEditCanvasSize);
 
-        setupSpinner(canvasWidthIn, 1, builder.canvasWidth, builder.validAscender);
-        setupSpinner(canvasHeightIn, 1, builder.canvasHeight, builder.validAscender);
+        setupSpinner(canvasWidthIn, 1, builder.canvasWidth, builder.validCanvasWidth);
+        setupSpinner(canvasHeightIn, 1, builder.canvasHeight, builder.validCanvasHeight);
         setupSpinner(ascenderIn, 0, builder.ascender, builder.validAscender);
-        setupSpinner(descenderIn, 0, builder.descender, builder.validAscender);
-        setupSpinner(capHeightIn, 0, builder.capHeight, builder.validAscender);
-        setupSpinner(xHeightIn, 0, builder.xHeight, builder.validAscender);
-        setupSpinner(defaultWidthIn, 0, builder.defaultWidth, builder.validAscender);
-        setupSpinner(letterSpacingIn, 0, builder.letterSpacing, builder.validAscender);
-        setupSpinner(spaceSizeIn, 0, builder.spaceSize, builder.validAscender);
-        setupSpinner(spaceSizeIn, 0, builder.spaceSize, builder.validAscender);
-        setupSpinner(lineSpacingIn, 0, builder.lineSpacing, builder.validAscender);
+        setupSpinner(descenderIn, 0, builder.descender, builder.validDescender);
+        setupSpinner(capHeightIn, 0, builder.capHeight, builder.validCapHeight);
+        setupSpinner(xHeightIn, 0, builder.xHeight, builder.validXHeight);
+        setupSpinner(defaultWidthIn, 0, builder.defaultWidth, builder.validDefaultWidth);
+        setupSpinner(letterSpacingIn, 0, builder.letterSpacing, builder.validLetterSpacing);
+        setupSpinner(spaceSizeIn, 0, builder.spaceSize, builder.validSpaceSize);
+        setupSpinner(spaceSizeIn, 0, builder.spaceSize, builder.validSpaceSize);
+        setupSpinner(lineSpacingIn, 0, builder.lineSpacing, builder.validLineSpacing);
 
         isBoldIn.addChangeListener(e -> builder.isBold.setValue(isBoldIn.isSelected()));
         isItalicIn.addChangeListener(e -> builder.isItalic.setValue(isItalicIn.isSelected()));
@@ -76,6 +79,11 @@ public final class DocumentSettingsDialog extends DocumentSettingsDialogBase {
             result = null;
             setVisible(false);
         });
+        helpButton.setAction(
+                new ApplicationAction("documentSettingsHelpAction", (e, action) -> { })
+                        .setIcon(Icons.HELP)
+                        .setTooltip(Resources.get().getString("help"))
+        );
     }
 
     /**
@@ -118,14 +126,13 @@ public final class DocumentSettingsDialog extends DocumentSettingsDialogBase {
             final ChangeableInt value,
             final ReadOnlyBoolean valid
     ) {
-        final var numberModel = new SpinnerNumberModel(value.getValue(), minimum, 512, 1);
         Components.setFixedSize(spinner, Dimensions.SPINNER_SIZE);
+        final var numberModel = new SpinnerNumberModel(value.getValue(), minimum, 512, 1);
+        spinner.setModel(numberModel);
         spinner.addChangeListener(e -> value.setValue(numberModel.getNumber().intValue()));
-        valid.addChangeListener(
-                (sender, isValid) -> spinner.putClientProperty(
-                        FlatClientProperties.OUTLINE,
-                        isValid ? null : FlatClientProperties.OUTLINE_ERROR
-                )
-        );
+        valid.addChangeListener((sender, isValid) -> spinner.putClientProperty(
+                FlatClientProperties.OUTLINE,
+                isValid ? null : FlatClientProperties.OUTLINE_ERROR
+        ));
     }
 }

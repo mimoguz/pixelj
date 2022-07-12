@@ -58,7 +58,7 @@ public final class HomeActions {
     /**
      * Display the application settings dialog.
      */
-    public final ApplicationAction showSettingsDialogAction;
+    public final ApplicationAction showOptionsDialogAction;
     /**
      * Collection of all actions.
      */
@@ -84,15 +84,15 @@ public final class HomeActions {
                 .setIcon(Icons.FILE_OPEN_SELECTED, res.colors.icon(), res.colors.disabledIcon());
 
         quitAction = new ApplicationAction("quitAction", this::quit)
-                .setTooltip(res.getString("quitActionTooltip"))
+                .setTooltip(res.getString("quit"))
                 .setIcon(Icons.EXIT, res.colors.icon(), res.colors.disabledIcon());
 
         loadProjectAction = new ApplicationAction("loadProjectAction", this::openProject)
                 .withText()
                 .setIcon(Icons.FILE_OPEN, res.colors.icon(), res.colors.disabledIcon());
 
-        showSettingsDialogAction = new ApplicationAction("showOptionsDialogAction", this::showOptionsDialog)
-                .setTooltip(res.getString("showOptionsDialogActionTooltip"))
+        showOptionsDialogAction = new ApplicationAction("showOptionsDialogAction", this::showOptionsDialog)
+                .setTooltip(res.getString("options"))
                 .setIcon(Icons.SETTINGS, res.colors.icon(), res.colors.disabledIcon());
 
         removeRecentItemAction = new ApplicationAction("removeRecentItemAction", this::showOptionsDialog)
@@ -108,7 +108,7 @@ public final class HomeActions {
                 openSelectedAction,
                 quitAction,
                 loadProjectAction,
-                showSettingsDialogAction
+                showOptionsDialogAction
         );
     }
 

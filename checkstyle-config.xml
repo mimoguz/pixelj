@@ -115,6 +115,8 @@
     </module>
     <module name="MissingJavadocMethod">
       <property name="allowMissingPropertyJavadoc" value="true" />
+      <!-- For some reason, above rule still sometimes requires javadoc for getters. So: -->
+      <property name="ignoreMethodNamesRegex" value="(^(get|set)[A-Z]+.*$|^main$)" />
       <property name="tokens" value="METHOD_DEF, ANNOTATION_FIELD_DEF" />
     </module>
 
@@ -157,7 +159,9 @@
 
     <!-- Size Violations -->
     <!-- https://checkstyle.org/config_sizes.html -->
-    <module name="AnonInnerLength" />
+    <module name="AnonInnerLength">
+      <property name="max" value="50"/> <!-- Just don't overdo it -->
+    </module>
     <module name="LambdaBodyLength" />
     <module name="MethodCount" />
     <module name="MethodLength" />

@@ -4,7 +4,7 @@ import java.util.EventListener;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ChangeableBoolean {
+public final class ChangeableBoolean {
     private final Set<Listener> listeners = new HashSet<>();
     private boolean value;
 

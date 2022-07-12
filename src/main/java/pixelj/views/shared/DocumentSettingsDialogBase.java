@@ -71,6 +71,7 @@ abstract class DocumentSettingsDialogBase extends JDialog {
 
         pack();
         metricsPanel.doLayout();
+        setSize(300, 680);
         setResizable(false);
         setLocationRelativeTo(owner);
     }
@@ -89,6 +90,7 @@ abstract class DocumentSettingsDialogBase extends JDialog {
         final var cons = new GridBagConstraints();
         final var res = Resources.get();
 
+        /* --------------------------------- Labels --------------------------------- */
         cons.gridx = 0;
         cons.gridy = 0;
         cons.weightx = 1.0;
@@ -116,6 +118,7 @@ abstract class DocumentSettingsDialogBase extends JDialog {
         isItalicLabel.setBorder(labelBorder);
         panel.add(isItalicLabel, cons);
 
+        /* --------------------------------- Inputs --------------------------------- */
         cons.gridx = 1;
         cons.gridy = 0;
         cons.weightx = 0.0;
@@ -142,7 +145,7 @@ abstract class DocumentSettingsDialogBase extends JDialog {
 
     private void addTitlePanel(final JPanel content) {
         final var titlePanel = new JPanel(new BorderLayout(0, Dimensions.MEDIUM_PADDING));
-        final var titleLabel = new JLabel(Resources.get().getString("projectTitlePrompt"));
+        final var titleLabel = new JLabel(Resources.get().getString("projectSectionTitle"));
         styleTitle(titleLabel);
         titlePanel.add(titleLabel, BorderLayout.NORTH);
         titlePanel.add(titleIn, BorderLayout.CENTER);
@@ -151,7 +154,7 @@ abstract class DocumentSettingsDialogBase extends JDialog {
 
     private void addMetricsPanel(final JPanel content, final JPanel metricsPanel) {
         final var centerPanel = new JPanel(new BorderLayout(0, Dimensions.MEDIUM_PADDING));
-        final var metricsLabel = new JLabel(Resources.get().getString("documentMetrics"));
+        final var metricsLabel = new JLabel(Resources.get().getString("metricsSectionTitle"));
         styleTitle(metricsLabel);
         centerPanel.add(metricsLabel, BorderLayout.NORTH);
 

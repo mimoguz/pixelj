@@ -1,6 +1,7 @@
 package pixelj.actions;
 
 import java.awt.Frame;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOError;
@@ -26,14 +27,14 @@ import org.lwjgl.util.nfd.NativeFileDialog;
 import pixelj.models.Project;
 import pixelj.resources.Icons;
 import pixelj.resources.Resources;
-import pixelj.util.packer.GridPacker;
-import pixelj.services.ExportServiceImpl;
-import pixelj.services.FileService;
 import pixelj.services.BasicImageWriter;
 import pixelj.services.DBFileService;
+import pixelj.services.ExportServiceImpl;
+import pixelj.services.FileService;
+import pixelj.util.packer.GridPacker;
 import pixelj.views.HomeView;
-import pixelj.views.DocumentSettingsDialog;
 import pixelj.views.shared.Components;
+import pixelj.views.shared.DocumentSettingsDialog;
 
 public final class MainActions {
     /**
@@ -67,7 +68,7 @@ public final class MainActions {
     /**
      * Display the application settings dialog.
      */
-    public final ApplicationAction showSettingsAction;
+    public final ApplicationAction showOptionsAction;
     /**
      * Collection of all actions.
      */
@@ -82,51 +83,67 @@ public final class MainActions {
     public MainActions(final Project project, final JComponent root) {
         this.project = project;
         this.root = root;
-        documentSettingsDialog = new DocumentSettingsDialog((Frame) SwingUtilities.windowForComponent(root));
+
+        final var res = Resources.get();
+
+        documentSettingsDialog = new DocumentSettingsDialog(
+                (Frame) SwingUtilities.windowForComponent(root),
+                res.getString("documentSettingsDialogTitle"),
+                res.getString("apply"),
+                false
+        );
 
         logger = Logger.getLogger(this.getClass().getName());
         logger.addHandler(new ConsoleHandler());
 
-        final var res = Resources.get();
+        final var menuShortcutMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
 
-        returnHomeAction = new ApplicationAction("returnHomeAction", this::returnHome).withText()
+        returnHomeAction = new ApplicationAction("returnHomeAction", this::returnHome)
+                .withText()
                 .setIcon(Icons.HOME, res.colors.icon(), res.colors.disabledIcon())
-                .setAccelerator(KeyEvent.VK_W, ActionEvent.CTRL_MASK);
+                .setAccelerator(KeyEvent.VK_W, menuShortcutMask);
 
-        exportAction = new ApplicationAction("exportAction", this::export).withText()
+        exportAction = new ApplicationAction("exportAction", this::export)
+                .withText()
                 .setIcon(Icons.FILE_EXPORT, res.colors.icon(), res.colors.disabledIcon())
-                .setAccelerator(KeyEvent.VK_E, ActionEvent.CTRL_MASK);
+                .setAccelerator(KeyEvent.VK_E, menuShortcutMask);
 
-        quitAction = new ApplicationAction("quitAction", this::quit).withText()
+        quitAction = new ApplicationAction("quitAction", this::quit)
+                .withText()
                 .setIcon(Icons.EXIT, res.colors.icon(), res.colors.disabledIcon())
-                .setAccelerator(KeyEvent.VK_Q, ActionEvent.CTRL_MASK);
+                .setAccelerator(KeyEvent.VK_Q, menuShortcutMask);
 
-        saveAction = new ApplicationAction("saveAction", this::save).withText()
+        saveAction = new ApplicationAction("saveAction", this::save)
+                .withText()
                 .setIcon(Icons.FILE_SAVE, res.colors.icon(), res.colors.disabledIcon())
-                .setAccelerator(KeyEvent.VK_S, ActionEvent.CTRL_MASK);
+                .setAccelerator(KeyEvent.VK_S, menuShortcutMask);
 
-        saveAsAction = new ApplicationAction("saveAsAction", this::saveAs).withText()
+        saveAsAction = new ApplicationAction("saveAsAction", this::saveAs)
+                .withText()
                 .setIcon(Icons.FILE_SAVE_AS, res.colors.icon(), res.colors.disabledIcon())
-                .setAccelerator(KeyEvent.VK_S, ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK);
+                .setAccelerator(KeyEvent.VK_S, menuShortcutMask | ActionEvent.SHIFT_MASK);
 
-        showHelpAction = new ApplicationAction("showHelpAction", this::showHelp).withText()
+        showHelpAction = new ApplicationAction("showHelpAction", this::showHelp)
+                .withText()
                 .setIcon(Icons.HELP, res.colors.icon(), res.colors.disabledIcon())
                 .setAccelerator(KeyEvent.VK_F1, 0);
 
         showDocumentSettingsAction = new ApplicationAction(
                 "showDocumentSettingsAction",
                 this::showDocumentSettings
-        ).withText()
+        )
+                .withText()
                 .setIcon(Icons.METRICS, res.colors.icon(), res.colors.disabledIcon())
-                .setAccelerator(KeyEvent.VK_M, ActionEvent.CTRL_MASK);
+                .setAccelerator(KeyEvent.VK_D, menuShortcutMask);
 
-        showSettingsAction = new ApplicationAction("showSettingsAction", this::showSettings).withText()
+        showOptionsAction = new ApplicationAction("showOptionsAction", this::showSettings)
+                .withText()
                 .setIcon(Icons.SETTINGS, res.colors.icon(), res.colors.disabledIcon())
-                .setAccelerator(KeyEvent.VK_PERIOD, ActionEvent.CTRL_MASK);
+                .setAccelerator(KeyEvent.VK_PERIOD, menuShortcutMask);
 
-        project.pathProperty.addChangeListener((sender, path) -> {
-            saveAction.setEnabled(enabled && path != null);
-        });
+        project.pathProperty.addChangeListener((sender, path) ->
+                saveAction.setEnabled(enabled && path != null)
+        );
 
         all = List.of(
                 returnHomeAction,
@@ -136,7 +153,7 @@ public final class MainActions {
                 saveAsAction,
                 showHelpAction,
                 showDocumentSettingsAction,
-                showSettingsAction
+                showOptionsAction
         );
     }
 
@@ -168,6 +185,7 @@ public final class MainActions {
     }
 
     private void quit(final ActionEvent event, final Action action) {
+        // TODO: Show an exit dialog when the project is unsaved.
         System.exit(0);
     }
 

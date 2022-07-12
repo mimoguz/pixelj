@@ -2,7 +2,6 @@ package pixelj.views.glyphs_screen;
 
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JComponent;
-import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 
 import pixelj.actions.Actions;

@@ -4,7 +4,7 @@ import java.util.EventListener;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ChangeableInt {
+public final class ChangeableInt {
     private final Set<Listener> listeners = new HashSet<>();
     private int value;
 
@@ -12,55 +12,138 @@ public class ChangeableInt {
         this(0);
     }
 
-    public ChangeableInt(int value) {
+    public ChangeableInt(final int value) {
         this.value = value;
-    }
-
-    public ReadOnlyInt add(ChangeableInt that) {
-        return binaryOp(that, Integer::sum);
-    }
-
-    public void addChangeListener(final Listener listener) {
-        if (listener != null) {
-            listeners.add(listener);
-        }
-    }
-
-    public ReadOnlyInt divide(ChangeableInt that) {
-        return binaryOp(that, (a, b) -> a / b);
-    }
-
-    public ReadOnlyBoolean ge(ChangeableInt that) {
-        return comparison(that, (a, b) -> a >= b);
     }
 
     public int getValue() {
         return value;
     }
 
-    public void setValue(final int value) {
-        if (value != this.value) {
-            this.value = value;
+    public void setValue(final int newValue) {
+        if (newValue != value) {
+            value = newValue;
             fireChangeEvent();
         }
     }
 
-    public ReadOnlyBoolean gt(ChangeableInt that) {
-        return comparison(that, (a, b) -> a > b);
+    /**
+     * @param listener ChangeableInt.Listener
+     */
+    public void addChangeListener(final Listener listener) {
+        if (listener != null) {
+            listeners.add(listener);
+        }
     }
 
-    public ReadOnlyBoolean le(ChangeableInt that) {
-        return comparison(that, (a, b) -> a <= b);
+    /**
+     * @param listener ChangeableList.Listener
+     */
+    public void removeChangeListener(final Listener listener) {
+        if (listener != null) {
+            listeners.remove(listener);
+        }
     }
 
-    public ReadOnlyBoolean lt(ChangeableInt that) {
-        return comparison(that, (a, b) -> a < b);
+    /**
+     * @param that LHS
+     * @return this + that
+     */
+    public ReadOnlyInt add(final ChangeableInt that) {
+        return binaryOp(that, Integer::sum);
     }
 
-    public ReadOnlyInt multiply(ChangeableInt that) {
+    /**
+     * @param that LHS
+     * @return this - that
+     */
+    public ReadOnlyInt subtract(final ChangeableInt that) {
+        return binaryOp(that, (a, b) -> a - b);
+    }
+
+    /**
+     * @param that LHS
+     * @return this * that
+     */
+    public ReadOnlyInt multiply(final ChangeableInt that) {
         return binaryOp(that, (a, b) -> a * b);
     }
 
+    /**
+     * @param that LHS
+     * @return this / that
+     */
+    public ReadOnlyInt divide(final ChangeableInt that) {
+        return binaryOp(that, (a, b) -> a / b);
+    }
+
+    /**
+     * @param that LHS
+     * @return this >= that
+     */
+    public ReadOnlyBoolean ge(final ChangeableInt that) {
+        return comparison(that, (a, b) -> a >= b);
+    }
+
+    /**
+     * @param that LHS
+     * @return this > that
+     */
+    public ReadOnlyBoolean ge(final int that) {
+        return comparison(that, (a, b) -> a >= b);
+    }
+
+    /**
+     * @param that LHS
+     * @return this > that
+     */
+    public ReadOnlyBoolean gt(final ChangeableInt that) {
+        return comparison(that, (a, b) -> a > b);
+    }
+
+    /**
+     * @param that LHS
+     * @return this > that
+     */
+    public ReadOnlyBoolean gt(final int that) {
+        return comparison(that, (a, b) -> a > b);
+    }
+
+    /**
+     * @param that LHS
+     * @return this <= that
+     */
+    public ReadOnlyBoolean le(final ChangeableInt that) {
+        return comparison(that, (a, b) -> a <= b);
+    }
+
+    /**
+     * @param that LHS
+     * @return this <= that
+     */
+    public ReadOnlyBoolean le(final int that) {
+        return comparison(that, (a, b) -> a <= b);
+    }
+
+    /**
+     * @param that LHS
+     * @return this < that
+     */
+    public ReadOnlyBoolean lt(final ChangeableInt that) {
+        return comparison(that, (a, b) -> a < b);
+    }
+
+    /**
+     * @param that LHS
+     * @return this < that
+     */
+    public ReadOnlyBoolean lt(final int that) {
+        return comparison(that, (a, b) -> a < b);
+    }
+
+    /**
+     * @return !this
+     */
     public ReadOnlyInt negate() {
         final var result = new ChangeableInt();
         final Listener listener = (sender, a) -> result.setValue(-a);
@@ -68,17 +151,7 @@ public class ChangeableInt {
         return new ReadOnlyInt(result, () -> this.removeChangeListener(listener));
     }
 
-    public void removeChangeListener(final Listener listener) {
-        if (listener != null) {
-            listeners.remove(listener);
-        }
-    }
-
-    public ReadOnlyInt subtract(ChangeableInt that) {
-        return binaryOp(that, (a, b) -> a - b);
-    }
-
-    private ReadOnlyInt binaryOp(ChangeableInt that, BinaryOperator operator) {
+    private ReadOnlyInt binaryOp(final ChangeableInt that, final BinaryOperator operator) {
         final var result = new ChangeableInt();
         final Listener listenerThis = (sender, a) -> result.setValue(operator.calculate(a, that.value));
         final Listener listenerThat = (sender, b) -> result.setValue(operator.calculate(value, b));
@@ -90,7 +163,7 @@ public class ChangeableInt {
         });
     }
 
-    private ReadOnlyBoolean comparison(ChangeableInt that, Comparison cmp) {
+    private ReadOnlyBoolean comparison(final ChangeableInt that, final Comparison cmp) {
         final var result = new ChangeableBoolean();
         final Listener listenerThis = (sender, a) -> result.setValue(cmp.check(a, that.value));
         final Listener listenerThat = (sender, b) -> result.setValue(cmp.check(value, b));
@@ -100,6 +173,13 @@ public class ChangeableInt {
             this.removeChangeListener(listenerThis);
             that.removeChangeListener(listenerThat);
         });
+    }
+
+    private ReadOnlyBoolean comparison(final int that, final Comparison cmp) {
+        final var result = new ChangeableBoolean();
+        final Listener listenerThis = (sender, a) -> result.setValue(cmp.check(a, that));
+        this.addChangeListener(listenerThis);
+        return new ReadOnlyBoolean(result, () -> this.removeChangeListener(listenerThis));
     }
 
     private void fireChangeEvent() {
@@ -118,6 +198,10 @@ public class ChangeableInt {
     }
 
     public interface Listener extends EventListener {
+        /**
+         * @param sender The source
+         * @param value  The new value
+         */
         void onChange(ChangeableInt sender, int value);
     }
 }

@@ -9,8 +9,11 @@ import com.formdev.flatlaf.FlatLightLaf;
 import pixelj.resources.Resources;
 import pixelj.views.HomeView;
 
-public class Main {
-    private static final boolean USE_DARK_THEME = true;
+public final class Main {
+    private static final boolean USE_DARK_THEME = false;
+
+    private Main() {
+    }
 
     public static void main(final String[] args) {
         Resources.initialize(USE_DARK_THEME);

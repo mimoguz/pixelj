@@ -129,7 +129,7 @@ public class PainterActions {
             action.putValue(Action.SELECTED_KEY, p.isSymmetrical());
         }))
                 .setTooltipWithAccelerator(
-                        res.getString("symmetryToggleActionTooltip"),
+                        res.getString("painterSymmetryToggleActionTooltip"),
                         KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.ALT_DOWN_MASK)
                 )
                 .setIcon(Icons.SYMMETRY, res.colors.icon(), res.colors.disabledIcon());
@@ -187,7 +187,7 @@ public class PainterActions {
                 (e, action) -> painter.flipVertically()
         )
                 .setTooltipWithAccelerator(
-                        res.getString("flipVerticallyActionTooltip"),
+                        res.getString("painterFlipVerticalActionTooltip"),
                         KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.ALT_DOWN_MASK)
                 )
                 .setIcon(Icons.FLIP_VERTICAL, res.colors.icon(), res.colors.disabledIcon());
@@ -197,56 +197,56 @@ public class PainterActions {
                     (e, action) -> painter.flipHorizontally()
         )
                 .setTooltipWithAccelerator(
-                        res.getString("flipHorizontallyActionTooltip"),
+                        res.getString("painterFlipHorizontalActionTooltip"),
                         KeyStroke.getKeyStroke(KeyEvent.VK_H, InputEvent.ALT_DOWN_MASK)
                 )
                 .setIcon(Icons.FLIP_HORIZONTAL, res.colors.icon(), res.colors.disabledIcon());
 
         rotateLeftAction = new ApplicationAction("rotateLeftAction", (e, action) -> painter.rotateLeft())
                 .setTooltipWithAccelerator(
-                        res.getString("rotateLeftActionTooltip"),
+                        res.getString("painterRotateLeftActionTooltip"),
                         KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.ALT_DOWN_MASK)
                 )
                 .setIcon(Icons.ROTATE_LEFT, res.colors.icon(), res.colors.disabledIcon());
 
         rotateRightAction = new ApplicationAction("rotateRightAction", (e, action) -> painter.rotateRight())
                 .setTooltipWithAccelerator(
-                        res.getString("rotateRightActionTooltip"),
+                        res.getString("painterRotateRightActionTooltip"),
                         KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.ALT_DOWN_MASK)
                 )
                 .setIcon(Icons.ROTATE_RIGHT, res.colors.icon(), res.colors.disabledIcon());
 
         moveLeftAction = new ApplicationAction("moveLeftAction", (e, action) -> painter.moveOnePixelLeft())
                 .setTooltipWithAccelerator(
-                        res.getString("moveLeftActionTooltip"),
+                        res.getString("painterMoveLeftActionTooltip"),
                         KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, InputEvent.ALT_DOWN_MASK)
                 )
                 .setIcon(Icons.MOVE_LEFT, res.colors.icon(), res.colors.disabledIcon());
 
         moveRightAction = new ApplicationAction("moveRightAction", (e, action) -> painter.moveOnePixelRight())
                 .setTooltipWithAccelerator(
-                        res.getString("moveRightActionTooltip"),
+                        res.getString("painterMoveRightActionTooltip"),
                         KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, InputEvent.ALT_DOWN_MASK)
                 )
                 .setIcon(Icons.MOVE_RIGHT, res.colors.icon(), res.colors.disabledIcon());
 
         moveUpAction = new ApplicationAction("moveUpAction", (e, action) -> painter.moveOnePixelUp())
                 .setTooltipWithAccelerator(
-                        res.getString("moveUpActionTooltip"),
+                        res.getString("painterMoveUpActionTooltip"),
                         KeyStroke.getKeyStroke(KeyEvent.VK_UP, InputEvent.ALT_DOWN_MASK)
                 )
                 .setIcon(Icons.MOVE_UP, res.colors.icon(), res.colors.disabledIcon());
 
         moveDownAction = new ApplicationAction("moveDownAction", (e, action) -> painter.moveOnePixelDown())
                 .setTooltipWithAccelerator(
-                        res.getString("moveDownActionTooltip"),
+                        res.getString("painterMoveDownActionTooltip"),
                         KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.ALT_DOWN_MASK)
                 )
                 .setIcon(Icons.MOVE_DOWN, res.colors.icon(), res.colors.disabledIcon());
 
         eraseAction = new ApplicationAction("eraseAction", this::erase)
                 .setTooltipWithAccelerator(
-                        res.getString("eraseActionTooltip"),
+                        res.getString("painterClearActionTooltip"),
                         KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.ALT_DOWN_MASK)
                 )
                 .setIcon(Icons.ERASE, res.colors.icon(), res.colors.disabledIcon());
