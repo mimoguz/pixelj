@@ -3,7 +3,7 @@ package pixelj.views.controls.painter;
 public interface CanFlipImage extends Painter {
 
     /**
-     * Reverses the byte array in-place
+     * Reverses the byte array in-place.
      */
     private static void reverseArray(byte[] array) {
         final var half = array.length / 2;
@@ -27,8 +27,8 @@ public interface CanFlipImage extends Painter {
         takeSnapshot();
 
         final var image = model.getImage();
-        final var width = image.getWidth();
-        final var height = image.getHeight();
+        final var width = image.getImageWidth();
+        final var height = image.getImageHeight();
         final var buffer = new byte[width];
 
         for (var y = 0; y < height; y++) {
@@ -54,8 +54,8 @@ public interface CanFlipImage extends Painter {
         takeSnapshot();
 
         final var image = model.getImage();
-        final var width = image.getWidth();
-        final var height = image.getHeight();
+        final var width = image.getImageWidth();
+        final var height = image.getImageHeight();
         final var half = height / 2;
         final var top = new byte[width];
         final var bottom = new byte[width];

@@ -5,7 +5,7 @@ import java.util.Arrays;
 public interface CanTranslateImage extends Painter {
 
     /**
-     * Moves the image one pixel left or right
+     * Moves the image one pixel left or right.
      *
      * @param sourceX First column of the source region. If it's 0, the region will
      *                be moved to the right. If it's 1, the region will be moved to
@@ -20,9 +20,9 @@ public interface CanTranslateImage extends Painter {
         takeSnapshot();
 
         final var image = model.getImage();
-        final var buffer = new byte[image.getWidth()];
-        final var length = image.getWidth() - 1;
-        final var height = image.getHeight();
+        final var buffer = new byte[image.getImageWidth()];
+        final var length = image.getImageWidth() - 1;
+        final var height = image.getImageHeight();
 
         for (var y = 0; y < height; y++) {
             image.getDataElements(sourceX, y, length, 1, buffer);
@@ -47,10 +47,10 @@ public interface CanTranslateImage extends Painter {
         takeSnapshot();
 
         final var image = model.getImage();
-        final var buffer = new byte[image.getWidth()];
-        final var width = image.getWidth();
+        final var buffer = new byte[image.getImageWidth()];
+        final var width = image.getImageWidth();
 
-        for (var y = image.getHeight() - 2; y >= 0; y--) {
+        for (var y = image.getImageHeight() - 2; y >= 0; y--) {
             image.getDataElements(0, y, width, 1, buffer);
             // Suppress notifications
             image.setDataElements(0, y + 1, width, 1, buffer, false);
@@ -89,9 +89,9 @@ public interface CanTranslateImage extends Painter {
         takeSnapshot();
 
         final var image = model.getImage();
-        final var buffer = new byte[image.getWidth()];
-        final var width = image.getWidth();
-        final var height = image.getHeight();
+        final var buffer = new byte[image.getImageWidth()];
+        final var width = image.getImageWidth();
+        final var height = image.getImageHeight();
 
         for (var y = 1; y < height; y++) {
             image.getDataElements(0, y, width, 1, buffer);

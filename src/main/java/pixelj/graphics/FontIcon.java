@@ -11,12 +11,12 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.Icon;
 
-public class FontIcon implements Icon {
+public final class FontIcon implements Icon {
     private Color disabledForeground;
-    private final Font font;
     private Color foreground;
-    private final int height;
+    private final Font font;
     private final String symbol;
+    private final int height;
     private final int width;
 
     public FontIcon(
@@ -28,7 +28,7 @@ public class FontIcon implements Icon {
         this.foreground = foreground;
         this.disabledForeground = disabledForeground;
         this.font = font;
-        symbol = new String(new int[] { codePoint }, 0, 1);
+        symbol = new String(new int[] {codePoint}, 0, 1);
 
         // Get symbol metrics:
         final var graphics = GraphicsEnvironment.getLocalGraphicsEnvironment()
@@ -65,14 +65,6 @@ public class FontIcon implements Icon {
         return width;
     }
 
-    private Color getPaint(final Component component) {
-        if (component.isEnabled()) {
-            return foreground != null ? foreground : component.getForeground();
-        } else {
-            return disabledForeground != null ? disabledForeground : component.getForeground();
-        }
-    }
-
     @Override
     public void paintIcon(final Component component, final Graphics graphics, final int x, final int y) {
         final var g = (Graphics2D) graphics.create();
@@ -95,5 +87,13 @@ public class FontIcon implements Icon {
      */
     public void setForeground(final Color value) {
         foreground = value;
+    }
+
+    private Color getPaint(final Component component) {
+        if (component.isEnabled()) {
+            return foreground != null ? foreground : component.getForeground();
+        } else {
+            return disabledForeground != null ? disabledForeground : component.getForeground();
+        }
     }
 }

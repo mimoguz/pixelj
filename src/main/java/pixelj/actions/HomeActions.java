@@ -20,7 +20,6 @@ import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.util.nfd.NativeFileDialog;
 
 import pixelj.models.DocumentSettings;
-import pixelj.models.ExampleData;
 import pixelj.models.Project;
 import pixelj.models.SortedList;
 import pixelj.resources.Icons;
@@ -131,13 +130,14 @@ public final class HomeActions {
         final var settings = dialog.getResult();
         dialog.dispose();
         if (settings != null) {
-            final var project = new Project(
-                    new SortedList<>(),
-                    new SortedList<>(),
-                    settings,
-                    null
+            showProject(
+                    new Project(
+                            new SortedList<>(),
+                            new SortedList<>(),
+                            settings,
+                            null
+                    )
             );
-            showProject(project);
         }
     }
 
@@ -155,7 +155,14 @@ public final class HomeActions {
     }
 
     private void openSelectedProject(final ActionEvent event, final Action action) {
-        showProject(ExampleData.createProject());
+        showProject(
+                new Project(
+                    new SortedList<>(),
+                    new SortedList<>(),
+                    DocumentSettings.getDefault(),
+                    null
+                )
+        );
     }
 
     private void quit(final ActionEvent event, final Action action) {

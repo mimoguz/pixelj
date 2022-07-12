@@ -7,25 +7,19 @@ import pixelj.util.ChangeableInt;
  * code of a kerning pair is calculated over its left and right scalars using
  * getHash static method.
  */
-public class KerningPair implements Comparable<KerningPair> {
+public final class KerningPair implements Comparable<KerningPair> {
+    /**
+     * Kerning value.
+     */
+    public final ChangeableInt kerningValueProperty;
+
     private final Glyph left;
     private final Glyph right;
-    public ChangeableInt kerningValueProperty;
 
     public KerningPair(final Glyph left, final Glyph right, final int kerningValue) {
         this.left = left;
         this.right = right;
         kerningValueProperty = new ChangeableInt(kerningValue);
-    }
-
-    @Override
-    public int compareTo(final KerningPair that) {
-        final var leftOrder = Integer.compare(left.getCodePoint(), that.left.getCodePoint());
-        if (leftOrder == 0) {
-            return Integer.compare(right.getCodePoint(), that.right.getCodePoint());
-        } else {
-            return leftOrder;
-        }
     }
 
     public int getKerningValue() {
@@ -45,6 +39,16 @@ public class KerningPair implements Comparable<KerningPair> {
     }
 
     @Override
+    public int compareTo(final KerningPair that) {
+        final var leftOrder = Integer.compare(left.getCodePoint(), that.left.getCodePoint());
+        if (leftOrder == 0) {
+            return Integer.compare(right.getCodePoint(), that.right.getCodePoint());
+        } else {
+            return leftOrder;
+        }
+    }
+
+    @Override
     public int hashCode() {
         return getHash(left, right);
     }
@@ -61,9 +65,13 @@ public class KerningPair implements Comparable<KerningPair> {
     }
 
     /**
-     * This is essentially a hack. I use this method to calculate a hash without
+     *  This is essentially a hack. I use this method to calculate a hash without
      * creating an instance, then use that hash to search a model in a
      * KerningPairListModel.
+     * 
+     * @param left
+     * @param right
+     * @return Hash value
      */
     public static int getHash(final Glyph left, final Glyph right) {
         // >In the Unicode Standard, the codespace consists of the integers from 0 to

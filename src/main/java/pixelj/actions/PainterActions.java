@@ -290,12 +290,12 @@ public class PainterActions {
         clipboard.setValue(image.getSnapshot(model.getCodePoint()));
         // Send to system clipboard:
         final var rgbImage = new BufferedImage(
-                image.getWidth(),
-                image.getHeight(),
+                image.getImageWidth(),
+                image.getImageHeight(),
                 BufferedImage.TYPE_INT_RGB
         );
         final var g2d = (Graphics2D) rgbImage.getGraphics();
-        image.draw(g2d, 0, 0, image.getWidth(), image.getHeight());
+        image.draw(g2d, 0, 0, image.getImageWidth(), image.getImageHeight());
         final var transferable = new TransferableImage(rgbImage);
         Toolkit.getDefaultToolkit().getSystemClipboard().setContents(transferable, null);
         g2d.dispose();
@@ -329,8 +329,8 @@ public class PainterActions {
         if (transferable != null && transferable.isDataFlavorSupported(DataFlavor.imageFlavor)) {
             try {
                 final var source = (BufferedImage) transferable.getTransferData(DataFlavor.imageFlavor);
-                final var w = Math.min(source.getWidth(null), image.getWidth());
-                final var h = Math.min(source.getHeight(null), image.getHeight());
+                final var w = Math.min(source.getWidth(null), image.getImageWidth());
+                final var h = Math.min(source.getHeight(null), image.getImageHeight());
                 final var raster = source.getRaster();
                 addToUndoBuffer(image.getSnapshot(model.getCodePoint()));
                 final var buffer = new int[raster.getNumDataElements()];

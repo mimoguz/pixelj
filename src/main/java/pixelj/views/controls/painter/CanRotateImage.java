@@ -33,9 +33,9 @@ public interface CanRotateImage extends Painter {
         takeSnapshot();
 
         final var image = model.getImage();
-        final var width = image.getWidth();
-        final var size = Math.min(image.getWidth(), image.getHeight());
-        final var buffer = new byte[image.getWidth() * image.getHeight()];
+        final var width = image.getImageWidth();
+        final var size = Math.min(image.getImageWidth(), image.getImageHeight());
+        final var buffer = new byte[image.getImageWidth() * image.getImageHeight()];
         Arrays.fill(buffer, (byte) 1);
 
         for (var y = 0; y < size; y++) {
@@ -47,6 +47,6 @@ public interface CanRotateImage extends Painter {
             }
         }
 
-        image.setDataElements(0, 0, width, image.getHeight(), buffer, true);
+        image.setDataElements(0, 0, width, image.getImageHeight(), buffer, true);
     }
 }

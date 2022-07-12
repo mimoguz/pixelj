@@ -33,15 +33,15 @@ public class GlyphView extends JPanel
     private final Set<ViewChangeListener> listeners = new HashSet<>();
     private boolean drawShade;
     /**
-     * May be null;
+     * May be null.
      */
     private Glyph model;
     /**
-     * May be null;
+     * May be null.
      */
     private Image overlay;
-    private boolean showLines = false;
-    private boolean showOverlay = false;
+    private boolean showLines;
+    private boolean showOverlay;
     private int top;
     private int zoom = 1;
 
@@ -203,7 +203,7 @@ public class GlyphView extends JPanel
             model.widthProperty.removeChangeListener(characterWidthChangeListener);
             fireChangeEvent(this, ViewChangeEvent.MODEL_UNLOADED);
             if (top <= 0) {
-                top = model.getImage().getHeight();
+                top = model.getImage().getImageHeight();
             }
         }
 
@@ -223,7 +223,7 @@ public class GlyphView extends JPanel
     private void autoSize() {
         if (zoom > 0) {
             final var dimension = model != null
-                    ? new Dimension(model.getImage().getWidth() * zoom, model.getImage().getHeight() * zoom)
+                    ? new Dimension(model.getImage().getImageWidth() * zoom, model.getImage().getImageHeight() * zoom)
                     : Dimensions.LARGE_SQUARE;
             setMinimumSize(dimension);
             setMaximumSize(dimension);
@@ -240,8 +240,8 @@ public class GlyphView extends JPanel
         }
 
         final var glyph = model.getImage();
-        final var w = glyph.getWidth();
-        final var h = glyph.getHeight();
+        final var w = glyph.getImageWidth();
+        final var h = glyph.getImageHeight();
         final var dx = getWidth() / (double) w;
         final var dy = getHeight() / (double) h;
         for (final var line : lines) {
@@ -271,11 +271,11 @@ public class GlyphView extends JPanel
         g.setColor(SHADE);
 
         final var x = (int) Math
-                .round((((double) getWidth()) / model.getImage().getWidth()) * model.getWidth());
+                .round((((double) getWidth()) / model.getImage().getImageWidth()) * model.getWidth());
         g.fillRect(x, 0, getWidth() - x, getHeight());
 
         final var y = (int) Math.round(
-                (((double) getHeight()) / model.getImage().getHeight()) * (model.getImage().getHeight() - top)
+                (((double) getHeight()) / model.getImage().getImageHeight()) * (model.getImage().getImageHeight() - top)
         );
         g.fillRect(0, 0, x, y);
     }

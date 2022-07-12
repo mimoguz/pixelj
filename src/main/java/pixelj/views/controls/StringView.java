@@ -94,8 +94,8 @@ public class StringView extends JPanel {
         final var sourceBuffer = new byte[w];
         final var targetBuffer = new int[w];
         final var source = character.getImage();
-        final var firstLine = maxY > 0 ? source.getHeight() - maxY : 0;
-        for (var sourceLine = firstLine; sourceLine < source.getHeight(); sourceLine++) {
+        final var firstLine = maxY > 0 ? source.getImageHeight() - maxY : 0;
+        for (var sourceLine = firstLine; sourceLine < source.getImageHeight(); sourceLine++) {
             final var targetLine = sourceLine - firstLine;
             if (targetLine >= target.getHeight() - lineSpacing) {
                 break;
@@ -119,7 +119,7 @@ public class StringView extends JPanel {
                 + spaces.stream().mapToInt(i -> i).limit(characters.size()).reduce(0, Integer::sum);
 
         var h = characters.stream()
-                .mapToInt(chr -> chr.getImage() == null ? 0 : chr.getImage().getHeight())
+                .mapToInt(chr -> chr.getImage() == null ? 0 : chr.getImage().getImageHeight())
                 .max()
                 .orElse(0);
 

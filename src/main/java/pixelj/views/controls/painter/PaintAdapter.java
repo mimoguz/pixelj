@@ -11,39 +11,63 @@ import pixelj.graphics.BinaryImage;
 /**
  * Adds mouse drawing support to a Painter.
  */
-public class PaintAdapter implements MouseListener, MouseMotionListener {
-    private int extent = 0;
-    private boolean fill = false;
+public final class PaintAdapter implements MouseListener, MouseMotionListener {
+
+    private int extent;
+    private boolean fill;
     private final Point lastPixel = new Point(-1, -1);
 
     private final Painter painter;
-    private boolean symmetrical = false;
+    private boolean symmetrical;
 
-    public PaintAdapter(Painter painter) {
+    public PaintAdapter(final Painter painter) {
         this.painter = painter;
     }
 
     /**
      * The last column of the main drawing area. It's used to calculate the vertical
      * symmetry axis.
+     *
+     * @return Extent.
      */
     public int getExtent() {
         return extent;
     }
 
     /**
+     * The last column of the main drawing area. It's used to calculate vertical
+     * symmetry axis.
+     * 
+     * @param value Extent value
+     */
+    public void setExtent(final int value) {
+        extent = value;
+    }
+
+    /**
      * Is the vertical symmetry enabled?
+     *
+     * @return True if enabled, false otherwise.
      */
     public boolean isSymmetrical() {
         return symmetrical;
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) { // Ignore
+    /**
+     * Enable/disable the vertical symmetry.
+     * 
+     * @param value Is symmetrical.
+     */
+    public void setSymmetrical(final boolean value) {
+        symmetrical = value;
     }
 
     @Override
-    public void mouseDragged(MouseEvent e) {
+    public void mouseClicked(final MouseEvent e) { // Ignore
+    }
+
+    @Override
+    public void mouseDragged(final MouseEvent e) {
         final var model = painter.getModel();
         if (model == null || e == null || isOutside()) {
             return;
@@ -93,24 +117,9 @@ public class PaintAdapter implements MouseListener, MouseMotionListener {
         setOutside();
     }
 
-    /**
-     * The last column of the main drawing area. It's used to calculate vertical
-     * symmetry axis.
-     */
-    public void setExtent(final int value) {
-        extent = value;
-    }
-
-    /**
-     * Enable/disable the vertical symmetry.
-     */
-    public void setSymmetrical(final boolean value) {
-        symmetrical = value;
-    }
-
     private Point getPixelCoordinates(final BinaryImage image, final MouseEvent e) {
-        final var cellWidth = painter.getWidth() / image.getWidth();
-        final var cellHeight = painter.getHeight() / image.getHeight();
+        final var cellWidth = painter.getWidth() / image.getImageWidth();
+        final var cellHeight = painter.getHeight() / image.getImageHeight();
         final var x = e.getX() / cellWidth;
         final var y = e.getY() / cellHeight;
         return new Point(x, y);
@@ -124,7 +133,7 @@ public class PaintAdapter implements MouseListener, MouseMotionListener {
         lastPixel.setLocation(-1, -1);
     }
 
-    private void setPixel(BinaryImage image) {
+    private void setPixel(final BinaryImage image) {
         image.set(lastPixel.x, lastPixel.y, fill);
         if (symmetrical && lastPixel.x < extent) {
             final var mirrorX = extent - lastPixel.x - 1;

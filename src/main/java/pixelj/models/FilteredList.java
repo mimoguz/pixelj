@@ -9,13 +9,12 @@ import javax.swing.event.ListDataListener;
 
 /**
  * A wrapper for HashList which adds filtering capability.
+ * 
+ * @param <E> Element type. Should have a unique hash.
  */
-public class FilteredList<E extends Comparable<E>> extends SortedList<E> {
-    private record Interval(int index0, int index1) {
-    }
+public final class FilteredList<E extends Comparable<E>> extends SortedList<E> {
 
     private final SortedList<E> delegate;
-
     private Predicate<E> filter = t -> true;
 
     public FilteredList(final SortedList<E> delegate) {
@@ -159,5 +158,8 @@ public class FilteredList<E extends Comparable<E>> extends SortedList<E> {
             }
         }
         return new Interval(index0, index1);
+    }
+
+    private record Interval(int index0, int index1) {
     }
 }

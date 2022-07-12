@@ -2,7 +2,6 @@ package pixelj.views.glyphs_screen;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 import javax.swing.JComponent;
 import javax.swing.JToggleButton;
@@ -10,7 +9,6 @@ import javax.swing.JToolBar;
 
 import pixelj.actions.Actions;
 import pixelj.actions.PainterActions;
-import pixelj.graphics.Snapshot;
 import pixelj.models.DocumentSettings;
 import pixelj.models.Glyph;
 import pixelj.models.Project;
@@ -79,10 +77,13 @@ public final class PainterPanel extends PainterPanelBase {
         if (value != null) {
             actions.setEnabled(true);
             zoomStrip.setEnabled(true);
-            final var gw = value.getImage().getWidth();
-            final var gh = value.getImage().getHeight();
+            final var gw = value.getImage().getImageWidth();
+            final var gh = value.getImage().getImageHeight();
             if (overlay == null || overlay.getWidth() != gw || overlay.getHeight() != gh) {
-                overlay = Checkerboard.create(value.getImage().getWidth(), value.getImage().getHeight());
+                overlay = Checkerboard.create(
+                        value.getImage().getImageWidth(), 
+                        value.getImage().getImageHeight()
+                );
             }
             painter.setOverlay(overlay);
         } else {

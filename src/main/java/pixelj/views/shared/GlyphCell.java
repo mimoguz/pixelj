@@ -35,8 +35,8 @@ public final class GlyphCell extends JPanel {
     public void set(final Glyph model, final int contentWidth) {
         picture.setModel(model, false);
 
-        final int pictureWidth = model.getImage().getWidth();
-        final int pictureHeight = model.getImage().getHeight();
+        final int pictureWidth = model.getImage().getImageWidth();
+        final int pictureHeight = model.getImage().getImageHeight();
         final var pictureSize = Math.max(pictureWidth, pictureHeight);
         if (pictureSize > maxPictureSize) {
             picture.setZoom(0);

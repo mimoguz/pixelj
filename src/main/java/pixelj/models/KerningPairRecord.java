@@ -1,12 +1,17 @@
 package pixelj.models;
 
 public record KerningPairRecord(int id, int left, int right, int value) {
-    public static KerningPairRecord from(KerningPair p) {
+
+    /**
+     * @param pair Source
+     * @return A record copying the source's data.
+     */
+    public static KerningPairRecord from(final KerningPair pair) {
         return new KerningPairRecord(
-                p.hashCode(),
-                p.getLeft().getCodePoint(),
-                p.getRight().getCodePoint(),
-                p.getKerningValue()
+                pair.hashCode(),
+                pair.getLeft().getCodePoint(),
+                pair.getRight().getCodePoint(),
+                pair.getKerningValue()
         );
     }
 }

@@ -14,17 +14,14 @@ import org.eclipse.collections.impl.map.mutable.primitive.IntObjectHashMap;
 
 /**
  * A list model that keeps its elements always sorted.
- * <p>
- * It's Intended to be used for CharacterModels and KerningPairModels, and uses
+ * 
+ * <p>It's Intended to be used for CharacterModels and KerningPairModels, and uses
  * a IntObjectHashMap for backing collection (so assumes no hash collisions).
+ * 
+ * @param <E> Element type. Should have a unique hash.
  */
 public class SortedList<E extends Comparable<E>> implements ListModel<E> {
     protected final ArrayList<E> display = new ArrayList<>();
-
-    public List<E> getElements() {
-        return display;
-    }
-
     protected final EventListenerList listeners = new EventListenerList();
     protected final IntObjectHashMap<E> source = new IntObjectHashMap<>();
 
@@ -41,6 +38,17 @@ public class SortedList<E extends Comparable<E>> implements ListModel<E> {
         display.addAll(source.toList());
     }
 
+    /**
+     * @return A list of all elements. This will create a new list on each call.
+     */
+    public List<E> getElements() {
+        return display;
+    }
+
+    /**
+     * @param element
+     * @return True if the element was added (if it wasn't already in the list), false otherwise.
+     */
     public boolean add(final E element) {
         if (element == null || source.contains(element)) {
             return false;
@@ -51,6 +59,9 @@ public class SortedList<E extends Comparable<E>> implements ListModel<E> {
         return true;
     }
 
+    /**
+     * @param collection A collection of elements to be added to the list.
+     */
     public void addAll(final Collection<E> collection) {
         var index0 = -1;
         var index1 = -1;
@@ -74,14 +85,9 @@ public class SortedList<E extends Comparable<E>> implements ListModel<E> {
         }
     }
 
-    @Override
-    public void addListDataListener(final ListDataListener listener) {
-        if (listener == null) {
-            return;
-        }
-        listeners.add(ListDataListener.class, listener);
-    }
-
+    /**
+     * Remove all element.
+     */
     public void clear() {
         if (source.isEmpty()) {
             return;
@@ -92,19 +98,34 @@ public class SortedList<E extends Comparable<E>> implements ListModel<E> {
         fireIntervalRemovedEvent(0, index1);
     }
 
+    /**
+     * @param predicate
+     * @return The number of elements which the predicate tests true.
+     */
     public int countWhere(final Predicate<E> predicate) {
         return (int) source.stream().filter(predicate).count();
     }
 
+    /**
+     * @param predicate
+     * @return The list of elements which the predicate tests true.
+     */
     public List<E> find(final Predicate<E> predicate) {
         return source.stream().filter(predicate).toList();
     }
 
+    /**
+     * @param predicate
+     * @return The first which the predicate tests true. Null if there were no matches.
+     */
     public E findFirst(final Predicate<E> predicate) {
         return source.stream().filter(predicate).findFirst().orElse(null);
     }
 
     /**
+     * Get by hash code.
+     * 
+     * @param hashCode
      * @return E or null
      */
     public E findHash(final int hashCode) {
@@ -112,11 +133,11 @@ public class SortedList<E extends Comparable<E>> implements ListModel<E> {
     }
 
     /**
-     * @param index Index to visible list
+     * @param element Element to be searched
+     * @return True if the element is in the list, false otherwise.
      */
-    @Override
-    public E getElementAt(final int index) {
-        return display.get(index);
+    public boolean sourceContains(final E element) {
+        return source.contains(element);
     }
 
     /**
@@ -135,8 +156,9 @@ public class SortedList<E extends Comparable<E>> implements ListModel<E> {
     }
 
     /**
+     * @param element The element to be removed
      * @return If the source collection have had an element with same hash code with
-     *         the parameter, returns that element. Otherwise, returns null.
+     *         the parameter, removes that element from the list and returns it. Otherwise, returns null.
      */
     public E remove(final E element) {
         if (element == null) {
@@ -150,6 +172,9 @@ public class SortedList<E extends Comparable<E>> implements ListModel<E> {
         return existing;
     }
 
+    /**
+     * @param collection The elements to be removed
+     */
     public void removeAll(final Collection<E> collection) {
         var index0 = -1;
         var index1 = -1;
@@ -198,31 +223,59 @@ public class SortedList<E extends Comparable<E>> implements ListModel<E> {
         fireIntervalRemovedEvent(from, to - 1);
     }
 
+    /**
+     * Request a notification without actually modifying the list.
+     * 
+     * @param index Index to visible list
+     */
+    public void requestEvent(final int index) {
+        fireContentsChangedEvent(index, index);
+    }
+
+    /**
+     * @see javax.swing.ListModel#addListDataListener(javax.swing.event.ListDataListener)
+     */
+    @Override
+    public void addListDataListener(final ListDataListener listener) {
+        if (listener == null) {
+            return;
+        }
+        listeners.add(ListDataListener.class, listener);
+    }
+
+    /** 
+     * @see javax.swing.ListModel#removeListDataListener(javax.swing.event.ListDataListener)
+     */
     @Override
     public void removeListDataListener(final ListDataListener l) {
         listeners.remove(ListDataListener.class, l);
     }
 
-    public void requestEvent(final int index) {
-        fireContentsChangedEvent(index, index);
+    /**
+     * @param index Index to visible list
+     */
+    @Override
+    public E getElementAt(final int index) {
+        return display.get(index);
     }
 
-    public boolean sourceContains(final E element) {
-        return source.contains(element);
-    }
-
-    private int findPlace(final E element) {
-        return (int) display.stream().takeWhile(item -> item.compareTo(element) < 0).count();
-    }
-
+    /**
+     * @param index0 From index, inclusive.
+     * @param index1 To index, inclusive.
+     */
     protected void fireContentsChangedEvent(final int index0, final int index1) {
         final var lst = listeners.getListeners(ListDataListener.class).clone();
         for (var index = lst.length - 1; index >= 0; index--) {
-            lst[index]
-                    .contentsChanged(new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, index0, index1));
+            lst[index].contentsChanged(
+                    new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, index0, index1)
+            );
         }
     }
 
+    /**
+     * @param index0 From index, inclusive.
+     * @param index1 To index, inclusive.
+     */
     protected void fireIntervalAddedEvent(final int index0, final int index1) {
         final var lst = listeners.getListeners(ListDataListener.class);
         for (var index = lst.length - 1; index >= 0; index--) {
@@ -230,6 +283,10 @@ public class SortedList<E extends Comparable<E>> implements ListModel<E> {
         }
     }
 
+    /**
+     * @param index0 From index, inclusive.
+     * @param index1 To index, inclusive.
+     */
     protected void fireIntervalRemovedEvent(final int index0, final int index1) {
         final var lst = listeners.getListeners(ListDataListener.class).clone();
         for (var index = lst.length - 1; index >= 0; index--) {
@@ -238,9 +295,17 @@ public class SortedList<E extends Comparable<E>> implements ListModel<E> {
         }
     }
 
+    /**
+     * @param element The element to be inserted.
+     * @return The index which the element was inserted.
+     */
     protected int insertOrdered(final E element) {
         final var index = findPlace(element);
         display.add(index, element);
         return index;
+    }
+
+    private int findPlace(final E element) {
+        return (int) display.stream().takeWhile(item -> item.compareTo(element) < 0).count();
     }
 }

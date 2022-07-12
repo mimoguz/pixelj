@@ -9,11 +9,15 @@ import pixelj.graphics.BinaryImage;
 
 public record CompressedGlyph(int codePoint, int width, byte[] imageBytes) {
 
-    public static CompressedGlyph from(Glyph glyph) {
+    /**
+     * @param glyph Source
+     * @return Compressed glyph using the source's data
+     */
+    public static CompressedGlyph from(final Glyph glyph) {
         final var deflater = new Deflater();
         final var image = glyph.getImage();
-        final var inBytes = new byte[image.getWidth() * image.getHeight()];
-        image.getDataElements(0, 0, image.getWidth(), image.getHeight(), inBytes);
+        final var inBytes = new byte[image.getImageWidth() * image.getImageHeight()];
+        image.getDataElements(0, 0, image.getImageWidth(), image.getImageHeight(), inBytes);
         final var outBuffer = new byte[inBytes.length];
         deflater.setInput(inBytes);
         deflater.finish();
@@ -22,7 +26,14 @@ public record CompressedGlyph(int codePoint, int width, byte[] imageBytes) {
         return new CompressedGlyph(glyph.getCodePoint(), glyph.getWidth(), outBytes);
     }
 
-    public Glyph decompress(int imageWidth, int imageHeight) throws MisshapenDataException {
+    /**
+     * @param imageWidth  Target image width
+     * @param imageHeight Target image height
+     * @return Decompressed glyph
+     * @throws MisshapenDataException If the data size doesn't match with the target image size or
+     *                                the data is corrupted.
+     */
+    public Glyph decompress(final int imageWidth, final int imageHeight) throws MisshapenDataException {
         final var inflater = new Inflater();
         final var outBytes = new byte[imageWidth * imageHeight];
         inflater.setInput(imageBytes);
@@ -40,7 +51,7 @@ public record CompressedGlyph(int codePoint, int width, byte[] imageBytes) {
     }
 
     public static class MisshapenDataException extends Exception {
-        public MisshapenDataException(String message) {
+        public MisshapenDataException(final String message) {
             super(message);
         }
     }
