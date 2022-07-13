@@ -10,7 +10,6 @@ import java.util.List;
 
 import javax.swing.AbstractButton;
 import javax.swing.Action;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
