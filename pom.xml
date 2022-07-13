@@ -179,9 +179,10 @@
         <version>${javapackager.version}</version>
         <configuration>
           <mainClass>pixelj.Main</mainClass>
+          <displayName>PixelJ</displayName>
           <generateInstaller>false</generateInstaller>
           <linuxConfig>
-            <pngFile>src/main/resources/pixelj/resources/applicationIcon/icon64.png</pngFile>
+            <pngFile>graphics/icon64.png</pngFile>
           </linuxConfig>
           <winConfig>
             <icoFile>graphics/icon.ico</icoFile>
