@@ -10,7 +10,7 @@ import pixelj.resources.Resources;
 import pixelj.views.homewindow.HomeWindow;
 
 public final class Main {
-    private static final boolean USE_DARK_THEME = false;
+    private static final boolean USE_DARK_THEME = true;
 
     private Main() {
     }
