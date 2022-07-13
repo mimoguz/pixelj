@@ -10,25 +10,25 @@ on:
       - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
 
 jobs:
-  build:
+  build_linux:
 
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
-    
-    - name: Set up JDK 18
+
+    - name: Set up JDK
       uses: actions/setup-java@v3
       with:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-        
+
     - name: Build with Maven
       run: mvn -B package --file pom.xml
-    
+
     - name: Create Release
-      id: create_release
+      id: create_release_linux
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -37,25 +37,75 @@ jobs:
         release_name: Release ${{ github.ref }}
         draft: false
         prerelease: true
-        
+
     - name: Attach release asset without JRE
-      id: attach_release_asset_no_jre
+      id: attach_release_asset_no_jre_linux
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        upload_url: ${{ steps.create_release_linux.outputs.upload_url }}
         asset_path: ./target/pixelj-without-jre-1.0-SNAPSHOT-linux.zip
         asset_name: pixelj-without-jre-1.0-SNAPSHOT-linux.zip
         asset_content_type: application/zip
-        
+
     - name: Attach release asset with JRE
-      id: attach_release_asset_jre
+      id: attach_release_asset_jre_linux
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        upload_url: ${{ steps.create_release_linux.outputs.upload_url }}
         asset_path: ./target/pixelj-with-jre-1.0-SNAPSHOT-linux.zip
         asset_name: pixelj-with-jre-1.0-SNAPSHOT-linux.zip
+        asset_content_type: application/zip
+
+  build_windows:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
+
+    - name: Create Release
+      id: create_release_windows
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: true
+
+    - name: Attach release asset without JRE
+      id: attach_release_asset_no_jre_windows
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release_windows.outputs.upload_url }}
+        asset_path: ./target/pixelj-without-jre-1.0-SNAPSHOT-windows.zip
+        asset_name: pixelj-without-jre-1.0-SNAPSHOT-windows.zip
+        asset_content_type: application/zip
+
+    - name: Attach release asset with JRE
+      id: attach_release_asset_jre_windows
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release_windows.outputs.upload_url }}
+        asset_path: ./target/pixelj-with-jre-1.0-SNAPSHOT-windows.zip
+        asset_name: pixelj-with-jre-1.0-SNAPSHOT-windows.zip
         asset_content_type: application/zip
