@@ -39,7 +39,9 @@ import pixelj.views.shared.Borders;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 
-
+/**
+ * Project window design.
+ */
 abstract class ProjectWindowBase extends JFrame {
     protected final JTabbedPane content = new JTabbedPane();
     protected final JToggleButton menuButton = new JToggleButton();
