@@ -36,7 +36,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build for Linux
-      run: mvn -B package --file pom.xml
+      run: mvn -B clean package --file pom.xml
     - name: Attach Linux package without JRE
       id: attach_without_jre_linux
       uses: actions/upload-release-asset@v1
@@ -57,7 +57,7 @@ jobs:
         asset_path: ./target/pixelj-with-jre-1.0-SNAPSHOT-linux.zip
         asset_name: pixelj-with-jre-1.0-SNAPSHOT-linux.zip
         asset_content_type: application/zip
-    - name: Clean 
+    - name: Clean after
       run: mvn -B clean
 
   build_windows:
@@ -72,7 +72,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build for Windows
-      run: mvn -B package --file pom.xml
+      run: mvn -B clean package --file pom.xml
     - name: Attach Windows package without JRE
       id: attach_without_jre_windows
       uses: actions/upload-release-asset@v1
@@ -93,5 +93,5 @@ jobs:
         asset_path: ./target/pixelj-with-jre-1.0-SNAPSHOT-windows.zip
         asset_name: pixelj-with-jre-1.0-SNAPSHOT-windows.zip
         asset_content_type: application/zip
-    - name: Clean 
+    - name: Clean after
       run: mvn -B clean
