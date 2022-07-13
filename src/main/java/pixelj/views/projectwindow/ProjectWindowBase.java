@@ -185,7 +185,10 @@ abstract class ProjectWindowBase extends JFrame {
         constraints.weighty = 1.0;
         constraints.gridx = 0;
         constraints.gridy = 0;
-        trailingContainer.add(Box.createVerticalGlue(), constraints);
+        final var emptyBox = new JPanel();
+        emptyBox.setMaximumSize(Dimensions.MAXIMUM);
+        emptyBox.setBackground(content.getBackground());
+        trailingContainer.add(emptyBox, constraints);
         constraints.weighty = 0.0;
         constraints.gridy = GridBagConstraints.RELATIVE;
         trailingContainer.add(optionsButton, constraints);
