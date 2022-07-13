@@ -8,10 +8,10 @@ import pixelj.actions.Actions;
 import pixelj.actions.PreviewScreenActions;
 import pixelj.models.Project;
 
-public final class PreviewScreen extends PreviewScreenBase {
+public final class PreviewPage extends PreviewPageBase {
     private final PreviewScreenActions actions;
 
-    public PreviewScreen(final Project project, final JComponent root) {
+    public PreviewPage(final Project project, final JComponent root) {
         actions = new PreviewScreenActions(project, textInput, container);
         actions.setZoom(INITIAL_ZOOM);
         Actions.registerShortcuts(actions.all, root);

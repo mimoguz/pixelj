@@ -35,18 +35,18 @@ import pixelj.graphics.FontIcon;
 import pixelj.models.Project;
 import pixelj.resources.Icons;
 import pixelj.resources.Resources;
-import pixelj.views.glyphspage.GlyphsScreen;
-import pixelj.views.kerningpairspage.KerningPairsScreen;
-import pixelj.views.previewpage.PreviewScreen;
+import pixelj.views.glyphspage.GlyphsPage;
+import pixelj.views.kerningpairspage.KerningPairsPage;
+import pixelj.views.previewpage.PreviewPage;
 import pixelj.views.projectwindow.CloseListener;
 import pixelj.views.shared.Borders;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 
 public class ProjectView extends JFrame {
-    private final GlyphsScreen charactersScreen;
-    private final KerningPairsScreen kerningPairsScreen;
-    private final PreviewScreen previewScreen;
+    private final GlyphsPage charactersScreen;
+    private final KerningPairsPage kerningPairsScreen;
+    private final PreviewPage previewScreen;
     private final JTabbedPane root;
 
     public ProjectView(final Project project) {
@@ -54,9 +54,9 @@ public class ProjectView extends JFrame {
 
         final var res = Resources.get();
 
-        charactersScreen = new GlyphsScreen(project, this);
-        kerningPairsScreen = new KerningPairsScreen(project, this);
-        previewScreen = new PreviewScreen(project, root);
+        charactersScreen = new GlyphsPage(project, this);
+        kerningPairsScreen = new KerningPairsPage(project, this);
+        previewScreen = new PreviewPage(project, root);
         // Invisible screens should be disabled to prevent shortcut collisions.
         kerningPairsScreen.setEnabled(false);
         previewScreen.setEnabled(false);

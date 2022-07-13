@@ -4,9 +4,9 @@ import javax.swing.JFrame;
 
 import pixelj.models.Project;
 
-public final class KerningPairsScreen extends KerningPairsScreenBase {
+public final class KerningPairsPage extends KerningPairsPageBase {
 
-    public KerningPairsScreen(final Project project, final JFrame window) {
+    public KerningPairsPage(final Project project, final JFrame window) {
         super(new EditorPanel(project), new ListPanel(project, window));
 
         // Connect the listModel to the editor

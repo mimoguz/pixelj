@@ -4,11 +4,11 @@ import javax.swing.JSplitPane;
 
 import pixelj.views.shared.Dimensions;
 
-public abstract class KerningPairsScreenBase extends JSplitPane {
+public abstract class KerningPairsPageBase extends JSplitPane {
     protected final EditorPanel editorPanel;
     protected final ListPanel listPanel;
 
-    public KerningPairsScreenBase(final EditorPanel editorPanel, final ListPanel listPanel) {
+    public KerningPairsPageBase(final EditorPanel editorPanel, final ListPanel listPanel) {
         this.editorPanel = editorPanel;
         this.listPanel = listPanel;
 

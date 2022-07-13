@@ -29,7 +29,7 @@ import pixelj.views.shared.Dimensions;
 /**
  * Preview screen design.
  */
-abstract class PreviewScreenBase extends JPanel {
+abstract class PreviewPageBase extends JPanel {
 
     protected static final int INITIAL_ZOOM = 4;
 
@@ -39,7 +39,7 @@ abstract class PreviewScreenBase extends JPanel {
     protected final PromptTextArea textInput = new PromptTextArea();
     protected final ZoomStrip zoomStrip = new ZoomStrip(1, 48, INITIAL_ZOOM);
 
-    PreviewScreenBase() {
+    PreviewPageBase() {
         final var res = Resources.get();
 
         Components.setFixedSize(refreshButton, Dimensions.TEXT_BUTTON_SIZE);
@@ -105,6 +105,8 @@ abstract class PreviewScreenBase extends JPanel {
         bottomPanel.add(inputPanel);
         bottomPanel.add(Box.createHorizontalGlue());
         add(bottomPanel);
+
+        add(zoomStrip);
     }
 
     private JPopupMenu makeContextMenu() {

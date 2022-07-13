@@ -6,10 +6,10 @@ import javax.swing.ListSelectionModel;
 import pixelj.models.Project;
 import pixelj.views.controls.GlyphView;
 
-public final class GlyphsScreen extends GlyphsScreenBase {
+public final class GlyphsPage extends GlyphsScreenBase {
     private final ListSelectionModel selectionModel;
 
-    public GlyphsScreen(final Project project, final JFrame window) {
+    public GlyphsPage(final Project project, final JFrame window) {
         super(new ListPanel(project, window), new PainterPanel(project, window));
         selectionModel = listPanel.getSelectionModel();
 
