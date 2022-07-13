@@ -24,6 +24,9 @@ import pixelj.views.shared.Borders;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 
+/**
+ * Export dialog design.
+ */
 abstract class ExportDialogBase extends JDialog {
 
     protected final JButton exportButton = new JButton(Resources.get().getString("export"));

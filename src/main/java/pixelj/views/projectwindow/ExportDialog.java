@@ -8,10 +8,10 @@ import javax.swing.SpinnerNumberModel;
 import pixelj.models.DocumentSettings;
 
 public final class ExportDialog extends ExportDialogBase {
+
     private static final int DEFAULT_SIZE = 256;
     private static final int MAXIMUM_SIZE = 4096;
     private static final int STEP_SIZE = 8;
-
 
     private Result result;
 
@@ -23,16 +23,16 @@ public final class ExportDialog extends ExportDialogBase {
         layoutStrategyIn.setSelectedIndex(0);
 
         widthIn.setModel(new SpinnerNumberModel(
-                DEFAULT_SIZE, 
-                settings.canvasWidth(), 
-                MAXIMUM_SIZE, 
+                DEFAULT_SIZE,
+                settings.canvasWidth(),
+                MAXIMUM_SIZE,
                 STEP_SIZE
         ));
 
         heightIn.setModel(new SpinnerNumberModel(
-                DEFAULT_SIZE, 
-                settings.canvasHeight(), 
-                MAXIMUM_SIZE, 
+                DEFAULT_SIZE,
+                settings.canvasHeight(),
+                MAXIMUM_SIZE,
                 STEP_SIZE
         ));
 
