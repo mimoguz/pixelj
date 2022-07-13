@@ -4,6 +4,16 @@
   <groupId>io.github.mimoguz</groupId>
   <artifactId>pixelj</artifactId>
   <version>1.0-SNAPSHOT</version>
+  <organization>
+    <name>Oğuz Taş</name>
+    <url>https://github.com/mimoguz/pixelj</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>GPL-3.0-only</name>
+      <url>https://www.gnu.org/licenses/gpl-3.0-standalone.html</url>
+    </license>
+  </licenses>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -12,6 +22,7 @@
     <h2.version>2.1.214</h2.version>
     <lwjgl.version>3.3.1</lwjgl.version> <!-- LWJGL3 provides a wrapper for NativeFileDialog library -->
     <jackson.version>2.13.3</jackson.version>
+    <javapackager.version>1.6.6</javapackager.version>
     <junit.version>5.8.2</junit.version>
     <maven.assembly.plugin.version>3.4.1</maven.assembly.plugin.version>
     <maven.compiler.plugin.version>3.10.1</maven.compiler.plugin.version>
@@ -162,6 +173,47 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>io.github.fvarrui</groupId>
+        <artifactId>javapackager</artifactId>
+        <version>${javapackager.version}</version>
+        <configuration>
+          <mainClass>pixelj.Main</mainClass>
+          <generateInstaller>false</generateInstaller>
+          <linuxConfig>
+            <pngFile>src/main/resources/pixelj/resources/applicationIcon/icon64.png</pngFile>
+          </linuxConfig>
+          <winConfig>
+            <icoFile>graphics/icon.ico</icoFile>
+          </winConfig>
+        </configuration>
+        <executions>
+          <execution>
+            <id>bundle-with-jre</id>
+            <phase>package</phase>
+            <goals>
+              <goal>package</goal>
+            </goals>
+            <configuration>
+              <name>pixelj-with-jre</name>
+              <bundleJre>true</bundleJre>
+              <createZipball>true</createZipball>
+            </configuration>
+          </execution>
+          <execution>
+            <id>bundle-without-jre</id>
+            <phase>package</phase>
+            <goals>
+              <goal>package</goal>
+            </goals>
+            <configuration>
+              <name>pixelj-without-jre</name>
+              <bundleJre>false</bundleJre>
+              <createZipball>true</createZipball>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
   <dependencyManagement>
@@ -212,7 +264,6 @@
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>org.lwjgl</groupId>
       <artifactId>lwjgl</artifactId>
