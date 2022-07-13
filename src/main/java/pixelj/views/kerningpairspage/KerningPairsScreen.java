@@ -1,13 +1,13 @@
 package pixelj.views.kerningpairspage;
 
-import javax.swing.JComponent;
+import javax.swing.JFrame;
 
 import pixelj.models.Project;
 
 public final class KerningPairsScreen extends KerningPairsScreenBase {
 
-    public KerningPairsScreen(final Project project, final JComponent root) {
-        super(new EditorPanel(project), new ListPanel(project, root));
+    public KerningPairsScreen(final Project project, final JFrame window) {
+        super(new EditorPanel(project), new ListPanel(project, window));
 
         // Connect the listModel to the editor
         final var selectionModel = listPanel.getSelectionModel();

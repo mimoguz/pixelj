@@ -10,11 +10,9 @@ import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.Action;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
 
 import pixelj.graphics.BinaryImage;
 import pixelj.models.Glyph;
@@ -42,18 +40,18 @@ public final class GlyphListActions {
     private boolean enabled = true;
     private final AddDialog addDialog;
     private final Project project;
-    private final JComponent root;
+    private final JFrame window;
     private final ListSelectionModel selectionModel;
 
     public GlyphListActions(
             final Project project,
             final ListSelectionModel selectionModel,
-            final JComponent root
+            final JFrame window
     ) {
         this.project = project;
         this.selectionModel = selectionModel;
-        this.root = root;
-        addDialog = new AddDialog((JFrame) SwingUtilities.getWindowAncestor(root));
+        this.window = window;
+        addDialog = new AddDialog(window);
 
         addGlyphsAction = new ApplicationAction("addGlyphsAction", this::showAddDialog)
                 .withText()
@@ -149,7 +147,7 @@ public final class GlyphListActions {
                 : res.formatString("removingGlyphsAndKerningPairsMessage", indices.length, affected);
 
         final var result = JOptionPane.showConfirmDialog(
-                root,
+                window,
                 message,
                 res.getString("nonUndoable"),
                 JOptionPane.OK_CANCEL_OPTION,

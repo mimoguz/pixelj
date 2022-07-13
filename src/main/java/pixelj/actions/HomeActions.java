@@ -1,6 +1,5 @@
 package pixelj.actions;
 
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -11,10 +10,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.Action;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 
 import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.util.nfd.NativeFileDialog;
@@ -63,14 +60,14 @@ public final class HomeActions {
      */
     public final Collection<ApplicationAction> all;
 
-    private final JComponent root;
+    private final JFrame window;
     private final Logger logger;
 
-    public HomeActions(final JComponent root) {
+    public HomeActions(final JFrame window) {
 
         logger = Logger.getLogger(this.getClass().getName());
         logger.addHandler(new ConsoleHandler());
-        this.root = root;
+        this.window = window;
 
         final var res = Resources.get();
 
@@ -117,7 +114,7 @@ public final class HomeActions {
     private void newProject(final ActionEvent event, final Action action) {
         final var res = Resources.get();
         final var dialog = new DocumentSettingsDialog(
-                (Frame) SwingUtilities.getWindowAncestor(root),
+                window,
                 res.getString("newProjectDialogTitle"),
                 res.getString("create"),
                 true
@@ -147,7 +144,7 @@ public final class HomeActions {
             // TODO: DI
             showProject(new DBFileService().readFile(path));
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(SwingUtilities.getWindowAncestor(root), e.getMessage());
+            JOptionPane.showMessageDialog(window, e.getMessage());
         }
     }
 
@@ -179,7 +176,7 @@ public final class HomeActions {
     }
 
     private void showProject(final Project project) {
-        Components.switchFrames((JFrame) SwingUtilities.getWindowAncestor(root), new ProjectView(project));
+        Components.switchFrames(window, new ProjectView(project));
     }
 
     private Path showOpenDialog() {

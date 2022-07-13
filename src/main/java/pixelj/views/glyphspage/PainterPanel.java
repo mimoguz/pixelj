@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 
@@ -26,7 +27,7 @@ public final class PainterPanel extends PainterPanelBase {
     private final PainterActions actions = new PainterActions();
     private BufferedImage overlay;
 
-    public PainterPanel(final Project project, final JComponent root) {
+    public PainterPanel(final Project project, final JFrame window) {
         super(new InfoPanel(project));
 
         painter.setZoom(INITIAL_ZOOM);
@@ -56,7 +57,7 @@ public final class PainterPanel extends PainterPanelBase {
             actions.snapshotConsumer.accept(s);
             project.setDirty(true);
         });
-        Actions.registerShortcuts(actions.all, root);
+        Actions.registerShortcuts(actions.all, window.getRootPane());
         fillToolbar(toolBar, actions);
   
         setMetrics(project.getDocumentSettings());

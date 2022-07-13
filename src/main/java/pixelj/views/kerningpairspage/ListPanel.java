@@ -3,7 +3,7 @@ package pixelj.views.kerningpairspage;
 import java.util.function.Predicate;
 
 import javax.swing.DefaultListSelectionModel;
-import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.ListSelectionModel;
 
 import pixelj.actions.Actions;
@@ -22,10 +22,10 @@ public final class ListPanel extends ListPanelBase {
     private Predicate<KerningPair> filterRight = model -> true;
     private Predicate<KerningPair> filterLeft = model -> true;
 
-    public ListPanel(final Project project, final JComponent root) {
-        actions = new KerningPairListActions(project, selectionModel, root);
+    public ListPanel(final Project project, final JFrame window) {
+        actions = new KerningPairListActions(project, selectionModel, window);
         actions.showRemoveDialogAction.setEnabled(false);
-        Actions.registerShortcuts(actions.all, root);
+        Actions.registerShortcuts(actions.all, window.getRootPane());
         addButton.setAction(actions.showAddDialogAction);
         removeButton.setAction(actions.showRemoveDialogAction);
 

@@ -2,6 +2,7 @@ package pixelj.views.glyphspage;
 
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.ListSelectionModel;
 
 import pixelj.actions.Actions;
@@ -18,10 +19,10 @@ public final class ListPanel extends ListPanelBase {
     private final ListSelectionModel selectionModel = new DefaultListSelectionModel();
     private final SortedList<Glyph> listModel;
 
-    public ListPanel(final Project project, final JComponent root) {
-        actions = new GlyphListActions(project, selectionModel, root);
+    public ListPanel(final Project project, final JFrame window) {
+        actions = new GlyphListActions(project, selectionModel, window);
         actions.removeGlyphsAction.setEnabled(false);
-        Actions.registerShortcuts(actions.all, root);
+        Actions.registerShortcuts(actions.all, window.getRootPane());
         addButton.setAction(actions.addGlyphsAction);
         removeButton.setAction(actions.removeGlyphsAction);
 

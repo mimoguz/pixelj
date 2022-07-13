@@ -1,6 +1,5 @@
 package pixelj.actions;
 
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -9,36 +8,44 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.swing.Action;
-import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
 
 import pixelj.models.Project;
 import pixelj.resources.Resources;
 import pixelj.views.kerningpairspage.AddDialog;
 
 public class KerningPairListActions {
-    private final AddDialog addDialog;
-    public final Collection<ApplicationAction> all;
-    private final Project project;
-
-    private final JComponent root;
-    private final ListSelectionModel selectionModel;
+    /**
+     * Show add kerning pair dialog.
+     */
     public final ApplicationAction showAddDialogAction;
+    /**
+     * Show remove kerning pairs dialog.
+     */
     public final ApplicationAction showRemoveDialogAction;
+    /**
+     * Collection of all actions.
+     */
+    public final Collection<ApplicationAction> all;
+
+    private final AddDialog addDialog;
+    private final Project project;
+    private final JFrame window;
+    private final ListSelectionModel selectionModel;
 
     public KerningPairListActions(
             final Project project,
             final ListSelectionModel selectionModel,
-            final JComponent root
+            final JFrame window
     ) {
 
         this.project = project;
         this.selectionModel = selectionModel;
-        this.root = root;
+        this.window = window;
 
-        addDialog = new AddDialog(project.getGlyphs(), (Frame) SwingUtilities.getWindowAncestor(root));
+        addDialog = new AddDialog(project.getGlyphs(), window);
 
         showAddDialogAction = new ApplicationAction("addKerningPairsAction", this::showAddDialog).withText()
                 .setAccelerator(KeyEvent.VK_PLUS, InputEvent.ALT_DOWN_MASK);
@@ -71,7 +78,7 @@ public class KerningPairListActions {
         final var res = Resources.get();
         final var message = res.formatString("removingKerningPairsMessage", indices.length);
         final var result = JOptionPane.showConfirmDialog(
-                root,
+                window,
                 message,
                 res.getString("nonUndoable"),
                 JOptionPane.OK_CANCEL_OPTION,
