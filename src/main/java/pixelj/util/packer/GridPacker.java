@@ -63,6 +63,7 @@ public final class GridPacker<M> implements Packer<M> {
      * @return 
      */
     private static int ceilDiv(final int a, final int b) {
+        // TODO: Test this
         return (int) Math.ceil((double) a / b);
     }
 }
