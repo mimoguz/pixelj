@@ -3,7 +3,6 @@ package pixelj.views.glyphspage;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;

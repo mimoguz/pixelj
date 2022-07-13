@@ -1,7 +1,6 @@
 package pixelj.views.glyphspage;
 
 import javax.swing.DefaultListSelectionModel;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.ListSelectionModel;
 
