@@ -43,7 +43,6 @@ public class ProjectWindow extends ProjectWindowBase {
         project.dirtyProperty.addChangeListener((sender, value) -> setFrameTitle(project.getTitle(), value));
     }
 
-
     private void setFrameTitle(final String titleText, final boolean isDirty) {
         if (isDirty) {
             setTitle(Resources.get().formatString("projectViewTitleUnsaved", titleText));
