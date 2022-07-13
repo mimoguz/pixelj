@@ -28,7 +28,7 @@ jobs:
       run: mvn -B package --file pom.xml
 
     - name: Create Release
-      id: create_release_linux
+      id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -44,7 +44,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release_linux.outputs.upload_url }}
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./target/pixelj-without-jre-1.0-SNAPSHOT-linux.zip
         asset_name: pixelj-without-jre-1.0-SNAPSHOT-linux.zip
         asset_content_type: application/zip
@@ -55,7 +55,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release_linux.outputs.upload_url }}
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./target/pixelj-with-jre-1.0-SNAPSHOT-linux.zip
         asset_name: pixelj-with-jre-1.0-SNAPSHOT-linux.zip
         asset_content_type: application/zip
@@ -77,24 +77,13 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
-    - name: Create Release
-      id: create_release_windows
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: true
-
     - name: Attach release asset without JRE
       id: attach_release_asset_no_jre_windows
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release_windows.outputs.upload_url }}
+        upload_url: ${{ jobs.build_linux.steps.create_release.outputs.upload_url }}
         asset_path: ./target/pixelj-without-jre-1.0-SNAPSHOT-windows.zip
         asset_name: pixelj-without-jre-1.0-SNAPSHOT-windows.zip
         asset_content_type: application/zip
