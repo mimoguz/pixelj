@@ -1,6 +1,5 @@
 package pixelj.actions;
 
-import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -16,10 +15,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.Action;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 
 import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.util.nfd.NativeFileDialog;
@@ -79,16 +76,16 @@ public final class MainActions {
     private final Logger logger;
     private final DocumentSettingsDialog documentSettingsDialog;
     private final Project project;
-    private final JComponent root;
+    private final JFrame window;
 
-    public MainActions(final Project project, final JComponent root) {
+    public MainActions(final Project project, final JFrame window) {
         this.project = project;
-        this.root = root;
+        this.window = window;
 
         final var res = Resources.get();
 
         documentSettingsDialog = new DocumentSettingsDialog(
-                (Frame) SwingUtilities.windowForComponent(root),
+                window,
                 res.getString("documentSettingsDialogTitle"),
                 res.getString("apply"),
                 false
@@ -171,10 +168,7 @@ public final class MainActions {
     }
 
     private void export(final ActionEvent event, final Action action) {
-        final var exportDialog = new ExportDialog(
-                    (Frame) SwingUtilities.getWindowAncestor(root), 
-                    project.getDocumentSettings()
-        );
+        final var exportDialog = new ExportDialog(window, project.getDocumentSettings());
         exportDialog.setVisible(true);
         final var exportOptions = exportDialog.getResult();
         if (exportOptions == null) {
@@ -195,12 +189,13 @@ public final class MainActions {
     }
 
     private void quit(final ActionEvent event, final Action action) {
-        // TODO: Show an exit dialog when the project is unsaved.
+        handleDirty();
         System.exit(0);
     }
 
     private void returnHome(final ActionEvent event, final Action action) {
-        Components.switchFrames((JFrame) SwingUtilities.getWindowAncestor(root), new HomeWindow());
+        handleDirty();
+        Components.switchFrames((JFrame) window, new HomeWindow());
     }
 
     private void save(final ActionEvent event, final Action action) {
@@ -279,7 +274,7 @@ public final class MainActions {
     }
 
     private void showInfo(final String message) {
-        JOptionPane.showMessageDialog((Frame) SwingUtilities.getWindowAncestor(root), message);
+        JOptionPane.showMessageDialog(window, message);
     }
 
     private void showLoadFailure(final String cause) {
@@ -288,5 +283,22 @@ public final class MainActions {
 
     private void logAction(final Action action) {
         logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
+    }
+
+    private void handleDirty() {
+        // TODO: This code is duplicated here from the CloseListener
+        if (project.isDirty()) {
+            final var res = Resources.get();
+            final var result = JOptionPane.showConfirmDialog(
+                    window,
+                    res.getString("unsavedWarning"),
+                    null,
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.WARNING_MESSAGE
+            );
+            if (result == JOptionPane.OK_OPTION) {
+                saveAction.actionPerformed(null);
+            }
+        }
     }
 }

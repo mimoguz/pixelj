@@ -22,6 +22,7 @@ import javax.swing.JToggleButton;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.ToolTipManager;
+import javax.swing.WindowConstants;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
@@ -37,6 +38,7 @@ import pixelj.resources.Resources;
 import pixelj.views.glyphspage.GlyphsScreen;
 import pixelj.views.kerningpairspage.KerningPairsScreen;
 import pixelj.views.previewpage.PreviewScreen;
+import pixelj.views.projectwindow.CloseListener;
 import pixelj.views.shared.Borders;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
@@ -52,15 +54,18 @@ public class ProjectView extends JFrame {
 
         final var res = Resources.get();
 
-        charactersScreen = new GlyphsScreen(project, root);
-        kerningPairsScreen = new KerningPairsScreen(project, root);
+        charactersScreen = new GlyphsScreen(project, this);
+        kerningPairsScreen = new KerningPairsScreen(project, this);
         previewScreen = new PreviewScreen(project, root);
         // Invisible screens should be disabled to prevent shortcut collisions.
         kerningPairsScreen.setEnabled(false);
         previewScreen.setEnabled(false);
 
-        final var mainActions = new MainActions(project, root);
+        final var mainActions = new MainActions(project, this);
         Actions.registerShortcuts(mainActions.all, root);
+
+        final var closeListener = new CloseListener(project, mainActions.saveAction, this);
+        this.addWindowListener(closeListener);
 
         project.titleProperty.addChangeListener((sender, value) -> setFrameTitle(value, project.isDirty()));
         project.dirtyProperty.addChangeListener((sender, value) -> setFrameTitle(project.getTitle(), value));
@@ -76,6 +81,7 @@ public class ProjectView extends JFrame {
         pack();
         setSize(1200, 720);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
     }
 
