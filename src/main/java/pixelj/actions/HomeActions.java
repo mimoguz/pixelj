@@ -22,7 +22,7 @@ import pixelj.models.SortedList;
 import pixelj.resources.Icons;
 import pixelj.resources.Resources;
 import pixelj.services.DBFileService;
-import pixelj.views.ProjectView;
+import pixelj.views.projectwindow.ProjectWindow;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.DocumentSettingsDialog;
 
@@ -176,7 +176,7 @@ public final class HomeActions {
     }
 
     private void showProject(final Project project) {
-        Components.switchFrames(window, new ProjectView(project));
+        Components.switchFrames(window, new ProjectWindow(project));
     }
 
     private Path showOpenDialog() {

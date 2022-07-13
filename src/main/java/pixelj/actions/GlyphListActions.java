@@ -19,7 +19,7 @@ import pixelj.models.Glyph;
 import pixelj.models.KerningPair;
 import pixelj.models.Project;
 import pixelj.resources.Resources;
-import pixelj.views.glyphspage.AddDialog;
+import pixelj.views.projectwindow.glyphspage.AddDialog;
 
 public final class GlyphListActions {
     /**

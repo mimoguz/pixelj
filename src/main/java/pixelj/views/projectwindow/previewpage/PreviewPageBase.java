@@ -1,4 +1,4 @@
-package pixelj.views.previewpage;
+package pixelj.views.projectwindow.previewpage;
 
 import java.awt.Color;
 import java.awt.Dimension;

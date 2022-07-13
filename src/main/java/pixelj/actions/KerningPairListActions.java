@@ -14,7 +14,7 @@ import javax.swing.ListSelectionModel;
 
 import pixelj.models.Project;
 import pixelj.resources.Resources;
-import pixelj.views.kerningpairspage.AddDialog;
+import pixelj.views.projectwindow.kerningpairspage.AddDialog;
 
 public class KerningPairListActions {
     /**

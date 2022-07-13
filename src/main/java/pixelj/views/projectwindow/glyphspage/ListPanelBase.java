@@ -1,4 +1,4 @@
-package pixelj.views.glyphspage;
+package pixelj.views.projectwindow.glyphspage;
 
 import java.awt.Dimension;
 

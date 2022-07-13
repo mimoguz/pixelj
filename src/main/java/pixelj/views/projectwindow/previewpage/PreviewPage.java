@@ -1,8 +1,8 @@
-package pixelj.views.previewpage;
+package pixelj.views.projectwindow.previewpage;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.JComponent;
+import javax.swing.JFrame;
 
 import pixelj.actions.Actions;
 import pixelj.actions.PreviewScreenActions;
@@ -11,10 +11,10 @@ import pixelj.models.Project;
 public final class PreviewPage extends PreviewPageBase {
     private final PreviewScreenActions actions;
 
-    public PreviewPage(final Project project, final JComponent root) {
+    public PreviewPage(final Project project, final JFrame window) {
         actions = new PreviewScreenActions(project, textInput, container);
         actions.setZoom(INITIAL_ZOOM);
-        Actions.registerShortcuts(actions.all, root);
+        Actions.registerShortcuts(actions.all, window.getRootPane());
         refreshButton.setAction(actions.refreshAction);
         clearButton.setAction(actions.clearAction);
 

@@ -1,4 +1,4 @@
-package pixelj.views.kerningpairspage;
+package pixelj.views.projectwindow.kerningpairspage;
 
 import javax.swing.JSplitPane;
 
