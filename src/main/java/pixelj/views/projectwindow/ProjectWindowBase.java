@@ -16,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JRootPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JToggleButton;
 import javax.swing.KeyStroke;
@@ -216,7 +217,8 @@ abstract class ProjectWindowBase extends JFrame {
     }
 
     private void handleMenu(final ActionEvent e, final Action action) {
-        if (menuButton.isSelected()) {
+        System.out.println(e.getSource());
+        if (menuButton.isSelected() || e.getSource() instanceof JRootPane) {
             mainMenu.show(menuButton, menuButton.getWidth() + Dimensions.MEDIUM_PADDING, 0);
         } else {
             mainMenu.setVisible(false);
