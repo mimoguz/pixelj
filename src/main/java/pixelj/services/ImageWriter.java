@@ -22,7 +22,7 @@ public interface ImageWriter {
 
     /**
      * Get color data of a pixel.
-     * 
+     *
      * @param source
      * @param px X coordinate of the pixel
      * @param py Y coordinate of the pixel
@@ -34,7 +34,7 @@ public interface ImageWriter {
 
     /**
      * Create an image and write glyph images to it.
-     * 
+     *
      * @param imageSize Result image size
      * @param rectangles Glyph placement
      * @param glyphs Glyph collection
@@ -42,9 +42,9 @@ public interface ImageWriter {
      * @return Created image. Its image type must be TYPE_INT_ARGB.
      */
     BufferedImage getImage(
-            Dimension imageSize, 
+            Dimension imageSize,
             Collection<Rectangle<GlyphImageData>> rectangles,
-            SortedList<Glyph> glyphs, 
+            SortedList<Glyph> glyphs,
             DocumentSettings settings
     );
 }

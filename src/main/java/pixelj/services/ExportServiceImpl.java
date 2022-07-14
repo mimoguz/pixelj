@@ -7,12 +7,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import javax.imageio.ImageIO;
 
 import pixelj.models.DocumentSettings;
+import pixelj.models.Glyph;
 import pixelj.models.KerningPair;
 import pixelj.models.Project;
 import pixelj.util.IOExceptionWrapper;
@@ -29,13 +31,13 @@ public final class ExportServiceImpl implements ExportService {
 
     public ExportServiceImpl(final Packer<GlyphImageData> packer, final ImageWriter imageWriter) {
         this.packer = packer;
-        this.imageWriter = imageWriter; 
+        this.imageWriter = imageWriter;
     }
 
     @Override
     public void export(
-            final Project project, 
-            final Path path, 
+            final Project project,
+            final Path path,
             final int textureWidth,
             final int textureHeight
     ) throws IOException {
@@ -97,14 +99,22 @@ public final class ExportServiceImpl implements ExportService {
     // TODO: Better rectangle generation
     private List<List<Rectangle<GlyphImageData>>> pack(
             final Project project,
-            final int textureWidth, 
+            final int textureWidth,
             final int textureHeight
     ) {
         final var settings = project.getDocumentSettings();
         final var glyphHeight = settings.ascender() + settings.descender();
         final var height = glyphHeight + 1;
-        final var rectangles = project.getGlyphs().getElements().stream().map(glyph -> {
-            final var glyphWidth = settings.isMonospaced() 
+        final var elements = new ArrayList<>(project.getGlyphs().getElements());
+
+        // Insert space
+        final var spaceSize = settings.isMonospaced()
+                ? settings.defaultWidth()
+                : settings.spaceSize() - settings.letterSpacing();
+        elements.add(new Glyph(32, spaceSize, null));
+
+        final var rectangles = elements.stream().map(glyph -> {
+            final var glyphWidth = settings.isMonospaced()
                     ? Math.min(glyph.getWidth(), settings.defaultWidth())
                     : glyph.getWidth();
             final var metadata = new GlyphImageData(glyphWidth, glyphHeight, glyphWidth, glyphHeight, 0, 0);
@@ -114,9 +124,9 @@ public final class ExportServiceImpl implements ExportService {
     }
 
     private static Stream<String> fnt(
-            final Project project, 
+            final Project project,
             final String baseName,
-            final List<List<Rectangle<GlyphImageData>>> rectangles, 
+            final List<List<Rectangle<GlyphImageData>>> rectangles,
             final Dimension imageSize
     ) {
         final var info = infoLine(project);
@@ -127,10 +137,10 @@ public final class ExportServiceImpl implements ExportService {
         final var kerningPairs = project.getKerningPairs().getElements().stream()
                 .map(ExportServiceImpl::kerningPairLine);
         return Stream.of(
-                Stream.of(info), 
-                Stream.of(common), 
-                pages, 
-                Stream.of(chars), 
+                Stream.of(info),
+                Stream.of(common),
+                pages,
+                Stream.of(chars),
                 characters,
                 kerningPairs
         ).flatMap(a -> a);
@@ -153,7 +163,7 @@ public final class ExportServiceImpl implements ExportService {
     }
 
     private static String commonLine(
-            final Project project, 
+            final Project project,
             final Dimension imageSize,
             final int pageCount
     ) {
@@ -183,7 +193,7 @@ public final class ExportServiceImpl implements ExportService {
 
     private static String characterLine(
             final DocumentSettings settings,
-            final Rectangle<GlyphImageData> rect, 
+            final Rectangle<GlyphImageData> rect,
             final int page
     ) {
         final var md = rect.getMetadata();
@@ -232,7 +242,7 @@ public final class ExportServiceImpl implements ExportService {
             final DocumentSettings settings) {
         final var pageCount = rectangles.size();
         return IntStream.range(0, pageCount)
-                .mapToObj(page -> 
+                .mapToObj(page ->
                         rectangles.get(page)
                                 .stream()
                                 .map(rect -> characterLine(settings, rect, page))

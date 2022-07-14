@@ -52,7 +52,7 @@ public record DocumentSettings(
          * Height of the capital letters, not counting accents.
          */
         public final ChangeableInt capHeight = new ChangeableInt(0);
-         /**
+        /**
          * Height of the lowercase x.
          */
         public final ChangeableInt xHeight = new ChangeableInt(0);
@@ -77,7 +77,7 @@ public record DocumentSettings(
          */
         public final ChangeableInt spaceSize = new ChangeableInt(0);
         /**
-         * The space between two adjacent letters. 
+         * The space between two adjacent letters.
          */
         public final ChangeableInt letterSpacing = new ChangeableInt(0);
         /**
@@ -305,7 +305,7 @@ public record DocumentSettings(
 
         /**
          * Copy all settings from the source.
-         * 
+         *
          * @param settings Source
          * @return This
          */
