@@ -218,7 +218,6 @@ abstract class ProjectWindowBase extends JFrame {
     }
 
     private void handleMenu(final ActionEvent e, final Action action) {
-        System.out.println(e.getSource());
         if (menuButton.isSelected() || e.getSource() != menuButton) {
             mainMenu.show(menuButton, menuButton.getWidth() + Dimensions.MEDIUM_PADDING, 0);
         } else {
