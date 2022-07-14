@@ -2,6 +2,7 @@ package pixelj.services;
 
 import static pixelj.services.Queries.PIXELJ;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,6 +16,10 @@ import java.util.Properties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import pixelj.util.FileSystemUtilities;
+import pixelj.util.FileSystemUtilities.OS;
+import pixelj.util.FileSystemUtilities.OSPair;
 
 /** Save/set the application state using the Java Properties API. */
 public final class JavaPropertiesService implements StatePersistanceService {
@@ -33,15 +38,14 @@ public final class JavaPropertiesService implements StatePersistanceService {
         properties.setProperty(EXPORT_IMAGE_WIDTH, Integer.toString(state.getExportImageWidth()));
         properties.setProperty(EXPORT_IMAGE_HEIGHT, Integer.toString(state.getExportImageHeight()));
         saveRecentItems(properties, state.getRecentItems());
-        try (var outStream = Files.newOutputStream(getPath(), StandardOpenOption.CREATE_NEW)) {
-            properties.storeToXML(outStream, "Pixelj application state");
-        }
+        saveXML(properties);
     }
 
     @Override
     public void set(final AppState state) throws IOException {
         final var properties = new Properties();
-        try (var inStream = Files.newInputStream(getPath(), StandardOpenOption.READ)) {
+        final var osPair = getPath();
+        try (var inStream = Files.newInputStream(osPair.value(), StandardOpenOption.READ)) {
             properties.loadFromXML(inStream);
         }
         state.setPreviewText(properties.getProperty(PREVIEW_TEXT, null));
@@ -92,8 +96,12 @@ public final class JavaPropertiesService implements StatePersistanceService {
         return Boolean.parseBoolean(properties.getProperty(key)) || defaultValue;
     }
 
-    private static Path getPath() {
-        return Paths.get(System.getProperty("user.home"), PIXELJ + ".properties");
+    private static OSPair<Path> getPath() throws IOException {
+        final var osPair = FileSystemUtilities.getConfigDirectory();
+        return new OSPair<>(
+                osPair.os(),
+                Paths.get(osPair.value().toAbsolutePath().toString(), PIXELJ + ".properties")
+        );
     }
 
     /**
@@ -109,5 +117,23 @@ public final class JavaPropertiesService implements StatePersistanceService {
         return Collections.unmodifiableCollection(
             objectMapper.readValue(source, new TypeReference<Collection<RecentItem>>() { })
         );
+    }
+
+    private static void saveXML(final Properties properties) throws IOException {
+        final var osPair = getPath();
+        if (osPair.os() == OS.LINUX) {
+            // .local/share may not exists
+            final var dir = new File(osPair.value().getParent().toAbsolutePath().toString());
+            if (!dir.exists()) {
+                try {
+                    dir.mkdirs();
+                } catch (SecurityException e) {
+                    throw new IOException(e);
+                }
+            }
+        }
+        try (var outStream = Files.newOutputStream(osPair.value(), StandardOpenOption.CREATE_NEW)) {
+            properties.storeToXML(outStream, "Pixelj application state");
+        }
     }
 }
