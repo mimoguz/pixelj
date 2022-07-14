@@ -1,5 +1,8 @@
 package pixelj.util;
 
+import static pixelj.util.MathUtils.even;
+import static pixelj.util.MathUtils.odd;
+
 import java.awt.image.BufferedImage;
 
 public final class Checkerboard {
@@ -28,11 +31,4 @@ public final class Checkerboard {
         return image;
     }
 
-    private static boolean even(final int a) {
-        return (a & 1) == 0;
-    }
-
-    private static boolean odd(final int a) {
-        return (a & 1) == 1;
-    }
 }

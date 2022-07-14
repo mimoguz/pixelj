@@ -8,6 +8,8 @@ import pixelj.graphics.BinaryImage;
 import pixelj.models.CompressedGlyph.MisshapenDataException;
 
 public class CompressedCharacterItemTests {
+
+    /** Compress-decompress a square image. */
     @Test
     public void testSquare() {
         final var size = 16;
@@ -26,12 +28,13 @@ public class CompressedCharacterItemTests {
             final var decompressed = compressed.decompress(size, size);
             decompressed.getImage().getDataElements(0, 0, size, size, outBytes);
         } catch (MisshapenDataException exception) {
-            throw new RuntimeException("Couldn't decompress back?");
+            throw new RuntimeException(exception);
         }
 
         assertArrayEquals(inBytes, outBytes);
     }
 
+    /** Compress-decompress a rectangular image. */
     @Test
     public void testRectangular() {
         final var width = 8;
@@ -53,7 +56,7 @@ public class CompressedCharacterItemTests {
             final var decompressed = compressed.decompress(width, height);
             decompressed.getImage().getDataElements(0, 0, width, height, outBytes);
         } catch (MisshapenDataException exception) {
-            throw new RuntimeException("Couldn't decompress back?");
+            throw new RuntimeException(exception);
         }
 
         assertArrayEquals(inBytes, outBytes);

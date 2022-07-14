@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import pixelj.util.MathUtils;
+
 // TODO: Write tests
 public final class GridPacker<M> implements Packer<M> {
 
@@ -18,7 +20,7 @@ public final class GridPacker<M> implements Packer<M> {
         final var columnsPerBox = boxWith / cellSz.width;
         final var rowsPerBox = boxHeight / cellSz.height;
         final var rectanglesPerBox = columnsPerBox * rowsPerBox;
-        final var boxCount = ceilDiv(input.size(), rectanglesPerBox);
+        final var boxCount = MathUtils.ceilDiv(input.size(), rectanglesPerBox);
         final var result = IntStream.range(0, boxCount)
                 .mapToObj(box -> input.subList(box * rectanglesPerBox,
                         Math.min((box + 1) * rectanglesPerBox, input.size())))
@@ -53,17 +55,5 @@ public final class GridPacker<M> implements Packer<M> {
                 input.get(index).moveTo(column * cellSize.width, row * cellSize.height);
             }
         }
-    }
-
-    /**
-     * I need to use Java 17 for now, becouse GitHub actions doesn't support Java 18. So, no Math.ceilDiv 
-     * 
-     * @param a Dividend
-     * @param b Divisor
-     * @return 
-     */
-    private static int ceilDiv(final int a, final int b) {
-        // TODO: Test this
-        return (int) Math.ceil((double) a / b);
     }
 }

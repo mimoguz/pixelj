@@ -119,20 +119,25 @@
       <property name="ignoreMethodNamesRegex" value="(^(get|set)[A-Z]+.*$|^main$)" />
       <property name="tokens" value="METHOD_DEF, ANNOTATION_FIELD_DEF" />
     </module>
+    <module name="SingleLineJavadoc">
+      <property name="violateExecutionOnNonTightHtml" value="true"/>
+    </module>
 
     <!-- Miscellaneous -->
     <!-- https://checkstyle.org/config_misc.html -->
+    <module name="ArrayTypeStyle" />
     <module name="AvoidEscapedUnicodeCharacters" />
+    <module name="CommentsIndentation" />
     <module name="FinalParameters" />
-    <module name="OuterTypeFilename" />
-    <module name="TodoComment">
-      <property name="format" value="(TODO)|(FIXME)" />
-    </module>
     <module name="Indentation">
       <property name="throwsIndent" value="8" />
       <property name="arrayInitIndent" value="8" />
       <property name="lineWrappingIndentation" value="8" />
       <property name="forceStrictCondition" value="false" />
+    </module>
+    <module name="OuterTypeFilename" />
+    <module name="TodoComment">
+      <property name="format" value="(TODO)|(FIXME)" />
     </module>
 
     <!-- Modifiers -->
@@ -156,6 +161,19 @@
     </module>
     <module name="ParameterName" />
     <module name="TypeName" />
+
+    <!-- Regexp -->
+    <!-- https://checkstyle.org/config_regexp.html -->
+    <module name="Regexp">
+      <property name="message" value="More than one empty line"/>
+      <property name="format" value="(\s*\r?\n){3,}"/>
+      <property name="illegalPattern" value="true"/>
+    </module>
+    <module name="Regexp">
+      <property name="message" value="Trailing whitespace"/>
+      <property name="format" value="[^\S\r\n]+\r?\n"/>
+      <property name="illegalPattern" value="true"/>
+    </module>
 
     <!-- Size Violations -->
     <!-- https://checkstyle.org/config_sizes.html -->

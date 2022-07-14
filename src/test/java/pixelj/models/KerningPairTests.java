@@ -18,18 +18,21 @@ public class KerningPairTests {
     private final KerningPair pairBA = new KerningPair(capitalB, capitalA, 0);
     private final KerningPair pairBB = new KerningPair(capitalB, capitalB, 0);
 
+    /** Value equality. */
     @Test
-    public void ABEqualsA2B() {
+    public void isABEqualA2B() {
         assertEquals(pairAB, pairA2B);
     }
 
+    /** Ordering. */
     @Test
-    public void ABIsLessThanBA() {
+    public void isABLessThanBA() {
         assertEquals(pairAB.compareTo(pairBA), -1);
     }
 
+    /** Ordering. */
     @Test
-    public void BBIsGreaterThanAC() {
+    public void isBBGreaterThanAC() {
         assertEquals(pairBB.compareTo(pairAC), 1);
     }
 }
