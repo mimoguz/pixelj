@@ -1,6 +1,7 @@
 package pixelj.actions;
 
 import java.awt.Toolkit;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOError;
@@ -24,6 +25,7 @@ import org.lwjgl.util.nfd.NativeFileDialog;
 import pixelj.models.Project;
 import pixelj.resources.Icons;
 import pixelj.resources.Resources;
+import pixelj.services.AppState;
 import pixelj.services.BasicImageWriter;
 import pixelj.services.DBFileService;
 import pixelj.services.ExportServiceImpl;
@@ -77,10 +79,12 @@ public final class MainActions {
     private final DocumentSettingsDialog documentSettingsDialog;
     private final Project project;
     private final JFrame window;
+    private final AppState appState;
 
-    public MainActions(final Project project, final JFrame window) {
+    public MainActions(final Project project, final JFrame window, final AppState appState) {
         this.project = project;
         this.window = window;
+        this.appState = appState;
 
         final var res = Resources.get();
 
@@ -168,17 +172,27 @@ public final class MainActions {
     }
 
     private void export(final ActionEvent event, final Action action) {
-        final var exportDialog = new ExportDialog(window, project.getDocumentSettings());
+        final var settings = project.getDocumentSettings();
+        final var minimumSize = new Dimension(settings.canvasWidth(), settings.canvasHeight());
+        final var defaultSize = new Dimension(
+                Math.max(settings.canvasWidth(), appState.getExportImageWidth()),
+                Math.max(settings.canvasHeight(), appState.getExportImageHeight())
+        );
+        final var exportDialog = new ExportDialog(window, defaultSize, minimumSize);
         exportDialog.setVisible(true);
         final var exportOptions = exportDialog.getResult();
         if (exportOptions == null) {
             return;
         }
 
+        appState.setExportImageWidth(exportOptions.width());
+        appState.setExportImageHeight(exportOptions.height());
+
         final var path = showSaveDialog("fnt");
         if (path == null || path.getFileName() == null) {
             return;
         }
+
         try {
             // TODO: Select layout strategy
             new ExportServiceImpl(new GridPacker<>(), new BasicImageWriter())
@@ -195,7 +209,7 @@ public final class MainActions {
 
     private void returnHome(final ActionEvent event, final Action action) {
         handleDirty();
-        Components.switchFrames((JFrame) window, new HomeWindow());
+        Components.switchFrames((JFrame) window, new HomeWindow(appState));
     }
 
     private void save(final ActionEvent event, final Action action) {
@@ -235,7 +249,7 @@ public final class MainActions {
     private Path showSaveDialog(final String filter) {
         final var outPath = MemoryUtil.memAllocPointer(1);
         try {
-            final var defaultPath = project.getPath() != null 
+            final var defaultPath = project.getPath() != null
                     ? project.getPath().toAbsolutePath().toString()
                     : null;
             if (NativeFileDialog.NFD_SaveDialog(filter, defaultPath, outPath) == NativeFileDialog.NFD_OKAY) {

@@ -1,21 +1,19 @@
 package pixelj.views.projectwindow;
 
+import java.awt.Dimension;
 import java.awt.Frame;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.SpinnerNumberModel;
 
-import pixelj.models.DocumentSettings;
-
 public final class ExportDialog extends ExportDialogBase {
 
-    private static final int DEFAULT_SIZE = 256;
     private static final int MAXIMUM_SIZE = 4096;
     private static final int STEP_SIZE = 8;
 
     private Result result;
 
-    public ExportDialog(final Frame owner, final DocumentSettings settings) {
+    public ExportDialog(final Frame owner, final Dimension defaultSize, final Dimension minimumSize) {
         super(owner);
         final var layouts = new DefaultComboBoxModel<LayoutStrategy>();
         layouts.addElement(LayoutStrategy.GRID_LAYOUT);
@@ -23,15 +21,15 @@ public final class ExportDialog extends ExportDialogBase {
         layoutStrategyIn.setSelectedIndex(0);
 
         widthIn.setModel(new SpinnerNumberModel(
-                DEFAULT_SIZE,
-                settings.canvasWidth(),
+                defaultSize.width,
+                minimumSize.width,
                 MAXIMUM_SIZE,
                 STEP_SIZE
         ));
 
         heightIn.setModel(new SpinnerNumberModel(
-                DEFAULT_SIZE,
-                settings.canvasHeight(),
+                defaultSize.height,
+                minimumSize.height,
                 MAXIMUM_SIZE,
                 STEP_SIZE
         ));

@@ -9,10 +9,10 @@ import pixelj.services.RecentItem;
 
 public class HomeWindow extends HomeWindowBase {
 
-    public HomeWindow() {
+    public HomeWindow(final AppState appState) {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        final var actions = new HomeActions(this);
+        final var actions = new HomeActions(this, appState);
         contextMenu.add(actions.removeRecentItemAction);
         contextMenu.add(actions.openContainingFolderAction);
         newProjectButton.setAction(actions.newProjectAction);
@@ -30,8 +30,7 @@ public class HomeWindow extends HomeWindowBase {
         );
         recentList.setModel(recentItems);
 
-        // Testing saving state
-        final var closeListener = new CloseListener(new AppState(), this);
+        final var closeListener = new CloseListener(appState, this);
         this.addWindowListener(closeListener);
     }
 }

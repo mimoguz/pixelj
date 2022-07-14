@@ -14,7 +14,6 @@ import pixelj.services.JavaPropertiesService;
 import pixelj.views.homewindow.HomeWindow;
 
 public final class Main {
-    private static final boolean USE_DARK_THEME = true;
 
     private Main() {
     }
@@ -33,9 +32,8 @@ public final class Main {
         } else {
             FlatLightLaf.setup();
         }
-        Resources.initialize(USE_DARK_THEME);
 
-        final var view = new HomeWindow();
+        final var view = new HomeWindow(appState);
         view.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         view.setVisible(true);
     }

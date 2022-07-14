@@ -83,7 +83,7 @@ public final class JavaPropertiesService implements StatePersistanceService {
 
     private static int getInt(final Properties properties, final String key, final int defaultValue) {
         try {
-            return Integer.parseInt(properties.getProperty(key, Integer.toString(defaultValue)));
+            return Integer.parseInt(properties.getProperty(key));
         } catch (NumberFormatException e) {
             return defaultValue;
         }

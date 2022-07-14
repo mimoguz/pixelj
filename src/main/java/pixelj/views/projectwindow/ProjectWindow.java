@@ -7,13 +7,14 @@ import pixelj.actions.Actions;
 import pixelj.actions.MainActions;
 import pixelj.models.Project;
 import pixelj.resources.Resources;
+import pixelj.services.AppState;
 import pixelj.views.projectwindow.glyphspage.GlyphsPage;
 import pixelj.views.projectwindow.kerningpairspage.KerningPairsPage;
 import pixelj.views.projectwindow.previewpage.PreviewPage;
 
 public class ProjectWindow extends ProjectWindowBase {
 
-    public ProjectWindow(final Project project) {
+    public ProjectWindow(final Project project, final AppState appState) {
         setup(
                 new GlyphsPage(project, this),
                 new KerningPairsPage(project, this),
@@ -24,7 +25,7 @@ public class ProjectWindow extends ProjectWindowBase {
         getKerningPairsPage().setEnabled(false);
         getPreviewPage().setEnabled(false);
 
-        final var mainActions = new MainActions(project, this);
+        final var mainActions = new MainActions(project, this, appState);
         Actions.registerShortcuts(mainActions.all, this.getRootPane());
         fillMenu(mainActions);
         helpButton.setAction(mainActions.showHelpAction);
@@ -36,7 +37,7 @@ public class ProjectWindow extends ProjectWindowBase {
         optionsButton.setText(null);
         optionsButton.setToolTipText(res.getString("showOptionsAction"));
 
-        final var closeListener = new CloseListener(project, mainActions.saveAction, this);
+        final var closeListener = new CloseListener(project, appState, mainActions.saveAction, this);
         this.addWindowListener(closeListener);
 
         project.titleProperty.addChangeListener((sender, value) -> setFrameTitle(value, project.isDirty()));

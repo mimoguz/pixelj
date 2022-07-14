@@ -21,6 +21,7 @@ import pixelj.models.Project;
 import pixelj.models.SortedList;
 import pixelj.resources.Icons;
 import pixelj.resources.Resources;
+import pixelj.services.AppState;
 import pixelj.services.DBFileService;
 import pixelj.views.projectwindow.ProjectWindow;
 import pixelj.views.shared.Components;
@@ -62,12 +63,14 @@ public final class HomeActions {
 
     private final JFrame window;
     private final Logger logger;
+    private final AppState appState;
 
-    public HomeActions(final JFrame window) {
+    public HomeActions(final JFrame window, final AppState appState) {
 
         logger = Logger.getLogger(this.getClass().getName());
         logger.addHandler(new ConsoleHandler());
         this.window = window;
+        this.appState = appState;
 
         final var res = Resources.get();
 
@@ -176,15 +179,15 @@ public final class HomeActions {
     }
 
     private void showProject(final Project project) {
-        Components.switchFrames(window, new ProjectWindow(project));
+        Components.switchFrames(window, new ProjectWindow(project, appState));
     }
 
     private Path showOpenDialog() {
         final var outPath = MemoryUtil.memAllocPointer(1);
         try {
             final var dialogResult = NativeFileDialog.NFD_OpenDialog(
-                    DBFileService.EXTENSION, 
-                    null, 
+                    DBFileService.EXTENSION,
+                    null,
                     outPath
             );
             if (dialogResult == NativeFileDialog.NFD_OKAY) {

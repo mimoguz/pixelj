@@ -12,11 +12,11 @@ import pixelj.services.JavaPropertiesService;
 
 public final class CloseListener extends WindowAdapter {
 
-    private final AppState state;
+    private final AppState appState;
     private final JFrame window;
 
-    public CloseListener(final AppState state, final JFrame window) {
-        this.state = state;
+    public CloseListener(final AppState appState, final JFrame window) {
+        this.appState = appState;
         this.window = window;
     }
 
@@ -25,7 +25,7 @@ public final class CloseListener extends WindowAdapter {
         // If quitting
         if (window.getDefaultCloseOperation() == WindowConstants.EXIT_ON_CLOSE) {
             try {
-                new JavaPropertiesService().save(state);
+                new JavaPropertiesService().save(appState);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
