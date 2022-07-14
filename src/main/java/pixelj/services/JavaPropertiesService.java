@@ -55,6 +55,7 @@ public final class JavaPropertiesService implements StatePersistanceService {
         state.setRecentItems(readRecentItems(properties));
     }
 
+    /** Read and parse JSON. */
     private static Collection<RecentItem> readRecentItems(final Properties properties) {
         try {
             final var source = properties.getProperty(RECENT_ITEMS, "[]");
@@ -64,6 +65,7 @@ public final class JavaPropertiesService implements StatePersistanceService {
         }
     }
 
+    /** Deserialize to JSON and write. */
     private static void saveRecentItems(final Properties properties, final List<RecentItem> recentItems) {
         final var objectMapper = new ObjectMapper();
         try {
@@ -87,15 +89,21 @@ public final class JavaPropertiesService implements StatePersistanceService {
             final String key,
             final Boolean defaultValue
     ) {
-        return Boolean.parseBoolean(properties.getProperty(key, Boolean.toString(defaultValue)))
-                || defaultValue;
+        return Boolean.parseBoolean(properties.getProperty(key)) || defaultValue;
     }
 
     private static Path getPath() {
         return Paths.get(System.getProperty("user.home"), PIXELJ + ".properties");
     }
 
-    private static Collection<RecentItem> parseRecentItems(final String source)
+    /**
+     * This is only public because I want to test it.
+     *
+     * @param source Serialized JSON
+     * @return Collection of deserialized recent items.
+     * @throws JsonProcessingException
+     */
+    public static Collection<RecentItem> parseRecentItems(final String source)
             throws JsonProcessingException {
         final var objectMapper = new ObjectMapper();
         return Collections.unmodifiableCollection(
