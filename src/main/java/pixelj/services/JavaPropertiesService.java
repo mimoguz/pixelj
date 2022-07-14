@@ -123,7 +123,7 @@ public final class JavaPropertiesService implements StatePersistanceService {
     private static void saveXML(final Properties properties) throws IOException {
         final var osPair = getPath();
         if (osPair.os() == OS.LINUX) {
-            // .local/share may not exists
+            // .local/share may not exist
             final var dir = new File(osPair.value().getParent().toAbsolutePath().toString());
             if (!dir.exists()) {
                 try {
