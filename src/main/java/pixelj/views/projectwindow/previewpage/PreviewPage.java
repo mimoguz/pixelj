@@ -5,18 +5,21 @@ import java.awt.event.ActionEvent;
 import javax.swing.JFrame;
 
 import pixelj.actions.Actions;
-import pixelj.actions.PreviewScreenActions;
+import pixelj.actions.PreviewPageActions;
 import pixelj.models.Project;
+import pixelj.services.AppState;
 
 public final class PreviewPage extends PreviewPageBase {
-    private final PreviewScreenActions actions;
+    private final PreviewPageActions actions;
 
-    public PreviewPage(final Project project, final JFrame window) {
-        actions = new PreviewScreenActions(project, textInput, container);
+    public PreviewPage(final Project project, final AppState appState, final JFrame window) {
+        actions = new PreviewPageActions(project, appState, textInput, container);
         actions.setZoom(INITIAL_ZOOM);
         Actions.registerShortcuts(actions.all, window.getRootPane());
         refreshButton.setAction(actions.refreshAction);
         clearButton.setAction(actions.clearAction);
+
+        textInput.setText(appState.getPreviewText());
 
         final var zoomSlider = zoomStrip.getSlider();
         zoomSlider.addChangeListener(e -> {

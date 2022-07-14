@@ -40,12 +40,15 @@ public final class DocumentSettingsDialog extends DocumentSettingsDialogBase {
         setupSpinner(defaultWidthIn, 0, builder.defaultWidth, builder.validDefaultWidth);
         setupSpinner(letterSpacingIn, 0, builder.letterSpacing, builder.validLetterSpacing);
         setupSpinner(spaceSizeIn, 0, builder.spaceSize, builder.validSpaceSize);
-        setupSpinner(spaceSizeIn, 0, builder.spaceSize, builder.validSpaceSize);
         setupSpinner(lineSpacingIn, 0, builder.lineSpacing, builder.validLineSpacing);
 
         isBoldIn.addChangeListener(e -> builder.isBold.setValue(isBoldIn.isSelected()));
         isItalicIn.addChangeListener(e -> builder.isItalic.setValue(isItalicIn.isSelected()));
-        isMonospacedIn.addChangeListener(e -> builder.isMonospaced.setValue(isMonospacedIn.isSelected()));
+        isMonospacedIn.addChangeListener(e -> {
+            final var isSelected = isMonospacedIn.isSelected();
+            builder.isMonospaced.setValue(isSelected);
+            spaceSizeIn.setEnabled(!isSelected);
+        });
 
         titleIn.getDocument().addDocumentListener(new DocumentListener() {
             @Override

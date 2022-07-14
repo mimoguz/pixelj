@@ -70,7 +70,7 @@ final class WriteService {
             statement.executeUpdate(Queries.CREATE_SETTINGS_TABLE);
             final var insertSettings = connection.prepareStatement(Queries.INSERT_SETTINGS);
             insertSettings.setString(
-                    SettingsColumn.TITLE.getIndex(), 
+                    SettingsColumn.TITLE.getIndex(),
                     substring(settings.title(), Queries.TITLE_LENGTH)
             );
             insertSettings.setInt(SettingsColumn.CANVAS_WIDTH.getIndex(), settings.canvasWidth());
@@ -84,10 +84,9 @@ final class WriteService {
                     settings.letterSpacing());
             insertSettings.setInt(SettingsColumn.SPACE_SIZE.getIndex(), settings.spaceSize());
             insertSettings.setInt(SettingsColumn.LINE_SPACING.getIndex(), settings.lineSpacing());
-            insertSettings.setBoolean(SettingsColumn.IS_MONOSPACED.getIndex(),
-                    settings.isMonospaced());
+            insertSettings.setBoolean(SettingsColumn.IS_MONOSPACED.getIndex(), settings.isMonospaced());
             insertSettings.setBoolean(SettingsColumn.IS_BOLD.getIndex(), settings.isBold());
-            insertSettings.setBoolean(SettingsColumn.IS_ITALIC.getIndex(), settings.isMonospaced());
+            insertSettings.setBoolean(SettingsColumn.IS_ITALIC.getIndex(), settings.isItalic());
             insertSettings.executeUpdate();
 
             connection.commit();

@@ -14,7 +14,7 @@ public final class BasicImageWriter implements ImageWriter {
     @Override
     public BufferedImage getImage(
             final Dimension imageSize,
-            final Collection<Rectangle<GlyphImageData>> rectangles, 
+            final Collection<Rectangle<GlyphImageData>> rectangles,
             final SortedList<Glyph> glyphs,
             final DocumentSettings settings
     ) {
@@ -22,16 +22,20 @@ public final class BasicImageWriter implements ImageWriter {
                 new BufferedImage(imageSize.width, imageSize.height, BufferedImage.TYPE_INT_ARGB);
         final var top = settings.canvasHeight() - settings.ascender() - settings.descender();
         for (var rect : rectangles) {
+            // Skip space
+            if (rect.getId() == 32) {
+                continue;
+            }
             final var glyph = glyphs.findHash(rect.getId());
             final var md = rect.getMetadata();
             writeRect(
-                    image, 
+                    image,
                     rect.getX(),
-                    rect.getY(), 
-                    glyph.getImage(), 
-                    md.xOffset(), 
-                    top + md.yOffset(), 
-                    md.clipWidth(), 
+                    rect.getY(),
+                    glyph.getImage(),
+                    md.xOffset(),
+                    top + md.yOffset(),
+                    md.clipWidth(),
                     md.clipHeight()
             );
         }
@@ -39,12 +43,12 @@ public final class BasicImageWriter implements ImageWriter {
     }
 
     private void writeRect(
-            final BufferedImage destination, 
+            final BufferedImage destination,
             final int destX,
             final int destY,
-            final BinaryImage source, 
-            final int sourceX, 
-            final int sourceY, 
+            final BinaryImage source,
+            final int sourceX,
+            final int sourceY,
             final int sourceWidth,
             final int sourceHeight
     ) {

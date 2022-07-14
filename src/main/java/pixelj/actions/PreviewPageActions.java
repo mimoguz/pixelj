@@ -16,9 +16,10 @@ import javax.swing.text.BadLocationException;
 import pixelj.models.Glyph;
 import pixelj.models.KerningPair;
 import pixelj.models.Project;
+import pixelj.services.AppState;
 import pixelj.views.controls.StringView;
 
-public class PreviewScreenActions {
+public class PreviewPageActions {
     private static final int SPACE = 32;
 
     /**
@@ -34,14 +35,20 @@ public class PreviewScreenActions {
      */
     public final Collection<ApplicationAction> all = new ArrayList<>();
 
-
     private final JPanel container;
     private final JTextArea input;
     private final Project project;
+    private final AppState appState;
     private int zoom = 1;
 
-    public PreviewScreenActions(final Project project, final JTextArea input, final JPanel container) {
+    public PreviewPageActions(
+            final Project project,
+            final AppState appState,
+            final JTextArea input,
+            final JPanel container
+    ) {
         this.project = project;
+        this.appState = appState;
         this.input = input;
         this.container = container;
 
@@ -79,6 +86,7 @@ public class PreviewScreenActions {
         container.revalidate();
         container.repaint();
         input.setText(null);
+        appState.setPreviewText(null);
     }
 
     private List<Glyph> getCharactersOfLine(final String line) {
@@ -128,8 +136,9 @@ public class PreviewScreenActions {
 
     private void refreshPreview(final ActionEvent event, final Action action) {
         clearContainer();
-
-        if (input.getText() != null && !input.getText().isEmpty()) {
+        final var text = input.getText();
+        appState.setPreviewText(text);
+        if (text != null && !input.getText().isEmpty()) {
             final var lines = input.getLineCount();
             for (var lineIndex = 0; lineIndex < lines; lineIndex++) {
                 try {
