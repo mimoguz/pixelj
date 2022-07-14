@@ -23,6 +23,7 @@ import javax.swing.SwingUtilities;
 import com.formdev.flatlaf.FlatClientProperties;
 
 import pixelj.resources.Resources;
+import pixelj.services.RecentItem;
 import pixelj.views.shared.Borders;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
@@ -91,9 +92,6 @@ abstract class HomeWindowBase extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    protected record RecentItem(String title, String path) {
-    }
-
     private static class RecentItemCellRenderer implements ListCellRenderer<RecentItem> {
 
         private static final String BLANK = " ";
@@ -128,8 +126,8 @@ abstract class HomeWindowBase extends JFrame {
             if (value == null) {
                 return null;
             }
-            title.setText(value.title);
-            path.setText(value.path);
+            title.setText(value.title());
+            path.setText(value.path());
             if (isSelected) {
                 title.setForeground(list.getSelectionForeground());
                 path.setForeground(list.getSelectionForeground());

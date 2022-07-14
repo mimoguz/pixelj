@@ -137,7 +137,7 @@ public final class Resources {
 
     /**
      * Initialize instance.
-     * 
+     *
      * @param useDarkTheme
      */
     public static void initialize(final boolean useDarkTheme) {

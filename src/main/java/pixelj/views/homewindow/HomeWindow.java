@@ -4,6 +4,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.WindowConstants;
 
 import pixelj.actions.HomeActions;
+import pixelj.services.RecentItem;
 
 public class HomeWindow extends HomeWindowBase {
 
