@@ -111,7 +111,7 @@ public final class ExportServiceImpl implements ExportService {
         final var spaceSize = settings.isMonospaced()
                 ? settings.defaultWidth()
                 : settings.spaceSize() - settings.letterSpacing();
-        elements.add(new Glyph(32, spaceSize, null));
+        elements.add(new Glyph(32, Math.max(spaceSize, 0), null));
 
         final var rectangles = elements.stream().map(glyph -> {
             final var glyphWidth = settings.isMonospaced()
