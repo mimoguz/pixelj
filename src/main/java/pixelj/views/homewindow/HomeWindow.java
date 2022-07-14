@@ -4,6 +4,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.WindowConstants;
 
 import pixelj.actions.HomeActions;
+import pixelj.services.AppState;
 import pixelj.services.RecentItem;
 
 public class HomeWindow extends HomeWindowBase {
@@ -28,5 +29,9 @@ public class HomeWindow extends HomeWindowBase {
             new RecentItem("Project Valhalla", "c:\\path\\to\\valhalla.ext")
         );
         recentList.setModel(recentItems);
+
+        // Testing saving state
+        final var closeListener = new CloseListener(new AppState(), this);
+        this.addWindowListener(closeListener);
     }
 }

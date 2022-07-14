@@ -20,9 +20,9 @@ public final class AppState {
     /** Use dark theme.  */
     public final ChangeableBoolean darkThemeProperty = new ChangeableBoolean();
     /** Width of the exported images. */
-    public final ChangeableInt exportImageWidthProperty = new ChangeableInt(256);
+    public final ChangeableInt exportImageWidthProperty = new ChangeableInt(DEFAULT_EXPORT_IMAGE_SIZE);
     /** Height of the exported images. */
-    public final ChangeableInt exportImageHeightProperty = new ChangeableInt(2);
+    public final ChangeableInt exportImageHeightProperty = new ChangeableInt(DEFAULT_EXPORT_IMAGE_SIZE);
     /** Recent projects. */
     public final DefaultListModel<RecentItem> recentItems = new DefaultListModel<>();
 

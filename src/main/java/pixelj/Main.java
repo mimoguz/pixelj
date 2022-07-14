@@ -1,5 +1,7 @@
 package pixelj;
 
+import java.io.IOException;
+
 import javax.swing.WindowConstants;
 
 import com.formdev.flatlaf.FlatDarkLaf;
@@ -7,6 +9,8 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 
 import pixelj.resources.Resources;
+import pixelj.services.AppState;
+import pixelj.services.JavaPropertiesService;
 import pixelj.views.homewindow.HomeWindow;
 
 public final class Main {
@@ -16,9 +20,15 @@ public final class Main {
     }
 
     public static void main(final String[] args) {
-        Resources.initialize(USE_DARK_THEME);
+        final var appState = new AppState();
+        try {
+            new JavaPropertiesService().set(appState);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Resources.initialize(appState.isDarkTheme());
         FlatLaf.registerCustomDefaultsSource("pixelj.themes");
-        if (USE_DARK_THEME) {
+        if (appState.isDarkTheme()) {
             FlatDarkLaf.setup();
         } else {
             FlatLightLaf.setup();

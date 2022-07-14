@@ -33,7 +33,8 @@ public final class JavaPropertiesService implements StatePersistanceService {
     @Override
     public void save(final AppState state) throws IOException {
         final var properties = new Properties();
-        properties.setProperty(PREVIEW_TEXT, state.getPreviewText());
+        final var previewText = state.getPreviewText() == null ? "" : state.getPreviewText();
+        properties.setProperty(PREVIEW_TEXT, previewText);
         properties.setProperty(DARK_THEME, Boolean.toString(state.isDarkTheme()));
         properties.setProperty(EXPORT_IMAGE_WIDTH, Integer.toString(state.getExportImageWidth()));
         properties.setProperty(EXPORT_IMAGE_HEIGHT, Integer.toString(state.getExportImageHeight()));
@@ -132,7 +133,7 @@ public final class JavaPropertiesService implements StatePersistanceService {
                 }
             }
         }
-        try (var outStream = Files.newOutputStream(osPair.value(), StandardOpenOption.CREATE_NEW)) {
+        try (var outStream = Files.newOutputStream(osPair.value())) {
             properties.storeToXML(outStream, "Pixelj application state");
         }
     }
