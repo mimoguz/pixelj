@@ -35,11 +35,14 @@ public final class CloseListener extends WindowAdapter {
 
     @Override
     public void windowClosing(final WindowEvent e) {
-        // TODO: DI
-        try {
-            new JavaPropertiesService().save(appState);
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        if (window.getDefaultCloseOperation() == WindowConstants.EXIT_ON_CLOSE) {
+            // If quitting
+            // TODO: DI
+            try {
+                new JavaPropertiesService().save(appState);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
 
         if (project.isDirty()) {

@@ -30,6 +30,7 @@ import pixelj.services.BasicImageWriter;
 import pixelj.services.DBFileService;
 import pixelj.services.ExportServiceImpl;
 import pixelj.services.FileService;
+import pixelj.services.JavaPropertiesService;
 import pixelj.util.packer.GridPacker;
 import pixelj.views.homewindow.HomeWindow;
 import pixelj.views.projectwindow.ExportDialog;
@@ -203,6 +204,11 @@ public final class MainActions {
     }
 
     private void quit(final ActionEvent event, final Action action) {
+        try {
+            new JavaPropertiesService().save(appState);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
         handleDirty();
         System.exit(0);
     }
