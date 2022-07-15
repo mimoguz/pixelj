@@ -4,7 +4,6 @@ import javax.swing.DefaultListSelectionModel;
 import javax.swing.JFrame;
 import javax.swing.ListSelectionModel;
 
-import pixelj.actions.Actions;
 import pixelj.actions.GlyphListActions;
 import pixelj.models.BlockRecord;
 import pixelj.models.FilteredList;
@@ -21,7 +20,7 @@ public final class ListPanel extends ListPanelBase {
     public ListPanel(final Project project, final JFrame window) {
         actions = new GlyphListActions(project, selectionModel, window);
         actions.removeGlyphsAction.setEnabled(false);
-        Actions.registerShortcuts(actions.all, window.getRootPane());
+        actions.registerShortcuts(window.getRootPane());
         addButton.setAction(actions.addGlyphsAction);
         removeButton.setAction(actions.removeGlyphsAction);
 
