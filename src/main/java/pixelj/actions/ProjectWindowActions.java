@@ -37,6 +37,7 @@ import pixelj.views.homewindow.HomeWindow;
 import pixelj.views.projectwindow.ExportDialog;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.DocumentSettingsDialog;
+import pixelj.views.shared.Help;
 import pixelj.views.shared.OptionsDialog;
 
 public final class ProjectWindowActions implements Actions {
@@ -259,7 +260,7 @@ public final class ProjectWindowActions implements Actions {
     }
 
     private void showHelp(final ActionEvent event, final Action action) {
-        logAction(action);
+        Help.showPage(Help.Page.MAIN);
     }
 
     private void showDocumentSettings(final ActionEvent event, final Action action) {

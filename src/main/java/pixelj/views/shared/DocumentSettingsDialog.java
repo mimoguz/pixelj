@@ -83,7 +83,10 @@ public final class DocumentSettingsDialog extends DocumentSettingsDialogBase {
             setVisible(false);
         });
         helpButton.setAction(
-                new ApplicationAction("documentSettingsHelpAction", (e, action) -> { })
+                new ApplicationAction(
+                        "documentSettingsHelpAction",
+                        (e, action) -> Help.showPage(Help.Page.DOCUMENT_SETTINGS)
+                )
                         .setIcon(Icons.HELP)
                         .setTooltip(Resources.get().getString("help"))
         );
