@@ -1,6 +1,8 @@
 package pixelj.actions;
 
 import java.awt.event.ActionEvent;
+import java.awt.Desktop;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
@@ -12,6 +14,7 @@ import java.util.logging.Logger;
 import javax.swing.Action;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 
 import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.util.nfd.NativeFileDialog;
@@ -23,6 +26,7 @@ import pixelj.resources.Icons;
 import pixelj.resources.Resources;
 import pixelj.services.AppState;
 import pixelj.services.DBFileService;
+import pixelj.services.RecentItem;
 import pixelj.views.projectwindow.ProjectWindow;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.DocumentSettingsDialog;
@@ -62,13 +66,19 @@ public final class HomeWindowActions implements Actions {
     private final JFrame window;
     private final Logger logger;
     private final AppState appState;
+    private final ListSelectionModel selectionModel;
 
-    public HomeWindowActions(final JFrame window, final AppState appState) {
+    public HomeWindowActions(
+            final JFrame window,
+            final AppState appState,
+            final ListSelectionModel selectionModel
+    ) {
 
         logger = Logger.getLogger(this.getClass().getName());
         logger.addHandler(new ConsoleHandler());
         this.window = window;
         this.appState = appState;
+        this.selectionModel = selectionModel;
 
         final var res = Resources.get();
 
@@ -143,6 +153,8 @@ public final class HomeWindowActions implements Actions {
         }
         try {
             // TODO: DI
+            final var project = new DBFileService().readFile(path);
+            appState.addRecentItem(new RecentItem(project.getTitle(), project.getPath()));
             showProject(new DBFileService().readFile(path));
         } catch (IOException e) {
             JOptionPane.showMessageDialog(window, e.getMessage());
@@ -150,14 +162,16 @@ public final class HomeWindowActions implements Actions {
     }
 
     private void openSelectedProject(final ActionEvent event, final Action action) {
-        showProject(
-                new Project(
-                    new SortedList<>(),
-                    new SortedList<>(),
-                    DocumentSettings.getDefault(),
-                    null
-                )
-        );
+        final var index = selectionModel.getMinSelectionIndex();
+        if (index < 0) {
+            return;
+        }
+        final var item = appState.getRecentItem(index);
+        try {
+            showProject(new DBFileService().readFile(item.path()));
+        } catch (IOException e) {
+            askRemoveItem(item);
+        }
     }
 
     private void quit(final ActionEvent event, final Action action) {
@@ -169,11 +183,26 @@ public final class HomeWindowActions implements Actions {
     }
 
     private void openFolder(final ActionEvent event, final Action action) {
-        log(action);
+        final var index = selectionModel.getMinSelectionIndex();
+        if (index < 0) {
+            return;
+        }
+        final var item = appState.getRecentItem(index);
+        final var parent = item.path().getParent();
+        final var dir = new File(parent.toAbsolutePath().toString());
+        try {
+            Desktop.getDesktop().open(dir);
+        } catch (IOException | NullPointerException e) {
+            askRemoveItem(item);
+        }
     }
 
     private void removeItem(final ActionEvent event, final Action action) {
-        log(action);
+        final var index = selectionModel.getMinSelectionIndex();
+        if (index >= 0) {
+            final var item = appState.getRecentItem(index);
+            appState.removeRecentItem(item);
+        }
     }
 
     private void showProject(final Project project) {
@@ -211,6 +240,19 @@ public final class HomeWindowActions implements Actions {
     public void setEnabled(final boolean enabled) {
         for (var action : all) {
             action.setEnabled(enabled);
+        }
+    }
+
+    private void askRemoveItem(final RecentItem item) {
+        final var response = JOptionPane.showConfirmDialog(
+                window,
+                Resources.get().getString("cantOpenRecentWarning"),
+                null,
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+        if (response == JOptionPane.OK_OPTION) {
+            appState.removeRecentItem(item);
         }
     }
 }

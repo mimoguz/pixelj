@@ -1,4 +1,6 @@
 package pixelj.services;
 
-public record RecentItem(String title, String path) {
+import java.nio.file.Path;
+
+public record RecentItem(String title, Path path) {
 }

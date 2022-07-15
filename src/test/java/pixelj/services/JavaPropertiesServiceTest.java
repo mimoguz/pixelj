@@ -3,6 +3,7 @@ package pixelj.services;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -16,9 +17,10 @@ public class JavaPropertiesServiceTest {
     /** Serialize then deserialize a list of recent items. */
     @Test
     public void recentItems() {
+        final var userHome = System.getProperty("user.home");
         final var items = List.of(
-            new RecentItem("Item 1", System.getProperty("user.home")),
-            new RecentItem("Item 2", "Path 2")
+            new RecentItem("Item 1", Paths.get(userHome, "foo.txt")),
+            new RecentItem("Item 2", Paths.get(userHome, "bar.txt"))
         );
         final var objectMapper = new ObjectMapper();
         try {

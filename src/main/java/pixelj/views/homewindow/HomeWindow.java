@@ -1,18 +1,26 @@
 package pixelj.views.homewindow;
 
-import javax.swing.DefaultListModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.DefaultListSelectionModel;
+import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
 
 import pixelj.actions.HomeWindowActions;
 import pixelj.services.AppState;
-import pixelj.services.RecentItem;
 
 public class HomeWindow extends HomeWindowBase {
 
     public HomeWindow(final AppState appState) {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        final var actions = new HomeWindowActions(this, appState);
+        recentList.setModel(appState.getRecentItemsListModel());
+        final var selectionModel = new DefaultListSelectionModel();
+        selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        recentList.setSelectionModel(selectionModel);
+
+        final var actions = new HomeWindowActions(this, appState, selectionModel);
         contextMenu.add(actions.removeRecentItemAction);
         contextMenu.add(actions.openContainingFolderAction);
         newProjectButton.setAction(actions.newProjectAction);
@@ -21,14 +29,21 @@ public class HomeWindow extends HomeWindowBase {
         toolBar.add(actions.showOptionsDialogAction);
         toolBar.add(actions.quitAction);
 
-        final var recentItems = new DefaultListModel<RecentItem>();
-        recentItems.addElement(
-                new RecentItem("Project Panama", "c:\\path\\to\\panama.ext")
+        // Open in double click
+        recentList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(final MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    actions.loadSelectedAction.actionPerformed(null);
+                }
+            }
+        });
+
+        // Disable load button if nothing is selected
+        loadSelectedButton.setEnabled(false);
+        selectionModel.addListSelectionListener(e ->
+                loadSelectedButton.setEnabled(selectionModel.getMinSelectionIndex() >= 0)
         );
-        recentItems.addElement(
-            new RecentItem("Project Valhalla", "c:\\path\\to\\valhalla.ext")
-        );
-        recentList.setModel(recentItems);
 
         final var closeListener = new CloseListener(appState, this);
         this.addWindowListener(closeListener);

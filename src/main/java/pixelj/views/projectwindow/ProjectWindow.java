@@ -3,7 +3,6 @@ package pixelj.views.projectwindow;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
-import pixelj.actions.Actions;
 import pixelj.actions.ProjectWindowActions;
 import pixelj.models.Project;
 import pixelj.resources.Resources;
@@ -40,8 +39,8 @@ public class ProjectWindow extends ProjectWindowBase {
         final var closeListener = new CloseListener(project, appState, mainActions.saveAction, this);
         this.addWindowListener(closeListener);
 
-        project.titleProperty.addChangeListener((sender, value) -> setFrameTitle(value, project.isDirty()));
-        project.dirtyProperty.addChangeListener((sender, value) -> setFrameTitle(project.getTitle(), value));
+        project.titleProperty.addChangeListener((sender, title) -> setFrameTitle(title, project.isDirty()));
+        project.dirtyProperty.addChangeListener((sender, dirty) -> setFrameTitle(project.getTitle(), dirty));
     }
 
     private void setFrameTitle(final String titleText, final boolean isDirty) {

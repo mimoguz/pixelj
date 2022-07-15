@@ -127,7 +127,7 @@ abstract class HomeWindowBase extends JFrame {
                 return null;
             }
             title.setText(value.title());
-            path.setText(value.path());
+            path.setText(value.path().toAbsolutePath().toString());
             if (isSelected) {
                 title.setForeground(list.getSelectionForeground());
                 path.setForeground(list.getSelectionForeground());
