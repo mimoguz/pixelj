@@ -29,6 +29,7 @@ public final class Help {
     public enum Page {
 
         MAIN(WIKI),
+        HOME(WIKI),
         DOCUMENT_SETTINGS(WIKI),
         EXPORT(WIKI),
         GLYPHS(WIKI),

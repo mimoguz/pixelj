@@ -26,6 +26,7 @@ public class HomeWindow extends HomeWindowBase {
         newProjectButton.setAction(actions.newProjectAction);
         loadSelectedButton.setAction(actions.loadSelectedAction);
         openProjectButton.setAction(actions.openProjectAction);
+        toolBar.add(actions.showHelpAction);
         toolBar.add(actions.showOptionsDialogAction);
         toolBar.add(actions.quitAction);
 

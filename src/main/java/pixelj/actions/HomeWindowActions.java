@@ -27,6 +27,7 @@ import pixelj.services.RecentItem;
 import pixelj.views.projectwindow.ProjectWindow;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.DocumentSettingsDialog;
+import pixelj.views.shared.Help;
 import pixelj.views.shared.OptionsDialog;
 
 public final class HomeWindowActions implements Actions {
@@ -39,6 +40,8 @@ public final class HomeWindowActions implements Actions {
     public final ApplicationAction openContainingFolderAction;
     /** Open the selected recent item. */
     public final ApplicationAction loadSelectedAction;
+    /** Show home window help page. */
+    public final ApplicationAction showHelpAction;
     /** Quit the application. */
     public final ApplicationAction quitAction;
     /** Context action: Remove the selected recent item from the list. */
@@ -73,6 +76,10 @@ public final class HomeWindowActions implements Actions {
         openProjectAction = new ApplicationAction("openProjectAction", this::openProject)
                 .withText();
 
+        showHelpAction = new ApplicationAction("showHomeHelpAction", this::showHelp)
+                .setTooltip(res.getString("help"))
+                .setIcon(Icons.HELP, res.colors.icon(), res.colors.disabledIcon());
+
         quitAction = new ApplicationAction("quitAction", this::quit)
                 .setTooltip(res.getString("quit"))
                 .setIcon(Icons.EXIT, res.colors.icon(), res.colors.disabledIcon());
@@ -92,6 +99,7 @@ public final class HomeWindowActions implements Actions {
         all = List.of(
                 newProjectAction,
                 loadSelectedAction,
+                showHelpAction,
                 quitAction,
                 openProjectAction,
                 showOptionsDialogAction
@@ -167,6 +175,10 @@ public final class HomeWindowActions implements Actions {
         if (result != null) {
             appState.setDarkTheme(result);
         }
+    }
+
+    private void showHelp(final ActionEvent event, final Action action) {
+        Help.showPage(Help.Page.HOME);
     }
 
     private void openFolder(final ActionEvent event, final Action action) {
