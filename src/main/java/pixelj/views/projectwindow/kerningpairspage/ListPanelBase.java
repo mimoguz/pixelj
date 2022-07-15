@@ -23,9 +23,7 @@ import pixelj.views.shared.Borders;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 
-/**
- * List panel design.
- */
+/** List panel design. */
 abstract class ListPanelBase extends JPanel {
 
     private static final String LIST_HEADER_STYLE = "h4";

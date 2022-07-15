@@ -42,7 +42,7 @@ public final class Rectangle<M> {
 
     /**
      * Move the rectangle.
-     * 
+     *
      * @param destX Destination x coordinate
      * @param destY Destination y coordinate
      */

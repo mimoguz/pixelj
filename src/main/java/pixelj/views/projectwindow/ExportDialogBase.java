@@ -24,9 +24,7 @@ import pixelj.views.shared.Borders;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 
-/**
- * Export dialog design.
- */
+/** Export dialog design. */
 abstract class ExportDialogBase extends JDialog {
 
     protected final JButton exportButton = new JButton(Resources.get().getString("export"));
@@ -50,7 +48,7 @@ abstract class ExportDialogBase extends JDialog {
         inputPanel.setBorder(Borders.LARGE_EMPTY);
         final var res = Resources.get();
         final var cons = new GridBagConstraints();
-        final var rowHeightDelta = Dimensions.SPINNER_SIZE.height 
+        final var rowHeightDelta = Dimensions.SPINNER_SIZE.height
                 - layoutStrategyIn.getPreferredSize().height;
         cons.fill = GridBagConstraints.NONE;
 

@@ -26,13 +26,10 @@ import pixelj.views.controls.ZoomStrip;
 import pixelj.views.shared.Borders;
 import pixelj.views.shared.Dimensions;
 
-/**
- * PainterPanel design.
- */
+/**  PainterPanel design. */
 public abstract class PainterPanelBase extends JPanel {
-    /**
-     * Focus border width.
-     */
+
+    /** Focus border width. */
     private static final int BW = 4;
 
     protected final GlyphPainter painter = new GlyphPainter(Resources.get().colors.disabledIcon());

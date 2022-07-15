@@ -35,13 +35,9 @@ public final class Resources {
     private static final String BASE = "pixelj/resources/";
     private static Resources instance;
 
-    /**
-     * List of application icons for different sizes.
-     */
+    /** List of application icons for different sizes. */
     public final List<Image> applicationIcons;
-    /**
-     * Theme colors.
-     */
+    /** Theme colors. */
     public final Colors colors;
 
     private final Collection<BlockRecord> blocks;

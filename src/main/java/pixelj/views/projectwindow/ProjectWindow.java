@@ -4,7 +4,7 @@ import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
 import pixelj.actions.Actions;
-import pixelj.actions.MainActions;
+import pixelj.actions.ProjectWindowActions;
 import pixelj.models.Project;
 import pixelj.resources.Resources;
 import pixelj.services.AppState;
@@ -25,8 +25,8 @@ public class ProjectWindow extends ProjectWindowBase {
         getKerningPairsPage().setEnabled(false);
         getPreviewPage().setEnabled(false);
 
-        final var mainActions = new MainActions(project, this, appState);
-        Actions.registerShortcuts(mainActions.all, this.getRootPane());
+        final var mainActions = new ProjectWindowActions(project, this, appState);
+        mainActions.registerShortcuts(getRootPane());
         fillMenu(mainActions);
         helpButton.setAction(mainActions.showHelpAction);
         optionsButton.setAction(mainActions.showOptionsAction);
@@ -52,7 +52,7 @@ public class ProjectWindow extends ProjectWindowBase {
         }
     }
 
-    private void fillMenu(final MainActions actions) {
+    private void fillMenu(final ProjectWindowActions actions) {
         mainMenu.add(actions.saveAction);
         mainMenu.add(actions.saveAsAction);
         mainMenu.add(actions.exportAction);

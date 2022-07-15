@@ -21,11 +21,8 @@ import pixelj.models.Project;
 import pixelj.resources.Resources;
 import pixelj.views.projectwindow.glyphspage.AddDialog;
 
-public final class GlyphListActions {
-    /**
-     * A collection of all actions.
-     */
-    public final Collection<ApplicationAction> all;
+public final class GlyphListActions implements Actions {
+
     /**
      * Display a dialog to add new glyphs to the project.
      */
@@ -35,6 +32,7 @@ public final class GlyphListActions {
      */
     public final ApplicationAction removeGlyphsAction;
 
+    private final Collection<ApplicationAction> all;
     private Dimension canvasSize;
     private int defaultWidth;
     private boolean enabled = true;
@@ -71,7 +69,7 @@ public final class GlyphListActions {
             defaultWidth = settings.defaultWidth();
         });
 
-        selectionModel.addListSelectionListener(e -> 
+        selectionModel.addListSelectionListener(e ->
                 removeGlyphsAction.setEnabled(selectionModel.getMinSelectionIndex() >= 0)
         );
     }
@@ -102,18 +100,6 @@ public final class GlyphListActions {
         this.defaultWidth = defaultCharacterWidth;
     }
 
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    /**
-     * @param value Is enabled
-     */
-    public void setEnabled(final boolean value) {
-        enabled = value;
-        Actions.setEnabled(all, enabled);
-    }
-
     private void showAddDialog(final ActionEvent event, final Action action) {
         addDialog.setVisible(true);
         final var result = addDialog.getResult();
@@ -142,7 +128,7 @@ public final class GlyphListActions {
         final var removed = Arrays.stream(indices).mapToObj(listModel::getElementAt).toList();
         final var affected = countAffectedKerningPairs(removed);
         final var res = Resources.get();
-        final var message = affected == 0 
+        final var message = affected == 0
                 ? res.formatString("removingGlyphsMessage", indices.length)
                 : res.formatString("removingGlyphsAndKerningPairsMessage", indices.length, affected);
 
@@ -161,5 +147,17 @@ public final class GlyphListActions {
         // Project model should take care of removing the affected kerning pairs.
         listModel.removeAll(removed);
         project.setDirty(true);
+    }
+
+    @Override
+    public Collection<ApplicationAction> getAll() {
+        return all;
+    }
+
+    @Override
+    public void setEnabled(final boolean enabled) {
+        for (var action : all) {
+            action.setEnabled(enabled);
+        }
     }
 }

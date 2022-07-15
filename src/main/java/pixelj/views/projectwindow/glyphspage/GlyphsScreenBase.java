@@ -4,9 +4,7 @@ import javax.swing.JSplitPane;
 
 import pixelj.views.shared.Dimensions;
 
-/**
- * GlyphsScreen design.
- */
+/** GlyphsScreen design. */
 abstract class GlyphsScreenBase extends JSplitPane {
     protected final ListPanel listPanel;
     protected final PainterPanel painterPanel;
@@ -20,13 +18,11 @@ abstract class GlyphsScreenBase extends JSplitPane {
         setResizeWeight(1.0);
     }
 
-    /**
-     * This will enable/disable the listPanel and painterPanel too.
-     */
+    /** This will enable/disable the listPanel and painterPanel too. */
     @Override
-    public void setEnabled(final boolean value) {
-        listPanel.setEnabled(value);
-        painterPanel.setEnabled(value);
-        super.setEnabled(value);
+    public void setEnabled(final boolean enabled) {
+        listPanel.setEnabled(enabled);
+        painterPanel.setEnabled(enabled);
+        super.setEnabled(enabled);
     }
 }

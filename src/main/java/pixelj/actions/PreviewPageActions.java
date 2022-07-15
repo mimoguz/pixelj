@@ -19,7 +19,7 @@ import pixelj.models.Project;
 import pixelj.services.AppState;
 import pixelj.views.controls.StringView;
 
-public class PreviewPageActions {
+public final class PreviewPageActions implements Actions {
     private static final int SPACE = 32;
 
     /**
@@ -30,11 +30,8 @@ public class PreviewPageActions {
      * Refresh the preview panel.
      */
     public final ApplicationAction refreshAction;
-    /**
-     * Collection of all actions.
-     */
-    public final Collection<ApplicationAction> all = new ArrayList<>();
 
+    private final Collection<ApplicationAction> all = new ArrayList<>();
     private final JPanel container;
     private final JTextArea input;
     private final Project project;
@@ -61,10 +58,7 @@ public class PreviewPageActions {
         all.add(refreshAction);
     }
 
-    /**
-     * @param value Zoom value
-     */
-    public final void setZoom(final int value) {
+    public void setZoom(final int value) {
         zoom = value;
         for (final var child : container.getComponents()) {
             if (child instanceof final StringView view) {
@@ -72,6 +66,18 @@ public class PreviewPageActions {
             }
         }
         container.revalidate();
+    }
+
+    @Override
+    public Collection<ApplicationAction> getAll() {
+        return all;
+    }
+
+    @Override
+    public void setEnabled(final boolean enabled) {
+        for (var action : all) {
+            action.setEnabled(enabled);
+        }
     }
 
     private void clearContainer() {

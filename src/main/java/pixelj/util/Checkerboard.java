@@ -6,6 +6,7 @@ import static pixelj.util.MathUtils.odd;
 import java.awt.image.BufferedImage;
 
 public final class Checkerboard {
+
     private static final int BLACK_SQUARE = 0x10_00_00_00;
     private static final int WHITE_SQUARE = 0x30_ff_ff_ff;
 

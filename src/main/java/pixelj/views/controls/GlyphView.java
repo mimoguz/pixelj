@@ -25,6 +25,7 @@ public class GlyphView extends JPanel
         implements
         Changeable<GlyphView, GlyphView.ViewChangeEvent, GlyphView.ViewChangeListener>,
         Detachable {
+
     private static final Color SHADE = new Color(242, 27, 63, 50);
     private final Color backgroundColor;
     private final ChangeableInt.Listener characterWidthChangeListener;
@@ -32,13 +33,9 @@ public class GlyphView extends JPanel
     private final ArrayList<Line> lines = new ArrayList<>();
     private final Set<ViewChangeListener> listeners = new HashSet<>();
     private boolean drawShade;
-    /**
-     * May be null.
-     */
+    /** May be null. */
     private Glyph model;
-    /**
-     * May be null.
-     */
+    /** May be null. */
     private Image overlay;
     private boolean showLines;
     private boolean showOverlay;
@@ -60,10 +57,13 @@ public class GlyphView extends JPanel
         };
     }
 
-    public void addLines(final Line... lines) {
-        Arrays.stream(lines).forEach(line -> {
+    /**
+     * @param newLines The lines to be added
+     */
+    public final void addLines(final Line... newLines) {
+        Arrays.stream(newLines).forEach(line -> {
             if (line != null) {
-                this.lines.add(line);
+                lines.add(line);
             }
         });
     }

@@ -18,9 +18,7 @@ import pixelj.views.shared.Borders;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 
-/**
- * Editor panel design.
- */
+/** Editor panel design. */
 abstract class EditorPanelBase extends JPanel {
 
     protected static final int INITIAL_ZOOM = 4;

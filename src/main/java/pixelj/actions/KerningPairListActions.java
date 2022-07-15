@@ -16,7 +16,7 @@ import pixelj.models.Project;
 import pixelj.resources.Resources;
 import pixelj.views.projectwindow.kerningpairspage.AddDialog;
 
-public class KerningPairListActions {
+public final class KerningPairListActions implements Actions {
     /**
      * Show add kerning pair dialog.
      */
@@ -25,11 +25,8 @@ public class KerningPairListActions {
      * Show remove kerning pairs dialog.
      */
     public final ApplicationAction showRemoveDialogAction;
-    /**
-     * Collection of all actions.
-     */
-    public final Collection<ApplicationAction> all;
 
+    private final Collection<ApplicationAction> all;
     private final AddDialog addDialog;
     private final Project project;
     private final JFrame window;
@@ -59,6 +56,17 @@ public class KerningPairListActions {
         );
 
         all = List.of(showAddDialogAction, showRemoveDialogAction);
+    }
+
+    @Override
+    public Collection<ApplicationAction> getAll() {
+        return all;
+    }
+
+    @Override
+    public void setEnabled(final boolean enabled) {
+        showAddDialogAction.setEnabled(enabled);
+        showRemoveDialogAction.setEnabled(enabled && selectionModel.getMaxSelectionIndex() >= 0);
     }
 
     private void showAddDialog(final ActionEvent event, final Action action) {

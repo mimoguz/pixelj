@@ -26,9 +26,7 @@ import pixelj.views.shared.Borders;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 
-/**
- * Preview screen design.
- */
+/** Preview screen design. */
 abstract class PreviewPageBase extends JPanel {
 
     protected static final int INITIAL_ZOOM = 4;
@@ -112,23 +110,24 @@ abstract class PreviewPageBase extends JPanel {
     private JPopupMenu makeContextMenu() {
         final var res = Resources.get();
         final var contextMenu = new JPopupMenu();
+        final var menuShortcutMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
         contextMenu.add(
                 new ApplicationAction("previewCutAction", (event, action) -> textInput.cut())
                         .setIcon(Icons.CLIPBOARD_CUT, res.colors.icon(), res.colors.disabledIcon())
                         .setTextKey("cut")
-                        .setAccelerator(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx())
+                        .setAccelerator(KeyEvent.VK_X, menuShortcutMask)
         );
         contextMenu.add(
                 new ApplicationAction("previewCopyAction", (event, action) -> textInput.copy())
                         .setIcon(Icons.CLIPBOARD_COPY, res.colors.icon(), res.colors.disabledIcon())
                         .setTextKey("copy")
-                        .setAccelerator(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx())
+                        .setAccelerator(KeyEvent.VK_C, menuShortcutMask)
         );
         contextMenu.add(
                 new ApplicationAction("previewPasteAction", (event, action) -> textInput.paste())
                         .setIcon(Icons.CLIPBOARD_PASTE, res.colors.icon(), res.colors.disabledIcon())
                         .setTextKey("paste")
-                        .setAccelerator(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx())
+                        .setAccelerator(KeyEvent.VK_V, menuShortcutMask)
         );
         return contextMenu;
     }

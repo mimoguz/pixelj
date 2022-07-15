@@ -3,7 +3,7 @@ package pixelj.views.homewindow;
 import javax.swing.DefaultListModel;
 import javax.swing.WindowConstants;
 
-import pixelj.actions.HomeActions;
+import pixelj.actions.HomeWindowActions;
 import pixelj.services.AppState;
 import pixelj.services.RecentItem;
 
@@ -12,7 +12,7 @@ public class HomeWindow extends HomeWindowBase {
     public HomeWindow(final AppState appState) {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        final var actions = new HomeActions(this, appState);
+        final var actions = new HomeWindowActions(this, appState);
         contextMenu.add(actions.removeRecentItemAction);
         contextMenu.add(actions.openContainingFolderAction);
         newProjectButton.setAction(actions.newProjectAction);

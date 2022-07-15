@@ -38,9 +38,7 @@ import pixelj.views.shared.Borders;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 
-/**
- * Project window design.
- */
+/** Project window design. */
 abstract class ProjectWindowBase extends JFrame {
     protected final JTabbedPane content = new JTabbedPane();
     protected final JToggleButton menuButton = new JToggleButton();
@@ -120,19 +118,21 @@ abstract class ProjectWindowBase extends JFrame {
 
         final Collection<ApplicationAction> tabActions = List.of(
                 new ApplicationAction(
-                        "projectViewTab0Action", 
+                        "projectViewTab0Action",
                         (event, action) -> content.setSelectedIndex(0)
                 ).setAccelerator(KeyEvent.VK_1, ActionEvent.ALT_MASK),
                 new ApplicationAction(
-                        "projectViewTab1Action", 
+                        "projectViewTab1Action",
                         (event, action) -> content.setSelectedIndex(1)
                 ).setAccelerator(KeyEvent.VK_2, ActionEvent.ALT_MASK),
                 new ApplicationAction(
-                        "projectViewTab2Action", 
+                        "projectViewTab2Action",
                         (event, action) -> content.setSelectedIndex(2)
                 ).setAccelerator(KeyEvent.VK_3, ActionEvent.ALT_MASK)
         );
-        Actions.registerShortcuts(tabActions, content);
+        for (var action : tabActions) {
+            Components.registerShortcut(content, action);
+        }
 
         content.addChangeListener(e -> setCurrentScreen(content.getSelectedIndex()));
     }
@@ -141,13 +141,15 @@ abstract class ProjectWindowBase extends JFrame {
         final var leadingContainer = new JPanel();
         final var res = Resources.get();
 
+        // Show menu using a shortcut or the menu button
         final var menuKey = KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.ALT_DOWN_MASK);
         final var menuAction = new ApplicationAction("menuAction", this::handleMenu)
                 .setTooltipWithAccelerator(res.getString("menuButtonActionTooltip"), menuKey)
                 .setIcon(Icons.BURGER, res.colors.accent(), res.colors.disabledIcon());
         menuButton.setAction(menuAction);
-        Actions.registerShortcuts(List.of(menuAction), getRootPane());
+        Components.registerShortcut(getRootPane(), menuAction);
 
+        // Deselect menu button when the menu is becoming invisible
         mainMenu.addPopupMenuListener(new PopupMenuListener() {
             @Override
             public void popupMenuCanceled(final PopupMenuEvent e) {
@@ -194,7 +196,6 @@ abstract class ProjectWindowBase extends JFrame {
 
         content.putClientProperty(FlatClientProperties.TABBED_PANE_TRAILING_COMPONENT, trailingContainer);
     }
-
 
     private void applyUITweaks() {
         ToolTipManager.sharedInstance().setInitialDelay(100);

@@ -24,9 +24,7 @@ import pixelj.views.shared.Dimensions;
 import pixelj.views.shared.GlyphCell;
 import pixelj.views.shared.GlyphCellRenderer;
 
-/**
- * Add dialog design.
- */
+/**  Add dialog design. */
 public abstract class AddDialogBase extends JDialog {
 
     protected final JComboBox<BlockRecord> filterBox = new SearchableComboBox<>(Resources.get().getBlocks());
@@ -125,9 +123,9 @@ public abstract class AddDialogBase extends JDialog {
         setResizable(true);
     }
 
-     /**
-     *  @param visible Is visible. Note that since this dialog is modal, passing true here block the caller.
-     */
+    /**
+    * @param visible Is visible. Note that since this dialog is modal, passing true here block the caller.
+    */
     @Override
     public void setVisible(final boolean visible) {
         if (visible) {

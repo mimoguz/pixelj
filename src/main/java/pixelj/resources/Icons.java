@@ -1,6 +1,7 @@
 package pixelj.resources;
 
 public enum Icons {
+
     BURGER(0xe926),
     CLIPBOARD_COPY(0xe900),
     CLIPBOARD_CUT(0xe901),

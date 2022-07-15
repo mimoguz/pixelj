@@ -3,6 +3,7 @@ package pixelj.resources;
 import java.awt.Color;
 
 public interface Colors {
+
     /**
      * @return Accent color.
      */

@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public final class ChangeableInt {
+
     private final Set<Listener> listeners = new HashSet<>();
     private int value;
 

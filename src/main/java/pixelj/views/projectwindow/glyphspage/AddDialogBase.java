@@ -22,15 +22,11 @@ import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 import pixelj.views.shared.ScalarCellRenderer;
 
-/**
- * AddDialog design.
- */
+/** AddDialog design. */
 abstract class AddDialogBase extends JDialog {
 
     protected final JList<ScalarRecord> scalarList = new JList<>();
-    /**
-     * Filter scalars by block.
-     */
+    /**  Filter scalars by block. */
     protected final JComboBox<BlockRecord> filterBox = new SearchableComboBox<>(
             Resources.get().getBlocks().stream().skip(1).toList()
     );
@@ -80,9 +76,7 @@ abstract class AddDialogBase extends JDialog {
         setResizable(true);
     }
 
-    /**
-     * When overridden, super.setVisible should be called last.
-     * */
+    /** When overridden, super.setVisible should be called last. */
     @Override
     public void setVisible(final boolean visible) {
         if (visible) {

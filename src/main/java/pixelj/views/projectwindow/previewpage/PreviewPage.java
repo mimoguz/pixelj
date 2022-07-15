@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JFrame;
 
-import pixelj.actions.Actions;
 import pixelj.actions.PreviewPageActions;
 import pixelj.models.Project;
 import pixelj.services.AppState;
@@ -15,7 +14,7 @@ public final class PreviewPage extends PreviewPageBase {
     public PreviewPage(final Project project, final AppState appState, final JFrame window) {
         actions = new PreviewPageActions(project, appState, textInput, container);
         actions.setZoom(INITIAL_ZOOM);
-        Actions.registerShortcuts(actions.all, window.getRootPane());
+        actions.registerShortcuts(window.getRootPane());
         refreshButton.setAction(actions.refreshAction);
         clearButton.setAction(actions.clearAction);
 
@@ -35,18 +34,16 @@ public final class PreviewPage extends PreviewPageBase {
         });
     }
 
-    /**
-     * Redraw preview.
-     */
+    /** Redraw preview. */
     public void refresh() {
         actions.refreshAction.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, ""));
     }
 
     @Override
-    public void setEnabled(final boolean value) {
-        super.setEnabled(value);
-        Actions.setEnabled(actions.all, value);
-        if (value) {
+    public void setEnabled(final boolean enabled) {
+        super.setEnabled(enabled);
+        actions.setEnabled(enabled);
+        if (enabled) {
             refresh();
         }
     }

@@ -23,6 +23,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 
 import pixelj.resources.Resources;
 
+/** Document settings dialog design. */
 abstract class DocumentSettingsDialogBase extends JDialog {
 
     protected final JButton applyButton;

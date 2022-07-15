@@ -8,7 +8,7 @@ import javax.swing.ListCellRenderer;
 import pixelj.models.ScalarRecord;
 import pixelj.resources.Resources;
 
-public class ScalarCellRenderer implements ListCellRenderer<ScalarRecord> {
+public final class ScalarCellRenderer implements ListCellRenderer<ScalarRecord> {
     private final ScalarCell component = new ScalarCell();
 
     public ScalarCellRenderer() {

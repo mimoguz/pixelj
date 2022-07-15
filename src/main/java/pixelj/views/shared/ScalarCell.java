@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
-public class ScalarCell extends JPanel {
+public final class ScalarCell extends JPanel {
     private final JLabel letter = new JLabel();
     private final JLabel subtitle = new JLabel();
     private final JLabel title = new JLabel();

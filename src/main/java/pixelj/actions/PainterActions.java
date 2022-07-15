@@ -28,87 +28,47 @@ import pixelj.util.ChangeableValue;
 import pixelj.views.controls.GlyphPainter;
 import pixelj.views.controls.painter.Painter;
 
-/**
- * In sake of simplicity, all actions assume painter is not null when they are
- * called.
- */
-public class PainterActions {
-    
+/** In sake of simplicity, all actions assume painter is not null when they are  called. */
+public final class PainterActions implements Actions {
+
     private static final int MAX_UNDO = 64;
 
-    /**
-     * Copy image to both the application and the system clipboards.
-     */
+    /** Copy image to both the application and the system clipboards. */
     public final ApplicationAction clipboardCopyAction;
-    /**
-     * Cut image, put it to both the application and the system clipboards.
-     */
+    /** Cut image, put it to both the application and the system clipboards. */
     public final ApplicationAction clipboardCutAction;
-    /**
-     * Paste from the system clipboard. This is relatively costly, and may fail.
-     */
+    /** Paste from the system clipboard. This is relatively costly, and may fail. */
     public final ApplicationAction clipboardImportAction;
-    /**
-     * Paste from the application clipboard.
-     */
+    /** Paste from the application clipboard. */
     public final ApplicationAction clipboardPasteAction;
-    /**
-     * Clear the image contents.
-     */
+    /** Clear the image contents. */
     public final ApplicationAction eraseAction;
-    /**
-     * Flip the image horizontally.
-     */
+    /** Flip the image horizontally. */
     public final ApplicationAction flipHorizontallyAction;
-    /**
-     * Flip the image vertically.
-     */
+    /** Flip the image vertically. */
     public final ApplicationAction flipVerticallyAction;
-    /**
-     * Redo.
-     */
+    /** Redo. */
     public final ApplicationAction historyRedoAction;
-    /**
-     * Undo.
-     */
+    /** Undo. */
     public final ApplicationAction historyUndoAction;
-    /**
-     * Move image contents one pixel down. The overflowing line will be lost.
-     */
+    /** Move image contents one pixel down. The overflowing line will be lost. */
     public final ApplicationAction moveDownAction;
-    /**
-     * Move image contents one pixel left. The O-overflowing line will be lost.
-     */
+    /** Move image contents one pixel left. The O-overflowing line will be lost. */
     public final ApplicationAction moveLeftAction;
-    /**
-     * Move image contents one pixel right. The overflowing line will be lost.
-     */
+    /** Move image contents one pixel right. The overflowing line will be lost. */
     public final ApplicationAction moveRightAction;
-    /**
-     * Move image contents one pixel up. The overflowing line will be lost.
-     */
+    /** Move image contents one pixel up. The overflowing line will be lost. */
     public final ApplicationAction moveUpAction;
-    /**
-     * Rotate the image 90 degrees left.
-     */
+    /** Rotate the image 90 degrees left. */
     public final ApplicationAction rotateLeftAction;
-    /**
-     * Rotate the image 90 right left.
-     */
+    /** Rotate the image 90 right left. */
     public final ApplicationAction rotateRightAction;
-    /**
-     * When an image modified, its previous state will be sent to this consumer.
-     */
+    /** When an image modified, its previous state will be sent to this consumer. */
     public final Consumer<Snapshot> snapshotConsumer;
-    /**
-     * Toggle horizontal symmetry.
-     */
+    /** Toggle horizontal symmetry. */
     public final ApplicationAction symmetryToggleAction;
-    /**
-     * Collection of all actions.
-     */
-    public final Collection<ApplicationAction> all = new ArrayList<>();
-    
+
+    private final Collection<ApplicationAction> all = new ArrayList<>();
     private boolean enabled = true;
     private GlyphPainter painter;
     private final ArrayList<Snapshot> undoBuffer = new ArrayList<>(MAX_UNDO);
@@ -144,10 +104,7 @@ public class PainterActions {
         historyRedoAction = new ApplicationAction("painterHistoryRedoAction", this::redo)
                 .setTooltipWithAccelerator(
                         res.getString("painterHistoryRedoActionTooltip"),
-                        KeyStroke.getKeyStroke(
-                                KeyEvent.VK_Y,
-                                menuShortcutMask
-                        )
+                        KeyStroke.getKeyStroke(KeyEvent.VK_Y, menuShortcutMask)
                 )
                 .setIcon(Icons.HISTORY_REDO, res.colors.icon(), res.colors.disabledIcon());
 
@@ -161,10 +118,7 @@ public class PainterActions {
         clipboardCopyAction = new ApplicationAction("painterClipboardCopyAction", this::copy)
                 .setTooltipWithAccelerator(
                         res.getString("painterClipboardCopyActionTooltip"),
-                        KeyStroke.getKeyStroke(
-                                KeyEvent.VK_C,
-                                menuShortcutMask
-                        )
+                        KeyStroke.getKeyStroke(KeyEvent.VK_C, menuShortcutMask)
                 )
                 .setIcon(Icons.CLIPBOARD_COPY, res.colors.icon(), res.colors.disabledIcon());
 
@@ -253,10 +207,10 @@ public class PainterActions {
 
         all.addAll(
                 List.of(
-                        historyUndoAction, historyRedoAction, clipboardCutAction, clipboardCopyAction, 
-                        clipboardPasteAction, clipboardImportAction, flipVerticallyAction, 
-                        flipHorizontallyAction, rotateLeftAction, rotateRightAction, moveLeftAction, 
-                        moveRightAction, moveUpAction, moveDownAction, eraseAction, symmetryToggleAction 
+                        historyUndoAction, historyRedoAction, clipboardCutAction, clipboardCopyAction,
+                        clipboardPasteAction, clipboardImportAction, flipVerticallyAction,
+                        flipHorizontallyAction, rotateLeftAction, rotateRightAction, moveLeftAction,
+                        moveRightAction, moveUpAction, moveDownAction, eraseAction, symmetryToggleAction
                 )
         );
 
@@ -268,6 +222,28 @@ public class PainterActions {
     public PainterActions(final GlyphPainter painter) {
         this();
         this.painter = painter;
+    }
+
+    public Painter getPainter() {
+        return painter;
+    }
+
+    public void setPainter(final GlyphPainter value) {
+        painter = value;
+    }
+
+    @Override
+    public Collection<ApplicationAction> getAll() {
+        return all;
+    }
+
+    @Override
+    public void setEnabled(final boolean enabled) {
+        this.enabled = enabled;
+        for (var action : all) {
+            action.setEnabled(enabled);
+        }
+        clipboardPasteAction.setEnabled(enabled && clipboard.getValue() != null);
     }
 
     private void act(final Consumer<GlyphPainter> consumer) {
@@ -315,10 +291,6 @@ public class PainterActions {
         painter.erase();
     }
 
-    public final Painter getPainter() {
-        return painter;
-    }
-
     private void importClip(final ActionEvent event, final Action action) {
         final var model = painter.getModel();
         if (model == null) {
@@ -344,25 +316,6 @@ public class PainterActions {
                 // Ignore errors
             }
         }
-    }
-
-    public final boolean isEnabled() {
-        return enabled;
-    }
-
-    /**
-     * Enable or disable all actions.
-     * 
-     * @param value Is enabled
-     */
-    public final void setEnabled(final boolean value) {
-        enabled = value;
-        Actions.setEnabled(this.all, enabled);
-        clipboardPasteAction.setEnabled(enabled && clipboard.getValue() != null);
-    }
-
-    public final void setPainter(final GlyphPainter value) {
-        painter = value;
     }
 
     private void paste(final ActionEvent event, final Action action) {

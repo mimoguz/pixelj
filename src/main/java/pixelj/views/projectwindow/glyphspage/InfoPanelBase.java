@@ -20,56 +20,32 @@ import pixelj.resources.Resources;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 
-/**
- * InfoPanel design.
- */
+/** InfoPanel design. */
 public abstract class InfoPanelBase extends JPanel {
-    /**
-     * Blank string.
-     */
+    /** Blank string. */
     protected static final String BLANK = " ";
-    /**
-     * Subtitle class property.
-     */
+    /** Subtitle class property. */
     protected static final String SUBTITLE_STYLE = "small";
-    /**
-     * Glyph reference font size.
-     */
+    /** Glyph reference font size. */
     protected static final int GLYPH_LABEL_SIZE = 120;
 
     private static final Color LABEL_FOREGROUND = new Color(50, 55, 65);
 
-    /**
-     * Glyph width input.
-     */
+    /** Glyph width input. */
     protected final JSpinner widthSpinner = new JSpinner();
-    /**
-     * Glyph reference.
-     */
+    /** Glyph reference. */
     protected final JLabel glyphLabel = new JLabel(BLANK);
-    /**
-     * Glyph name.
-     */
+    /** Glyph name. */
     protected final JLabel nameLabel = new JLabel(BLANK);
-    /**
-     * Code point.
-     */
+    /** Code point. */
     protected final JLabel codePointLabel = new JLabel(BLANK);
-    /**
-     * Block name.
-     */
+    /** Block name. */
     protected final JLabel blockNameLabel = new JLabel(BLANK);
-    /**
-     * Width spinner label.
-     */
+    /** Width spinner label. */
     protected final JLabel widthLabel = new JLabel(Resources.get().getString("widthSpinnerLabel"));
-    /**
-     * Grid toggle.
-     */
+    /** Grid toggle. */
     protected final JCheckBox showGridCheckBox = new JCheckBox(Resources.get().getString("showGrid"));
-    /**
-     * Guide toggle.
-     */
+    /** Guide toggle. */
     protected final JCheckBox showGuidesCheckBox = new JCheckBox(Resources.get().getString("showGuides"));
 
     public InfoPanelBase() {

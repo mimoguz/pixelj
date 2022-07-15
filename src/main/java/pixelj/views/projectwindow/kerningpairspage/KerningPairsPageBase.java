@@ -4,6 +4,7 @@ import javax.swing.JSplitPane;
 
 import pixelj.views.shared.Dimensions;
 
+/** Kerning pairs page design. */
 public abstract class KerningPairsPageBase extends JSplitPane {
     protected final EditorPanel editorPanel;
     protected final ListPanel listPanel;
@@ -20,7 +21,7 @@ public abstract class KerningPairsPageBase extends JSplitPane {
 
     /**
      * Already handles the focus issue.
-     * 
+     *
      * @param enabled Is Enabled
      */
     @Override

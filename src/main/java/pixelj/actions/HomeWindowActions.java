@@ -27,7 +27,8 @@ import pixelj.views.projectwindow.ProjectWindow;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.DocumentSettingsDialog;
 
-public final class HomeActions {
+public final class HomeWindowActions implements Actions {
+
     /**
      * Display an open dialog and load the selected project.
      */
@@ -56,16 +57,13 @@ public final class HomeActions {
      * Display the application settings dialog.
      */
     public final ApplicationAction showOptionsDialogAction;
-    /**
-     * Collection of all actions.
-     */
-    public final Collection<ApplicationAction> all;
 
+    private final Collection<ApplicationAction> all;
     private final JFrame window;
     private final Logger logger;
     private final AppState appState;
 
-    public HomeActions(final JFrame window, final AppState appState) {
+    public HomeWindowActions(final JFrame window, final AppState appState) {
 
         logger = Logger.getLogger(this.getClass().getName());
         logger.addHandler(new ConsoleHandler());
@@ -201,6 +199,18 @@ public final class HomeActions {
             if (outPath != null) {
                 MemoryUtil.memFree(outPath);
             }
+        }
+    }
+
+    @Override
+    public Collection<ApplicationAction> getAll() {
+        return all;
+    }
+
+    @Override
+    public void setEnabled(final boolean enabled) {
+        for (var action : all) {
+            action.setEnabled(enabled);
         }
     }
 }

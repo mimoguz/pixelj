@@ -11,7 +11,7 @@ import pixelj.views.controls.painter.CanRotateImage;
 import pixelj.views.controls.painter.CanTranslateImage;
 import pixelj.views.controls.painter.PaintAdapter;
 
-public class GlyphPainter extends GlyphView implements CanFlipImage, CanRotateImage, CanTranslateImage {
+public final class GlyphPainter extends GlyphView implements CanFlipImage, CanRotateImage, CanTranslateImage {
 
     private final ChangeableInt.Listener characterWidthChangeListener;
     private final PaintAdapter paintAdapter;
@@ -26,6 +26,7 @@ public class GlyphPainter extends GlyphView implements CanFlipImage, CanRotateIm
         characterWidthChangeListener = (sender, value) -> paintAdapter.setExtent(value);
     }
 
+    /** Fill the image all white. */
     public void erase() {
         final var model = getModel();
         if (model != null) {

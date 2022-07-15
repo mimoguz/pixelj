@@ -42,7 +42,7 @@ public final class PainterPanel extends PainterPanelBase {
         });
         zoomStrip.setEnabled(false);
 
-        infoPanel.gridVisibleProperty.addChangeListener((source, isVisible) -> 
+        infoPanel.gridVisibleProperty.addChangeListener((source, isVisible) ->
                 painter.setOverlayVisible(isVisible)
         );
 
@@ -56,9 +56,9 @@ public final class PainterPanel extends PainterPanelBase {
             actions.snapshotConsumer.accept(s);
             project.setDirty(true);
         });
-        Actions.registerShortcuts(actions.all, window.getRootPane());
+        actions.registerShortcuts(window.getRootPane());
         fillToolbar(toolBar, actions);
-  
+
         setMetrics(project.getDocumentSettings());
         project.documentSettingsProperty.addChangeListener((source, settings) -> setMetrics(settings));
         setEnabled(false);
@@ -81,7 +81,7 @@ public final class PainterPanel extends PainterPanelBase {
             final var gh = value.getImage().getImageHeight();
             if (overlay == null || overlay.getWidth() != gw || overlay.getHeight() != gh) {
                 overlay = Checkerboard.create(
-                        value.getImage().getImageWidth(), 
+                        value.getImage().getImageWidth(),
                         value.getImage().getImageHeight()
                 );
             }

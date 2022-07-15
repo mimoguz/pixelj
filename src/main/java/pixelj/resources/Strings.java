@@ -7,6 +7,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 public final class Strings {
+
     final ResourceBundle resourceBundle;
 
     public Strings(final ResourceBundle bundle) {

@@ -1,7 +1,7 @@
 package pixelj.actions;
 
-import java.awt.Toolkit;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOError;
@@ -37,52 +37,33 @@ import pixelj.views.projectwindow.ExportDialog;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.DocumentSettingsDialog;
 
-public final class MainActions {
-    /**
-     * Return to home screen.
-     */
-    public final ApplicationAction returnHomeAction;
-    /**
-     * Export project.
-     */
-    public final ApplicationAction exportAction;
-    /**
-     * Quit the application.
-     */
-    public final ApplicationAction quitAction;
-    /**
-     * Save project. Calls saveAsAction if no path was set for the project.
-     */
-    public final ApplicationAction saveAction;
-    /**
-     * Display a save dialog.
-     */
-    public final ApplicationAction saveAsAction;
-    /**
-     * Display online help.
-     */
-    public final ApplicationAction showHelpAction;
-    /**
-     * Display the document settings dialog.
-     */
-    public final ApplicationAction showDocumentSettingsAction;
-    /**
-     * Display the application settings dialog.
-     */
-    public final ApplicationAction showOptionsAction;
-    /**
-     * Collection of all actions.
-     */
-    public final Collection<ApplicationAction> all;
+public final class ProjectWindowActions implements Actions {
 
-    private boolean enabled = true;
+    /** * Return to home screen. */
+    public final ApplicationAction returnHomeAction;
+    /** * Export project. */
+    public final ApplicationAction exportAction;
+    /** Quit the application. */
+    public final ApplicationAction quitAction;
+    /** Save project. Calls saveAsAction if no path was set for the project. */
+    public final ApplicationAction saveAction;
+    /** Display a save dialog. */
+    public final ApplicationAction saveAsAction;
+    /** Display online help. */
+    public final ApplicationAction showHelpAction;
+    /** Display the document settings dialog. */
+    public final ApplicationAction showDocumentSettingsAction;
+    /** Display the application settings dialog. */
+    public final ApplicationAction showOptionsAction;
+
+    private final Collection<ApplicationAction> all;
     private final Logger logger;
     private final DocumentSettingsDialog documentSettingsDialog;
     private final Project project;
     private final JFrame window;
     private final AppState appState;
 
-    public MainActions(final Project project, final JFrame window, final AppState appState) {
+    public ProjectWindowActions(final Project project, final JFrame window, final AppState appState) {
         this.project = project;
         this.window = window;
         this.appState = appState;
@@ -144,10 +125,6 @@ public final class MainActions {
                 .setIcon(Icons.SETTINGS, res.colors.icon(), res.colors.disabledIcon())
                 .setAccelerator(KeyEvent.VK_PERIOD, menuShortcutMask);
 
-        project.pathProperty.addChangeListener((sender, path) ->
-                saveAction.setEnabled(enabled && path != null)
-        );
-
         all = List.of(
                 returnHomeAction,
                 exportAction,
@@ -160,16 +137,16 @@ public final class MainActions {
         );
     }
 
-    public boolean isEnabled() {
-        return enabled;
+    @Override
+    public Collection<ApplicationAction> getAll() {
+        return all;
     }
 
-    /**
-     * @param value Is enabled
-     */
-    public void setEnabled(final boolean value) {
-        enabled = value;
-        Actions.setEnabled(all, value);
+    @Override
+    public void setEnabled(final boolean enabled) {
+        for (var action : all) {
+            action.setEnabled(enabled);
+        }
     }
 
     private void export(final ActionEvent event, final Action action) {
@@ -209,12 +186,12 @@ public final class MainActions {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        handleDirty();
+        Shared.checkUnsaved(project, window, saveAction);
         System.exit(0);
     }
 
     private void returnHome(final ActionEvent event, final Action action) {
-        handleDirty();
+        Shared.checkUnsaved(project, window, saveAction);
         Components.switchFrames((JFrame) window, new HomeWindow(appState));
     }
 
@@ -303,22 +280,5 @@ public final class MainActions {
 
     private void logAction(final Action action) {
         logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
-    }
-
-    private void handleDirty() {
-        // TODO: This code is duplicated here from the CloseListener
-        if (project.isDirty()) {
-            final var res = Resources.get();
-            final var result = JOptionPane.showConfirmDialog(
-                    window,
-                    res.getString("unsavedWarning"),
-                    null,
-                    JOptionPane.OK_CANCEL_OPTION,
-                    JOptionPane.WARNING_MESSAGE
-            );
-            if (result == JOptionPane.OK_OPTION) {
-                saveAction.actionPerformed(null);
-            }
-        }
     }
 }

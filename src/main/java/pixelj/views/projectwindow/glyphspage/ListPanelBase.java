@@ -20,9 +20,7 @@ import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 import pixelj.views.shared.GlyphCellRenderer;
 
-/**
- * ListPanel design.
- */
+/** ListPanel design. */
 abstract class ListPanelBase extends JPanel {
 
     protected final JComboBox<BlockRecord> filterBox = new SearchableComboBox<>(Resources.get().getBlocks());

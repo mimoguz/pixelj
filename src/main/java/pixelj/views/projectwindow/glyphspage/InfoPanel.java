@@ -15,13 +15,9 @@ public final class InfoPanel extends InfoPanelBase {
 
     protected final ChangeableBoolean gridVisible = new ChangeableBoolean(true);
     protected final ChangeableBoolean guidesVisible = new ChangeableBoolean(true);
-    /**
-     * Show/hide grid.
-     */
+    /**  Show/hide grid. */
     public final ReadOnlyBoolean gridVisibleProperty = new ReadOnlyBoolean(gridVisible);
-    /**
-     * Show/hide guides.
-     */
+    /** Show/hide guides. */
     public final ReadOnlyBoolean guidesVisibleProperty = new ReadOnlyBoolean(guidesVisible);
 
     private Glyph model;
@@ -32,7 +28,7 @@ public final class InfoPanel extends InfoPanelBase {
 
         showGuidesCheckBox.addItemListener(e -> guidesVisible.setValue(showGuidesCheckBox.isSelected()));
         showGuidesCheckBox.setSelected(true);
-        
+
         widthSpinner.addChangeListener(e -> {
             if (model != null && widthSpinner.getModel() instanceof final SpinnerNumberModel numberModel) {
                 final var value = numberModel.getNumber().intValue();

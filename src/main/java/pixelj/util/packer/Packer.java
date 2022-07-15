@@ -3,6 +3,7 @@ package pixelj.util.packer;
 import java.util.List;
 
 public interface Packer<M> {
+
     /**
      * Calculate box size and move inputs.
      *

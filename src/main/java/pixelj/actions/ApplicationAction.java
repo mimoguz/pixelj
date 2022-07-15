@@ -36,7 +36,7 @@ public final class ApplicationAction extends AbstractAction {
 
     /**
      * Create KeyStroke using the key code and the modifiers, assign it as the shortcut key for the action.
-     * 
+     *
      * @param keyCode   Key codes defined in java.awt.event.KeyEvent class
      * @param modifiers Modifiers defined in java.awt.event.InputEvent class
      * @return This action
@@ -47,7 +47,7 @@ public final class ApplicationAction extends AbstractAction {
 
     /**
      * Assign key stroke as the shortcut key for the action.
-     * 
+     *
      * @param value Key stroke
      * @return This action
      */
@@ -58,7 +58,7 @@ public final class ApplicationAction extends AbstractAction {
 
     /**
      * Create a font icon using the icon variant, set it as both small and large icons.
-     * 
+     *
      * @param iconVariant Icon variant
      * @return This action
      */
@@ -68,7 +68,7 @@ public final class ApplicationAction extends AbstractAction {
 
     /**
      * Create a font icon using the icon variant and the colors, set it as both small and large icons.
-     * 
+     *
      * @param iconVariant   Icon variant
      * @param color         Icon color
      * @param disabledColor Disabled icon color
@@ -84,7 +84,7 @@ public final class ApplicationAction extends AbstractAction {
 
     /**
      * Set the action's NAME value. This value is used as label text if a control needs one.
-     * 
+     *
      * @param value The key for the strings resource.
      * @return This action
      */
@@ -95,7 +95,7 @@ public final class ApplicationAction extends AbstractAction {
 
     /**
      * Set the action's SHORT_DESCRIPTION value. This value is used as tooltip text.
-     * 
+     *
      * @param value Text value
      * @return This action
      */
@@ -106,7 +106,7 @@ public final class ApplicationAction extends AbstractAction {
 
     /**
      * Set both tooltip and shortcut key. This will add shortcut info to the tooltip.
-     * 
+     *
      * @param tooltip     Tooltip text
      * @param accelerator Shortcut
      * @return This action
@@ -126,7 +126,7 @@ public final class ApplicationAction extends AbstractAction {
 
     /**
      * Use action's key to get its text from the strings resource.
-     * 
+     *
      * @return This action
      */
     public ApplicationAction withText() {

@@ -31,4 +31,5 @@
     "editor.rulers": [
         110
     ],
+    "files.trimTrailingWhitespace": true,
 }

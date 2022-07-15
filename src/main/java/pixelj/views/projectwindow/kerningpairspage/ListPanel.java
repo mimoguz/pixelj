@@ -6,7 +6,6 @@ import javax.swing.DefaultListSelectionModel;
 import javax.swing.JFrame;
 import javax.swing.ListSelectionModel;
 
-import pixelj.actions.Actions;
 import pixelj.actions.KerningPairListActions;
 import pixelj.models.BlockRecord;
 import pixelj.models.FilteredList;
@@ -25,7 +24,7 @@ public final class ListPanel extends ListPanelBase {
     public ListPanel(final Project project, final JFrame window) {
         actions = new KerningPairListActions(project, selectionModel, window);
         actions.showRemoveDialogAction.setEnabled(false);
-        Actions.registerShortcuts(actions.all, window.getRootPane());
+        actions.registerShortcuts(window.getRootPane());
         addButton.setAction(actions.showAddDialogAction);
         removeButton.setAction(actions.showRemoveDialogAction);
 
@@ -67,13 +66,13 @@ public final class ListPanel extends ListPanelBase {
     }
 
     private void setFilterLeft(final int from, final int to) {
-        filterLeft = model -> 
+        filterLeft = model ->
                 model.getLeft().getCodePoint() >= from && model.getLeft().getCodePoint() <= to;
         listModel.setFilter(model -> filterLeft.test(model) && filterRight.test(model));
     }
 
     private void setFilterRight(final int from, final int to) {
-        filterLeft = model -> 
+        filterLeft = model ->
                 model.getRight().getCodePoint() >= from && model.getRight().getCodePoint() <= to;
         listModel.setFilter(model -> filterLeft.test(model) && filterRight.test(model));
     }
