@@ -13,7 +13,7 @@ public interface FileService {
 
     /**
      * Save the project  to the disk.
-     * 
+     *
      * @param project
      * @param path
      * @throws IOException
@@ -22,7 +22,7 @@ public interface FileService {
 
     /**
      * Load a project from disk.
-     * 
+     *
      * @param path
      * @return The loaded project
      * @throws IOException
