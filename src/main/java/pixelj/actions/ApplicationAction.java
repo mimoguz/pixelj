@@ -2,7 +2,9 @@ package pixelj.actions;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
+import java.util.Arrays;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -12,6 +14,9 @@ import pixelj.resources.Icons;
 import pixelj.resources.Resources;
 
 public final class ApplicationAction extends AbstractAction {
+
+    private static final String WORD_SEPARATOR = " ";
+
     private final BiConsumer<ActionEvent, Action> consumer;
     private final String key;
 
@@ -117,7 +122,7 @@ public final class ApplicationAction extends AbstractAction {
                 String.format(
                         "<html><body>%s<br /><strong>%s</strong><body></html>",
                         tooltip,
-                        accelerator.toString().replace("pressed", "+")
+                        acceleratorToString(accelerator)
                 )
         );
         putValue(Action.ACCELERATOR_KEY, accelerator);
@@ -131,5 +136,15 @@ public final class ApplicationAction extends AbstractAction {
      */
     public ApplicationAction withText() {
         return setTextKey(key);
+    }
+
+    private static String acceleratorToString(final KeyStroke accelerator) {
+        final var str = accelerator.toString().replace("pressed", "+");
+        return Arrays.stream(str.split(WORD_SEPARATOR))
+                .map(word -> word.isEmpty()
+                        ? word
+                        : Character.toTitleCase(word.charAt(0)) + word.substring(1).toLowerCase()
+                )
+                .collect(Collectors.joining(WORD_SEPARATOR));
     }
 }
