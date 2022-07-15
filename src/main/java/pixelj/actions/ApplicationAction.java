@@ -3,6 +3,7 @@ package pixelj.actions;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -140,6 +141,7 @@ public final class ApplicationAction extends AbstractAction {
 
     private static String acceleratorToString(final KeyStroke accelerator) {
         final var str = accelerator.toString().replace("pressed", "+");
+        // TODO: Investigate: Locale problems?
         return Arrays.stream(str.split(WORD_SEPARATOR))
                 .map(word -> word.isEmpty()
                         ? word
