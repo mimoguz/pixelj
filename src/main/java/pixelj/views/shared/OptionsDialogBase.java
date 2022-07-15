@@ -81,6 +81,7 @@ public abstract class OptionsDialogBase extends JDialog {
     public void setVisible(final boolean visible) {
         if (visible) {
             setLocationRelativeTo(getOwner());
+            themeIn.requestFocusInWindow();
         }
         super.setVisible(visible);
     }
