@@ -39,6 +39,7 @@ public class ProjectWindow extends ProjectWindowBase {
         final var closeListener = new CloseListener(project, appState, mainActions.saveAction, this);
         this.addWindowListener(closeListener);
 
+        setFrameTitle(project.getTitle(), false);
         project.titleProperty.addChangeListener((sender, title) -> setFrameTitle(title, project.isDirty()));
         project.dirtyProperty.addChangeListener((sender, dirty) -> setFrameTitle(project.getTitle(), dirty));
     }
