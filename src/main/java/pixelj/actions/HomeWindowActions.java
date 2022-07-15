@@ -1,15 +1,13 @@
 package pixelj.actions;
 
-import java.awt.event.ActionEvent;
 import java.awt.Desktop;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.Action;
 import javax.swing.JFrame;
@@ -26,59 +24,46 @@ import pixelj.resources.Icons;
 import pixelj.resources.Resources;
 import pixelj.services.AppState;
 import pixelj.services.DBFileService;
+import pixelj.services.FileService;
+import pixelj.services.JavaPropertiesService;
 import pixelj.services.RecentItem;
 import pixelj.views.projectwindow.ProjectWindow;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.DocumentSettingsDialog;
+import pixelj.views.shared.OptionsDialog;
 
 public final class HomeWindowActions implements Actions {
 
-    /**
-     * Display an open dialog and load the selected project.
-     */
+    /** Display an open dialog and load the selected project. */
     public final ApplicationAction openProjectAction;
-    /**
-     * Display the new project dialog.
-     */
+    /** Display the new project dialog. */
     public final ApplicationAction newProjectAction;
-    /**
-     * Context action: Open the parent folder of the selected recent item.
-     */
+    /** Context action: Open the parent folder of the selected recent item. */
     public final ApplicationAction openContainingFolderAction;
-    /**
-     * Open the selected recent item.
-     */
+    /** Open the selected recent item. */
     public final ApplicationAction loadSelectedAction;
-    /**
-     * Quit the application.
-     */
+    /** Quit the application. */
     public final ApplicationAction quitAction;
-    /**
-     * Context action: Remove the selected recent item from the list.
-     */
+    /** Context action: Remove the selected recent item from the list. */
     public final ApplicationAction removeRecentItemAction;
-    /**
-     * Display the application settings dialog.
-     */
+    /** Display the application settings dialog. */
     public final ApplicationAction showOptionsDialogAction;
 
     private final Collection<ApplicationAction> all;
     private final JFrame window;
-    private final Logger logger;
     private final AppState appState;
     private final ListSelectionModel selectionModel;
+    private final OptionsDialog optionsDialog;
 
     public HomeWindowActions(
             final JFrame window,
             final AppState appState,
             final ListSelectionModel selectionModel
     ) {
-
-        logger = Logger.getLogger(this.getClass().getName());
-        logger.addHandler(new ConsoleHandler());
         this.window = window;
         this.appState = appState;
         this.selectionModel = selectionModel;
+        this.optionsDialog = new OptionsDialog(window);
 
         final var res = Resources.get();
 
@@ -114,12 +99,6 @@ public final class HomeWindowActions implements Actions {
                 openProjectAction,
                 showOptionsDialogAction
         );
-    }
-
-    private void log(final Action action) {
-        final var name = action.getValue(Action.NAME);
-        final var toolTip = action.getValue(Action.SHORT_DESCRIPTION);
-        logger.log(Level.INFO, "{0}", name == null ? (toolTip == null ? action : toolTip) : name);
     }
 
     private void newProject(final ActionEvent event, final Action action) {
@@ -175,11 +154,22 @@ public final class HomeWindowActions implements Actions {
     }
 
     private void quit(final ActionEvent event, final Action action) {
-        log(action);
+        try {
+            // TODO: DI
+            new JavaPropertiesService().save(appState);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        System.exit(0);
     }
 
     private void showOptionsDialog(final ActionEvent event, final Action action) {
-        log(action);
+        optionsDialog.setDarkTheme(appState.isDarkTheme());
+        optionsDialog.setVisible(true);
+        final var result = optionsDialog.getResult();
+        if (result != null) {
+            appState.setDarkTheme(result);
+        }
     }
 
     private void openFolder(final ActionEvent event, final Action action) {
@@ -189,7 +179,7 @@ public final class HomeWindowActions implements Actions {
         }
         final var item = appState.getRecentItem(index);
         final var parent = item.path().getParent();
-        final var dir = new File(parent.toAbsolutePath().toString());
+        final var dir = parent.toFile();
         try {
             Desktop.getDesktop().open(dir);
         } catch (IOException | NullPointerException e) {

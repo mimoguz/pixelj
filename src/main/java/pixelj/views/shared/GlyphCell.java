@@ -32,6 +32,10 @@ public final class GlyphCell extends JPanel {
         add(scalarCell);
     }
 
+    /**
+     * @param model
+     * @param contentWidth The width of the cell
+     */
     public void set(final Glyph model, final int contentWidth) {
         picture.setModel(model, false);
 

@@ -66,7 +66,7 @@ public final class ExportServiceImpl implements ExportService {
         try {
             images.forEach(img -> {
                 try {
-                    final var file = new File(Paths.get(dirStr, imageName(img.page, baseName)).toString());
+                    final var file = Paths.get(dirStr, imageName(img.page, baseName)).toFile();
                     ImageIO.write(img.image, "png", file);
                 } catch (IOException e) {
                     throw new IOExceptionWrapper(e);

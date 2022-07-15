@@ -73,7 +73,6 @@ abstract class DocumentSettingsDialogBase extends JDialog {
         metricsPanel.doLayout();
         setSize(300, 680);
         setResizable(false);
-        setLocationRelativeTo(owner);
     }
 
     @Override

@@ -37,6 +37,7 @@ import pixelj.views.homewindow.HomeWindow;
 import pixelj.views.projectwindow.ExportDialog;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.DocumentSettingsDialog;
+import pixelj.views.shared.OptionsDialog;
 
 public final class ProjectWindowActions implements Actions {
 
@@ -63,11 +64,13 @@ public final class ProjectWindowActions implements Actions {
     private final Project project;
     private final JFrame window;
     private final AppState appState;
+    private final OptionsDialog optionsDialog;
 
     public ProjectWindowActions(final Project project, final JFrame window, final AppState appState) {
         this.project = project;
         this.window = window;
         this.appState = appState;
+        optionsDialog = new OptionsDialog(window);
 
         final var res = Resources.get();
 
@@ -121,7 +124,7 @@ public final class ProjectWindowActions implements Actions {
                 .setIcon(Icons.METRICS, res.colors.icon(), res.colors.disabledIcon())
                 .setAccelerator(KeyEvent.VK_D, menuShortcutMask);
 
-        showOptionsAction = new ApplicationAction("showOptionsAction", this::showSettings)
+        showOptionsAction = new ApplicationAction("showOptionsAction", this::showOptions)
                 .withText()
                 .setIcon(Icons.SETTINGS, res.colors.icon(), res.colors.disabledIcon())
                 .setAccelerator(KeyEvent.VK_PERIOD, menuShortcutMask);
@@ -269,8 +272,13 @@ public final class ProjectWindowActions implements Actions {
         }
     }
 
-    private void showSettings(final ActionEvent event, final Action action) {
-        logAction(action);
+    private void showOptions(final ActionEvent event, final Action action) {
+        optionsDialog.setDarkTheme(appState.isDarkTheme());
+        optionsDialog.setVisible(true);
+        final var result = optionsDialog.getResult();
+        if (result != null) {
+            appState.setDarkTheme(result);
+        }
     }
 
     private void showInfo(final String message) {

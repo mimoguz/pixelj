@@ -124,7 +124,7 @@ public final class JavaPropertiesService implements StatePersistanceService {
         final var osPair = getPath();
         if (osPair.os() == OS.LINUX) {
             // .local/share may not exist
-            final var dir = new File(osPair.value().getParent().toAbsolutePath().toString());
+            final var dir = osPair.value().getParent().toFile();
             if (!dir.exists()) {
                 try {
                     dir.mkdirs();
