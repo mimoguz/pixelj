@@ -204,7 +204,7 @@ public final class ProjectWindowActions implements Actions {
             } else {
                 // TODO: DI
                 new DBFileService().writeFile(project, path);
-                appState.replaceTitle(project.getPath(), project.getTitle());
+                appState.replaceRecentItemTitle(project.getPath(), project.getTitle());
                 project.setDirty(false);
             }
         } catch (IOException e) {
@@ -220,14 +220,9 @@ public final class ProjectWindowActions implements Actions {
         }
         try {
             if (path.getFileName() != null) {
-                final var oldPath = project.getPath();
                 // TODO: DI
                 new DBFileService().writeFile(project, path);
-                if (oldPath != null) {
-                    appState.replaceRecentItem(new RecentItem(project.getTitle(), path), oldPath);
-                } else {
-                    appState.addRecentItem(new RecentItem(project.getTitle(), path));
-                }
+                appState.addRecentItem(new RecentItem(project.getTitle(), path));
                 project.setPath(path);
                 project.setDirty(false);
             }
