@@ -2,6 +2,7 @@ package pixelj.services;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,13 +21,18 @@ import pixelj.services.Queries.SettingsColumn;
 
 final class ReadService {
 
+    private static final String EXTENSION = "." + Queries.EXTENSION;
+
     private ReadService() {
     }
 
     public static Project load(final Path path) throws IOException {
         final var pathStr = path.toAbsolutePath().toString();
-        final var url = pathStr.endsWith("." + Queries.EXTENSION)
-                ? pathStr.substring(0, pathStr.length() - Queries.EXTENSION.length() - 1)
+        if (!path.toFile().exists()) {
+            throw new IOException("File not found: " + pathStr);
+        }
+        final var url = pathStr.endsWith(EXTENSION)
+                ? pathStr.substring(0, pathStr.length() - EXTENSION.length())
                 : path;
         try (var connection = DriverManager.getConnection(Queries.URL_PREFIX + url, Queries.PIXELJ, "")) {
             final var statement = connection.createStatement();
@@ -38,10 +44,12 @@ final class ReadService {
             );
             return new Project(glyphs, kerningPairs, settings, path);
         } catch (SQLException | IOException e) {
+            cleanup(path);
             throw new IOException(
                     String.format("Can't open or read the file %s:\n%s", path.toString(), e.getMessage())
             );
         } catch (NullPointerException | MisshapenDataException | InvalidStateException e) {
+            cleanup(path);
             throw new IOException(
                     String.format("%s file is corrupted:\n%s", path.toString(), e.getMessage())
             );
@@ -50,7 +58,7 @@ final class ReadService {
     }
 
     private static SortedList<KerningPair> extractKerningPairs(
-            final ResultSet result, 
+            final ResultSet result,
             final SortedList<Glyph> glyphs
     ) throws SQLException, IllegalArgumentException {
         final var list = new SortedList<KerningPair>();
@@ -98,5 +106,24 @@ final class ReadService {
                 .setBold(result.getBoolean(SettingsColumn.IS_BOLD.getIndex()))
                 .setItalic(result.getBoolean(SettingsColumn.IS_ITALIC.getIndex()))
                 .build();
+    }
+
+    // TODO: Investigate: Can I prevent creation of such files in the first place?
+    private static void cleanup(final Path path) {
+        // Remove *.trace.db
+        var name = path.getFileName().toString();
+        if (name.endsWith(EXTENSION)) {
+            name = name.substring(0, name.length() - EXTENSION.length());
+        }
+        name += ".trace.db";
+        final var tracePath = Paths.get(path.getParent().toAbsolutePath().toString(), name);
+        final var trace = tracePath.toFile();
+        if (trace.exists()) {
+            try {
+                trace.delete();
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
