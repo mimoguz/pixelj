@@ -70,10 +70,6 @@ public final class AppState {
         return Collections.list(recentItems.elements());
     }
 
-    public RecentItem getRecentItem(final int index) {
-        return recentItems.get(index);
-    }
-
     public void setRecentItems(final Collection<RecentItem> items) {
         recentItems.clear();
         for (var item : items) {
@@ -81,20 +77,8 @@ public final class AppState {
         }
     }
 
-    /**
-     * Replace the save path of a recent project.
-     *
-     * @param oldPath
-     * @param newPath
-     */
-    public void replacePath(final Path oldPath, final Path newPath) {
-        final var index = findItemIdex(oldPath);
-        if (index < 0) {
-            return;
-        }
-        final var item = recentItems.get(index);
-        final var newItem = new RecentItem(item.title(), newPath);
-        recentItems.set(index, newItem);
+    public RecentItem getRecentItem(final int index) {
+        return recentItems.get(index);
     }
 
     /**
@@ -103,7 +87,7 @@ public final class AppState {
      * @param path
      * @param title
      */
-    public void replaceTitle(final Path path, final String title) {
+    public void replaceRecentItemTitle(final Path path, final String title) {
         final var index = findItemIdex(path);
         if (index < 0) {
             return;
@@ -125,22 +109,6 @@ public final class AppState {
         } else {
             recentItems.addElement(item);
         }
-    }
-
-    /**
-     * Replace a recent item. The lookup will performed using its path.
-     *
-     * @param newItem
-     * @param path    The path of the item that will be replaced.
-     * @return True if an item with the given path was in the list, false otherwise
-     */
-    public boolean replaceRecentItem(final RecentItem newItem, final Path path) {
-        final var index = findItemIdex(path);
-        if (index >= 0) {
-            recentItems.set(index, newItem);
-            return true;
-        }
-        return false;
     }
 
     /**
