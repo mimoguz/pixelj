@@ -12,7 +12,7 @@ import pixelj.util.ChangeableBoolean;
 import pixelj.util.ChangeableInt;
 import pixelj.util.ChangeableValue;
 
-// TODO: MAJOR: Better statem management!
+// TODO: MAJOR: Better state management!
 public final class AppState {
 
     /** The default image size for the export dialog. */

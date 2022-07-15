@@ -1,8 +1,7 @@
 package pixelj.services;
 
-import java.awt.image.BufferedImage;
 import java.awt.Dimension;
-import java.io.File;
+import java.awt.image.BufferedImage;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -11,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
 import javax.imageio.ImageIO;
 
 import pixelj.models.DocumentSettings;

@@ -7,7 +7,6 @@ import javax.swing.JFrame;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 
-import pixelj.actions.Actions;
 import pixelj.actions.PainterActions;
 import pixelj.models.DocumentSettings;
 import pixelj.models.Glyph;

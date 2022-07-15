@@ -3,7 +3,6 @@ package pixelj.actions;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.util.Arrays;
-import java.util.Locale;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 

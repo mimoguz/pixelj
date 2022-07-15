@@ -2,10 +2,8 @@ package pixelj.actions;
 
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
 
@@ -24,7 +22,6 @@ import pixelj.resources.Icons;
 import pixelj.resources.Resources;
 import pixelj.services.AppState;
 import pixelj.services.DBFileService;
-import pixelj.services.FileService;
 import pixelj.services.JavaPropertiesService;
 import pixelj.services.RecentItem;
 import pixelj.views.projectwindow.ProjectWindow;

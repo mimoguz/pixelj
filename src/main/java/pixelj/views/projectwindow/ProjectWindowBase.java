@@ -26,7 +26,6 @@ import javax.swing.event.PopupMenuListener;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
-import pixelj.actions.Actions;
 import pixelj.actions.ApplicationAction;
 import pixelj.graphics.FontIcon;
 import pixelj.resources.Icons;

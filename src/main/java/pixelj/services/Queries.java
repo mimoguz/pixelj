@@ -76,9 +76,9 @@ final class Queries {
 
     public static final String INSERT_KERNING_PAIR = insertQuery(
             KERNING_PAIRS_TABLE,
-            "id", 
-            "left_code_point", 
-            "right_code_point", 
+            "id",
+            "left_code_point",
+            "right_code_point",
             "kerning_value"
     );
 
@@ -137,7 +137,7 @@ final class Queries {
     private static String insertQuery(final String table, final String... columns) {
         final var vals = Stream.iterate("?", a -> a).limit(columns.length).collect(Collectors.joining(COMMA));
         return String.format("INSERT INTO %s (%s) VALUES (%s);", table, String.join(COMMA, columns), vals);
-    } 
+    }
 
     private static String selectQuery(final String table) {
         return String.format("SELECT * FROM %s;", table);
