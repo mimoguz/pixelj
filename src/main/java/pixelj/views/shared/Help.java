@@ -29,7 +29,7 @@ public final class Help {
     public enum Page {
 
         MAIN(WIKI),
-        HOME(WIKI),
+        HOME("https://github.com/mimoguz/pixelj/wiki/Home-Window"),
         DOCUMENT_SETTINGS(WIKI),
         EXPORT(WIKI),
         GLYPHS(WIKI),
