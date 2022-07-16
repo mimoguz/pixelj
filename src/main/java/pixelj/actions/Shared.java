@@ -6,6 +6,8 @@ import javax.swing.JOptionPane;
 
 import pixelj.models.Project;
 import pixelj.resources.Resources;
+import pixelj.services.AppState;
+import pixelj.views.shared.OptionsDialog;
 
 public final class Shared {
 
@@ -26,12 +28,27 @@ public final class Shared {
                     window,
                     res.getString("unsavedWarning"),
                     null,
-                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.YES_NO_OPTION,
                     JOptionPane.WARNING_MESSAGE
             );
-            if (result == JOptionPane.OK_OPTION) {
+            if (result == JOptionPane.YES_OPTION) {
                 action.actionPerformed(null);
             }
+        }
+    }
+
+    /**
+     * Show options dialog and then set app state.
+     *
+     * @param dialog
+     * @param appState
+     */
+    public static void getOptions(final OptionsDialog dialog, final AppState appState) {
+        dialog.setDarkTheme(appState.isDarkTheme());
+        dialog.setVisible(true);
+        final var result = dialog.getResult();
+        if (result != null) {
+            appState.setDarkTheme(result);
         }
     }
 }

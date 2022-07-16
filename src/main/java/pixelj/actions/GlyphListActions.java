@@ -35,7 +35,6 @@ public final class GlyphListActions implements Actions {
     private final Collection<ApplicationAction> all;
     private Dimension canvasSize;
     private int defaultWidth;
-    private boolean enabled = true;
     private final AddDialog addDialog;
     private final Project project;
     private final JFrame window;

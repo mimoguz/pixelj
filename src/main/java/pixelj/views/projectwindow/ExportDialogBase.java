@@ -32,6 +32,7 @@ abstract class ExportDialogBase extends JDialog {
     protected final JComboBox<LayoutStrategy> layoutStrategyIn = new JComboBox<>();
     protected final JSpinner widthIn = new JSpinner();
     protected final JSpinner heightIn = new JSpinner();
+    protected final JButton helpButton = new JButton();
 
     ExportDialogBase(final Frame owner) {
         super(owner, Resources.get().getString("exportDialogTitle"), Dialog.ModalityType.APPLICATION_MODAL);
@@ -41,6 +42,10 @@ abstract class ExportDialogBase extends JDialog {
         Components.setFixedSize(widthIn, Dimensions.SPINNER_SIZE);
         Components.setFixedSize(heightIn, Dimensions.SPINNER_SIZE);
         layoutStrategyIn.setPreferredSize(new Dimension(120, layoutStrategyIn.getPreferredSize().height));
+        helpButton.putClientProperty(
+                FlatClientProperties.BUTTON_TYPE,
+                FlatClientProperties.BUTTON_TYPE_BORDERLESS
+        );
 
         final var content = new JPanel(new BorderLayout());
 
@@ -79,6 +84,7 @@ abstract class ExportDialogBase extends JDialog {
         final var buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
         buttonPanel.setBorder(Borders.LARGE_EMPTY);
+        buttonPanel.add(helpButton);
         buttonPanel.add(Box.createHorizontalGlue());
         buttonPanel.add(exportButton);
         buttonPanel.add(Box.createRigidArea(Dimensions.MEDIUM_SQUARE));

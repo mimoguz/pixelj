@@ -169,12 +169,7 @@ public final class HomeWindowActions implements Actions {
     }
 
     private void showOptionsDialog(final ActionEvent event, final Action action) {
-        optionsDialog.setDarkTheme(appState.isDarkTheme());
-        optionsDialog.setVisible(true);
-        final var result = optionsDialog.getResult();
-        if (result != null) {
-            appState.setDarkTheme(result);
-        }
+        Shared.getOptions(optionsDialog, appState);
     }
 
     private void showHelp(final ActionEvent event, final Action action) {

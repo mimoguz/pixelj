@@ -274,12 +274,7 @@ public final class ProjectWindowActions implements Actions {
     }
 
     private void showOptions(final ActionEvent event, final Action action) {
-        optionsDialog.setDarkTheme(appState.isDarkTheme());
-        optionsDialog.setVisible(true);
-        final var result = optionsDialog.getResult();
-        if (result != null) {
-            appState.setDarkTheme(result);
-        }
+        Shared.getOptions(optionsDialog, appState);
     }
 
     private void showInfo(final String message) {
@@ -288,9 +283,5 @@ public final class ProjectWindowActions implements Actions {
 
     private void showLoadFailure(final String cause) {
         showInfo(Resources.get().getString("saveFailed") + ":\n" + cause);
-    }
-
-    private void logAction(final Action action) {
-        logger.log(Level.INFO, "{0}", action.getValue(Action.NAME));
     }
 }

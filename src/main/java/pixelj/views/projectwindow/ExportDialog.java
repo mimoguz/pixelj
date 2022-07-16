@@ -6,6 +6,11 @@ import java.awt.Frame;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.SpinnerNumberModel;
 
+import pixelj.actions.ApplicationAction;
+import pixelj.resources.Icons;
+import pixelj.resources.Resources;
+import pixelj.views.shared.Help;
+
 public final class ExportDialog extends ExportDialogBase {
 
     private static final int MAXIMUM_SIZE = 4096;
@@ -44,6 +49,12 @@ public final class ExportDialog extends ExportDialogBase {
         });
 
         cancelButton.addActionListener(e -> setVisible(false));
+
+        helpButton.setAction(
+                new ApplicationAction("exportHelpAction", (e, action) -> Help.showPage(Help.Page.EXPORT))
+                        .setIcon(Icons.HELP)
+                        .setTooltip(Resources.get().getString("help"))
+        );
     }
 
     public Result getResult() {

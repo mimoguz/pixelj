@@ -55,7 +55,7 @@ public abstract class InfoPanelBase extends JPanel {
         blockNameLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, SUBTITLE_STYLE);
         Components.setFixedSize(widthSpinner, Dimensions.SPINNER_SIZE);
 
-        final var pad = Dimensions.MEDIUM_SQUARE.width;
+        final var pad = Dimensions.MEDIUM_PADDING;
         final var focusWidth = 2;
         final var divWidth = 5;
         final var panelWidth = 212;
@@ -79,9 +79,9 @@ public abstract class InfoPanelBase extends JPanel {
         add(glyphBackground, cons);
 
         cons.gridy = 1;
-        cons.insets = new Insets(pad, pad, pad, pad - divWidth);
+        cons.insets = new Insets(0, pad, pad, pad - divWidth);
         final var titlePanel = new JPanel();
-        Components.setFixedSize(titlePanel, new Dimension(innerWidth, 96));
+        Components.setFixedSize(titlePanel, new Dimension(innerWidth, 80));
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
         titlePanel.add(nameLabel);
         titlePanel.add(codePointLabel);
