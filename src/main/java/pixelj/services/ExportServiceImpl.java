@@ -24,7 +24,7 @@ import pixelj.util.packer.Rectangle;
 // TODO: How can I make the export method testable?
 // TODO: Make this testable.
 // TODO: Not finished yet.
-// TODO: Space size?
+// TODO: Handle the space size issue better.
 public final class ExportServiceImpl implements ExportService {
     private final Packer<GlyphImageData> packer;
     private final ImageWriter imageWriter;
