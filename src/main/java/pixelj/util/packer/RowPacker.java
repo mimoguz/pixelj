@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * More optimal packing than the grid packer, if the rectangle heights are not all same.
+ * Potentially more optimal packing than the grid packer. Still puts the rectangles into rows, but
+ * unlike the grid packer, row heights and cell widths can vary.
  * Caution: The pack method modifies the input list.
  *
  * @param <M> Metadata type
