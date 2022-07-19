@@ -19,8 +19,8 @@ import java.util.Set;
 import pixelj.util.ChangeListener;
 import pixelj.util.Changeable;
 
-public final class BinaryImage 
-        extends Image 
+public final class BinaryImage
+        extends Image
         implements Changeable<BinaryImage, Void, BinaryImage.ImageListener> {
 
     private static final byte BYTE_0 = 0;
@@ -40,7 +40,7 @@ public final class BinaryImage
         raster = image.getRaster();
     }
 
-    /** 
+    /**
      * Graphics.drawImage won't work. Use this to draw.
      *
      * @param graphics
@@ -55,7 +55,7 @@ public final class BinaryImage
 
     /**
      * Fill all pixels with the value. Notify after.
-     * 
+     *
      * @param value Fill value
      */
     public void fill(final boolean value) {
@@ -64,7 +64,7 @@ public final class BinaryImage
 
     /**
      * Fill all pixels with the value.
-     * 
+     *
      * @param value  Fill value
      * @param notify true -> notify after | false -> don't notify
      */
@@ -91,7 +91,7 @@ public final class BinaryImage
 
     /**
      * Set the pixel at (x, y) with the fill value, notify after.
-     * 
+     *
      * @param x     X coordinate
      * @param y     Y coordinate
      * @param value Fill value
@@ -102,7 +102,7 @@ public final class BinaryImage
 
     /**
      * Set the pixel at (x, y) with the fill value.
-     * 
+     *
      * @param x      X coordinate
      * @param y      Y coordinate
      * @param value  Fill value
@@ -139,7 +139,7 @@ public final class BinaryImage
 
     /**
      * @see java.awt.image.BufferedImage#getColorModel()
-     * 
+     *
      * @return The color model of the source image
      */
     public ColorModel getColorModel() {
@@ -148,7 +148,7 @@ public final class BinaryImage
 
     /**
      * @see java.awt.image.Raster#getDataElements(int, int, int, int, Object)
-     * 
+     *
      * @param x
      * @param y
      * @param width
@@ -171,7 +171,7 @@ public final class BinaryImage
     /**
      * Set data elements of the rectangle given by (x, y) (width, height), notify after.
      * @see java.awt.image.WritableRaster#setDataElements(int, int, int, int, Object)
-     * 
+     *
      * @param x
      * @param y
      * @param width
@@ -191,7 +191,7 @@ public final class BinaryImage
     /**
      * Set data elements of the rectangle given by (x, y) (width, height).
      * @see java.awt.image.WritableRaster#setDataElements(int, int, int, int, Object)
-     * 
+     *
      * @param x
      * @param y
      * @param width
@@ -215,7 +215,7 @@ public final class BinaryImage
 
     /**
      * Invert pixel value at (x, y).
-     * 
+     *
      * @param x X coordinate
      * @param y Y coordinate
      */
@@ -225,7 +225,7 @@ public final class BinaryImage
 
     /**
      * Invert pixel value at (x, y).
-     * 
+     *
      * @param x X coordinate
      * @param y Y coordinate
      * @param notify true -> notify after | false -> don't notify.
@@ -246,7 +246,7 @@ public final class BinaryImage
 
     /**
      * @see java.awt.image.BufferedImage#getData()
-     * 
+     *
      * @return Source image raster
      */
     public Raster getRaster() {
@@ -265,7 +265,7 @@ public final class BinaryImage
 
     /**
      * @see java.awt.image.BufferedImage#getSubimage(int, int, int, int)
-     * 
+     *
      * @param x       X coordinate
      * @param y       Y coordinate
      * @param width   Sub-image width
@@ -330,7 +330,6 @@ public final class BinaryImage
         return image.getScaledInstance(width, height, hints);
     }
 
-
     @Override
     public ImageProducer getSource() {
         return image.getSource();
@@ -340,7 +339,6 @@ public final class BinaryImage
     public void setAccelerationPriority(final float priority) {
         image.setAccelerationPriority(priority);
     }
-
 
     /**
      * @param image Source
