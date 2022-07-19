@@ -17,7 +17,7 @@ public final class GridPacker<M> implements Packer<M> {
         final var columnsPerBox = boxWith / cellSz.width;
         final var rowsPerBox = boxHeight / cellSz.height;
         final var rectanglesPerBox = columnsPerBox * rowsPerBox;
-        final var boxCount = MathUtils.ceilDiv(input.size(), rectanglesPerBox);
+        final var boxCount = Math.ceilDiv(input.size(), rectanglesPerBox);
         final var result = IntStream.range(0, boxCount)
                 .mapToObj(box -> input.subList(box * rectanglesPerBox,
                         Math.min((box + 1) * rectanglesPerBox, input.size())))
