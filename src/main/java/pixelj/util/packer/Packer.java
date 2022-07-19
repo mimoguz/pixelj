@@ -12,6 +12,5 @@ public interface Packer<M> {
      * @param boxHeight Height of each box
      * @return List of rectangles per box.
      */
-    List<List<Rectangle<M>>> pack(List<Rectangle<M>> input, int boxWith, int boxHeight)
-            throws IllegalStateException;
+    List<List<Rectangle<M>>> pack(List<Rectangle<M>> input, int boxWith, int boxHeight);
 }

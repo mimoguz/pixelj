@@ -13,9 +13,6 @@ public final class GridPacker<M> implements Packer<M> {
     @Override
     public List<List<Rectangle<M>>> pack(final List<Rectangle<M>> input, final int boxWith,
             final int boxHeight) throws IllegalStateException {
-        if (input == null) {
-            throw new IllegalStateException("GridPacker input is not set yet");
-        }
         final var cellSz = cellSize(input);
         final var columnsPerBox = boxWith / cellSz.width;
         final var rowsPerBox = boxHeight / cellSz.height;
