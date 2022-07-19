@@ -182,12 +182,6 @@
           <mainClass>pixelj.Main</mainClass>
           <displayName>PixelJ</displayName>
           <generateInstaller>false</generateInstaller>
-          <linuxConfig>
-            <pngFile>graphics/icon64.png</pngFile>
-          </linuxConfig>
-          <winConfig>
-            <icoFile>graphics/icon.ico</icoFile>
-          </winConfig>
         </configuration>
         <executions>
           <execution>
