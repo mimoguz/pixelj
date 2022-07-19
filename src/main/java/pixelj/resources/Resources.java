@@ -146,7 +146,8 @@ public final class Resources {
                 return new ImageIcon(
                         Resources.class.getResource("applicationIcon/icon" + size + "px.png").getPath()
                 ).getImage();
-            } catch (final NullPointerException e) {
+            } catch (NullPointerException e) {
+                e.printStackTrace();
                 return null;
             }
         }).filter(Objects::nonNull).toList();
