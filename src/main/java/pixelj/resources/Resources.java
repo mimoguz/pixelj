@@ -141,12 +141,12 @@ public final class Resources {
     }
 
     private static List<Image> loadApplicationIcons() {
-        return Stream.of(16, 24, 48, 32, 64, 128, 256).map(size -> {
+        return Stream.of(16, 24, 32, 64, 128, 256).map(size -> {
             try {
                 return new ImageIcon(
                         Resources.class.getResource("applicationIcon/icon" + size + "px.png").getPath()
                 ).getImage();
-            } catch (final NullPointerException exception) {
+            } catch (final NullPointerException e) {
                 return null;
             }
         }).filter(Objects::nonNull).toList();
