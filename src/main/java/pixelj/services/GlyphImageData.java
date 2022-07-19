@@ -30,20 +30,12 @@ public record GlyphImageData(
         final var colBuffer = new byte[glyphHeight];
         final var rowBuffer = new byte[glyphWidth];
         final var img = glyph.getImage();
+        final var topPad = settings.canvasHeight() - glyphHeight;
 
         // Find first x
         var left = 0;
         for (; left < glyphWidth; left++) {
             img.getDataElements(left, 0, 1, glyphHeight, colBuffer);
-            if (isNotEmpty(colBuffer)) {
-                break;
-            }
-        }
-
-        // Find first y
-        var top = 0;
-        for (; top < glyphHeight; top++) {
-            img.getDataElements(0, top, glyphWidth, 1, rowBuffer);
             if (isNotEmpty(colBuffer)) {
                 break;
             }
@@ -58,11 +50,20 @@ public record GlyphImageData(
             }
         }
 
+        // Find first y
+        var top = 0;
+        for (; top < glyphHeight; top++) {
+            img.getDataElements(0, top + topPad, glyphWidth, 1, rowBuffer);
+            if (isNotEmpty(rowBuffer)) {
+                break;
+            }
+        }
+
         // Find last y
         var bottom = glyphHeight - 1;
         for (; bottom >= 0; bottom--) {
-            img.getDataElements(0, bottom, glyphWidth, 1, rowBuffer);
-            if (isNotEmpty(colBuffer)) {
+            img.getDataElements(0, bottom + topPad, glyphWidth, 1, rowBuffer);
+            if (isNotEmpty(rowBuffer)) {
                 break;
             }
         }
@@ -81,7 +82,7 @@ public record GlyphImageData(
      * @param settings
      * @return Loose-fitting rectangle
      */
-    public static Rectangle<GlyphImageData> findFLoose(final Glyph glyph, final DocumentSettings settings) {
+    public static Rectangle<GlyphImageData> findLoose(final Glyph glyph, final DocumentSettings settings) {
         final var glyphHeight = settings.ascender() + settings.descender();
         final var glyphWidth = settings.isMonospaced()
                     ? Math.min(glyph.getWidth(), settings.defaultWidth())
@@ -96,7 +97,8 @@ public record GlyphImageData(
      */
     public byte[] extract(final BinaryImage image) {
         final var buffer = new byte[clipWidth * clipHeight];
-        return image.getDataElements(xOffset, yOffset, clipWidth, clipHeight, buffer);
+        final var topPad = image.getImageHeight() - glyphHeight;
+        return image.getDataElements(xOffset, yOffset + topPad, clipWidth, clipHeight, buffer);
     }
 
     private static boolean isNotEmpty(final byte[] line) {
