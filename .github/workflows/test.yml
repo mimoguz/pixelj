@@ -22,7 +22,6 @@ jobs:
 
   test_windows:
     runs-on: windows-latest
-    needs: [ prepare_release ]
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK on Windows
