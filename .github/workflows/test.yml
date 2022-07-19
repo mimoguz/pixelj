@@ -1,0 +1,35 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: Test
+
+on: workflow_dispatch
+
+jobs:
+
+  test_linux:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK on Linux
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '18'
+        cache: maven
+    - name: Run tests on Linux
+      run: mvn -B Test --file pom.xml
+
+  test_windows:
+    runs-on: windows-latest
+    needs: [ prepare_release ]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK on Windows
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '18'
+        cache: maven
+    - name: Run tests on Windows
+      run: mvn -B test --file pom.xml
