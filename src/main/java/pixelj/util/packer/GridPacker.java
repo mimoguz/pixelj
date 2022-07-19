@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import pixelj.util.MathUtils;
-
 // TODO: Write tests
 public final class GridPacker<M> implements Packer<M> {
 
