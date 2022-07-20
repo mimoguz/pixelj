@@ -1,6 +1,7 @@
 package pixelj.util.packer;
 
 import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -9,8 +10,11 @@ import java.util.stream.IntStream;
 public final class GridPacker<M> implements Packer<M> {
 
     @Override
-    public List<List<Rectangle<M>>> pack(final List<Rectangle<M>> input, final int boxWith,
-            final int boxHeight) throws IllegalStateException {
+    public List<List<Rectangle<M>>> pack(
+            final ArrayList<Rectangle<M>> input,
+            final int boxWith,
+            final int boxHeight
+    ) throws IllegalStateException {
         final var cellSz = cellSize(input);
         final var columnsPerBox = boxWith / cellSz.width;
         final var rowsPerBox = boxHeight / cellSz.height;

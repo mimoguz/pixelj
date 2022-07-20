@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -110,26 +111,25 @@ public final class ExportServiceImpl implements ExportService {
         final var spaceSize = settings.spaceSize() - settings.letterSpacing();
         elements.add(new Glyph(32, Math.max(spaceSize, 0), null));
 
-        final List<Rectangle<GlyphImageData>> rectangles;
+        final Stream<Rectangle<GlyphImageData>> rectangleStream;
         final Packer<GlyphImageData> packer;
         switch (strategy) {
             case GRID_LAYOUT:
-                rectangles = elements
+                rectangleStream = elements
                         .stream()
-                        .map(glyph -> GlyphImageData.findLoose(glyph, settings))
-                        .filter(rect -> rect.getMetadata() != null)
-                        .toList();
+                        .map(glyph -> GlyphImageData.findLoose(glyph, settings));
                 packer = new GridPacker<>();
                 break;
             default: // ROW_LAYOUT
-                rectangles = elements
+                rectangleStream = elements
                         .stream()
-                        .map(glyph -> GlyphImageData.findFitting(glyph, settings))
-                        .filter(rect -> rect.getMetadata() != null)
-                        .toList();
+                        .map(glyph -> GlyphImageData.findFitting(glyph, settings));
                 packer = new RowPacker<>();
                 break;
         }
+        final var rectangles = rectangleStream
+                .filter(rect -> rect.getMetadata() != null)
+                .collect(Collectors.toCollection(ArrayList::new));
 
         return packer.pack(rectangles, textureWidth, textureHeight);
     }
@@ -250,7 +250,8 @@ public final class ExportServiceImpl implements ExportService {
 
     private static Stream<String> characterStream(
             final List<List<Rectangle<GlyphImageData>>> rectangles,
-            final DocumentSettings settings) {
+            final DocumentSettings settings
+    ) {
         final var pageCount = rectangles.size();
         return IntStream.range(0, pageCount)
                 .mapToObj(page ->
