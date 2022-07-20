@@ -44,7 +44,7 @@ public final class AddDialog extends AddDialogBase {
             if (selectionModel.getMinSelectionIndex() >= 0) {
                 left = listModel.getElementAt(selectionModel.getMinSelectionIndex());
                 leftCell.set(left, Integer.MAX_VALUE);
-                addButton.setEnabled(right != null);
+                addButton.setEnabled(right != null && left != null);
             }
         });
 
@@ -53,7 +53,7 @@ public final class AddDialog extends AddDialogBase {
             if (selectionModel.getMinSelectionIndex() >= 0) {
                 right = listModel.getElementAt(selectionModel.getMinSelectionIndex());
                 rightCell.set(right, Integer.MAX_VALUE);
-                addButton.setEnabled(right != null);
+                addButton.setEnabled(right != null && left != null);
             }
         });
 
