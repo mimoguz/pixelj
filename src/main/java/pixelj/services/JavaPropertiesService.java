@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import pixelj.util.FileSystemUtilities;
 import pixelj.util.FileSystemUtilities.OS;
 import pixelj.util.FileSystemUtilities.OSPair;
+import pixelj.views.projectwindow.LayoutStrategy;
 
 /** Save/set the application state using the Java Properties API. */
 public final class JavaPropertiesService implements StatePersistanceService {
@@ -27,6 +28,7 @@ public final class JavaPropertiesService implements StatePersistanceService {
     private static final String DARK_THEME = "darkTheme";
     private static final String EXPORT_IMAGE_WIDTH = "exportImageWidth";
     private static final String EXPORT_IMAGE_HEIGHT = "exportImageHeight";
+    private static final String LAYOUT_STRATEGY = "layoutStrategy";
     private static final String RECENT_ITEMS = "recentProjects";
 
     @Override
@@ -37,6 +39,7 @@ public final class JavaPropertiesService implements StatePersistanceService {
         properties.setProperty(DARK_THEME, Boolean.toString(state.isDarkTheme()));
         properties.setProperty(EXPORT_IMAGE_WIDTH, Integer.toString(state.getExportImageWidth()));
         properties.setProperty(EXPORT_IMAGE_HEIGHT, Integer.toString(state.getExportImageHeight()));
+        properties.setProperty(LAYOUT_STRATEGY, Integer.toString(state.getLayoutStrategy().ordinal()));
         saveRecentItems(properties, state.getRecentItems());
         saveXML(properties);
     }
@@ -57,6 +60,13 @@ public final class JavaPropertiesService implements StatePersistanceService {
                 getInt(properties, EXPORT_IMAGE_HEIGHT, AppState.DEFAULT_EXPORT_IMAGE_SIZE)
         );
         state.setRecentItems(readRecentItems(properties));
+
+        try {
+            final var layoutStrategy = getInt(properties, LAYOUT_STRATEGY, 0);
+            state.setLayoutStrategy(LayoutStrategy.values()[layoutStrategy]);
+        } catch (IndexOutOfBoundsException e) {
+            state.setLayoutStrategy(LayoutStrategy.values()[0]);
+        }
     }
 
     /** Read and parse JSON. */
