@@ -1,6 +1,5 @@
 package pixelj.services;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
@@ -68,15 +67,6 @@ public class GlyphImageDataTests {
         assertEquals(A_WIDTH, md.clipWidth());
         assertEquals(A_HEIGHT, md.clipHeight());
         assertEquals(a.getWidth(), md.glyphWidth());
-    }
-
-    /** Test extracted bytes. */
-    @Test
-    public void extractSnugFit() {
-        final var a = makeLowercaseA(0, 0);
-        final var rect = GlyphImageData.findFitting(a, SETTINGS);
-        final var bytes = rect.getMetadata().extract(a.getImage());
-        assertArrayEquals(A_BYTES, bytes);
     }
 
     private static Glyph makeLowercaseA(final int x, final int y) {

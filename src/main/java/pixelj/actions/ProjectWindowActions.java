@@ -12,7 +12,6 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.Action;
@@ -32,7 +31,6 @@ import pixelj.services.ExportServiceImpl;
 import pixelj.services.FileService;
 import pixelj.services.JavaPropertiesService;
 import pixelj.services.RecentItem;
-import pixelj.util.packer.GridPacker;
 import pixelj.views.homewindow.HomeWindow;
 import pixelj.views.projectwindow.ExportDialog;
 import pixelj.views.shared.Components;
