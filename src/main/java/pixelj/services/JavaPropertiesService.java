@@ -62,8 +62,7 @@ public final class JavaPropertiesService implements StatePersistanceService {
         state.setRecentItems(readRecentItems(properties));
 
         try {
-            final var layoutStrategy = getInt(properties, LAYOUT_STRATEGY, 0);
-            state.setLayoutStrategy(LayoutStrategy.values()[layoutStrategy]);
+            state.setLayoutStrategy(LayoutStrategy.values()[getInt(properties, LAYOUT_STRATEGY, 0);]);
         } catch (IndexOutOfBoundsException e) {
             state.setLayoutStrategy(LayoutStrategy.values()[0]);
         }
