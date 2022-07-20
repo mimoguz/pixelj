@@ -32,6 +32,11 @@ public record GlyphImageData(
         final var img = glyph.getImage();
         final var topPad = settings.canvasHeight() - glyphHeight;
 
+        if (img == null) {
+            final var md = new GlyphImageData(glyphWidth, glyphHeight, glyphWidth, 1, 0, 0);
+            return new Rectangle<>(glyph.getCodePoint(), glyphWidth + 1, 2, md);
+        }
+
         // Find first x
         var left = 0;
         for (; left < glyphWidth; left++) {

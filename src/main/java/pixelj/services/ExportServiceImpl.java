@@ -18,19 +18,19 @@ import pixelj.models.Glyph;
 import pixelj.models.KerningPair;
 import pixelj.models.Project;
 import pixelj.util.IOExceptionWrapper;
+import pixelj.util.packer.GridPacker;
 import pixelj.util.packer.Packer;
 import pixelj.util.packer.Rectangle;
+import pixelj.util.packer.RowPacker;
+import pixelj.views.projectwindow.LayoutStrategy;
 
 // TODO: How can I make the export method testable?
-// TODO: Make this testable.
 // TODO: Not finished yet.
 // TODO: Handle the space size issue better.
 public final class ExportServiceImpl implements ExportService {
-    private final Packer<GlyphImageData> packer;
     private final ImageWriter imageWriter;
 
-    public ExportServiceImpl(final Packer<GlyphImageData> packer, final ImageWriter imageWriter) {
-        this.packer = packer;
+    public ExportServiceImpl(final ImageWriter imageWriter) {
         this.imageWriter = imageWriter;
     }
 
@@ -39,11 +39,12 @@ public final class ExportServiceImpl implements ExportService {
             final Project project,
             final Path path,
             final int textureWidth,
-            final int textureHeight
+            final int textureHeight,
+            final LayoutStrategy strategy
     ) throws IOException {
         final var settings = project.getDocumentSettings();
         final var glyphs = project.getGlyphs();
-        final var packedRectangles = pack(project, textureWidth, textureHeight);
+        final var packedRectangles = pack(project, textureWidth, textureHeight, strategy);
 
         // Get images
         final var imageSize = new Dimension(textureWidth, textureHeight);
@@ -96,30 +97,38 @@ public final class ExportServiceImpl implements ExportService {
         return dotPosition > 0 ? fileName.substring(0, dotPosition) : fileName;
     }
 
-    // TODO: Better rectangle generation
     private List<List<Rectangle<GlyphImageData>>> pack(
             final Project project,
             final int textureWidth,
-            final int textureHeight
+            final int textureHeight,
+            final LayoutStrategy strategy
     ) {
         final var settings = project.getDocumentSettings();
-        final var glyphHeight = settings.ascender() + settings.descender();
-        final var height = glyphHeight + 1;
         final var elements = new ArrayList<>(project.getGlyphs().getElements());
 
         // Insert space
-        final var spaceSize = settings.isMonospaced()
-                ? settings.defaultWidth()
-                : settings.spaceSize() - settings.letterSpacing();
+        final var spaceSize = settings.spaceSize() - settings.letterSpacing();
         elements.add(new Glyph(32, Math.max(spaceSize, 0), null));
 
-        final var rectangles = elements.stream().map(glyph -> {
-            final var glyphWidth = settings.isMonospaced()
-                    ? Math.min(glyph.getWidth(), settings.defaultWidth())
-                    : glyph.getWidth();
-            final var metadata = new GlyphImageData(glyphWidth, glyphHeight, glyphWidth, glyphHeight, 0, 0);
-            return new Rectangle<>(glyph.getCodePoint(), glyphWidth + 1, height, metadata);
-        }).toList();
+        final List<Rectangle<GlyphImageData>> rectangles;
+        final Packer<GlyphImageData> packer;
+        switch (strategy) {
+            case GRID_LAYOUT:
+                rectangles = elements
+                        .stream()
+                        .map(glyph -> GlyphImageData.findLoose(glyph, settings))
+                        .toList();
+                packer = new GridPacker<>();
+                break;
+            default: // ROW_LAYOUT
+                rectangles = elements
+                        .stream()
+                        .map(glyph -> GlyphImageData.findFitting(glyph, settings))
+                        .toList();
+                packer = new RowPacker<>();
+                break;
+        }
+
         return packer.pack(rectangles, textureWidth, textureHeight);
     }
 

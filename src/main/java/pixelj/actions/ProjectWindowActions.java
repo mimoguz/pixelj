@@ -161,15 +161,21 @@ public final class ProjectWindowActions implements Actions {
                 Math.max(settings.canvasWidth(), appState.getExportImageWidth()),
                 Math.max(settings.canvasHeight(), appState.getExportImageHeight())
         );
-        final var exportDialog = new ExportDialog(window, defaultSize, minimumSize);
+        final var exportDialog = new ExportDialog(
+                window,
+                defaultSize,
+                minimumSize,
+                appState.getLayoutStrategy()
+        );
         exportDialog.setVisible(true);
-        final var exportOptions = exportDialog.getResult();
-        if (exportOptions == null) {
+        final var options = exportDialog.getResult();
+        if (options == null) {
             return;
         }
 
-        appState.setExportImageWidth(exportOptions.width());
-        appState.setExportImageHeight(exportOptions.height());
+        appState.setExportImageWidth(options.width());
+        appState.setExportImageHeight(options.height());
+        appState.setLayoutStrategy(options.strategy());
 
         final var path = showSaveDialog("fnt");
         if (path == null || path.getFileName() == null) {
@@ -177,9 +183,9 @@ public final class ProjectWindowActions implements Actions {
         }
 
         try {
-            // TODO: Select layout strategy
-            new ExportServiceImpl(new GridPacker<>(), new BasicImageWriter())
-                    .export(project, path, exportOptions.width(), exportOptions.height());
+            // TODO: DI
+            new ExportServiceImpl(new BasicImageWriter())
+                    .export(project, path, options.width(), options.height(), options.strategy());
         } catch (IOException e) {
             e.printStackTrace();
         }

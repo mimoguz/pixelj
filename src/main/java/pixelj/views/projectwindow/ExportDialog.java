@@ -2,6 +2,7 @@ package pixelj.views.projectwindow;
 
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.util.Arrays;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.SpinnerNumberModel;
@@ -18,12 +19,17 @@ public final class ExportDialog extends ExportDialogBase {
 
     private Result result;
 
-    public ExportDialog(final Frame owner, final Dimension defaultSize, final Dimension minimumSize) {
+    public ExportDialog(
+            final Frame owner,
+            final Dimension defaultSize,
+            final Dimension minimumSize,
+            final LayoutStrategy strategy
+    ) {
         super(owner);
         final var layouts = new DefaultComboBoxModel<LayoutStrategy>();
-        layouts.addElement(LayoutStrategy.GRID_LAYOUT);
+        layouts.addAll(Arrays.asList(LayoutStrategy.values()));
         layoutStrategyIn.setModel(layouts);
-        layoutStrategyIn.setSelectedIndex(0);
+        layoutStrategyIn.setSelectedIndex(strategy.ordinal());
 
         widthIn.setModel(new SpinnerNumberModel(
                 defaultSize.width,

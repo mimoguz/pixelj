@@ -11,6 +11,7 @@ import javax.swing.ListModel;
 import pixelj.util.ChangeableBoolean;
 import pixelj.util.ChangeableInt;
 import pixelj.util.ChangeableValue;
+import pixelj.views.projectwindow.LayoutStrategy;
 
 // TODO: MAJOR: Better state management!
 public final class AppState {
@@ -26,6 +27,10 @@ public final class AppState {
     public final ChangeableInt exportImageWidthProperty = new ChangeableInt(DEFAULT_EXPORT_IMAGE_SIZE);
     /** Height of the exported images. */
     public final ChangeableInt exportImageHeightProperty = new ChangeableInt(DEFAULT_EXPORT_IMAGE_SIZE);
+    /** Controls the packer-rectangle extractor combo to be used. */
+    public final ChangeableValue<LayoutStrategy> layoutStrategyProperty = new ChangeableValue<>(
+            LayoutStrategy.GRID_LAYOUT
+    );
 
     /** Recent projects. */
     private final DefaultListModel<RecentItem> recentItems = new DefaultListModel<>();
@@ -64,6 +69,14 @@ public final class AppState {
 
     public void setExportImageHeight(final int value) {
         exportImageHeightProperty.setValue(value);
+    }
+
+    public LayoutStrategy getLayoutStrategy() {
+        return layoutStrategyProperty.getValue();
+    }
+
+    public void setLayoutStrategy(final LayoutStrategy value) {
+        layoutStrategyProperty.setValue(value);
     }
 
     public List<RecentItem> getRecentItems() {

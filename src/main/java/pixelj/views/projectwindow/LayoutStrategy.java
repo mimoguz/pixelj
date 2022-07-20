@@ -3,7 +3,8 @@ package pixelj.views.projectwindow;
 import pixelj.resources.Resources;
 
 public enum LayoutStrategy {
-    GRID_LAYOUT("gridLayoutStrategy");
+    GRID_LAYOUT("gridLayoutStrategy"),
+    ROW_LAYOUT("rowLayoutStrategy");
 
     private String key;
 
