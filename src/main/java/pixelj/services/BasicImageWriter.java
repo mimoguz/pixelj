@@ -54,7 +54,22 @@ public final class BasicImageWriter implements ImageWriter {
     ) {
         for (var py = 0; py < sourceHeight; py++) {
             for (var px = 0; px < sourceWidth; px++) {
-                destination.setRGB(destX + px, destY + py, getARGB(source, px + sourceX, py + sourceY));
+                try {
+                    destination.setRGB(destX + px, destY + py, getARGB(source, px + sourceX, py + sourceY));
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    System.out.println(
+                            String.format(
+                                    "DX: %d, DY: %d\nSX: %d, SY: %d\nSW: %d, SH: %d",
+                                    destX,
+                                    destY,
+                                    sourceX,
+                                    sourceY,
+                                    sourceWidth,
+                                    sourceHeight
+                            )
+                    );
+                    e.printStackTrace();
+                }
             }
         }
     }

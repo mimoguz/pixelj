@@ -33,8 +33,8 @@ public record GlyphImageData(
         final var topPad = settings.canvasHeight() - glyphHeight;
 
         if (img == null) {
-            final var md = new GlyphImageData(glyphWidth, glyphHeight, glyphWidth, 1, 0, 0);
-            return new Rectangle<>(glyph.getCodePoint(), glyphWidth + 1, 2, md);
+            final var md = new GlyphImageData(glyphWidth, glyphHeight, 1, 1, glyphWidth - 1, 0);
+            return new Rectangle<>(glyph.getCodePoint(), 2, 2, md);
         }
 
         // Find first x

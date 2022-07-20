@@ -40,6 +40,9 @@ public final class RowPacker<M> implements Packer<M> {
             for (var i = line.start(); i < line.end(); i++) {
                 final var rect = rectangles.get(i);
                 rect.moveTo(x, pageHeight);
+                if (x > boxWith) {
+                    throw new IllegalArgumentException("????");
+                }
                 x += rect.getWidth();
                 currentPage.add(rect);
             }
@@ -61,7 +64,7 @@ public final class RowPacker<M> implements Packer<M> {
         var width = 0;
         var height = 0;
         while (width <= boxWidth && end < input.size()) {
-            final var rect = input.get(start);
+            final var rect = input.get(end);
             final var w = width + rect.getWidth();
             if (w > boxWidth) {
                 break;

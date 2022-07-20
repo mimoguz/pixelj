@@ -26,7 +26,6 @@ import pixelj.views.projectwindow.LayoutStrategy;
 
 // TODO: How can I make the export method testable?
 // TODO: Not finished yet.
-// TODO: Handle the space size issue better.
 public final class ExportServiceImpl implements ExportService {
     private final ImageWriter imageWriter;
 
