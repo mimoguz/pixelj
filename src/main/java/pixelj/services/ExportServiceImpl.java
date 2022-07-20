@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -116,6 +117,7 @@ public final class ExportServiceImpl implements ExportService {
                 rectangles = elements
                         .stream()
                         .map(glyph -> GlyphImageData.findLoose(glyph, settings))
+                        .filter(rect -> rect.getMetadata() != null)
                         .toList();
                 packer = new GridPacker<>();
                 break;
@@ -123,6 +125,7 @@ public final class ExportServiceImpl implements ExportService {
                 rectangles = elements
                         .stream()
                         .map(glyph -> GlyphImageData.findFitting(glyph, settings))
+                        .filter(rect -> rect.getMetadata() != null)
                         .toList();
                 packer = new RowPacker<>();
                 break;

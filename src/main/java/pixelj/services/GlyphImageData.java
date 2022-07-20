@@ -19,7 +19,8 @@ public record GlyphImageData(
      *
      * @param glyph
      * @param settings
-     * @return Snug-fitting rectangle
+     * @return Snug-fitting rectangle. If can't find such rectangle, metadata field will be null and
+     *         the rectangle's width and height will be 0.
      */
     public static Rectangle<GlyphImageData> findFitting(final Glyph glyph, final DocumentSettings settings) {
         final var glyphHeight = settings.ascender() + settings.descender();
@@ -27,20 +28,25 @@ public record GlyphImageData(
                     ? Math.min(glyph.getWidth(), settings.defaultWidth())
                     : glyph.getWidth();
 
-        final var colBuffer = new byte[glyphHeight];
-        final var rowBuffer = new byte[glyphWidth];
+        if (glyphWidth <= 0) {
+            return new Rectangle<>(glyph.getCodePoint(), 0, 0, null);
+        }
+
         final var img = glyph.getImage();
-        final var topPad = settings.canvasHeight() - glyphHeight;
 
         if (img == null) {
+            // Probably space
             final var md = new GlyphImageData(glyphWidth, glyphHeight, 1, 1, glyphWidth - 1, 0);
             return new Rectangle<>(glyph.getCodePoint(), 2, 2, md);
         }
 
+        final var colBuffer = new byte[glyphHeight];
+        final var topPad = settings.canvasHeight() - glyphHeight;
+
         // Find first x
         var left = 0;
         for (; left < glyphWidth; left++) {
-            img.getDataElements(left, 0, 1, glyphHeight, colBuffer);
+            img.getDataElements(left, topPad, 1, glyphHeight, colBuffer);
             if (isNotEmpty(colBuffer)) {
                 break;
             }
@@ -49,16 +55,24 @@ public record GlyphImageData(
         // Find last x
         var right = glyphWidth - 1;
         for (; right >= 0; right--) {
-            img.getDataElements(right, 0, 1, glyphHeight, colBuffer);
+            img.getDataElements(right, topPad, 1, glyphHeight, colBuffer);
             if (isNotEmpty(colBuffer)) {
                 break;
             }
         }
 
+        if (right < left) {
+            // The image is empty
+            return new Rectangle<>(glyph.getCodePoint(), 0, 0, null);
+        }
+
+        final var w = right - left + 1;
+        final var rowBuffer = new byte[w];
+
         // Find first y
         var top = 0;
         for (; top < glyphHeight; top++) {
-            img.getDataElements(0, top + topPad, glyphWidth, 1, rowBuffer);
+            img.getDataElements(left, top + topPad, w, 1, rowBuffer);
             if (isNotEmpty(rowBuffer)) {
                 break;
             }
@@ -67,7 +81,7 @@ public record GlyphImageData(
         // Find last y
         var bottom = glyphHeight - 1;
         for (; bottom >= 0; bottom--) {
-            img.getDataElements(0, bottom + topPad, glyphWidth, 1, rowBuffer);
+            img.getDataElements(left, bottom + topPad, w, 1, rowBuffer);
             if (isNotEmpty(rowBuffer)) {
                 break;
             }
