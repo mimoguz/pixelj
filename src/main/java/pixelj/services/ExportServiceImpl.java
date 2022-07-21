@@ -2,8 +2,11 @@ package pixelj.services;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -51,11 +54,8 @@ public final class ExportServiceImpl implements ExportService {
         final var images = IntStream.range(0, packedRectangles.size())
                 .parallel()
                 .mapToObj(index -> {
-                    final var segment = packedRectangles.get(index);
-                    return new PageImage(
-                            index,
-                            imageWriter.getImage(imageSize, segment, glyphs, settings)
-                    );
+                    final var page = packedRectangles.get(index);
+                    return new PageImage(index, imageWriter.getImage(imageSize, page, glyphs, settings));
                 });
 
         // Get out path
@@ -78,7 +78,10 @@ public final class ExportServiceImpl implements ExportService {
         }
 
         // Create and save fnt file
-        try (var writer = new FileWriter(Paths.get(dirStr, baseName + "." + EXTENSION).toFile())) {
+        try (var writer = new OutputStreamWriter(
+                new FileOutputStream(Paths.get(dirStr, baseName + "." + EXTENSION).toFile()),
+                StandardCharsets.UTF_8
+        )) {
             fnt(project, baseName, packedRectangles, imageSize).forEach(block -> {
                 try {
                     writer.write(block);
@@ -126,6 +129,7 @@ public final class ExportServiceImpl implements ExportService {
                 packer = new RowPacker<>();
                 break;
         }
+
         final var rectangles = rectangleStream
                 .filter(rect -> rect.getMetadata() != null)
                 .collect(Collectors.toCollection(ArrayList::new));

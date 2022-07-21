@@ -21,12 +21,18 @@ public final class GridPacker<M> implements Packer<M> {
         final var rectanglesPerBox = columnsPerBox * rowsPerBox;
         final var boxCount = Math.ceilDiv(input.size(), rectanglesPerBox);
         final var result = IntStream.range(0, boxCount)
-                .mapToObj(box -> input.subList(box * rectanglesPerBox,
-                        Math.min((box + 1) * rectanglesPerBox, input.size())))
-                .parallel().map(segment -> {
+                .mapToObj(box ->
+                        input.subList(
+                                box * rectanglesPerBox,
+                                Math.min((box + 1) * rectanglesPerBox, input.size())
+                        )
+                )
+                .parallel()
+                .map(segment -> {
                     arrange(segment, rowsPerBox, columnsPerBox, cellSz);
                     return segment;
-                }).toList();
+                })
+                .toList();
         return result;
     }
 

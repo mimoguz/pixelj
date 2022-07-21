@@ -113,8 +113,6 @@ public record GlyphImageData(
     }
 
     private static int getGlyphWidth(final Glyph glyph, final DocumentSettings settings) {
-        return settings.isMonospaced()
-                ? Math.min(glyph.getWidth(), settings.defaultWidth())
-                : glyph.getWidth();
+        return settings.isMonospaced() ? settings.defaultWidth() : glyph.getWidth();
     }
 }
