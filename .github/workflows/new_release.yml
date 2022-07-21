@@ -34,8 +34,8 @@ jobs:
     - name: Set up JDK on Linux
       uses: actions/setup-java@v3
       with:
-        java-version: '17'
         distribution: 'temurin'
+        java-version: '18'
         cache: maven
     - name: Build for Linux
       run: mvn -B clean package --file pom.xml
@@ -68,8 +68,8 @@ jobs:
     - name: Set up JDK on Windows
       uses: actions/setup-java@v3
       with:
-        java-version: '17'
         distribution: 'temurin'
+        java-version: '18'
         cache: maven
     - name: Build for Windows
       run: mvn -B clean package --file pom.xml
