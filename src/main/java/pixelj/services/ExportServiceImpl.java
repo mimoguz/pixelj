@@ -3,7 +3,6 @@ package pixelj.services;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
