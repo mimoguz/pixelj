@@ -150,7 +150,7 @@ public class StringView extends JPanel {
     }
 
     private void resizeCanvas() {
-        var dimensions = renderTarget == null ? Dimensions.LARGE_SQUARE
+        final var dimensions = renderTarget == null ? Dimensions.LARGE_SQUARE
                 : new Dimension(
                         renderTarget.getWidth() * zoom + 2 * padding,
                         renderTarget.getHeight() * zoom + 2 * padding

@@ -56,6 +56,8 @@ public final class PreviewPageActions implements Actions {
 
         all.add(clearAction);
         all.add(refreshAction);
+
+        project.documentSettingsProperty.addChangeListener((source, value) -> refresh());
     }
 
     public void setZoom(final int value) {
@@ -108,25 +110,26 @@ public final class PreviewPageActions implements Actions {
             return java.util.Collections.emptyList();
         }
 
-        final var letterSpacing = project.getDocumentSettings().letterSpacing();
+        final var settings = project.getDocumentSettings();
+        final var letterSpacing = settings.letterSpacing();
+        final var spaceSize = settings.isMonospaced()
+                ? settings.defaultWidth() + settings.letterSpacing()
+                : settings.spaceSize();
         final var kerningPairs = project.getKerningPairs();
         final var pairs = characters.size() - 1;
         final var spaces = new ArrayList<Integer>(pairs);
         for (var index = 0; index < pairs; index++) {
             final var left = characters.get(index);
             if (left.getCodePoint() == SPACE) {
-                spaces.add(project.getDocumentSettings().spaceSize());
+                spaces.add(spaceSize);
                 continue;
             }
-
             final var right = characters.get(index + 1);
-            if (right.getCodePoint() == SPACE) {
-                spaces.add(0);
-                continue;
-            }
-
             final var pair = kerningPairs.findHash(KerningPair.getHash(left, right));
-            spaces.add(pair == null ? letterSpacing : letterSpacing + pair.getKerningValue());
+            spaces.add(pair == null || settings.isMonospaced()
+                    ? letterSpacing
+                    : letterSpacing + pair.getKerningValue()
+            );
         }
         return spaces;
     }
@@ -141,6 +144,10 @@ public final class PreviewPageActions implements Actions {
     }
 
     private void refreshPreview(final ActionEvent event, final Action action) {
+        refresh();
+    }
+
+    private void refresh() {
         clearContainer();
         final var text = input.getText();
         appState.setPreviewText(text);
