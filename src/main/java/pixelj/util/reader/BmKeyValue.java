@@ -1,4 +1,4 @@
 package pixelj.util.reader;
 
-public record BmKeyValue(BmField key, BmValue value) {
+public record BmKeyValue(BmKeyword key, BmValue value) {
 }

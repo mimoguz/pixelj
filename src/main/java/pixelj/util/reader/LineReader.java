@@ -124,7 +124,7 @@ public final class LineReader {
         }
         final var string = input.substring(start, end);
         start = end;
-        final var field = BmField.fromString(string);
+        final var field = BmKeyword.fromString(string);
         if (field == null) {
             throw new IllegalArgumentException("Invalid field name " + string);
         }
@@ -152,11 +152,11 @@ public final class LineReader {
         start = end;
     }
 
-    private BmField getKey(final int index) {
+    private BmKeyword getKey(final int index) {
         if (index >= tokens.size()) {
             return null;
         }
-        if (tokens.get(index) instanceof BmField key) {
+        if (tokens.get(index) instanceof BmKeyword key) {
             return key;
         }
         return null;

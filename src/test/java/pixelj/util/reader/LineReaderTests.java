@@ -31,7 +31,7 @@ public class LineReaderTests {
         final var line = "info face=\"My Font\" size=-11 bold=0 italic=0 unicode=1 stretchH=100 smooth=0"
                 + " aa=1 padding=1,2,3,4 spacing=1,1 outline=0";
         final var result = new LineReader(line).build();
-        assertEquals(BmField.INFO.getText(), result.line().getText());
+        assertEquals(BmKeyword.INFO.getText(), result.line().getText());
         assertEquals(new BmNumber(-11), result.assignments().get("size"));
         assertEquals(
                 new BmVector(List.of(

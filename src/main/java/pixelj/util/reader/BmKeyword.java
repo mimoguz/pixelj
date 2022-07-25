@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public enum BmField implements BmToken {
+public enum BmKeyword implements BmToken {
 
     // Info line
     INFO("info"),
@@ -59,14 +59,14 @@ public enum BmField implements BmToken {
     SECOND("second"),
     AMOUNT("amount");
 
-    private static final Map<String, BmField> MAPPING = Arrays.stream(BmField.values())
+    private static final Map<String, BmKeyword> MAPPING = Arrays.stream(BmKeyword.values())
             .collect(Collectors.toMap(f -> f.getText(), f -> f));
 
-    private static final Set<BmField> LINES = EnumSet.of(INFO, COMMON, PAGE, CHARS, CHAR, KERNING);
+    private static final Set<BmKeyword> LINES = EnumSet.of(INFO, COMMON, PAGE, CHARS, CHAR, KERNING);
 
     private final String text;
 
-    BmField(final String text) {
+    BmKeyword(final String text) {
         this.text = text;
     }
 
@@ -82,7 +82,7 @@ public enum BmField implements BmToken {
      * @param string
      * @return May be null
      */
-    public static BmField fromString(final String string) {
+    public static BmKeyword fromString(final String string) {
         return MAPPING.get(string);
     }
 }
