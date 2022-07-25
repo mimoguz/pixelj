@@ -3,6 +3,10 @@ package pixelj.util.reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Parse a single line of a BmFont config file.
+ * (You can easily see that I've never written a parser before :D)
+ */
 public final class LineReader {
     private static final char END = '\0';
     private static final char COMMA = ',';
