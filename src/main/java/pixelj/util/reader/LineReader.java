@@ -24,6 +24,8 @@ public final class LineReader {
     }
 
     /**
+     * Extracts the key-value pairs.
+     *
      * @return Read line
      */
     public BmLine build() {
