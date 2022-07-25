@@ -33,14 +33,14 @@ public final class LineReader {
         if (tokens.isEmpty()) {
             throw new IllegalArgumentException("Empty line");
         }
-        final var line = getKeyword(0);
+        final var line = getKey(0);
         if (line == null) {
             throw new IllegalArgumentException("No line name");
         }
         var index = 1;
         while (index < tokens.size()) {
-            final var kw = getKeyword(index);
-            if (kw == null) {
+            final var key = getKey(index);
+            if (key == null) {
                 throw new IllegalArgumentException("No field name");
             }
             index++;
@@ -57,9 +57,9 @@ public final class LineReader {
             } else {
                 index++;
             }
-            map.put(kw.keyword().getText(), value);
+            map.put(key.getText(), value);
         }
-        return new BmLine(line.keyword(), map);
+        return new BmLine(line, map);
     }
 
     private void read() {
@@ -128,7 +128,7 @@ public final class LineReader {
         if (field == null) {
             throw new IllegalArgumentException("Invalid field name " + string);
         }
-        tokens.add(new BmKeyword(field));
+        tokens.add(field);
     }
 
     private void advance() {
@@ -152,12 +152,12 @@ public final class LineReader {
         start = end;
     }
 
-    private BmKeyword getKeyword(final int index) {
+    private BmField getKey(final int index) {
         if (index >= tokens.size()) {
             return null;
         }
-        if (tokens.get(index) instanceof BmKeyword kw) {
-            return kw;
+        if (tokens.get(index) instanceof BmField key) {
+            return key;
         }
         return null;
     }
@@ -206,6 +206,9 @@ public final class LineReader {
             } else {
                 break;
             }
+        }
+        if (values.size() == 0) {
+            return null;
         }
         return new BmVector(values);
     }
