@@ -150,6 +150,7 @@
           <target>18</target>
         </configuration>
       </plugin>
+      <!-- Disable maven-assembly plugin till I find a way to create  multiplatform package.
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
@@ -175,6 +176,7 @@
           </execution>
         </executions>
       </plugin>
+      -->
       <plugin>
         <groupId>io.github.fvarrui</groupId>
         <artifactId>javapackager</artifactId>
@@ -250,7 +252,7 @@
       <artifactId>miglayout-swing</artifactId>
       <version>${miglayout.version}</version>
     </dependency>
-    <!--
+    <!-- I'm  not using this yet.
     <dependency>
       <groupId>com.google.inject</groupId>
       <artifactId>guice</artifactId>
