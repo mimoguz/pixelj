@@ -45,7 +45,8 @@ public final class GlyphCell extends JPanel {
         if (pictureSize > maxPictureSize) {
             picture.setZoom(0);
             final var scale = ((double) maxPictureSize) / pictureSize;
-            picture.setSize(
+            Components.setFixedSize(
+                    picture,
                     new Dimension(
                             (int) Math.round(pictureWidth * scale),
                             (int) Math.round(pictureHeight * scale)

@@ -25,6 +25,7 @@
     <jackson.version>2.13.3</jackson.version>
     <javapackager.version>1.6.7</javapackager.version>
     <junit.version>5.8.2</junit.version>
+    <miglayout.version>11.0</miglayout.version>
     <maven.assembly.plugin.version>3.4.2</maven.assembly.plugin.version>
     <maven.compiler.plugin.version>3.10.1</maven.compiler.plugin.version>
   </properties>
@@ -245,10 +246,17 @@
       <version>${flatlaf.version}</version>
     </dependency>
     <dependency>
+      <groupId>com.miglayout</groupId>
+      <artifactId>miglayout-swing</artifactId>
+      <version>${miglayout.version}</version>
+    </dependency>
+    <!--
+    <dependency>
       <groupId>com.google.inject</groupId>
       <artifactId>guice</artifactId>
       <version>${guice.version}</version>
     </dependency>
+    -->
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>

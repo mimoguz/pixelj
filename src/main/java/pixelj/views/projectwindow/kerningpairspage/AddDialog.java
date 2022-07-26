@@ -90,6 +90,7 @@ public final class AddDialog extends AddDialogBase {
             if (mirroredCheck.isSelected()) {
                 project.getKerningPairs().add(new KerningPair(right, left, 0));
             }
+            project.setDirty(true);
         }
     }
 }

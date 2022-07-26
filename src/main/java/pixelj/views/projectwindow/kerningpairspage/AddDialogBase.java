@@ -1,13 +1,11 @@
 package pixelj.views.projectwindow.kerningpairspage;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Frame;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -16,8 +14,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
-import javax.swing.LayoutStyle.ComponentPlacement;
 
+import net.miginfocom.swing.MigLayout;
 import pixelj.models.BlockRecord;
 import pixelj.models.Glyph;
 import pixelj.resources.Resources;
@@ -30,6 +28,8 @@ import pixelj.views.shared.GlyphCellRenderer;
 
 /**  Add dialog design. */
 public abstract class AddDialogBase extends JDialog {
+
+    private static final String WRAP = "wrap";
 
     protected final JComboBox<BlockRecord> filterBox = new SearchableComboBox<>(Resources.get().getBlocks());
     protected final JList<Glyph> glyphList = new JList<>();
@@ -55,6 +55,7 @@ public abstract class AddDialogBase extends JDialog {
         Components.setFixedSize(cancelButton, Dimensions.TEXT_BUTTON_SIZE);
 
         mirroredCheck.setIconTextGap(Dimensions.LARGE_PADDING);
+        mirroredCheck.setHorizontalTextPosition(SwingConstants.LEADING);
 
         final var scrollPanel = new JScrollPane(glyphList);
         scrollPanel.setMaximumSize(Dimensions.MAXIMUM);
@@ -62,57 +63,21 @@ public abstract class AddDialogBase extends JDialog {
         final var centerPanel = new JPanel(new BorderLayout());
         centerPanel.add(scrollPanel, BorderLayout.CENTER);
 
-        final var selectionPanel = new JPanel();
+        final var selectionPanel = new JPanel(
+                new MigLayout(
+                        "insets 2lp",
+                        "[]8lp[grow]",
+                        "[center, 48lp!]8lp[center, 48lp!]8lp[]"
+                )
+        );
         selectionPanel.setBorder(Borders.EMPTY);
-        final var selectionPanelLayout = new GroupLayout(selectionPanel);
-        selectionPanel.setLayout(selectionPanelLayout);
-        selectionPanelLayout.setHorizontalGroup(
-                selectionPanelLayout.createSequentialGroup()
-                        .addGroup(
-                                selectionPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                        .addComponent(setLeftButton)
-                                        .addComponent(setRightButton)
-                        )
-                        .addGroup(
-                                selectionPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                        .addComponent(
-                                                leftCell,
-                                                GroupLayout.DEFAULT_SIZE,
-                                                GroupLayout.PREFERRED_SIZE,
-                                                Short.MAX_VALUE
-                                        )
-                                        .addComponent(
-                                                rightCell,
-                                                GroupLayout.DEFAULT_SIZE,
-                                                GroupLayout.PREFERRED_SIZE,
-                                                Short.MAX_VALUE
-                                        )
-                        )
-        );
+        selectionPanel.add(setLeftButton);
+        selectionPanel.add(leftCell, WRAP);
+        selectionPanel.add(setRightButton);
+        selectionPanel.add(rightCell, WRAP);
+        selectionPanel.add(mirroredCheck, "span, align right");
 
-        selectionPanelLayout.setVerticalGroup(
-                selectionPanelLayout.createSequentialGroup()
-                        .addGroup(
-                                selectionPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                                        .addComponent(setLeftButton)
-                                        .addComponent(leftCell, 64, 64, 64)
-                        )
-                        .addGroup(
-                                selectionPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                                        .addComponent(setRightButton)
-                                        .addComponent(rightCell, 64, 64, 64)
-                        )
-        );
-
-        final var southPanel = new JPanel();
-        southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.Y_AXIS));
-        southPanel.add(selectionPanel);
-        final var checkBoxPanel = new JPanel();
-        checkBoxPanel.setLayout(new BoxLayout(checkBoxPanel, BoxLayout.X_AXIS));
-        checkBoxPanel.add(mirroredCheck);
-        checkBoxPanel.add(Box.createHorizontalGlue());
-        southPanel.add(checkBoxPanel);
-        centerPanel.add(southPanel, BorderLayout.SOUTH);
+        centerPanel.add(selectionPanel, BorderLayout.SOUTH);
 
         final var buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));

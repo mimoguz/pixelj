@@ -80,6 +80,25 @@ public class GlyphView extends JPanel
         return listeners;
     }
 
+    @Override
+    public void paintComponent(final Graphics graphics) {
+        final var g2d = (Graphics2D) graphics.create();
+        if (model != null) {
+            g2d.setRenderingHint(
+                    RenderingHints.KEY_INTERPOLATION,
+                    RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR
+            );
+            model.getImage().draw(g2d, 0, 0, getWidth(), getHeight());
+            drawShade(g2d);
+            drawOverlay(g2d);
+            drawLines(g2d);
+        } else {
+            g2d.setColor(backgroundColor);
+            g2d.fillRect(0, 0, getWidth(), getHeight());
+        }
+        g2d.dispose();
+    }
+
     /**
      * @return Character model or null
      */
@@ -161,25 +180,6 @@ public class GlyphView extends JPanel
         this.drawShade = value;
     }
 
-    @Override
-    public void paintComponent(final Graphics graphics) {
-        final var g2d = (Graphics2D) graphics.create();
-        if (model != null) {
-            g2d.setRenderingHint(
-                    RenderingHints.KEY_INTERPOLATION,
-                    RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR
-            );
-            model.getImage().draw(g2d, 0, 0, getWidth(), getHeight());
-            drawShade(g2d);
-            drawOverlay(g2d);
-            drawLines(g2d);
-        } else {
-            g2d.setColor(backgroundColor);
-            g2d.fillRect(0, 0, getWidth(), getHeight());
-        }
-        g2d.dispose();
-    }
-
     public void removeLines() {
         lines.clear();
         repaint();
@@ -221,9 +221,10 @@ public class GlyphView extends JPanel
     }
 
     private void autoSize() {
-        if (zoom > 0) {
+        if (zoom > 0 && model != null) {
+            final var image = model.getImage();
             final var dimension = model != null
-                    ? new Dimension(model.getImage().getImageWidth() * zoom, model.getImage().getImageHeight() * zoom)
+                    ? new Dimension(image.getImageWidth() * zoom, image.getImageHeight() * zoom)
                     : Dimensions.LARGE_SQUARE;
             setMinimumSize(dimension);
             setMaximumSize(dimension);
