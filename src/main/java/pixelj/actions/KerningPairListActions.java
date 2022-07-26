@@ -17,6 +17,7 @@ import pixelj.resources.Resources;
 import pixelj.views.projectwindow.kerningpairspage.AddDialog;
 
 public final class KerningPairListActions implements Actions {
+
     /**
      * Show add kerning pair dialog.
      */
@@ -42,7 +43,7 @@ public final class KerningPairListActions implements Actions {
         this.selectionModel = selectionModel;
         this.window = window;
 
-        addDialog = new AddDialog(project.getGlyphs(), window);
+        addDialog = new AddDialog(window, project);
 
         showAddDialogAction = new ApplicationAction("addKerningPairsAction", this::showAddDialog).withText()
                 .setAccelerator(KeyEvent.VK_PLUS, InputEvent.ALT_DOWN_MASK);

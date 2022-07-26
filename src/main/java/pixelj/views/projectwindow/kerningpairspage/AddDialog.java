@@ -9,21 +9,23 @@ import pixelj.models.BlockRecord;
 import pixelj.models.FilteredList;
 import pixelj.models.Glyph;
 import pixelj.models.KerningPair;
-import pixelj.models.SortedList;
+import pixelj.models.Project;
 import pixelj.views.shared.Dimensions;
 import pixelj.views.shared.GlyphCellRenderer;
 
 public final class AddDialog extends AddDialogBase {
 
     private final ListSelectionModel selectionModel = new DefaultListSelectionModel();
+    private final Project project;
     private Glyph left;
     private Glyph right;
     private KerningPair result;
 
-    public AddDialog(final SortedList<Glyph> source, final Frame owner) {
+    public AddDialog(final Frame owner, final Project project) {
         super(owner);
+        this.project = project;
 
-        final var listModel = new FilteredList<>(source);
+        final var listModel = new FilteredList<>(project.getGlyphs());
         glyphList.setModel(listModel);
 
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -63,12 +65,8 @@ public final class AddDialog extends AddDialogBase {
         });
 
         addButton.setEnabled(false);
-        addButton.addActionListener(event -> {
-            if (left != null && right != null) {
-                result = new KerningPair(left, right, 0);
-            }
-            setVisible(false);
-        });
+        // TODO: Separate events
+        addButton.addActionListener(event -> addKerningPair());
 
         cancelButton.addActionListener(event -> setVisible(false));
     }
@@ -84,5 +82,14 @@ public final class AddDialog extends AddDialogBase {
             selectionModel.clearSelection();
         }
         super.setVisible(visible);
+    }
+
+    private void addKerningPair() {
+        if (left != null && right != null) {
+            project.getKerningPairs().add(new KerningPair(left, right, 0));
+            if (mirroredCheck.isSelected()) {
+                project.getKerningPairs().add(new KerningPair(right, left, 0));
+            }
+        }
     }
 }

@@ -31,13 +31,13 @@ abstract class AddDialogBase extends JDialog {
             Resources.get().getBlocks().stream().skip(1).toList()
     );
     protected final JButton addButton;
-    protected final JButton cancelButton;
+    protected final JButton closeButton;
 
     AddDialogBase(final Frame owner) {
         super(
                 owner,
                 Resources.get().getString("addGlyphsDialogTitle"),
-                Dialog.ModalityType.APPLICATION_MODAL
+                Dialog.ModalityType.MODELESS
         );
 
         final var res = Resources.get();
@@ -50,15 +50,15 @@ abstract class AddDialogBase extends JDialog {
         addButton = new JButton(res.getString("add"));
         Components.setFixedSize(addButton, Dimensions.TEXT_BUTTON_SIZE);
 
-        cancelButton = new JButton(res.getString("cancel"));
-        Components.setFixedSize(cancelButton, Dimensions.TEXT_BUTTON_SIZE);
+        closeButton = new JButton(res.getString("close"));
+        Components.setFixedSize(closeButton, Dimensions.TEXT_BUTTON_SIZE);
 
         final var buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
         buttonPanel.add(Box.createHorizontalGlue());
         buttonPanel.add(addButton);
         buttonPanel.add(Box.createRigidArea(Dimensions.MEDIUM_SQUARE));
-        buttonPanel.add(cancelButton);
+        buttonPanel.add(closeButton);
 
         final var content = new JPanel();
         content.setLayout(new BorderLayout(Dimensions.MEDIUM_PADDING, Dimensions.MEDIUM_PADDING));
@@ -68,12 +68,13 @@ abstract class AddDialogBase extends JDialog {
         content.add(buttonPanel, BorderLayout.SOUTH);
         content.setBorder(Borders.MEDIUM_EMPTY);
         setContentPane(content);
-        getRootPane().setDefaultButton(cancelButton);
+        getRootPane().setDefaultButton(closeButton);
 
         pack();
         scalarList.requestFocusInWindow();
         setSize(400, 600);
         setResizable(true);
+        setAlwaysOnTop(true);
     }
 
     /** When overridden, super.setVisible should be called last. */

@@ -48,7 +48,7 @@ public final class GlyphListActions implements Actions {
         this.project = project;
         this.selectionModel = selectionModel;
         this.window = window;
-        addDialog = new AddDialog(window);
+        addDialog = new AddDialog(window, project);
 
         addGlyphsAction = new ApplicationAction("addGlyphsAction", this::showAddDialog)
                 .withText()
@@ -101,20 +101,6 @@ public final class GlyphListActions implements Actions {
 
     private void showAddDialog(final ActionEvent event, final Action action) {
         addDialog.setVisible(true);
-        final var result = addDialog.getResult();
-        if (result.isEmpty()) {
-            return;
-        }
-        for (final var characterData : result) {
-            project.getGlyphs().add(
-                    new Glyph(
-                        characterData.codePoint(),
-                        defaultWidth,
-                        BinaryImage.of(canvasSize.width, canvasSize.height, true)
-                    )
-            );
-        }
-        project.setDirty(true);
     }
 
     private void showRemoveDialog(final ActionEvent event, final Action action) {

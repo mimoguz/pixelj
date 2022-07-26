@@ -9,7 +9,10 @@ import javax.swing.DefaultListModel;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.ListSelectionModel;
 
+import pixelj.graphics.BinaryImage;
 import pixelj.models.BlockRecord;
+import pixelj.models.Glyph;
+import pixelj.models.Project;
 import pixelj.models.ScalarRecord;
 import pixelj.resources.Resources;
 import pixelj.views.shared.ScalarCellRenderer;
@@ -18,12 +21,14 @@ import pixelj.views.shared.ScalarCellRenderer;
  * A dialog to select scalars to add. Application modal.
  */
 public final class AddDialog extends AddDialogBase {
-    private final DefaultListModel<ScalarRecord> listModel = new DefaultListModel<>();
-    private final ArrayList<ScalarRecord> result = new ArrayList<>();
-    private final ListSelectionModel selectionModel = new DefaultListSelectionModel();
 
-    public AddDialog(final Frame owner) {
+    private final DefaultListModel<ScalarRecord> listModel = new DefaultListModel<>();
+    private final ListSelectionModel selectionModel = new DefaultListSelectionModel();
+    private final Project project;
+
+    public AddDialog(final Frame owner, final Project project) {
         super(owner);
+        this.project = project;
 
         selectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         scalarList.setModel(listModel);
@@ -44,23 +49,13 @@ public final class AddDialog extends AddDialogBase {
         });
 
         addButton.setEnabled(false);
-        addButton.addActionListener(event -> {
-            fillResult();
-            setVisible(false);
-        });
+        // TODO: Seperate actions
+        addButton.addActionListener(event -> addSelected());
         selectionModel.addListSelectionListener(
                 e -> addButton.setEnabled(selectionModel.getMinSelectionIndex() >= 0)
         );
 
-        cancelButton.addActionListener(event -> setVisible(false));
-    }
-
-    /**
-     * @return List of scalars the user selected. If the user presses the cancel button to dismiss this
-     *         dialog, the result will be empty.
-     */
-    public Collection<ScalarRecord> getResult() {
-        return Collections.unmodifiableCollection(result);
+        closeButton.addActionListener(event -> setVisible(false));
     }
 
     /**
@@ -69,16 +64,28 @@ public final class AddDialog extends AddDialogBase {
     @Override
     public void setVisible(final boolean visible) {
         if (visible) {
-            result.clear();
             selectionModel.clearSelection();
+            scalarList.requestFocusInWindow();
         }
         super.setVisible(visible);
     }
 
-    private void fillResult() {
+    private void addSelected() {
         final var indices = selectionModel.getSelectedIndices();
+        final var defaultWidth = project.getDocumentSettings().defaultWidth();
+        final var canvasWidth = project.getDocumentSettings().canvasWidth();
+        final var canvasHeight = project.getDocumentSettings().canvasHeight();
         for (final var i : indices) {
-            result.add(listModel.get(i));
+            final var scalarData = listModel.get(i);
+            project.getGlyphs().add(
+                    new Glyph(
+                        scalarData.codePoint(),
+                        defaultWidth,
+                        BinaryImage.of(canvasWidth, canvasHeight, true)
+                    )
+            );
         }
+        selectionModel.clearSelection();
+        project.setDirty(true);
     }
 }
