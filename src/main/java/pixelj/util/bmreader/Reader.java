@@ -29,7 +29,7 @@ public final class Reader {
                 .collect(Collectors.groupingBy(line -> line.tagType()));
     }
 
-    public List<Tag> getLines(final Ident line) {
+    public List<Tag> getTags(final Ident line) {
         return lines.get(line);
     }
 }
