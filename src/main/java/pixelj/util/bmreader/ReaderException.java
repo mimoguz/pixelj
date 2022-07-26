@@ -1,4 +1,4 @@
-package pixelj.util.reader;
+package pixelj.util.bmreader;
 
 public final class ReaderException extends Exception {
 
