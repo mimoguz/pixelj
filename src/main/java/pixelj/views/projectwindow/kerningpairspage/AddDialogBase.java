@@ -1,6 +1,7 @@
 package pixelj.views.projectwindow.kerningpairspage;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Frame;
 
@@ -14,6 +15,8 @@ import javax.swing.JDialog;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 import pixelj.models.BlockRecord;
 import pixelj.models.Glyph;
@@ -51,6 +54,8 @@ public abstract class AddDialogBase extends JDialog {
         Components.setFixedSize(setRightButton, Dimensions.TEXT_BUTTON_SIZE);
         Components.setFixedSize(cancelButton, Dimensions.TEXT_BUTTON_SIZE);
 
+        mirroredCheck.setIconTextGap(Dimensions.LARGE_PADDING);
+
         final var scrollPanel = new JScrollPane(glyphList);
         scrollPanel.setMaximumSize(Dimensions.MAXIMUM);
 
@@ -61,14 +66,12 @@ public abstract class AddDialogBase extends JDialog {
         selectionPanel.setBorder(Borders.EMPTY);
         final var selectionPanelLayout = new GroupLayout(selectionPanel);
         selectionPanel.setLayout(selectionPanelLayout);
-
         selectionPanelLayout.setHorizontalGroup(
                 selectionPanelLayout.createSequentialGroup()
                         .addGroup(
                                 selectionPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                         .addComponent(setLeftButton)
                                         .addComponent(setRightButton)
-                                        .addComponent(mirroredCheck)
                         )
                         .addGroup(
                                 selectionPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -99,10 +102,17 @@ public abstract class AddDialogBase extends JDialog {
                                         .addComponent(setRightButton)
                                         .addComponent(rightCell, 64, 64, 64)
                         )
-                        .addComponent(mirroredCheck, 48, 48, 48)
         );
 
-        centerPanel.add(selectionPanel, BorderLayout.SOUTH);
+        final var southPanel = new JPanel();
+        southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.Y_AXIS));
+        southPanel.add(selectionPanel);
+        final var checkBoxPanel = new JPanel();
+        checkBoxPanel.setLayout(new BoxLayout(checkBoxPanel, BoxLayout.X_AXIS));
+        checkBoxPanel.add(mirroredCheck);
+        checkBoxPanel.add(Box.createHorizontalGlue());
+        southPanel.add(checkBoxPanel);
+        centerPanel.add(southPanel, BorderLayout.SOUTH);
 
         final var buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
@@ -123,7 +133,7 @@ public abstract class AddDialogBase extends JDialog {
 
         pack();
         glyphList.requestFocusInWindow();
-        setSize(400, 600);
+        setSize(400, 720);
         setResizable(true);
         setAlwaysOnTop(true);
     }
