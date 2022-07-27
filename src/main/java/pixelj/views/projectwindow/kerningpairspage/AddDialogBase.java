@@ -63,11 +63,13 @@ public abstract class AddDialogBase extends JDialog {
         final var centerPanel = new JPanel(new BorderLayout());
         centerPanel.add(scrollPanel, BorderLayout.CENTER);
 
+        final var mps = Dimensions.MAXIMUM_PREVIEW_SIZE;
+        final var pad = Dimensions.MEDIUM_PADDING;
         final var selectionPanel = new JPanel(
                 new MigLayout(
                         "insets 2lp",
-                        "[]8lp[grow]",
-                        "[center, 48lp!]8lp[center, 48lp!]8lp[]"
+                        "[]" + pad + "lp[grow]",
+                        String.format("[center, %dlp!]%dlp[center, %dlp!]%dlp[]", mps, pad, mps, pad)
                 )
         );
         selectionPanel.setBorder(Borders.EMPTY);
