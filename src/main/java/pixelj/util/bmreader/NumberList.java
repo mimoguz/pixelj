@@ -5,7 +5,7 @@ import java.util.List;
 import org.eclipse.collections.api.list.primitive.IntList;
 import org.eclipse.collections.impl.list.mutable.primitive.IntArrayList;
 
-public record NumberList(List<Number> values) implements Token, Value {
+public record NumberList(List<Number> values) implements Value {
 
     @Override
     public IntList getIntList() throws ReaderException {

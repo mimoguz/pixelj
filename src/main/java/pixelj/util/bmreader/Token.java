@@ -1,4 +1,4 @@
 package pixelj.util.bmreader;
 
-public sealed interface Token permits Number, NumberList, Text, Ident, Equals {
+public sealed interface Token permits Number, Text, Ident, Equals {
 }
