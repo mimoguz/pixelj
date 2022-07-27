@@ -1,9 +1,6 @@
 package pixelj.views.projectwindow.glyphspage;
 
 import java.awt.Frame;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 
 import javax.swing.DefaultListModel;
 import javax.swing.DefaultListSelectionModel;

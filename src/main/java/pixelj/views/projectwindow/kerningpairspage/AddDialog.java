@@ -5,13 +5,17 @@ import java.awt.Frame;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.ListSelectionModel;
 
+import pixelj.actions.ApplicationAction;
 import pixelj.models.BlockRecord;
 import pixelj.models.FilteredList;
 import pixelj.models.Glyph;
 import pixelj.models.KerningPair;
 import pixelj.models.Project;
+import pixelj.resources.Icons;
+import pixelj.resources.Resources;
 import pixelj.views.shared.Dimensions;
 import pixelj.views.shared.GlyphCellRenderer;
+import pixelj.views.shared.Help;
 
 public final class AddDialog extends AddDialogBase {
 
@@ -58,6 +62,15 @@ public final class AddDialog extends AddDialogBase {
                 addButton.setEnabled(right != null && left != null);
             }
         });
+
+        helpButton.setAction(
+                new ApplicationAction(
+                        "documentSettingsHelpAction",
+                        (e, action) -> Help.showPage(Help.Page.KERNING_PAIRS)
+                )
+                        .setIcon(Icons.HELP)
+                        .setTooltip(Resources.get().getString("help"))
+        );
 
         selectionModel.addListSelectionListener(e -> {
             setLeftButton.setEnabled(selectionModel.getMinSelectionIndex() >= 0);
