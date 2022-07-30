@@ -9,7 +9,7 @@ You can find pre-compiled Windows and Linux packages on the [releases](https://g
 
 ![Project view](.github/glyphs_screen_2022_07_16.png)
 
-## Engine/Framework support
+## Engine/Framework Support
 
 LibGDX, And (as far as I know) Godot use BMFont config format for bitmap fonts. MonoGame.Extended package adds
 BMFont support to MonoGame.
