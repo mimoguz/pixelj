@@ -16,8 +16,8 @@ import javax.swing.JTextArea;
  * "https://stackoverflow.com/questions/16213836/java-swing-jtextfield-set-placeholder">Stackoverflow
  * thread</a>
  */
-public class PromptTextArea extends JTextArea {
-    private static final Map<?, ?> hints = (Map<?, ?>) Toolkit.getDefaultToolkit()
+public final class PromptTextArea extends JTextArea {
+    private static final Map<?, ?> HINTS = (Map<?, ?>) Toolkit.getDefaultToolkit()
             .getDesktopProperty("awt.font.desktophints");
 
     private Color promptColor;
@@ -46,15 +46,15 @@ public class PromptTextArea extends JTextArea {
         super.paintComponent(graphics);
 
         if (
-            isFocusOwner() || (getText() != null && !getText().isEmpty()) || promptText == null
+                isFocusOwner() || (getText() != null && !getText().isEmpty()) || promptText == null
                     || promptText.isEmpty() || promptText.isBlank()
         ) {
             return;
         }
 
         final var g2d = (Graphics2D) graphics.create();
-        if (hints != null) {
-            g2d.setRenderingHints(hints);
+        if (HINTS != null) {
+            g2d.setRenderingHints(HINTS);
         } else {
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         }

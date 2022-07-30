@@ -2,9 +2,7 @@ package pixelj.views.controls.painter;
 
 public interface CanFlipImage extends Painter {
 
-    /**
-     * Reverses the byte array in-place.
-     */
+    /** Reverses the byte array in-place. */
     private static void reverseArray(byte[] array) {
         final var half = array.length / 2;
         for (var left = 0; left < half; left++) {
@@ -15,9 +13,7 @@ public interface CanFlipImage extends Painter {
         }
     }
 
-    /**
-     * Flips the image along the x-axis.
-     */
+    /** Flips the image along the x-axis. */
     default void flipHorizontally() {
         final var model = getModel();
         if (model == null) {
@@ -42,9 +38,7 @@ public interface CanFlipImage extends Painter {
         image.requestUpdate();
     }
 
-    /**
-     * Flips the image along the y-axis.
-     */
+    /** Flips the image along the y-axis. */
     default void flipVertically() {
         final var model = getModel();
         if (model == null) {

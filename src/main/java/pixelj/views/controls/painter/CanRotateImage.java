@@ -4,18 +4,12 @@ import java.util.Arrays;
 import java.util.function.IntBinaryOperator;
 
 public interface CanRotateImage extends Painter {
-    /**
-     * Rotates the top-left square of the image 90 degrees left, and fills the rest
-     * with 1.
-     */
+    /** Rotates the top-left square of the image 90 degrees left, and fills the rest * with 1. */
     default void rotateLeft() {
         rotate((size, y) -> y, (size, x) -> size - x - 1);
     }
 
-    /**
-     * Rotates the top-left square of the image 90 degrees right, and fills the rest
-     * with 1.
-     */
+    /** Rotates the top-left square of the image 90 degrees right, and fills the rest * with 1. */
     default void rotateRight() {
         rotate((size, y) -> size - y - 1, (size, x) -> x);
     }

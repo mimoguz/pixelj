@@ -17,9 +17,10 @@ import javax.swing.text.PlainDocument;
 import com.formdev.flatlaf.FlatClientProperties;
 
 /**
- * An implementation of Thomas Bierhance's auto-complete combo-box:<br />
- * <a href=
- * "http://www.orbital-computer.de/JComboBox/">http://www.orbital-computer.de/JComboBox/</a>
+ * An implementation of Thomas Bierhance's auto-complete combo-box.<br />
+ * <a href="http://www.orbital-computer.de/JComboBox/">http://www.orbital-computer.de/JComboBox/</a>
+ *
+ * @param <E> Element type
  */
 class SearchableDocument<E> extends PlainDocument {
     private enum BackspaceState {
@@ -31,7 +32,7 @@ class SearchableDocument<E> extends PlainDocument {
     private final JTextComponent editor;
     private final ComboBoxModel<E> model;
 
-    private boolean selecting = false;
+    private boolean selecting;
 
     SearchableDocument(final JComboBox<E> comboBox) {
         this.comboBox = comboBox;

@@ -22,6 +22,7 @@ import javax.swing.SwingUtilities;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
+import net.miginfocom.swing.MigLayout;
 import pixelj.resources.Resources;
 import pixelj.services.RecentItem;
 import pixelj.views.shared.Borders;
@@ -47,19 +48,19 @@ abstract class HomeWindowBase extends JFrame {
         Components.setFixedSize(newProjectButton, Dimensions.HOME_BUTTON_SIZE);
         Components.setFixedSize(loadSelectedButton, Dimensions.HOME_BUTTON_SIZE);
         Components.setFixedSize(openProjectButton, Dimensions.HOME_BUTTON_SIZE);
-        final var north = new JPanel(new BorderLayout());
+        final var pad = Dimensions.MEDIUM_PADDING;
+        final var northLayout = new MigLayout(
+                "",
+                String.format("[]%dlp[]%dlp[]%dlp[grow][]", pad, pad, pad),
+                "[center]"
+        );
+        final var north = new JPanel(northLayout);
         north.setBorder(Borders.LARGE_EMPTY);
-        final var buttonBox = new JPanel();
-        buttonBox.setLayout(new BoxLayout(buttonBox, BoxLayout.X_AXIS));
-        buttonBox.add(newProjectButton);
-        buttonBox.add(Box.createHorizontalStrut(Dimensions.MEDIUM_PADDING));
-        buttonBox.add(loadSelectedButton);
-        buttonBox.add(Box.createHorizontalStrut(Dimensions.MEDIUM_PADDING));
-        buttonBox.add(openProjectButton);
-        buttonBox.add(Box.createHorizontalStrut(Dimensions.MEDIUM_PADDING));
-        buttonBox.add(Box.createHorizontalStrut(Dimensions.MEDIUM_PADDING));
-        north.add(buttonBox, BorderLayout.WEST);
-        north.add(toolBar, BorderLayout.EAST);
+        north.add(newProjectButton);
+        north.add(loadSelectedButton);
+        north.add(openProjectButton);
+        north.add(new JPanel());
+        north.add(toolBar);
         content.add(north, BorderLayout.NORTH);
 
         /* --------------------------------- Center --------------------------------- */

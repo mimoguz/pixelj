@@ -8,9 +8,7 @@ import java.awt.event.MouseMotionListener;
 
 import pixelj.graphics.BinaryImage;
 
-/**
- * Adds mouse drawing support to a Painter.
- */
+/** Adds mouse drawing support to a Painter. */
 public final class PaintAdapter implements MouseListener, MouseMotionListener {
 
     private int extent;
@@ -37,7 +35,7 @@ public final class PaintAdapter implements MouseListener, MouseMotionListener {
     /**
      * The last column of the main drawing area. It's used to calculate vertical
      * symmetry axis.
-     * 
+     *
      * @param value Extent value
      */
     public void setExtent(final int value) {
@@ -55,7 +53,7 @@ public final class PaintAdapter implements MouseListener, MouseMotionListener {
 
     /**
      * Enable/disable the vertical symmetry.
-     * 
+     *
      * @param value Is symmetrical.
      */
     public void setSymmetrical(final boolean value) {

@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import pixelj.models.Glyph;
 import pixelj.views.shared.Dimensions;
 
-public class StringView extends JPanel {
+public final class StringView extends JPanel {
     private final Color backgroundColor;
     private final ArrayList<Glyph> characters = new ArrayList<>();
     private int lineSpacing;
@@ -44,22 +44,26 @@ public class StringView extends JPanel {
         return zoom;
     }
 
-    public void set(Collection<Glyph> characters, Collection<Integer> spaces) {
+    /**
+     * @param characterList
+     * @param spaceList
+     */
+    public void set(final Collection<Glyph> characterList, final Collection<Integer> spaceList) {
         this.characters.clear();
-        this.characters.addAll(characters);
+        this.characters.addAll(characterList);
 
         this.spaces.clear();
-        this.spaces.addAll(spaces);
+        this.spaces.addAll(spaceList);
 
         updateView();
     }
 
-    public void setLineSpacing(int lineSpacing) {
+    public void setLineSpacing(final int lineSpacing) {
         this.lineSpacing = lineSpacing;
         updateView();
     }
 
-    public void setMaxY(int maxY) {
+    public void setMaxY(final int maxY) {
         this.maxY = maxY;
         updateView();
     }
@@ -70,9 +74,9 @@ public class StringView extends JPanel {
         repaint();
     }
 
-    public void setSpaces(Collection<Integer> spaces) {
+    public void setSpaces(final Collection<Integer> spaceList) {
         this.spaces.clear();
-        this.spaces.addAll(spaces);
+        this.spaces.addAll(spaceList);
         updateView();
     }
 
@@ -82,6 +86,7 @@ public class StringView extends JPanel {
         repaint();
     }
 
+    /** Resize and redraw the view. */
     public void updateView() {
         renderString();
         resizeCanvas();

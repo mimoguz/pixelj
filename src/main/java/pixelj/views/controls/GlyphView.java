@@ -68,37 +68,6 @@ public class GlyphView extends JPanel
         });
     }
 
-    @Override
-    public void detach() {
-        if (model != null) {
-            model.getImage().removeChangeListener(imageChangeListener);
-        }
-    }
-
-    @Override
-    public Set<ViewChangeListener> getListeners() {
-        return listeners;
-    }
-
-    @Override
-    public void paintComponent(final Graphics graphics) {
-        final var g2d = (Graphics2D) graphics.create();
-        if (model != null) {
-            g2d.setRenderingHint(
-                    RenderingHints.KEY_INTERPOLATION,
-                    RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR
-            );
-            model.getImage().draw(g2d, 0, 0, getWidth(), getHeight());
-            drawShade(g2d);
-            drawOverlay(g2d);
-            drawLines(g2d);
-        } else {
-            g2d.setColor(backgroundColor);
-            g2d.fillRect(0, 0, getWidth(), getHeight());
-        }
-        g2d.dispose();
-    }
-
     /**
      * @return Character model or null
      */
@@ -111,83 +80,6 @@ public class GlyphView extends JPanel
      */
     public void setModel(final Glyph value) {
         setModel(value, true);
-    }
-
-    /**
-     * @return Overlay image or null
-     */
-    public Image getOverlay() {
-        return overlay;
-    }
-
-    /**
-     * @param value May be null
-     */
-    public void setOverlay(final Image value) {
-        if (overlay == value) {
-            return;
-        }
-        overlay = value;
-        repaint();
-    }
-
-    public int getTop() {
-        return top;
-    }
-
-    public void setTop(final int top) {
-        this.top = top;
-    }
-
-    public int getZoom() {
-        return zoom;
-    }
-
-    public void setZoom(final int value) {
-        zoom = value;
-        autoSize();
-    }
-
-    public boolean isLinesVisible() {
-        return showLines;
-    }
-
-    public void setLinesVisible(final boolean value) {
-        if (value == showLines) {
-            return;
-        }
-        this.showLines = value;
-        repaint();
-    }
-
-    public boolean isOverlayVisible() {
-        return showOverlay;
-    }
-
-    public void setOverlayVisible(final boolean value) {
-        if (value == showOverlay) {
-            return;
-        }
-        this.showOverlay = value;
-        repaint();
-    }
-
-    public boolean isShaded() {
-        return drawShade;
-    }
-
-    public void setShaded(final boolean value) {
-        this.drawShade = value;
-    }
-
-    public void removeLines() {
-        lines.clear();
-        repaint();
-    }
-
-    public void removeLines(final Line... lines) {
-        this.lines.removeAll(Arrays.stream(lines).toList());
-        repaint();
     }
 
     /**
@@ -218,6 +110,152 @@ public class GlyphView extends JPanel
         }
 
         autoSize();
+    }
+
+    /**
+     * @return Overlay image or null
+     */
+    public Image getOverlay() {
+        return overlay;
+    }
+
+    /**
+     * @param value May be null
+     */
+    public void setOverlay(final Image value) {
+        if (overlay == value) {
+            return;
+        }
+        overlay = value;
+        repaint();
+    }
+
+    /**
+     * @return Top of the glyph area
+     */
+    public int getTop() {
+        return top;
+    }
+
+    /**
+     * @param top Top of the glyph. That value is used to calculate the shaded area.
+     */
+    public void setTop(final int top) {
+        this.top = top;
+    }
+
+    /**
+     * @return Zoom value of the view. If it's zero, auto-resizing is disabled.
+     */
+    public int getZoom() {
+        return zoom;
+    }
+
+    /**
+     * @param value Zoom value of the view. If it's zero, auto-resizing will be disabled.
+     */
+    public void setZoom(final int value) {
+        zoom = value;
+        autoSize();
+    }
+
+    /**
+     * @return The visibility of the guide lines
+     */
+    public boolean isLinesVisible() {
+        return showLines;
+    }
+
+    /**
+     * @param value  The visibility of the guide lines
+     */
+    public void setLinesVisible(final boolean value) {
+        if (value == showLines) {
+            return;
+        }
+        this.showLines = value;
+        repaint();
+    }
+
+    /**
+     * @return The visibility of the overlay image, if it exists.
+     */
+    public boolean isOverlayVisible() {
+        return showOverlay;
+    }
+
+    /**
+     * @param value The visibility of the overlay image, if it exists.
+     */
+    public void setOverlayVisible(final boolean value) {
+        if (value == showOverlay) {
+            return;
+        }
+        this.showOverlay = value;
+        repaint();
+    }
+
+    /**
+     * @return The visibility of the shade, the "outside" of the area.
+     */
+    public boolean isShaded() {
+        return drawShade;
+    }
+
+    /**
+     * @param value The visibility of the shade, the "outside" of the area.
+     */
+    public void setShaded(final boolean value) {
+        this.drawShade = value;
+    }
+
+    /** Removes all guide lines. */
+    public void removeLines() {
+        lines.clear();
+        repaint();
+    }
+
+    /**
+     * @param linesToRemove Guide lines to be removed
+     */
+    public void removeLines(final Line... linesToRemove) {
+        this.lines.removeAll(Arrays.stream(linesToRemove).toList());
+        repaint();
+    }
+
+    /** Remove hard references. */
+    @Override
+    public void detach() {
+        if (model != null) {
+            model.getImage().removeChangeListener(imageChangeListener);
+        }
+    }
+
+    @Override
+    public final Set<ViewChangeListener> getListeners() {
+        return listeners;
+    }
+
+    /**
+     * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
+     */
+    @Override
+    public void paintComponent(final Graphics graphics) {
+        final var g2d = (Graphics2D) graphics.create();
+        if (model != null) {
+            g2d.setRenderingHint(
+                    RenderingHints.KEY_INTERPOLATION,
+                    RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR
+            );
+            model.getImage().draw(g2d, 0, 0, getWidth(), getHeight());
+            drawShade(g2d);
+            drawOverlay(g2d);
+            drawLines(g2d);
+        } else {
+            g2d.setColor(backgroundColor);
+            g2d.fillRect(0, 0, getWidth(), getHeight());
+        }
+        g2d.dispose();
     }
 
     private void autoSize() {
@@ -270,14 +308,15 @@ public class GlyphView extends JPanel
         }
 
         g.setColor(SHADE);
-
-        final var x = (int) Math
-                .round((((double) getWidth()) / model.getImage().getImageWidth()) * model.getWidth());
-        g.fillRect(x, 0, getWidth() - x, getHeight());
-
-        final var y = (int) Math.round(
-                (((double) getHeight()) / model.getImage().getImageHeight()) * (model.getImage().getImageHeight() - top)
+        final var x = (int) Math.round(
+                (((double) getWidth()) / model.getImage().getImageWidth())
+                * model.getWidth()
         );
+        final var y = (int) Math.round(
+                (((double) getHeight()) / model.getImage().getImageHeight())
+                    * (model.getImage().getImageHeight() - top)
+        );
+        g.fillRect(x, 0, getWidth() - x, getHeight());
         g.fillRect(0, 0, x, y);
     }
 

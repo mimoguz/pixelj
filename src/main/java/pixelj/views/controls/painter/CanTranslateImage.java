@@ -35,9 +35,7 @@ public interface CanTranslateImage extends Painter {
         image.requestUpdate();
     }
 
-    /**
-     * Moves the image one pixel down, and fills the first row with 1.
-     */
+    /** Moves the image one pixel down, and fills the first row with 1. */
     default void moveOnePixelDown() {
         final var model = getModel();
         if (model == null) {
@@ -63,23 +61,17 @@ public interface CanTranslateImage extends Painter {
         image.requestUpdate();
     }
 
-    /**
-     * Moves the image one pixel left, and fills the last column with 1.
-     */
+    /** Moves the image one pixel left, and fills the last column with 1. */
     default void moveOnePixelLeft() {
         moveHorizontally(1);
     }
 
-    /**
-     * Moves the image one pixel right, and fills the first column with 1.
-     */
+    /** Moves the image one pixel right, and fills the first column with 1. */
     default void moveOnePixelRight() {
         moveHorizontally(0);
     }
 
-    /**
-     * Moves the image one pixel up, and fills the last row with 1.
-     */
+    /** Moves the image one pixel up, and fills the last row with 1. */
     default void moveOnePixelUp() {
         final var model = getModel();
         if (model == null) {

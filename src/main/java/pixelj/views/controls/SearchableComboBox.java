@@ -7,13 +7,13 @@ import javax.swing.JComboBox;
 import javax.swing.text.JTextComponent;
 
 /**
- * An implementation of Thomas Bierhance's auto-complete combo-box:<br />
- * <a href=
- * "http://www.orbital-computer.de/JComboBox/">http://www.orbital-computer.de/JComboBox/</a>
+ * An implementation of Thomas Bierhance's auto-complete combo-box.<br />ş
+ * <a href="http://www.orbital-computer.de/JComboBox/">http://www.orbital-computer.de/JComboBox/</a>
+ *
+ * @param <E> Element type
  */
 public class SearchableComboBox<E> extends JComboBox<E> {
     public SearchableComboBox() {
-        super();
         final var editor = (JTextComponent) getEditor().getEditorComponent();
         editor.setDocument(new SearchableDocument<>(this));
     }

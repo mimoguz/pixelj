@@ -13,7 +13,7 @@ import pixelj.resources.Resources;
 import pixelj.views.shared.Borders;
 import pixelj.views.shared.Components;
 
-public class ZoomStrip extends JPanel {
+public final class ZoomStrip extends JPanel {
     private final JSlider slider;
     private final JLabel zoomOut = new JLabel();
     private final JLabel zoomIn = new JLabel();

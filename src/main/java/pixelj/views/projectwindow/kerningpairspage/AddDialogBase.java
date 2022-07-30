@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dialog;
 import java.awt.Frame;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
