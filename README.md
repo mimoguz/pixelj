@@ -11,7 +11,7 @@ You can find pre-compiled Windows and Linux packages on the [releases](https://g
 
 ## Engine/Framework Support
 
-LibGDX, And (as far as I know) Godot use BMFont config format for bitmap fonts. MonoGame.Extended package adds
+LibGDX, and (as far as I know) Godot use BMFont config format for bitmap fonts. MonoGame.Extended package adds
 BMFont support to MonoGame.
 
 ## Building
