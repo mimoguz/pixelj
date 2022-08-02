@@ -1,0 +1,1100 @@
+[
+    {
+       "id": 1,
+       "name": "Basic Latin",
+       "firstCodePoint": 0,
+       "lastCodePoint": 127
+    },
+    {
+       "id": 2,
+       "name": "Latin-1 Supplement",
+       "firstCodePoint": 128,
+       "lastCodePoint": 255
+    },
+    {
+       "id": 3,
+       "name": "Latin Extended-A",
+       "firstCodePoint": 256,
+       "lastCodePoint": 383
+    },
+    {
+       "id": 4,
+       "name": "Latin Extended-B",
+       "firstCodePoint": 384,
+       "lastCodePoint": 591
+    },
+    {
+       "id": 5,
+       "name": "IPA Extensions",
+       "firstCodePoint": 592,
+       "lastCodePoint": 687
+    },
+    {
+       "id": 6,
+       "name": "Spacing Modifier Letters",
+       "firstCodePoint": 688,
+       "lastCodePoint": 767
+    },
+    {
+       "id": 8,
+       "name": "Greek and Coptic",
+       "firstCodePoint": 880,
+       "lastCodePoint": 1023
+    },
+    {
+       "id": 9,
+       "name": "Cyrillic",
+       "firstCodePoint": 1024,
+       "lastCodePoint": 1279
+    },
+    {
+       "id": 10,
+       "name": "Cyrillic Supplement",
+       "firstCodePoint": 1280,
+       "lastCodePoint": 1327
+    },
+    {
+       "id": 11,
+       "name": "Armenian",
+       "firstCodePoint": 1328,
+       "lastCodePoint": 1423
+    },
+    {
+       "id": 12,
+       "name": "Hebrew",
+       "firstCodePoint": 1424,
+       "lastCodePoint": 1535
+    },
+    {
+       "id": 13,
+       "name": "Arabic",
+       "firstCodePoint": 1536,
+       "lastCodePoint": 1791
+    },
+    {
+       "id": 14,
+       "name": "Syriac",
+       "firstCodePoint": 1792,
+       "lastCodePoint": 1871
+    },
+    {
+       "id": 15,
+       "name": "Arabic Supplement",
+       "firstCodePoint": 1872,
+       "lastCodePoint": 1919
+    },
+    {
+       "id": 16,
+       "name": "Thaana",
+       "firstCodePoint": 1920,
+       "lastCodePoint": 1983
+    },
+    {
+       "id": 17,
+       "name": "NKo",
+       "firstCodePoint": 1984,
+       "lastCodePoint": 2047
+    },
+    {
+       "id": 18,
+       "name": "Samaritan",
+       "firstCodePoint": 2048,
+       "lastCodePoint": 2111
+    },
+    {
+       "id": 19,
+       "name": "Devanagari",
+       "firstCodePoint": 2304,
+       "lastCodePoint": 2431
+    },
+    {
+       "id": 20,
+       "name": "Bengali",
+       "firstCodePoint": 2432,
+       "lastCodePoint": 2559
+    },
+    {
+       "id": 21,
+       "name": "Gurmukhi",
+       "firstCodePoint": 2560,
+       "lastCodePoint": 2687
+    },
+    {
+       "id": 22,
+       "name": "Gujarati",
+       "firstCodePoint": 2688,
+       "lastCodePoint": 2815
+    },
+    {
+       "id": 23,
+       "name": "Oriya",
+       "firstCodePoint": 2816,
+       "lastCodePoint": 2943
+    },
+    {
+       "id": 24,
+       "name": "Tamil",
+       "firstCodePoint": 2944,
+       "lastCodePoint": 3071
+    },
+    {
+       "id": 25,
+       "name": "Telugu",
+       "firstCodePoint": 3072,
+       "lastCodePoint": 3199
+    },
+    {
+       "id": 26,
+       "name": "Kannada",
+       "firstCodePoint": 3200,
+       "lastCodePoint": 3327
+    },
+    {
+       "id": 27,
+       "name": "Malayalam",
+       "firstCodePoint": 3328,
+       "lastCodePoint": 3455
+    },
+    {
+       "id": 28,
+       "name": "Sinhala",
+       "firstCodePoint": 3456,
+       "lastCodePoint": 3583
+    },
+    {
+       "id": 29,
+       "name": "Thai",
+       "firstCodePoint": 3584,
+       "lastCodePoint": 3711
+    },
+    {
+       "id": 30,
+       "name": "Lao",
+       "firstCodePoint": 3712,
+       "lastCodePoint": 3839
+    },
+    {
+       "id": 31,
+       "name": "Tibetan",
+       "firstCodePoint": 3840,
+       "lastCodePoint": 4095
+    },
+    {
+       "id": 32,
+       "name": "Myanmar",
+       "firstCodePoint": 4096,
+       "lastCodePoint": 4255
+    },
+    {
+       "id": 33,
+       "name": "Georgian",
+       "firstCodePoint": 4256,
+       "lastCodePoint": 4351
+    },
+    {
+       "id": 34,
+       "name": "Hangul Jamo",
+       "firstCodePoint": 4352,
+       "lastCodePoint": 4607
+    },
+    {
+       "id": 35,
+       "name": "Ethiopic",
+       "firstCodePoint": 4608,
+       "lastCodePoint": 4991
+    },
+    {
+       "id": 36,
+       "name": "Ethiopic Supplement",
+       "firstCodePoint": 4992,
+       "lastCodePoint": 5023
+    },
+    {
+       "id": 37,
+       "name": "Cherokee",
+       "firstCodePoint": 5024,
+       "lastCodePoint": 5119
+    },
+    {
+       "id": 38,
+       "name": "Unified Canadian Aboriginal Syllabics",
+       "firstCodePoint": 5120,
+       "lastCodePoint": 5759
+    },
+    {
+       "id": 39,
+       "name": "Ogham",
+       "firstCodePoint": 5760,
+       "lastCodePoint": 5791
+    },
+    {
+       "id": 40,
+       "name": "Runic",
+       "firstCodePoint": 5792,
+       "lastCodePoint": 5887
+    },
+    {
+       "id": 41,
+       "name": "Tagalog",
+       "firstCodePoint": 5888,
+       "lastCodePoint": 5919
+    },
+    {
+       "id": 42,
+       "name": "Hanunoo",
+       "firstCodePoint": 5920,
+       "lastCodePoint": 5951
+    },
+    {
+       "id": 43,
+       "name": "Buhid",
+       "firstCodePoint": 5952,
+       "lastCodePoint": 5983
+    },
+    {
+       "id": 44,
+       "name": "Tagbanwa",
+       "firstCodePoint": 5984,
+       "lastCodePoint": 6015
+    },
+    {
+       "id": 45,
+       "name": "Khmer",
+       "firstCodePoint": 6016,
+       "lastCodePoint": 6143
+    },
+    {
+       "id": 46,
+       "name": "Mongolian",
+       "firstCodePoint": 6144,
+       "lastCodePoint": 6319
+    },
+    {
+       "id": 47,
+       "name": "Unified Canadian Aboriginal Syllabics Extended",
+       "firstCodePoint": 6320,
+       "lastCodePoint": 6399
+    },
+    {
+       "id": 48,
+       "name": "Limbu",
+       "firstCodePoint": 6400,
+       "lastCodePoint": 6479
+    },
+    {
+       "id": 49,
+       "name": "Tai Le",
+       "firstCodePoint": 6480,
+       "lastCodePoint": 6527
+    },
+    {
+       "id": 50,
+       "name": "New Tai Lue",
+       "firstCodePoint": 6528,
+       "lastCodePoint": 6623
+    },
+    {
+       "id": 51,
+       "name": "Khmer Symbols",
+       "firstCodePoint": 6624,
+       "lastCodePoint": 6655
+    },
+    {
+       "id": 52,
+       "name": "Buginese",
+       "firstCodePoint": 6656,
+       "lastCodePoint": 6687
+    },
+    {
+       "id": 53,
+       "name": "Tai Tham",
+       "firstCodePoint": 6688,
+       "lastCodePoint": 6831
+    },
+    {
+       "id": 54,
+       "name": "Balinese",
+       "firstCodePoint": 6912,
+       "lastCodePoint": 7039
+    },
+    {
+       "id": 55,
+       "name": "Sundanese",
+       "firstCodePoint": 7040,
+       "lastCodePoint": 7103
+    },
+    {
+       "id": 56,
+       "name": "Lepcha",
+       "firstCodePoint": 7168,
+       "lastCodePoint": 7247
+    },
+    {
+       "id": 57,
+       "name": "Ol Chiki",
+       "firstCodePoint": 7248,
+       "lastCodePoint": 7295
+    },
+    {
+       "id": 58,
+       "name": "Vedic Extensions",
+       "firstCodePoint": 7376,
+       "lastCodePoint": 7423
+    },
+    {
+       "id": 59,
+       "name": "Phonetic Extensions",
+       "firstCodePoint": 7424,
+       "lastCodePoint": 7551
+    },
+    {
+       "id": 60,
+       "name": "Phonetic Extensions Supplement",
+       "firstCodePoint": 7552,
+       "lastCodePoint": 7615
+    },
+    {
+       "id": 62,
+       "name": "Latin Extended Additional",
+       "firstCodePoint": 7680,
+       "lastCodePoint": 7935
+    },
+    {
+       "id": 63,
+       "name": "Greek Extended",
+       "firstCodePoint": 7936,
+       "lastCodePoint": 8191
+    },
+    {
+       "id": 64,
+       "name": "General Punctuation",
+       "firstCodePoint": 8192,
+       "lastCodePoint": 8303
+    },
+    {
+       "id": 65,
+       "name": "Superscripts and Subscripts",
+       "firstCodePoint": 8304,
+       "lastCodePoint": 8351
+    },
+    {
+       "id": 66,
+       "name": "Currency Symbols",
+       "firstCodePoint": 8352,
+       "lastCodePoint": 8399
+    },
+    {
+       "id": 68,
+       "name": "Letterlike Symbols",
+       "firstCodePoint": 8448,
+       "lastCodePoint": 8527
+    },
+    {
+       "id": 69,
+       "name": "Number Forms",
+       "firstCodePoint": 8528,
+       "lastCodePoint": 8591
+    },
+    {
+       "id": 70,
+       "name": "Arrows",
+       "firstCodePoint": 8592,
+       "lastCodePoint": 8703
+    },
+    {
+       "id": 71,
+       "name": "Mathematical Operators",
+       "firstCodePoint": 8704,
+       "lastCodePoint": 8959
+    },
+    {
+       "id": 72,
+       "name": "Miscellaneous Technical",
+       "firstCodePoint": 8960,
+       "lastCodePoint": 9215
+    },
+    {
+       "id": 73,
+       "name": "Control Pictures",
+       "firstCodePoint": 9216,
+       "lastCodePoint": 9279
+    },
+    {
+       "id": 74,
+       "name": "Optical Character Recognition",
+       "firstCodePoint": 9280,
+       "lastCodePoint": 9311
+    },
+    {
+       "id": 75,
+       "name": "Enclosed Alphanumerics",
+       "firstCodePoint": 9312,
+       "lastCodePoint": 9471
+    },
+    {
+       "id": 76,
+       "name": "Box Drawing",
+       "firstCodePoint": 9472,
+       "lastCodePoint": 9599
+    },
+    {
+       "id": 77,
+       "name": "Block Elements",
+       "firstCodePoint": 9600,
+       "lastCodePoint": 9631
+    },
+    {
+       "id": 78,
+       "name": "Geometric Shapes",
+       "firstCodePoint": 9632,
+       "lastCodePoint": 9727
+    },
+    {
+       "id": 79,
+       "name": "Miscellaneous Symbols",
+       "firstCodePoint": 9728,
+       "lastCodePoint": 9983
+    },
+    {
+       "id": 80,
+       "name": "Dingbats",
+       "firstCodePoint": 9984,
+       "lastCodePoint": 10175
+    },
+    {
+       "id": 81,
+       "name": "Miscellaneous Mathematical Symbols-A",
+       "firstCodePoint": 10176,
+       "lastCodePoint": 10223
+    },
+    {
+       "id": 82,
+       "name": "Supplemental Arrows-A",
+       "firstCodePoint": 10224,
+       "lastCodePoint": 10239
+    },
+    {
+       "id": 83,
+       "name": "Braille Patterns",
+       "firstCodePoint": 10240,
+       "lastCodePoint": 10495
+    },
+    {
+       "id": 84,
+       "name": "Supplemental Arrows-B",
+       "firstCodePoint": 10496,
+       "lastCodePoint": 10623
+    },
+    {
+       "id": 85,
+       "name": "Miscellaneous Mathematical Symbols-B",
+       "firstCodePoint": 10624,
+       "lastCodePoint": 10751
+    },
+    {
+       "id": 86,
+       "name": "Supplemental Mathematical Operators",
+       "firstCodePoint": 10752,
+       "lastCodePoint": 11007
+    },
+    {
+       "id": 87,
+       "name": "Miscellaneous Symbols and Arrows",
+       "firstCodePoint": 11008,
+       "lastCodePoint": 11263
+    },
+    {
+       "id": 88,
+       "name": "Glagolitic",
+       "firstCodePoint": 11264,
+       "lastCodePoint": 11359
+    },
+    {
+       "id": 89,
+       "name": "Latin Extended-C",
+       "firstCodePoint": 11360,
+       "lastCodePoint": 11391
+    },
+    {
+       "id": 90,
+       "name": "Coptic",
+       "firstCodePoint": 11392,
+       "lastCodePoint": 11519
+    },
+    {
+       "id": 91,
+       "name": "Georgian Supplement",
+       "firstCodePoint": 11520,
+       "lastCodePoint": 11567
+    },
+    {
+       "id": 92,
+       "name": "Tifinagh",
+       "firstCodePoint": 11568,
+       "lastCodePoint": 11647
+    },
+    {
+       "id": 93,
+       "name": "Ethiopic Extended",
+       "firstCodePoint": 11648,
+       "lastCodePoint": 11743
+    },
+    {
+       "id": 95,
+       "name": "Supplemental Punctuation",
+       "firstCodePoint": 11776,
+       "lastCodePoint": 11903
+    },
+    {
+       "id": 96,
+       "name": "CJK Radicals Supplement",
+       "firstCodePoint": 11904,
+       "lastCodePoint": 12031
+    },
+    {
+       "id": 97,
+       "name": "Kangxi Radicals",
+       "firstCodePoint": 12032,
+       "lastCodePoint": 12255
+    },
+    {
+       "id": 98,
+       "name": "Ideographic Description Characters",
+       "firstCodePoint": 12272,
+       "lastCodePoint": 12287
+    },
+    {
+       "id": 99,
+       "name": "CJK Symbols and Punctuation",
+       "firstCodePoint": 12288,
+       "lastCodePoint": 12351
+    },
+    {
+       "id": 100,
+       "name": "Hiragana",
+       "firstCodePoint": 12352,
+       "lastCodePoint": 12447
+    },
+    {
+       "id": 101,
+       "name": "Katakana",
+       "firstCodePoint": 12448,
+       "lastCodePoint": 12543
+    },
+    {
+       "id": 102,
+       "name": "Bopomofo",
+       "firstCodePoint": 12544,
+       "lastCodePoint": 12591
+    },
+    {
+       "id": 103,
+       "name": "Hangul Compatibility Jamo",
+       "firstCodePoint": 12592,
+       "lastCodePoint": 12687
+    },
+    {
+       "id": 104,
+       "name": "Kanbun",
+       "firstCodePoint": 12688,
+       "lastCodePoint": 12703
+    },
+    {
+       "id": 105,
+       "name": "Bopomofo Extended",
+       "firstCodePoint": 12704,
+       "lastCodePoint": 12735
+    },
+    {
+       "id": 106,
+       "name": "CJK Strokes",
+       "firstCodePoint": 12736,
+       "lastCodePoint": 12783
+    },
+    {
+       "id": 107,
+       "name": "Katakana Phonetic Extensions",
+       "firstCodePoint": 12784,
+       "lastCodePoint": 12799
+    },
+    {
+       "id": 108,
+       "name": "Enclosed CJK Letters and Months",
+       "firstCodePoint": 12800,
+       "lastCodePoint": 13055
+    },
+    {
+       "id": 109,
+       "name": "CJK Compatibility",
+       "firstCodePoint": 13056,
+       "lastCodePoint": 13311
+    },
+    {
+       "id": 110,
+       "name": "CJK Unified Ideographs Extension A",
+       "firstCodePoint": 13312,
+       "lastCodePoint": 19903
+    },
+    {
+       "id": 111,
+       "name": "Yijing Hexagram Symbols",
+       "firstCodePoint": 19904,
+       "lastCodePoint": 19967
+    },
+    {
+       "id": 112,
+       "name": "CJK Unified Ideographs",
+       "firstCodePoint": 19968,
+       "lastCodePoint": 40959
+    },
+    {
+       "id": 113,
+       "name": "Yi Syllables",
+       "firstCodePoint": 40960,
+       "lastCodePoint": 42127
+    },
+    {
+       "id": 114,
+       "name": "Yi Radicals",
+       "firstCodePoint": 42128,
+       "lastCodePoint": 42191
+    },
+    {
+       "id": 115,
+       "name": "Lisu",
+       "firstCodePoint": 42192,
+       "lastCodePoint": 42239
+    },
+    {
+       "id": 116,
+       "name": "Vai",
+       "firstCodePoint": 42240,
+       "lastCodePoint": 42559
+    },
+    {
+       "id": 117,
+       "name": "Cyrillic Extended-B",
+       "firstCodePoint": 42560,
+       "lastCodePoint": 42655
+    },
+    {
+       "id": 118,
+       "name": "Bamum",
+       "firstCodePoint": 42656,
+       "lastCodePoint": 42751
+    },
+    {
+       "id": 119,
+       "name": "Modifier Tone Letters",
+       "firstCodePoint": 42752,
+       "lastCodePoint": 42783
+    },
+    {
+       "id": 120,
+       "name": "Latin Extended-D",
+       "firstCodePoint": 42784,
+       "lastCodePoint": 43007
+    },
+    {
+       "id": 121,
+       "name": "Syloti Nagri",
+       "firstCodePoint": 43008,
+       "lastCodePoint": 43055
+    },
+    {
+       "id": 122,
+       "name": "Common Indic Number Forms",
+       "firstCodePoint": 43056,
+       "lastCodePoint": 43071
+    },
+    {
+       "id": 123,
+       "name": "Phags-pa",
+       "firstCodePoint": 43072,
+       "lastCodePoint": 43135
+    },
+    {
+       "id": 124,
+       "name": "Saurashtra",
+       "firstCodePoint": 43136,
+       "lastCodePoint": 43231
+    },
+    {
+       "id": 125,
+       "name": "Devanagari Extended",
+       "firstCodePoint": 43232,
+       "lastCodePoint": 43263
+    },
+    {
+       "id": 126,
+       "name": "Kayah Li",
+       "firstCodePoint": 43264,
+       "lastCodePoint": 43311
+    },
+    {
+       "id": 127,
+       "name": "Rejang",
+       "firstCodePoint": 43312,
+       "lastCodePoint": 43359
+    },
+    {
+       "id": 128,
+       "name": "Hangul Jamo Extended-A",
+       "firstCodePoint": 43360,
+       "lastCodePoint": 43391
+    },
+    {
+       "id": 129,
+       "name": "Javanese",
+       "firstCodePoint": 43392,
+       "lastCodePoint": 43487
+    },
+    {
+       "id": 130,
+       "name": "Cham",
+       "firstCodePoint": 43520,
+       "lastCodePoint": 43615
+    },
+    {
+       "id": 131,
+       "name": "Myanmar Extended-A",
+       "firstCodePoint": 43616,
+       "lastCodePoint": 43647
+    },
+    {
+       "id": 132,
+       "name": "Tai Viet",
+       "firstCodePoint": 43648,
+       "lastCodePoint": 43743
+    },
+    {
+       "id": 133,
+       "name": "Meetei Mayek",
+       "firstCodePoint": 43968,
+       "lastCodePoint": 44031
+    },
+    {
+       "id": 134,
+       "name": "Hangul Syllables",
+       "firstCodePoint": 44032,
+       "lastCodePoint": 55215
+    },
+    {
+       "id": 135,
+       "name": "Hangul Jamo Extended-B",
+       "firstCodePoint": 55216,
+       "lastCodePoint": 55295
+    },
+    {
+       "id": 140,
+       "name": "CJK Compatibility Ideographs",
+       "firstCodePoint": 63744,
+       "lastCodePoint": 64255
+    },
+    {
+       "id": 141,
+       "name": "Alphabetic Presentation Forms",
+       "firstCodePoint": 64256,
+       "lastCodePoint": 64335
+    },
+    {
+       "id": 142,
+       "name": "Arabic Presentation Forms-A",
+       "firstCodePoint": 64336,
+       "lastCodePoint": 65023
+    },
+    {
+       "id": 144,
+       "name": "Vertical Forms",
+       "firstCodePoint": 65040,
+       "lastCodePoint": 65055
+    },
+    {
+       "id": 146,
+       "name": "CJK Compatibility Forms",
+       "firstCodePoint": 65072,
+       "lastCodePoint": 65103
+    },
+    {
+       "id": 147,
+       "name": "Small Form Variants",
+       "firstCodePoint": 65104,
+       "lastCodePoint": 65135
+    },
+    {
+       "id": 148,
+       "name": "Arabic Presentation Forms-B",
+       "firstCodePoint": 65136,
+       "lastCodePoint": 65279
+    },
+    {
+       "id": 149,
+       "name": "Halfwidth and Fullwidth Forms",
+       "firstCodePoint": 65280,
+       "lastCodePoint": 65519
+    },
+    {
+       "id": 150,
+       "name": "Specials",
+       "firstCodePoint": 65520,
+       "lastCodePoint": 65535
+    },
+    {
+       "id": 151,
+       "name": "Linear B Syllabary",
+       "firstCodePoint": 65536,
+       "lastCodePoint": 65663
+    },
+    {
+       "id": 152,
+       "name": "Linear B Ideograms",
+       "firstCodePoint": 65664,
+       "lastCodePoint": 65791
+    },
+    {
+       "id": 153,
+       "name": "Aegean Numbers",
+       "firstCodePoint": 65792,
+       "lastCodePoint": 65855
+    },
+    {
+       "id": 154,
+       "name": "Ancient Greek Numbers",
+       "firstCodePoint": 65856,
+       "lastCodePoint": 65935
+    },
+    {
+       "id": 155,
+       "name": "Ancient Symbols",
+       "firstCodePoint": 65936,
+       "lastCodePoint": 65999
+    },
+    {
+       "id": 156,
+       "name": "Phaistos Disc",
+       "firstCodePoint": 66000,
+       "lastCodePoint": 66047
+    },
+    {
+       "id": 157,
+       "name": "Lycian",
+       "firstCodePoint": 66176,
+       "lastCodePoint": 66207
+    },
+    {
+       "id": 158,
+       "name": "Carian",
+       "firstCodePoint": 66208,
+       "lastCodePoint": 66271
+    },
+    {
+       "id": 159,
+       "name": "Old Italic",
+       "firstCodePoint": 66304,
+       "lastCodePoint": 66351
+    },
+    {
+       "id": 160,
+       "name": "Gothic",
+       "firstCodePoint": 66352,
+       "lastCodePoint": 66383
+    },
+    {
+       "id": 161,
+       "name": "Ugaritic",
+       "firstCodePoint": 66432,
+       "lastCodePoint": 66463
+    },
+    {
+       "id": 162,
+       "name": "Old Persian",
+       "firstCodePoint": 66464,
+       "lastCodePoint": 66527
+    },
+    {
+       "id": 163,
+       "name": "Deseret",
+       "firstCodePoint": 66560,
+       "lastCodePoint": 66639
+    },
+    {
+       "id": 164,
+       "name": "Shavian",
+       "firstCodePoint": 66640,
+       "lastCodePoint": 66687
+    },
+    {
+       "id": 165,
+       "name": "Osmanya",
+       "firstCodePoint": 66688,
+       "lastCodePoint": 66735
+    },
+    {
+       "id": 166,
+       "name": "Cypriot Syllabary",
+       "firstCodePoint": 67584,
+       "lastCodePoint": 67647
+    },
+    {
+       "id": 167,
+       "name": "Imperial Aramaic",
+       "firstCodePoint": 67648,
+       "lastCodePoint": 67679
+    },
+    {
+       "id": 168,
+       "name": "Phoenician",
+       "firstCodePoint": 67840,
+       "lastCodePoint": 67871
+    },
+    {
+       "id": 169,
+       "name": "Lydian",
+       "firstCodePoint": 67872,
+       "lastCodePoint": 67903
+    },
+    {
+       "id": 170,
+       "name": "Kharoshthi",
+       "firstCodePoint": 68096,
+       "lastCodePoint": 68191
+    },
+    {
+       "id": 171,
+       "name": "Old South Arabian",
+       "firstCodePoint": 68192,
+       "lastCodePoint": 68223
+    },
+    {
+       "id": 172,
+       "name": "Avestan",
+       "firstCodePoint": 68352,
+       "lastCodePoint": 68415
+    },
+    {
+       "id": 173,
+       "name": "Inscriptional Parthian",
+       "firstCodePoint": 68416,
+       "lastCodePoint": 68447
+    },
+    {
+       "id": 174,
+       "name": "Inscriptional Pahlavi",
+       "firstCodePoint": 68448,
+       "lastCodePoint": 68479
+    },
+    {
+       "id": 175,
+       "name": "Old Turkic",
+       "firstCodePoint": 68608,
+       "lastCodePoint": 68687
+    },
+    {
+       "id": 176,
+       "name": "Rumi Numeral Symbols",
+       "firstCodePoint": 69216,
+       "lastCodePoint": 69247
+    },
+    {
+       "id": 177,
+       "name": "Kaithi",
+       "firstCodePoint": 69760,
+       "lastCodePoint": 69839
+    },
+    {
+       "id": 178,
+       "name": "Cuneiform",
+       "firstCodePoint": 73728,
+       "lastCodePoint": 74751
+    },
+    {
+       "id": 179,
+       "name": "Cuneiform Numbers and Punctuation",
+       "firstCodePoint": 74752,
+       "lastCodePoint": 74879
+    },
+    {
+       "id": 180,
+       "name": "Egyptian Hieroglyphs",
+       "firstCodePoint": 77824,
+       "lastCodePoint": 78895
+    },
+    {
+       "id": 181,
+       "name": "Byzantine Musical Symbols",
+       "firstCodePoint": 118784,
+       "lastCodePoint": 119039
+    },
+    {
+       "id": 182,
+       "name": "Musical Symbols",
+       "firstCodePoint": 119040,
+       "lastCodePoint": 119295
+    },
+    {
+       "id": 183,
+       "name": "Ancient Greek Musical Notation",
+       "firstCodePoint": 119296,
+       "lastCodePoint": 119375
+    },
+    {
+       "id": 184,
+       "name": "Tai Xuan Jing Symbols",
+       "firstCodePoint": 119552,
+       "lastCodePoint": 119647
+    },
+    {
+       "id": 185,
+       "name": "Counting Rod Numerals",
+       "firstCodePoint": 119648,
+       "lastCodePoint": 119679
+    },
+    {
+       "id": 186,
+       "name": "Mathematical Alphanumeric Symbols",
+       "firstCodePoint": 119808,
+       "lastCodePoint": 120831
+    },
+    {
+       "id": 187,
+       "name": "Mahjong Tiles",
+       "firstCodePoint": 126976,
+       "lastCodePoint": 127023
+    },
+    {
+       "id": 188,
+       "name": "Domino Tiles",
+       "firstCodePoint": 127024,
+       "lastCodePoint": 127135
+    },
+    {
+       "id": 189,
+       "name": "Enclosed Alphanumeric Supplement",
+       "firstCodePoint": 127232,
+       "lastCodePoint": 127487
+    },
+    {
+       "id": 190,
+       "name": "Enclosed Ideographic Supplement",
+       "firstCodePoint": 127488,
+       "lastCodePoint": 127743
+    },
+    {
+       "id": 191,
+       "name": "CJK Unified Ideographs Extension B",
+       "firstCodePoint": 131072,
+       "lastCodePoint": 173791
+    },
+    {
+       "id": 192,
+       "name": "CJK Unified Ideographs Extension C",
+       "firstCodePoint": 173824,
+       "lastCodePoint": 177983
+    },
+    {
+       "id": 193,
+       "name": "CJK Compatibility Ideographs Supplement",
+       "firstCodePoint": 194560,
+       "lastCodePoint": 195103
+    }
+]

@@ -23,7 +23,7 @@ public final class TagReader {
 
     public TagReader(final String input) throws ReaderException {
         this.input = input;
-        read();
+        scan();
     }
 
     /**
@@ -31,7 +31,7 @@ public final class TagReader {
      *
      * @return Parsed tag
      */
-    public Tag build() throws ReaderException {
+    public Tag read() throws ReaderException {
         final var map = new HashMap<Ident, Value>();
         if (tokens.isEmpty()) {
             throw new ReaderException("Empty line");
@@ -65,18 +65,18 @@ public final class TagReader {
         return new Tag(tagType, map);
     }
 
-    private void read() throws ReaderException {
+    private void scan() throws ReaderException {
         // This is supposed to be a basic recursive descend parser.
         while (peek() != END) {
             final var current = peek();
             if (Character.isWhitespace(current)) {
                 skipWhitespace();
             } else if (Character.isAlphabetic(current)) {
-                readIdent();
+                ident();
             } else if (current == DOUBLE_QUOTES) {
-                readString();
+                string();
             } else if (Character.isDigit(current) || current == MINUS) {
-                readNumbers();
+                numbers();
             } else if (current == EQUALS) {
                 tokens.add(Equals.get());
                 advance();
@@ -85,18 +85,18 @@ public final class TagReader {
         }
     }
 
-    private void readNumbers() throws ReaderException {
-        readNumber();
+    private void numbers() throws ReaderException {
+        number();
         skipWhitespace();
         while (peek() == COMMA) {
             advance();
             start = end;
-            readNumber();
+            number();
             skipWhitespace();
         }
     }
 
-    private void readNumber() throws ReaderException {
+    private void number() throws ReaderException {
         if (peek() == MINUS) {
             advance();
         }
@@ -112,7 +112,7 @@ public final class TagReader {
         }
     }
 
-    private void readString() throws ReaderException {
+    private void string() throws ReaderException {
         advance();
         while (peek() != DOUBLE_QUOTES || peek() != END) {
             advance();
@@ -126,7 +126,7 @@ public final class TagReader {
         tokens.add(result);
     }
 
-    private void readIdent() throws ReaderException {
+    private void ident() throws ReaderException {
         while (Character.isAlphabetic(peek())) {
             advance();
         }

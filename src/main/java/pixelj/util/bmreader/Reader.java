@@ -18,7 +18,7 @@ public final class Reader {
                 .filter(line -> !(line.isBlank()))
                 .map(line -> {
                     try {
-                        return new TagReader(line).build();
+                        return new TagReader(line).read();
                     } catch (ReaderException exception) {
                         throw new IllegalArgumentException(
                                 "Error parsing input: " + exception.getMessage(),
