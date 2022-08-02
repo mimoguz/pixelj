@@ -27,8 +27,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.dataformat.smile.databind.SmileMapper;
 
 import pixelj.graphics.FontIcon;
-import pixelj.models.BlockRecord;
-import pixelj.models.ScalarRecord;
+import pixelj.models.Block;
+import pixelj.models.Scalar;
 
 public final class Resources {
 
@@ -40,35 +40,35 @@ public final class Resources {
     /** Theme colors. */
     public final Colors colors;
 
-    private final Collection<BlockRecord> blocks;
-    private final ImmutableIntObjectMap<BlockRecord> blocksTable;
-    private final ImmutableIntObjectMap<ScalarRecord> scalarsTable;
-    private final ImmutableIntObjectMap<Collection<ScalarRecord>> scalarsInBlock;
+    private final Collection<Block> blocks;
+    private final ImmutableIntObjectMap<Block> blocksTable;
+    private final ImmutableIntObjectMap<Scalar> scalarsTable;
+    private final ImmutableIntObjectMap<Collection<Scalar>> scalarsInBlock;
     private final Font iconFont;
     private final Strings strings;
 
     private Resources(final boolean useDarkTheme) {
-        final var blockList = new ArrayList<BlockRecord>();
-        blockList.add(new BlockRecord(0, "All", 0, Integer.MAX_VALUE));
+        final var blockList = new ArrayList<Block>();
+        blockList.add(new Block(0, "All", 0, Integer.MAX_VALUE));
         blockList.addAll(loadBlocks());
         blocks = Collections.unmodifiableCollection(blockList);
 
-        final var blockMap = new IntObjectHashMap<BlockRecord>(blockList.size());
+        final var blockMap = new IntObjectHashMap<Block>(blockList.size());
         for (final var block : blockList) {
             blockMap.put(block.id(), block);
         }
         blocksTable = blockMap.toImmutable();
 
-        final Collection<ScalarRecord> scalarRecords = loadScalarRecords();
-        final var scalars = new IntObjectHashMap<ScalarRecord>(scalarRecords.size());
+        final Collection<Scalar> scalarRecords = loadScalarRecords();
+        final var scalars = new IntObjectHashMap<Scalar>(scalarRecords.size());
         for (final var scalar : scalarRecords) {
             scalars.put(scalar.codePoint(), scalar);
         }
         scalarsTable = scalars.toImmutable();
 
-        final var scalarsByBlock = new IntObjectHashMap<Collection<ScalarRecord>>();
+        final var scalarsByBlock = new IntObjectHashMap<Collection<Scalar>>();
         scalarRecords.stream()
-                .collect(Collectors.groupingBy(ScalarRecord::blockId))
+                .collect(Collectors.groupingBy(Scalar::blockId))
                 .forEach((key, value) -> scalarsByBlock.put(key, Collections.unmodifiableCollection(value)));
         scalarsInBlock = scalarsByBlock.toImmutable();
 
@@ -89,19 +89,19 @@ public final class Resources {
         return strings.format(key, arguments);
     }
 
-    public BlockRecord getBlockData(final int blockId) {
+    public Block getBlockData(final int blockId) {
         return blocksTable.get(blockId);
     }
 
-    public Collection<BlockRecord> getBlocks() {
+    public Collection<Block> getBlocks() {
         return blocks;
     }
 
-    public ScalarRecord getScalar(final int codePoint) {
+    public Scalar getScalar(final int codePoint) {
         return scalarsTable.get(codePoint);
     }
 
-    public Collection<ScalarRecord> getScalars(final int blockId) {
+    public Collection<Scalar> getScalars(final int blockId) {
         return scalarsInBlock.get(blockId);
     }
 
@@ -153,13 +153,13 @@ public final class Resources {
         }).filter(Objects::nonNull).toList();
     }
 
-    private static Collection<BlockRecord> loadBlocks() {
+    private static Collection<Block> loadBlocks() {
         return loadSerializedCollection("blocks.sml", new TypeReference<>() {
             // Empty
         });
     }
 
-    private static Collection<ScalarRecord> loadScalarRecords() {
+    private static Collection<Scalar> loadScalarRecords() {
         return loadSerializedCollection("scalars.sml", new TypeReference<>() {
             // Empty
         });

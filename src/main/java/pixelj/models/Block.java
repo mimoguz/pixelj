@@ -2,7 +2,7 @@ package pixelj.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record BlockRecord(
+public record Block(
         @JsonProperty("id") int id,
         @JsonProperty("name") String name,
         @JsonProperty("firstCodePoint") int starts,
@@ -23,7 +23,7 @@ public record BlockRecord(
         if (this == obj) {
             return true;
         }
-        if (obj instanceof BlockRecord other) {
+        if (obj instanceof Block other) {
             return id == other.id();
         }
         return false;

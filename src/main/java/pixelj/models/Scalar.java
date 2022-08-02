@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @param generalCategory https://www.unicode.org/reports/tr44/#General_Category_Values
  * @param blockId
  */
-public record ScalarRecord(
+public record Scalar(
         @JsonProperty("codePoint") int codePoint,
         @JsonProperty("name") String name,
         @JsonProperty("generalCategory") GeneralCategory generalCategory,
@@ -32,7 +32,7 @@ public record ScalarRecord(
         if (this == obj) {
             return true;
         }
-        if (obj instanceof ScalarRecord other) {
+        if (obj instanceof Scalar other) {
             return codePoint == other.codePoint();
         }
         return false;

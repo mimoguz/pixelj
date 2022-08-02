@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.ListSelectionModel;
 
 import pixelj.actions.KerningPairListActions;
-import pixelj.models.BlockRecord;
+import pixelj.models.Block;
 import pixelj.models.FilteredList;
 import pixelj.models.KerningPair;
 import pixelj.models.Project;
@@ -34,7 +34,7 @@ public final class ListPanel extends ListPanelBase {
         selectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
         leftFilterBox.addActionListener(e -> {
-            if (leftFilterBox.getSelectedItem() instanceof final BlockRecord block) {
+            if (leftFilterBox.getSelectedItem() instanceof final Block block) {
                 setFilterLeft(block.starts(), block.ends());
             } else {
                 setFilterLeft(0, Integer.MAX_VALUE);
@@ -42,7 +42,7 @@ public final class ListPanel extends ListPanelBase {
         });
 
         rightFilterBox.addActionListener(e -> {
-            if (rightFilterBox.getSelectedItem() instanceof final BlockRecord block) {
+            if (rightFilterBox.getSelectedItem() instanceof final Block block) {
                 setFilterRight(block.starts(), block.ends());
             } else {
                 setFilterRight(0, Integer.MAX_VALUE);

@@ -6,7 +6,7 @@ import javax.swing.DefaultListSelectionModel;
 import javax.swing.ListSelectionModel;
 
 import pixelj.actions.ApplicationAction;
-import pixelj.models.BlockRecord;
+import pixelj.models.Block;
 import pixelj.models.FilteredList;
 import pixelj.models.Glyph;
 import pixelj.models.KerningPair;
@@ -38,7 +38,7 @@ public final class AddDialog extends AddDialogBase {
 
         filterBox.setSelectedIndex(0);
         filterBox.addActionListener(event -> {
-            if (filterBox.getSelectedItem() instanceof final BlockRecord block) {
+            if (filterBox.getSelectedItem() instanceof final Block block) {
                 listModel.setFilter(
                         chr -> chr.getCodePoint() >= block.starts() && chr.getCodePoint() <= block.ends()
                 );

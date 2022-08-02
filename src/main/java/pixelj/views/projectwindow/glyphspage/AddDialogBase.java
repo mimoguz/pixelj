@@ -14,8 +14,8 @@ import javax.swing.JScrollPane;
 import com.formdev.flatlaf.FlatClientProperties;
 
 import net.miginfocom.swing.MigLayout;
-import pixelj.models.BlockRecord;
-import pixelj.models.ScalarRecord;
+import pixelj.models.Block;
+import pixelj.models.Scalar;
 import pixelj.resources.Resources;
 import pixelj.views.controls.SearchableComboBox;
 import pixelj.views.shared.Borders;
@@ -28,12 +28,12 @@ abstract class AddDialogBase extends JDialog {
 
     private static final String INSETS = "insets 2lp";
 
-    protected final JList<ScalarRecord> scalarList = new JList<>();
+    protected final JList<Scalar> scalarList = new JList<>();
     /**  Filter scalars by block. */
-    protected final JComboBox<BlockRecord> filterBox = new SearchableComboBox<>(
+    protected final JComboBox<Block> filterBox = new SearchableComboBox<>(
             Resources.get().getBlocks().stream().skip(1).toList()
     );
-    protected final JButton addButton = new JButton(Resources.get().getString("add"));;
+    protected final JButton addButton = new JButton(Resources.get().getString("add"));
     protected final JButton closeButton = new JButton(Resources.get().getString("close"));
     protected final JButton helpButton = new JButton();
 
@@ -59,11 +59,11 @@ abstract class AddDialogBase extends JDialog {
 
         final var pad = Dimensions.MEDIUM_PADDING;
         final var buttonPanel = new JPanel(
-            new MigLayout(
-                INSETS,
-                String.format("[grow, left]%dlp[]%dlp[]", pad, pad),
-                "[center]"
-            )
+                new MigLayout(
+                    INSETS,
+                    String.format("[grow, left]%dlp[]%dlp[]", pad, pad),
+                    "[center]"
+                )
         );
         buttonPanel.add(helpButton);
         buttonPanel.add(addButton);

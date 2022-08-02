@@ -5,10 +5,10 @@ import java.awt.Component;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
-import pixelj.models.ScalarRecord;
+import pixelj.models.Scalar;
 import pixelj.resources.Resources;
 
-public final class ScalarCellRenderer implements ListCellRenderer<ScalarRecord> {
+public final class ScalarCellRenderer implements ListCellRenderer<Scalar> {
     private final ScalarCell component = new ScalarCell();
 
     public ScalarCellRenderer() {
@@ -17,8 +17,8 @@ public final class ScalarCellRenderer implements ListCellRenderer<ScalarRecord> 
 
     @Override
     public Component getListCellRendererComponent(
-            final JList<? extends ScalarRecord> list,
-            final ScalarRecord value,
+            final JList<? extends Scalar> list,
+            final Scalar value,
             final int index,
             final boolean isSelected,
             final boolean cellHasFocus
