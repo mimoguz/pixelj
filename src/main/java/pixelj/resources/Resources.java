@@ -24,7 +24,7 @@ import org.eclipse.collections.api.map.primitive.ImmutableIntObjectMap;
 import org.eclipse.collections.impl.map.mutable.primitive.IntObjectHashMap;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.smile.databind.SmileMapper;
 
 import pixelj.graphics.FontIcon;
 import pixelj.models.BlockRecord;
@@ -154,13 +154,13 @@ public final class Resources {
     }
 
     private static Collection<BlockRecord> loadBlocks() {
-        return loadSerializedCollection("blocks.json", new TypeReference<>() {
+        return loadSerializedCollection("blocks.sml", new TypeReference<>() {
             // Empty
         });
     }
 
     private static Collection<ScalarRecord> loadScalarRecords() {
-        return loadSerializedCollection("scalars.json", new TypeReference<>() {
+        return loadSerializedCollection("scalars.sml", new TypeReference<>() {
             // Empty
         });
     }
@@ -231,9 +231,9 @@ public final class Resources {
             final String resource,
             final TypeReference<Collection<T>> typeRef
     ) {
-        final var objectMapper = new ObjectMapper();
+        final var smileMapper = new SmileMapper();
         try (var source = Resources.class.getResourceAsStream(resource)) {
-            return Collections.unmodifiableCollection(objectMapper.readValue(source, typeRef));
+            return Collections.unmodifiableCollection(smileMapper.readValue(source, typeRef));
         } catch (final IOException e) {
             throw new ResourceInitializationException(e);
         }

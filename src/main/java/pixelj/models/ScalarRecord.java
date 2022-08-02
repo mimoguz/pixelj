@@ -4,17 +4,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * A unicode scalar.
- * 
+ *
  * @param codePoint
  * @param name
- * @param blockId   Id of its block. See {@link #BlockRecord}
+ * @param generalCategory https://www.unicode.org/reports/tr44/#General_Category_Values
+ * @param blockId
  */
 public record ScalarRecord(
         @JsonProperty("codePoint") int codePoint,
         @JsonProperty("name") String name,
+        @JsonProperty("generalCategory") GeneralCategory generalCategory,
         @JsonProperty("blockId") int blockId
 ) {
-    
+
     @Override
     public String toString() {
         return name;
