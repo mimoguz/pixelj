@@ -7,7 +7,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,11 +21,8 @@ import javax.swing.SwingUtilities;
 import com.formdev.flatlaf.FlatClientProperties;
 
 import net.miginfocom.swing.MigLayout;
-import pixelj.actions.ApplicationAction;
-import pixelj.resources.Icons;
 import pixelj.resources.Resources;
 import pixelj.services.RecentItem;
-import pixelj.views.controls.CoupledActionsButton;
 import pixelj.views.shared.Borders;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
@@ -86,23 +82,6 @@ abstract class HomeWindowBase extends JFrame {
         });
 
         final var res = Resources.get();
-
-        final var south = new JPanel();
-        south.setLayout(new BoxLayout(south, BoxLayout.LINE_AXIS));
-        final var testButton = new CoupledActionsButton();
-        Components.setFixedSize(testButton, Dimensions.HOME_BUTTON_SIZE);
-        testButton.setPrimaryAction(
-                new ApplicationAction("testLeft", (event, action) -> System.err.println("left"))
-                    .withText()
-        );
-        testButton.setSecondaryAction(
-                new ApplicationAction("testRight", (event, action) -> System.err.println("right"))
-                    .setIcon(Icons.BURGER)
-        );
-        south.add(testButton);
-        south.setBorder(Borders.LARGE_EMPTY);
-        content.add(south, BorderLayout.SOUTH);
-
         setTitle(res.getString("applicationName"));
         setIconImages(res.applicationIcons);
         getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
