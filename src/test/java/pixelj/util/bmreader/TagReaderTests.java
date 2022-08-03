@@ -15,7 +15,7 @@ public class TagReaderTests {
         final var line = "char id=45 x=0 y=0 width=5 height=1 xoffset=0 yoffset=11 xadvance=6 page=0 chnl=15";
         final Map<Ident, Value> result;
         try {
-            result = new TagReader(line).build().assignments();
+            result = new TagReader(line).read().assignments();
         } catch (ReaderException exception) {
             throw new AssertionError(exception);
         }
@@ -39,7 +39,7 @@ public class TagReaderTests {
                 + " aa=1 padding=1,2,3,4 spacing=1,1 outline=0";
         final Tag result;
         try {
-            result = new TagReader(line).build();
+            result = new TagReader(line).read();
         } catch (ReaderException exception) {
             throw new AssertionError(exception);
         }

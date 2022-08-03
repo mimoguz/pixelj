@@ -16,7 +16,7 @@ import javax.swing.SwingConstants;
 import com.formdev.flatlaf.FlatClientProperties;
 
 import net.miginfocom.swing.MigLayout;
-import pixelj.models.BlockRecord;
+import pixelj.models.Block;
 import pixelj.models.Glyph;
 import pixelj.resources.Resources;
 import pixelj.views.controls.SearchableComboBox;
@@ -32,7 +32,7 @@ public abstract class AddDialogBase extends JDialog {
     private static final String WRAP = "wrap";
     private static final String INSETS = "insets 2lp";
 
-    protected final JComboBox<BlockRecord> filterBox = new SearchableComboBox<>(Resources.get().getBlocks());
+    protected final JComboBox<Block> filterBox = new SearchableComboBox<>(Resources.get().getBlocks());
     protected final JList<Glyph> glyphList = new JList<>();
     protected final GlyphCell leftCell = new GlyphCell(Dimensions.MAXIMUM_PREVIEW_SIZE);
     protected final GlyphCell rightCell = new GlyphCell(Dimensions.MAXIMUM_PREVIEW_SIZE);
@@ -90,11 +90,11 @@ public abstract class AddDialogBase extends JDialog {
         centerPanel.add(selectionPanel, BorderLayout.SOUTH);
 
         final var buttonPanel = new JPanel(
-            new MigLayout(
-                INSETS,
-                String.format("[grow, left]%dlp[]%dlp[]", pad, pad),
-                "[center]"
-            )
+                new MigLayout(
+                    INSETS,
+                    String.format("[grow, left]%dlp[]%dlp[]", pad, pad),
+                    "[center]"
+                )
         );
         buttonPanel.add(helpButton);
         buttonPanel.add(addButton);

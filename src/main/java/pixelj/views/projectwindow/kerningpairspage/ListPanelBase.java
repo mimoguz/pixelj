@@ -15,7 +15,7 @@ import javax.swing.SwingConstants;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
-import pixelj.models.BlockRecord;
+import pixelj.models.Block;
 import pixelj.models.KerningPair;
 import pixelj.resources.Resources;
 import pixelj.views.controls.SearchableComboBox;
@@ -31,10 +31,10 @@ abstract class ListPanelBase extends JPanel {
     protected final JList<KerningPair> list = new JList<>();
     protected final JButton addButton = new JButton();
     protected final JButton removeButton = new JButton();
-    protected final SearchableComboBox<BlockRecord> leftFilterBox = new SearchableComboBox<>(
+    protected final SearchableComboBox<Block> leftFilterBox = new SearchableComboBox<>(
             Resources.get().getBlocks()
     );
-    protected final SearchableComboBox<BlockRecord> rightFilterBox = new SearchableComboBox<>(
+    protected final SearchableComboBox<Block> rightFilterBox = new SearchableComboBox<>(
             Resources.get().getBlocks()
     );
 

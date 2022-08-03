@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 import javax.swing.ListSelectionModel;
 
 import pixelj.actions.GlyphListActions;
-import pixelj.models.BlockRecord;
+import pixelj.models.Block;
 import pixelj.models.FilteredList;
 import pixelj.models.Glyph;
 import pixelj.models.Project;
@@ -31,7 +31,7 @@ public final class ListPanel extends ListPanelBase {
         selectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
         filterBox.addActionListener(event -> {
-            if (filterBox.getSelectedItem() instanceof final BlockRecord block) {
+            if (filterBox.getSelectedItem() instanceof final Block block) {
                 filteredListModel.setFilter(
                         chr -> chr.getCodePoint() >= block.starts() && chr.getCodePoint() <= block.ends()
                 );

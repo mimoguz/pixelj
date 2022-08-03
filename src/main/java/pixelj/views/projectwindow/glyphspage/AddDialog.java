@@ -8,10 +8,10 @@ import javax.swing.ListSelectionModel;
 
 import pixelj.actions.ApplicationAction;
 import pixelj.graphics.BinaryImage;
-import pixelj.models.BlockRecord;
+import pixelj.models.Block;
 import pixelj.models.Glyph;
 import pixelj.models.Project;
-import pixelj.models.ScalarRecord;
+import pixelj.models.Scalar;
 import pixelj.resources.Icons;
 import pixelj.resources.Resources;
 import pixelj.views.shared.Help;
@@ -22,7 +22,7 @@ import pixelj.views.shared.ScalarCellRenderer;
  */
 public final class AddDialog extends AddDialogBase {
 
-    private final DefaultListModel<ScalarRecord> listModel = new DefaultListModel<>();
+    private final DefaultListModel<Scalar> listModel = new DefaultListModel<>();
     private final ListSelectionModel selectionModel = new DefaultListSelectionModel();
     private final Project project;
 
@@ -38,18 +38,18 @@ public final class AddDialog extends AddDialogBase {
         final var res = Resources.get();
 
         filterBox.setSelectedIndex(0);
-        if (filterBox.getSelectedItem() instanceof final BlockRecord block) {
+        if (filterBox.getSelectedItem() instanceof final Block block) {
             listModel.addAll(res.getScalars(block.id()));
         }
         filterBox.addActionListener(event -> {
-            if (filterBox.getSelectedItem() instanceof final BlockRecord block) {
+            if (filterBox.getSelectedItem() instanceof final Block block) {
                 listModel.clear();
                 listModel.addAll(res.getScalars(block.id()));
             }
         });
 
         addButton.setEnabled(false);
-        // TODO: Seperate actions
+        // TODO: Separate actions
         addButton.addActionListener(event -> addSelected());
         selectionModel.addListSelectionListener(
                 e -> addButton.setEnabled(selectionModel.getMinSelectionIndex() >= 0)
