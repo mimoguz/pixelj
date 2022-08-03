@@ -1,8 +1,11 @@
 package pixelj.views.projectwindow.kerningpairspage;
 
 import java.awt.Frame;
+import java.awt.event.KeyEvent;
 
 import javax.swing.DefaultListSelectionModel;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 
 import pixelj.actions.ApplicationAction;
@@ -82,6 +85,12 @@ public final class AddDialog extends AddDialogBase {
         addButton.addActionListener(event -> addKerningPair());
 
         cancelButton.addActionListener(event -> setVisible(false));
+
+        getRootPane().registerKeyboardAction(
+                (e) -> setVisible(false),
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_IN_FOCUSED_WINDOW
+        );
     }
 
     public KerningPair getResult() {

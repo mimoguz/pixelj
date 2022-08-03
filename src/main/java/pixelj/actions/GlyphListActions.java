@@ -58,9 +58,9 @@ public final class GlyphListActions implements Actions {
                 );
 
         addCodePointAction = new ApplicationAction("addCodePointAction", (e, a) -> System.err.println("r"))
-            .setIcon(Icons.ELLIPSIS)
+            .setIcon(Icons.NUMBER)
             .setTooltipWithAccelerator(
-                    "addCodePointActionTooltip",
+                    Resources.get().getString("addCodePointActionTooltip"),
                     KeyStroke.getKeyStroke(
                             KeyEvent.VK_N, InputEvent.ALT_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK
                     )

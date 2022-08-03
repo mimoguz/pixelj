@@ -26,6 +26,18 @@ public interface Actions {
     }
 
     /**
+     * Unregister keyboard shortcuts.
+     *
+     * @param component Component to register shortcuts.
+     */
+    default void unregisterShortcuts(final JComponent component) {
+        final var actions = getAll();
+        for (var action :actions) {
+            Components.unregisterShortcut(component, action);
+        }
+    }
+
+    /**
      * Enable or disable all actions in the given collection.
      *
      * @param isEnabled Target state

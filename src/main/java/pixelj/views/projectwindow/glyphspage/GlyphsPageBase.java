@@ -5,11 +5,11 @@ import javax.swing.JSplitPane;
 import pixelj.views.shared.Dimensions;
 
 /** GlyphsScreen design. */
-abstract class GlyphsScreenBase extends JSplitPane {
+abstract class GlyphsPageBase extends JSplitPane {
     protected final ListPanel listPanel;
     protected final PainterPanel painterPanel;
 
-    GlyphsScreenBase(final ListPanel listPanel, final PainterPanel painterPanel) {
+    GlyphsPageBase(final ListPanel listPanel, final PainterPanel painterPanel) {
         this.listPanel = listPanel;
         this.painterPanel = painterPanel;
         setMaximumSize(Dimensions.MAXIMUM);

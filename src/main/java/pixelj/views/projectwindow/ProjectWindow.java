@@ -21,8 +21,11 @@ public class ProjectWindow extends ProjectWindowBase {
         );
 
         // Invisible screens should be disabled to prevent shortcut collisions.
+        // Related actions handle registering/un-registering shortcuts. Enabled page must be the last item,
+        // otherwise its registered shortcut may be unregistered by the disabled pages.
         getKerningPairsPage().setEnabled(false);
         getPreviewPage().setEnabled(false);
+        getGlyphsPage().setEnabled(true);
 
         final var mainActions = new ProjectWindowActions(project, this, appState);
         mainActions.registerShortcuts(getRootPane());

@@ -11,6 +11,7 @@ import javax.swing.Action;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.WindowConstants;
 
 import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.util.nfd.NativeFileDialog;
@@ -114,6 +115,7 @@ public final class HomeWindowActions implements Actions {
                 res.getString("create"),
                 true
         );
+        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         dialog.set(DocumentSettings.getDefault());
         dialog.setVisible(true);
         final var settings = dialog.getResult();

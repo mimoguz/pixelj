@@ -77,4 +77,17 @@ public final class Components {
         }
     }
 
+    /**
+     * If action has an accelerator defined, unregister it from the component.
+     *
+     * @param component
+     * @param action
+     */
+    public static void unregisterShortcut(final JComponent component, final ApplicationAction action) {
+        if (action.getValue(Action.ACCELERATOR_KEY) instanceof KeyStroke accelerator) {
+            component.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).remove(accelerator);
+            component.getActionMap().remove(action.getKey());
+        }
+    }
+
 }

@@ -6,7 +6,7 @@ import javax.swing.ListSelectionModel;
 import pixelj.models.Project;
 import pixelj.views.controls.GlyphView;
 
-public final class GlyphsPage extends GlyphsScreenBase {
+public final class GlyphsPage extends GlyphsPageBase {
     private final ListSelectionModel selectionModel;
 
     public GlyphsPage(final Project project, final JFrame window) {

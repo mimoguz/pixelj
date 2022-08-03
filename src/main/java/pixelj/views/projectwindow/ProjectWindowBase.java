@@ -226,16 +226,18 @@ abstract class ProjectWindowBase extends JFrame {
     }
 
     private void setCurrentScreen(final int index) {
+        // Related actions handle registering/un-registering shortcuts. Enabled page must be the last item,
+        // otherwise its registered shortcut may be unregistered by the disabled pages.
         switch (index) {
             case 0 -> {
-                glyphsPage.setEnabled(true);
                 kerningPairsPage.setEnabled(false);
                 previewPage.setEnabled(false);
+                glyphsPage.setEnabled(true);
             }
             case 1 -> {
                 glyphsPage.setEnabled(false);
-                kerningPairsPage.setEnabled(true);
                 previewPage.setEnabled(false);
+                kerningPairsPage.setEnabled(true);
             }
             default -> {
                 glyphsPage.setEnabled(false);

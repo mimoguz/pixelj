@@ -18,13 +18,15 @@ public final class ListPanel extends ListPanelBase {
     private final KerningPairListActions actions;
     private final FilteredList<KerningPair> listModel;
     private final ListSelectionModel selectionModel = new DefaultListSelectionModel();
+    private final JFrame window;
     private Predicate<KerningPair> filterRight = model -> true;
     private Predicate<KerningPair> filterLeft = model -> true;
 
     public ListPanel(final Project project, final JFrame window) {
+        this.window = window;
+
         actions = new KerningPairListActions(project, selectionModel, window);
         actions.removeAction.setEnabled(false);
-        actions.registerShortcuts(window.getRootPane());
         addButton.setAction(actions.addAction);
         removeButton.setAction(actions.removeAction);
 
@@ -63,6 +65,11 @@ public final class ListPanel extends ListPanelBase {
         super.setEnabled(enabled);
         actions.addAction.setEnabled(enabled);
         actions.removeAction.setEnabled(enabled && (selectionModel.getMinSelectionIndex() >= 0));
+        if (enabled) {
+            actions.registerShortcuts(window.getRootPane());
+        } else {
+            actions.unregisterShortcuts(window.getRootPane());
+        }
     }
 
     private void setFilterLeft(final int from, final int to) {
