@@ -23,10 +23,10 @@ public final class ListPanel extends ListPanelBase {
 
     public ListPanel(final Project project, final JFrame window) {
         actions = new KerningPairListActions(project, selectionModel, window);
-        actions.showRemoveDialogAction.setEnabled(false);
+        actions.removeAction.setEnabled(false);
         actions.registerShortcuts(window.getRootPane());
-        addButton.setAction(actions.showAddDialogAction);
-        removeButton.setAction(actions.showRemoveDialogAction);
+        addButton.setAction(actions.addAction);
+        removeButton.setAction(actions.removeAction);
 
         listModel = new FilteredList<>(project.getKerningPairs());
         list.setSelectionModel(selectionModel);
@@ -61,8 +61,8 @@ public final class ListPanel extends ListPanelBase {
     @Override
     public void setEnabled(final boolean enabled) {
         super.setEnabled(enabled);
-        actions.showAddDialogAction.setEnabled(enabled);
-        actions.showRemoveDialogAction.setEnabled(enabled && (selectionModel.getMinSelectionIndex() >= 0));
+        actions.addAction.setEnabled(enabled);
+        actions.removeAction.setEnabled(enabled && (selectionModel.getMinSelectionIndex() >= 0));
     }
 
     private void setFilterLeft(final int from, final int to) {

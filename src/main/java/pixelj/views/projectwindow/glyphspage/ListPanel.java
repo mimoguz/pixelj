@@ -10,6 +10,8 @@ import pixelj.models.FilteredList;
 import pixelj.models.Glyph;
 import pixelj.models.Project;
 import pixelj.models.SortedList;
+import pixelj.resources.Icons;
+import pixelj.resources.Resources;
 
 public final class ListPanel extends ListPanelBase {
 
@@ -21,7 +23,8 @@ public final class ListPanel extends ListPanelBase {
         actions = new GlyphListActions(project, selectionModel, window);
         actions.removeGlyphsAction.setEnabled(false);
         actions.registerShortcuts(window.getRootPane());
-        addButton.setAction(actions.addGlyphsAction);
+        addButton.setPrimaryAction(actions.addGlyphsAction);
+        addButton.setSecondaryAction(actions.addCodePointAction);
         removeButton.setAction(actions.removeGlyphsAction);
 
         final var filteredListModel = new FilteredList<>(project.getGlyphs());

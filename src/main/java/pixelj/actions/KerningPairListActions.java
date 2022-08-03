@@ -10,6 +10,7 @@ import java.util.List;
 import javax.swing.Action;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 
 import pixelj.models.Project;
@@ -21,11 +22,11 @@ public final class KerningPairListActions implements Actions {
     /**
      * Show add kerning pair dialog.
      */
-    public final ApplicationAction showAddDialogAction;
+    public final ApplicationAction addAction;
     /**
      * Show remove kerning pairs dialog.
      */
-    public final ApplicationAction showRemoveDialogAction;
+    public final ApplicationAction removeAction;
 
     private final Collection<ApplicationAction> all;
     private final AddDialog addDialog;
@@ -45,18 +46,25 @@ public final class KerningPairListActions implements Actions {
 
         addDialog = new AddDialog(window, project);
 
-        showAddDialogAction = new ApplicationAction("addKerningPairsAction", this::showAddDialog).withText()
-                .setAccelerator(KeyEvent.VK_PLUS, InputEvent.ALT_DOWN_MASK);
-
-        showRemoveDialogAction = new ApplicationAction("removeKerningPairsAction", this::showRemoveDialog)
+        addAction = new ApplicationAction("addKerningPairsAction", this::showAddDialog)
                 .withText()
-                .setAccelerator(KeyEvent.VK_MINUS, InputEvent.ALT_DOWN_MASK);
+                .setTooltipWithAccelerator(
+                        null,
+                        KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.ALT_DOWN_MASK)
+                );
+
+        removeAction = new ApplicationAction("removeKerningPairsAction", this::showRemoveDialog)
+                .withText()
+                .setTooltipWithAccelerator(
+                        null,
+                        KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.ALT_DOWN_MASK)
+                );
 
         selectionModel.addListSelectionListener(
-                e -> showRemoveDialogAction.setEnabled(selectionModel.getMinSelectionIndex() >= 0)
+                e -> removeAction.setEnabled(selectionModel.getMinSelectionIndex() >= 0)
         );
 
-        all = List.of(showAddDialogAction, showRemoveDialogAction);
+        all = List.of(addAction, removeAction);
     }
 
     @Override
@@ -66,8 +74,8 @@ public final class KerningPairListActions implements Actions {
 
     @Override
     public void setEnabled(final boolean enabled) {
-        showAddDialogAction.setEnabled(enabled);
-        showRemoveDialogAction.setEnabled(enabled && selectionModel.getMaxSelectionIndex() >= 0);
+        addAction.setEnabled(enabled);
+        removeAction.setEnabled(enabled && selectionModel.getMaxSelectionIndex() >= 0);
     }
 
     private void showAddDialog(final ActionEvent event, final Action action) {

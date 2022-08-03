@@ -12,24 +12,24 @@ import java.util.List;
 import javax.swing.Action;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 
 import pixelj.graphics.BinaryImage;
 import pixelj.models.Glyph;
 import pixelj.models.KerningPair;
 import pixelj.models.Project;
+import pixelj.resources.Icons;
 import pixelj.resources.Resources;
 import pixelj.views.projectwindow.glyphspage.AddDialog;
 
 public final class GlyphListActions implements Actions {
 
-    /**
-     * Display a dialog to add new glyphs to the project.
-     */
+    /** Display a dialog to add new glyphs to the project. */
     public final ApplicationAction addGlyphsAction;
-    /**
-     * Remove the selected glyphs.
-     */
+    /** Display a dialog to add a glyph using its code point. */
+    public final ApplicationAction addCodePointAction;
+    /** Remove the selected glyphs. */
     public final ApplicationAction removeGlyphsAction;
 
     private final Collection<ApplicationAction> all;
@@ -52,13 +52,28 @@ public final class GlyphListActions implements Actions {
 
         addGlyphsAction = new ApplicationAction("addGlyphsAction", this::showAddDialog)
                 .withText()
-                .setAccelerator(KeyEvent.VK_PLUS, InputEvent.ALT_DOWN_MASK);
+                .setTooltipWithAccelerator(
+                        null,
+                        KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.ALT_DOWN_MASK)
+                );
+
+        addCodePointAction = new ApplicationAction("addCodePointAction", (e, a) -> System.err.println("r"))
+            .setIcon(Icons.ELLIPSIS)
+            .setTooltipWithAccelerator(
+                    "addCodePointActionTooltip",
+                    KeyStroke.getKeyStroke(
+                            KeyEvent.VK_N, InputEvent.ALT_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK
+                    )
+                );
 
         removeGlyphsAction = new ApplicationAction("removeGlyphsAction", this::showRemoveDialog)
                 .withText()
-                .setAccelerator(KeyEvent.VK_MINUS, InputEvent.ALT_DOWN_MASK);
+                .setTooltipWithAccelerator(
+                        null,
+                        KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.ALT_DOWN_MASK)
+                );
 
-        all = List.of(addGlyphsAction, removeGlyphsAction);
+        all = List.of(addGlyphsAction, addCodePointAction, removeGlyphsAction);
 
         final var documentSettings = project.getDocumentSettings();
         canvasSize = new Dimension(documentSettings.canvasWidth(), documentSettings.canvasHeight());

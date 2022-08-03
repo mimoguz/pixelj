@@ -197,7 +197,7 @@ abstract class ProjectWindowBase extends JFrame {
     }
 
     private void applyUITweaks() {
-        ToolTipManager.sharedInstance().setInitialDelay(100);
+        ToolTipManager.sharedInstance().setInitialDelay(600);
         ToolTipManager.sharedInstance().setDismissDelay(3000);
 
         content.putClientProperty(

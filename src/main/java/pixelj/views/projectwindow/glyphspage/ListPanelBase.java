@@ -14,6 +14,7 @@ import javax.swing.JScrollPane;
 import pixelj.models.Block;
 import pixelj.models.Glyph;
 import pixelj.resources.Resources;
+import pixelj.views.controls.CoupledActionsButton;
 import pixelj.views.controls.SearchableComboBox;
 import pixelj.views.shared.Borders;
 import pixelj.views.shared.Components;
@@ -25,7 +26,7 @@ abstract class ListPanelBase extends JPanel {
 
     protected final JComboBox<Block> filterBox = new SearchableComboBox<>(Resources.get().getBlocks());
     protected final JList<Glyph> list = new JList<>();
-    protected final JButton addButton = new JButton();
+    protected final CoupledActionsButton addButton = new CoupledActionsButton();
     protected final JButton removeButton = new JButton();
 
     ListPanelBase() {

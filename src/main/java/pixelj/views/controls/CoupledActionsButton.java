@@ -1,10 +1,10 @@
 package pixelj.views.controls;
 
-import java.awt.event.MouseEvent;
+import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
-import java.awt.BorderLayout;
+import java.awt.event.MouseEvent;
 
 import javax.swing.Action;
 import javax.swing.BorderFactory;
@@ -17,9 +17,11 @@ import javax.swing.event.MouseInputAdapter;
 import pixelj.graphics.FontIcon;
 import pixelj.resources.Resources;
 import pixelj.util.ChangeableBoolean;
+import pixelj.util.ChangeableBoolean.Listener;
 import pixelj.views.shared.Borders;
 import pixelj.views.shared.Dimensions;
 
+/**  A button which can perform another action when its right side is clicked. */
 public final class CoupledActionsButton extends JButton {
     private static final int RIGHT_SIZE = 24;
     private static final int BORDER = 4;
@@ -63,7 +65,7 @@ public final class CoupledActionsButton extends JButton {
             public void mouseClicked(final MouseEvent e) {
                 final var action = secondary.getValue() ? getSecondaryAction() : getAction();
                 if (action != null) {
-                    action.accept(CoupledActionsButton.this);
+                    action.actionPerformed(null);
                 }
             }
 
@@ -74,13 +76,7 @@ public final class CoupledActionsButton extends JButton {
 
         addMouseListener(mouseAdapter);
         addMouseMotionListener(mouseAdapter);
-        secondary.addChangeListener((source, value) -> {
-            if (secondaryActionLabel.getIcon() instanceof FontIcon icn) {
-                final var res = Resources.get();
-                icn.setForeground(value ? res.colors.accent() : res.colors.icon());
-            }
-            repaint();
-        });
+        secondary.addChangeListener(this::onSecondaryChanged);
     }
 
     public Action getPrimaryAction() {
@@ -89,8 +85,13 @@ public final class CoupledActionsButton extends JButton {
 
     public void setPrimaryAction(final Action action) {
         primaryAction = action;
-        if (action != null && action.getValue(Action.NAME) instanceof String name) {
-            primaryActionLabel.setText(name);
+        if (action != null) {
+            if (action.getValue(Action.NAME) instanceof String name) {
+                primaryActionLabel.setText(name);
+            }
+            if (!secondary.getValue() && action.getValue(Action.SHORT_DESCRIPTION) instanceof String desc) {
+                setToolTipText(desc);
+            }
         }
     }
 
@@ -100,8 +101,15 @@ public final class CoupledActionsButton extends JButton {
 
     public void setSecondaryAction(final Action action) {
         secondaryAction = action;
-        if (action != null && action.getValue(Action.SMALL_ICON) instanceof Icon icon) {
-            setSecondaryIcon(icon);
+        setToolTipText(secondary.getValue() ? null : getToolTipText());
+        setSecondaryIcon(null);
+        if (action != null) {
+            if (action.getValue(Action.SMALL_ICON) instanceof Icon icon) {
+                setSecondaryIcon(icon);
+            }
+            if (secondary.getValue() && action.getValue(Action.SHORT_DESCRIPTION) instanceof String desc) {
+                setToolTipText(desc);
+            }
         }
     }
 
@@ -119,11 +127,15 @@ public final class CoupledActionsButton extends JButton {
 
     public void setSecondaryIcon(final Icon icon) {
         secondaryActionLabel.setIcon(icon);
+        if (icon == null) {
+            secondaryActionLabel.setBorder(Borders.EMPTY);
+            return;
+        }
         final var border = (RIGHT_SIZE - icon.getIconWidth()) / 2;
         secondaryActionLabel.setBorder(BorderFactory.createEmptyBorder(0, border, 0, border));
         if (secondaryActionLabel.getIcon() instanceof FontIcon icn) {
             final var res = Resources.get();
-            icn.setForeground(res.colors.icon());
+            icn.setForeground(secondary.getValue() ? res.colors.accent() : res.colors.icon());
         }
     }
 
@@ -157,5 +169,18 @@ public final class CoupledActionsButton extends JButton {
             g2d.drawLine(x, BORDER + 2, x, getHeight() - BORDER - 2);
             g2d.dispose();
         }
+    }
+
+    private void onSecondaryChanged(final ChangeableBoolean source, final boolean value) {
+        if (secondaryActionLabel.getIcon() instanceof FontIcon icn) {
+            final var res = Resources.get();
+            icn.setForeground(value ? res.colors.accent() : res.colors.icon());
+        }
+        final var action = value ? secondaryAction : primaryAction;
+        setToolTipText(action != null && action.getValue(Action.SHORT_DESCRIPTION) instanceof String str
+                ? str
+                : null
+        );
+        repaint();
     }
 }

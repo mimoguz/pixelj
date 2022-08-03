@@ -117,14 +117,17 @@ public final class ApplicationAction extends AbstractAction {
      * @return This action
      */
     public ApplicationAction setTooltipWithAccelerator(final String tooltip, final KeyStroke accelerator) {
-        putValue(
-                Action.SHORT_DESCRIPTION,
-                String.format(
+        final var shortDescription = tooltip != null
+                ? String.format(
                         "<html><body>%s<br /><strong>%s</strong><body></html>",
                         tooltip,
                         acceleratorToString(accelerator)
                 )
-        );
+                : String.format(
+                    "<html><body><strong>%s</strong><body></html>",
+                    acceleratorToString(accelerator)
+                );
+        putValue(Action.SHORT_DESCRIPTION, shortDescription);
         putValue(Action.ACCELERATOR_KEY, accelerator);
         return this;
     }
