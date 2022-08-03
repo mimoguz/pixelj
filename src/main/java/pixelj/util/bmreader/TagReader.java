@@ -114,7 +114,7 @@ public final class TagReader {
 
     private void string() throws ReaderException {
         advance();
-        while (peek() != DOUBLE_QUOTES || peek() != END) {
+        while (peek() != DOUBLE_QUOTES && peek() != END) {
             advance();
         }
         if (peek() == END) {
