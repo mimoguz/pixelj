@@ -1,19 +1,29 @@
 package pixelj.views.controls;
 
 import java.awt.event.MouseEvent;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
-import java.awt.Color;
+import java.awt.BorderLayout;
 
 import javax.swing.Action;
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 import javax.swing.event.MouseInputAdapter;
 
-import net.miginfocom.swing.MigLayout;
+import pixelj.graphics.FontIcon;
+import pixelj.resources.Resources;
 import pixelj.util.ChangeableBoolean;
+import pixelj.views.shared.Borders;
+import pixelj.views.shared.Dimensions;
 
 public final class CoupledActionsButton extends JButton {
+    private static final int RIGHT_SIZE = 24;
+    private static final int BORDER = 4;
+
     private final JLabel primaryActionLabel = new JLabel();
     private final JLabel secondaryActionLabel = new JLabel();
     private final ChangeableBoolean secondary = new ChangeableBoolean();
@@ -21,11 +31,17 @@ public final class CoupledActionsButton extends JButton {
     private Action secondaryAction;
 
     public CoupledActionsButton() {
-        setLayout(new MigLayout("", "[grow]8lp[24lp!]", "[center]"));
-        add(primaryActionLabel);
-        add(secondaryActionLabel);
+        primaryActionLabel.setMaximumSize(Dimensions.MAXIMUM);
+        primaryActionLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        primaryActionLabel.setBorder(Borders.EMPTY);
 
+        secondaryActionLabel.setIconTextGap(0);
+        secondaryActionLabel.setBorder(Borders.EMPTY);
+
+        setLayout(new BorderLayout());
         setMargin(new Insets(0, 0, 0, 0));
+        add(primaryActionLabel, BorderLayout.CENTER);
+        add(secondaryActionLabel, BorderLayout.EAST);
 
         final var mouseAdapter = new MouseInputAdapter() {
             @Override
@@ -52,12 +68,30 @@ public final class CoupledActionsButton extends JButton {
             }
 
             private void checkX(final MouseEvent e) {
-                secondary.setValue(e.getX() > getWidth() - 24);
+                secondary.setValue(e.getX() > getWidth() - RIGHT_SIZE - BORDER);
             }
         };
 
         addMouseListener(mouseAdapter);
         addMouseMotionListener(mouseAdapter);
+        secondary.addChangeListener((source, value) -> {
+            if (secondaryActionLabel.getIcon() instanceof FontIcon icn) {
+                final var res = Resources.get();
+                icn.setForeground(value ? res.colors.accent() : res.colors.icon());
+            }
+            repaint();
+        });
+    }
+
+    public Action getPrimaryAction() {
+        return primaryAction;
+    }
+
+    public void setPrimaryAction(final Action action) {
+        primaryAction = action;
+        if (action != null && action.getValue(Action.NAME) instanceof String name) {
+            primaryActionLabel.setText(name);
+        }
     }
 
     public Action getSecondaryAction() {
@@ -67,31 +101,40 @@ public final class CoupledActionsButton extends JButton {
     public void setSecondaryAction(final Action action) {
         secondaryAction = action;
         if (action != null && action.getValue(Action.SMALL_ICON) instanceof Icon icon) {
-            secondaryActionLabel.setIcon(icon);
+            setSecondaryIcon(icon);
         }
     }
 
-    @Override
-    public String getText() {
-        if (primaryActionLabel != null) {
-            return primaryActionLabel.getText();
+    public String getPrimaryText() {
+        return primaryActionLabel.getText();
+    }
+
+    public void setPrimaryText(final String text) {
+        primaryActionLabel.setText(text);
+    }
+
+    public Icon getSecondaryIcon() {
+        return secondaryActionLabel.getIcon();
+    }
+
+    public void setSecondaryIcon(final Icon icon) {
+        secondaryActionLabel.setIcon(icon);
+        final var border = (RIGHT_SIZE - icon.getIconWidth()) / 2;
+        secondaryActionLabel.setBorder(BorderFactory.createEmptyBorder(0, border, 0, border));
+        if (secondaryActionLabel.getIcon() instanceof FontIcon icn) {
+            final var res = Resources.get();
+            icn.setForeground(res.colors.icon());
         }
-        return null;
     }
 
     @Override
     public void setText(final String text) {
-        primaryActionLabel.setText(text);
-    }
-
-    @Override
-    public Icon getIcon() {
-        return secondaryActionLabel.getIcon();
+        throw new UnsupportedOperationException("Use setPrimaryText");
     }
 
     @Override
     public void setIcon(final Icon icon) {
-        secondaryActionLabel.setIcon(icon);
+        throw new UnsupportedOperationException("Use setSecondaryIcon");
     }
 
     @Override
@@ -101,9 +144,18 @@ public final class CoupledActionsButton extends JButton {
 
     @Override
     public void setAction(final Action action) {
-        primaryAction = action;
-        if (action != null && action.getValue(Action.NAME) instanceof String name) {
-            primaryActionLabel.setText(name);
+        throw new UnsupportedOperationException("Use setPrimaryAction");
+    }
+
+    @Override
+    public void paint(final Graphics g) {
+        super.paint(g);
+        if (secondary.getValue()) {
+            final var g2d = (Graphics2D) g.create();
+            final var x = getWidth() - RIGHT_SIZE - BORDER;
+            g2d.setColor(Resources.get().colors.accent());
+            g2d.drawLine(x, BORDER + 2, x, getHeight() - BORDER - 2);
+            g2d.dispose();
         }
     }
 }

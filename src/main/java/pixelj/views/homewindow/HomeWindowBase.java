@@ -91,13 +91,13 @@ abstract class HomeWindowBase extends JFrame {
         south.setLayout(new BoxLayout(south, BoxLayout.LINE_AXIS));
         final var testButton = new CoupledActionsButton();
         Components.setFixedSize(testButton, Dimensions.HOME_BUTTON_SIZE);
-        testButton.setAction(
+        testButton.setPrimaryAction(
                 new ApplicationAction("testLeft", (event, action) -> System.err.println("left"))
                     .withText()
         );
         testButton.setSecondaryAction(
                 new ApplicationAction("testRight", (event, action) -> System.err.println("right"))
-                    .setIcon(Icons.EYE)
+                    .setIcon(Icons.BURGER)
         );
         south.add(testButton);
         south.setBorder(Borders.LARGE_EMPTY);
