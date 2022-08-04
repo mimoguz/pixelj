@@ -100,7 +100,7 @@ public class AddCodePointDialog extends AddCodePointDialogBase {
     private void onValidChanged(final boolean value) {
         cpIn.putClientProperty(
                 FlatClientProperties.OUTLINE,
-                value ? null : Color.RED
+                value ? null : FlatClientProperties.OUTLINE_ERROR
         );
         addButton.setEnabled(value);
     }
