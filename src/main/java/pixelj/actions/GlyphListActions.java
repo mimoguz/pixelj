@@ -21,6 +21,7 @@ import pixelj.models.KerningPair;
 import pixelj.models.Project;
 import pixelj.resources.Icons;
 import pixelj.resources.Resources;
+import pixelj.views.projectwindow.glyphspage.AddCodePointDialog;
 import pixelj.views.projectwindow.glyphspage.AddDialog;
 
 public final class GlyphListActions implements Actions {
@@ -36,6 +37,7 @@ public final class GlyphListActions implements Actions {
     private Dimension canvasSize;
     private int defaultWidth;
     private final AddDialog addDialog;
+    private final AddCodePointDialog addCodePointDialog;
     private final Project project;
     private final JFrame window;
     private final ListSelectionModel selectionModel;
@@ -49,6 +51,7 @@ public final class GlyphListActions implements Actions {
         this.selectionModel = selectionModel;
         this.window = window;
         addDialog = new AddDialog(window, project);
+        addCodePointDialog = new AddCodePointDialog(window, project);
 
         addGlyphsAction = new ApplicationAction("addGlyphsAction", this::showAddDialog)
                 .withText()
@@ -57,7 +60,7 @@ public final class GlyphListActions implements Actions {
                         KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.ALT_DOWN_MASK)
                 );
 
-        addCodePointAction = new ApplicationAction("addCodePointAction", (e, a) -> System.err.println("r"))
+        addCodePointAction = new ApplicationAction("addCodePointAction", this::showAddCodePointDialog)
             .setIcon(Icons.NUMBER)
             .setTooltipWithAccelerator(
                     Resources.get().getString("addCodePointActionTooltip"),
@@ -88,6 +91,14 @@ public final class GlyphListActions implements Actions {
         );
     }
 
+    public int getDefaultCharacterWidth() {
+        return defaultWidth;
+    }
+
+    public void setDefaultCharacterWidth(final int defaultCharacterWidth) {
+        this.defaultWidth = defaultCharacterWidth;
+    }
+
     @SuppressWarnings("unused")
     private void addCharacters(final int... codePoints) {
         for (final var codePoint : codePoints) {
@@ -98,6 +109,12 @@ public final class GlyphListActions implements Actions {
         project.setDirty(true);
     }
 
+    @Override
+    public void detach() {
+        addDialog.dispose();
+        addCodePointDialog.dispose();
+    }
+
     private int countAffectedKerningPairs(final Collection<Glyph> characters) {
         final var kerningPairs = new HashSet<KerningPair>();
         for (final var character : characters) {
@@ -106,16 +123,12 @@ public final class GlyphListActions implements Actions {
         return kerningPairs.size();
     }
 
-    public int getDefaultCharacterWidth() {
-        return defaultWidth;
-    }
-
-    public void setDefaultCharacterWidth(final int defaultCharacterWidth) {
-        this.defaultWidth = defaultCharacterWidth;
-    }
-
     private void showAddDialog(final ActionEvent event, final Action action) {
         addDialog.setVisible(true);
+    }
+
+    private void showAddCodePointDialog(final ActionEvent event, final Action action) {
+        addCodePointDialog.setVisible(true);
     }
 
     private void showRemoveDialog(final ActionEvent event, final Action action) {

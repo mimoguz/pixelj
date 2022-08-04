@@ -10,8 +10,9 @@ import pixelj.models.FilteredList;
 import pixelj.models.Glyph;
 import pixelj.models.Project;
 import pixelj.models.SortedList;
+import pixelj.util.Detachable;
 
-public final class ListPanel extends ListPanelBase {
+public final class ListPanel extends ListPanelBase implements Detachable {
 
     private final GlyphListActions actions;
     private final ListSelectionModel selectionModel = new DefaultListSelectionModel();
@@ -49,6 +50,11 @@ public final class ListPanel extends ListPanelBase {
 
     public SortedList<Glyph> getListModel() {
         return listModel;
+    }
+
+    @Override
+    public void detach() {
+        actions.detach();
     }
 
     @Override

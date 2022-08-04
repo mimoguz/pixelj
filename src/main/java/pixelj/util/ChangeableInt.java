@@ -3,6 +3,7 @@ package pixelj.util;
 import java.util.EventListener;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Predicate;
 
 public final class ChangeableInt {
 
@@ -147,15 +148,26 @@ public final class ChangeableInt {
      */
     public ReadOnlyInt negate() {
         final var result = new ChangeableInt();
-        final Listener listener = (sender, a) -> result.setValue(-a);
+        final Listener listener = a -> result.setValue(-a);
         addChangeListener(listener);
         return new ReadOnlyInt(result, () -> this.removeChangeListener(listener));
     }
 
+    /**
+     * @param predicate
+     * @return If the predicate returns true
+     */
+    public ReadOnlyBoolean test(final Predicate<Integer> predicate) {
+        final var result = new ChangeableBoolean();
+        final Listener listener = a -> result.setValue(predicate.test(a));
+        addChangeListener(listener);
+        return new ReadOnlyBoolean(result, () -> this.removeChangeListener(listener));
+    }
+
     private ReadOnlyInt binaryOp(final ChangeableInt that, final BinaryOperator operator) {
         final var result = new ChangeableInt();
-        final Listener listenerThis = (sender, a) -> result.setValue(operator.calculate(a, that.value));
-        final Listener listenerThat = (sender, b) -> result.setValue(operator.calculate(value, b));
+        final Listener listenerThis = a -> result.setValue(operator.calculate(a, that.value));
+        final Listener listenerThat = b -> result.setValue(operator.calculate(value, b));
         this.addChangeListener(listenerThis);
         that.addChangeListener(listenerThat);
         return new ReadOnlyInt(result, () -> {
@@ -166,8 +178,8 @@ public final class ChangeableInt {
 
     private ReadOnlyBoolean comparison(final ChangeableInt that, final Comparison cmp) {
         final var result = new ChangeableBoolean();
-        final Listener listenerThis = (sender, a) -> result.setValue(cmp.check(a, that.value));
-        final Listener listenerThat = (sender, b) -> result.setValue(cmp.check(value, b));
+        final Listener listenerThis = a -> result.setValue(cmp.check(a, that.value));
+        final Listener listenerThat = b -> result.setValue(cmp.check(value, b));
         this.addChangeListener(listenerThis);
         that.addChangeListener(listenerThat);
         return new ReadOnlyBoolean(result, () -> {
@@ -178,7 +190,7 @@ public final class ChangeableInt {
 
     private ReadOnlyBoolean comparison(final int that, final Comparison cmp) {
         final var result = new ChangeableBoolean();
-        final Listener listenerThis = (sender, a) -> result.setValue(cmp.check(a, that));
+        final Listener listenerThis = a -> result.setValue(cmp.check(a, that));
         this.addChangeListener(listenerThis);
         return new ReadOnlyBoolean(result, () -> this.removeChangeListener(listenerThis));
     }
@@ -186,7 +198,7 @@ public final class ChangeableInt {
     private void fireChangeEvent() {
         final var lst = listeners.stream().toList();
         for (var listener : lst) {
-            listener.onChange(this, value);
+            listener.onChange(value);
         }
     }
 
@@ -200,9 +212,8 @@ public final class ChangeableInt {
 
     public interface Listener extends EventListener {
         /**
-         * @param sender The source
          * @param value  The new value
          */
-        void onChange(ChangeableInt sender, int value);
+        void onChange(int value);
     }
 }

@@ -12,11 +12,12 @@ import pixelj.models.DocumentSettings;
 import pixelj.models.Glyph;
 import pixelj.models.Project;
 import pixelj.util.Checkerboard;
+import pixelj.util.Detachable;
 import pixelj.views.controls.GlyphPainter;
 import pixelj.views.controls.Line;
 import pixelj.views.controls.Orientation;
 
-public final class PainterPanel extends PainterPanelBase {
+public final class PainterPanel extends PainterPanelBase implements Detachable {
     private static final Color BASELINE = new Color(45, 147, 173);
     private static final Color CAP_HEIGHT = new Color(41, 191, 18);
     private static final int INITIAL_ZOOM = 12;
@@ -41,11 +42,11 @@ public final class PainterPanel extends PainterPanelBase {
         });
         zoomStrip.setEnabled(false);
 
-        infoPanel.gridVisibleProperty.addChangeListener((source, isVisible) ->
+        infoPanel.gridVisibleProperty.addChangeListener(isVisible ->
                 painter.setOverlayVisible(isVisible)
         );
 
-        infoPanel.guidesVisibleProperty.addChangeListener((source, isVisible) -> {
+        infoPanel.guidesVisibleProperty.addChangeListener(isVisible -> {
             painter.setLinesVisible(isVisible);
             painter.setShaded(isVisible);
         });
@@ -94,6 +95,11 @@ public final class PainterPanel extends PainterPanelBase {
 
     public GlyphPainter getPainter() {
         return painter;
+    }
+
+    @Override
+    public void detach() {
+        actions.detach();
     }
 
     @Override

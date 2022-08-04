@@ -107,6 +107,11 @@ public final class HomeWindowActions implements Actions {
         );
     }
 
+    @Override
+    public void detach() {
+        optionsDialog.dispose();
+    }
+
     private void newProject(final ActionEvent event, final Action action) {
         final var res = Resources.get();
         final var dialog = new DocumentSettingsDialog(

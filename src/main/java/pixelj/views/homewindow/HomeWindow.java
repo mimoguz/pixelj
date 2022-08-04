@@ -10,7 +10,9 @@ import javax.swing.WindowConstants;
 import pixelj.actions.HomeWindowActions;
 import pixelj.services.AppState;
 
-public class HomeWindow extends HomeWindowBase {
+public final class HomeWindow extends HomeWindowBase {
+
+    private final HomeWindowActions actions;
 
     public HomeWindow(final AppState appState) {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -20,7 +22,7 @@ public class HomeWindow extends HomeWindowBase {
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         recentList.setSelectionModel(selectionModel);
 
-        final var actions = new HomeWindowActions(this, appState, selectionModel);
+        actions = new HomeWindowActions(this, appState, selectionModel);
         contextMenu.add(actions.removeRecentItemAction);
         contextMenu.add(actions.openContainingFolderAction);
         newProjectButton.setAction(actions.newProjectAction);
@@ -48,5 +50,11 @@ public class HomeWindow extends HomeWindowBase {
 
         final var closeListener = new CloseListener(appState, this);
         this.addWindowListener(closeListener);
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        actions.detach();
     }
 }

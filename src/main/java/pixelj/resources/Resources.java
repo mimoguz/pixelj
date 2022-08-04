@@ -101,6 +101,14 @@ public final class Resources {
         return scalarsTable.get(codePoint);
     }
 
+    /**
+     * @param codePoint
+     * @return If the code point is a valid scalar
+     */
+    public boolean hasScalar(final int codePoint) {
+        return scalarsTable.containsKey(codePoint);
+    }
+
     public Collection<Scalar> getScalars(final int blockId) {
         return scalarsInBlock.get(blockId);
     }

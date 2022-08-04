@@ -58,11 +58,10 @@ public final class ProjectWindowActions implements Actions {
     public final ApplicationAction showOptionsAction;
 
     private final Collection<ApplicationAction> all;
-    private final Logger logger;
-    private final DocumentSettingsDialog documentSettingsDialog;
     private final Project project;
     private final JFrame window;
     private final AppState appState;
+    private final DocumentSettingsDialog documentSettingsDialog;
     private final OptionsDialog optionsDialog;
 
     public ProjectWindowActions(final Project project, final JFrame window, final AppState appState) {
@@ -79,9 +78,6 @@ public final class ProjectWindowActions implements Actions {
                 res.getString("apply"),
                 false
         );
-
-        logger = Logger.getLogger(this.getClass().getName());
-        logger.addHandler(new ConsoleHandler());
 
         final var menuShortcutMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
 
@@ -138,6 +134,12 @@ public final class ProjectWindowActions implements Actions {
                 showDocumentSettingsAction,
                 showOptionsAction
         );
+    }
+
+    @Override
+    public void detach() {
+        optionsDialog.dispose();
+        documentSettingsDialog.dispose();
     }
 
     @Override

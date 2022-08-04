@@ -4,9 +4,10 @@ import javax.swing.JFrame;
 import javax.swing.ListSelectionModel;
 
 import pixelj.models.Project;
+import pixelj.util.Detachable;
 import pixelj.views.controls.GlyphView;
 
-public final class GlyphsPage extends GlyphsPageBase {
+public final class GlyphsPage extends GlyphsPageBase implements Detachable {
     private final ListSelectionModel selectionModel;
 
     public GlyphsPage(final Project project, final JFrame window) {
@@ -32,5 +33,11 @@ public final class GlyphsPage extends GlyphsPageBase {
                 }
             }
         });
+    }
+
+    @Override
+    public void detach() {
+        listPanel.detach();
+        painterPanel.detach();
     }
 }

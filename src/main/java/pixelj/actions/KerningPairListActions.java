@@ -68,6 +68,11 @@ public final class KerningPairListActions implements Actions {
     }
 
     @Override
+    public void detach() {
+        addDialog.dispose();
+    }
+
+    @Override
     public Collection<ApplicationAction> getAll() {
         return all;
     }

@@ -45,7 +45,7 @@ public class GlyphView extends JPanel
     public GlyphView(final Color backgroundColor) {
         this.backgroundColor = backgroundColor;
 
-        characterWidthChangeListener = (source, event) -> repaint();
+        characterWidthChangeListener = value -> repaint();
 
         imageChangeListener = (source, event) -> {
             if (model == null || source != model.getImage()) {

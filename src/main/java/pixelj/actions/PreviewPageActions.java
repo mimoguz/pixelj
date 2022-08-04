@@ -71,6 +71,11 @@ public final class PreviewPageActions implements Actions {
     }
 
     @Override
+    public void detach() {
+        // Empty
+    }
+
+    @Override
     public Collection<ApplicationAction> getAll() {
         return all;
     }

@@ -4,9 +4,10 @@ import java.util.Collection;
 
 import javax.swing.JComponent;
 
+import pixelj.util.Detachable;
 import pixelj.views.shared.Components;
 
-public interface Actions {
+public interface Actions extends Detachable {
 
     /**
      * @return All actions

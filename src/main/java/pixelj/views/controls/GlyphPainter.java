@@ -23,7 +23,7 @@ public final class GlyphPainter extends GlyphView implements CanFlipImage, CanRo
         paintAdapter = new PaintAdapter(this);
         addMouseListener(paintAdapter);
         addMouseMotionListener(paintAdapter);
-        characterWidthChangeListener = (sender, value) -> paintAdapter.setExtent(value);
+        characterWidthChangeListener = value -> paintAdapter.setExtent(value);
     }
 
     /** Fill the image all white. */

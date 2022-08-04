@@ -12,8 +12,9 @@ import pixelj.models.FilteredList;
 import pixelj.models.KerningPair;
 import pixelj.models.Project;
 import pixelj.models.SortedList;
+import pixelj.util.Detachable;
 
-public final class ListPanel extends ListPanelBase {
+public final class ListPanel extends ListPanelBase implements Detachable {
 
     private final KerningPairListActions actions;
     private final FilteredList<KerningPair> listModel;
@@ -58,6 +59,11 @@ public final class ListPanel extends ListPanelBase {
 
     public ListSelectionModel getSelectionModel() {
         return selectionModel;
+    }
+
+    @Override
+    public void detach() {
+        actions.detach();
     }
 
     @Override

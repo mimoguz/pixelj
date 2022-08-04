@@ -17,7 +17,6 @@ import javax.swing.event.MouseInputAdapter;
 import pixelj.graphics.FontIcon;
 import pixelj.resources.Resources;
 import pixelj.util.ChangeableBoolean;
-import pixelj.util.ChangeableBoolean.Listener;
 import pixelj.views.shared.Borders;
 import pixelj.views.shared.Dimensions;
 
@@ -171,7 +170,7 @@ public final class CoupledActionsButton extends JButton {
         }
     }
 
-    private void onSecondaryChanged(final ChangeableBoolean source, final boolean value) {
+    private void onSecondaryChanged(final boolean value) {
         if (secondaryActionLabel.getIcon() instanceof FontIcon icn) {
             final var res = Resources.get();
             icn.setForeground(value ? res.colors.accent() : res.colors.icon());

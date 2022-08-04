@@ -44,7 +44,7 @@ public final class ChangeableBoolean {
      */
     public ReadOnlyBoolean not() {
         final var result = new ChangeableBoolean();
-        final Listener listener = (sender, a) -> result.setValue(!a);
+        final Listener listener = a -> result.setValue(!a);
         addChangeListener(listener);
         return new ReadOnlyBoolean(result, () -> this.removeChangeListener(listener));
     }
@@ -76,8 +76,8 @@ public final class ChangeableBoolean {
 
     private ReadOnlyBoolean binaryOp(final ChangeableBoolean that, final BinaryOperator operator) {
         final var result = new ChangeableBoolean();
-        final Listener listenerThis = (sender, a) -> result.setValue(operator.op(a, that.value));
-        final Listener listenerThat = (sender, b) -> result.setValue(operator.op(value, b));
+        final Listener listenerThis = a -> result.setValue(operator.op(a, that.value));
+        final Listener listenerThat = b -> result.setValue(operator.op(value, b));
         this.addChangeListener(listenerThis);
         that.addChangeListener(listenerThat);
         return new ReadOnlyBoolean(result);
@@ -86,7 +86,7 @@ public final class ChangeableBoolean {
     private void fireChangeEvent() {
         final var lst = listeners.stream().toList();
         for (var listener : lst) {
-            listener.onChange(this, value);
+            listener.onChange(value);
         }
     }
 
@@ -96,9 +96,8 @@ public final class ChangeableBoolean {
 
     public interface Listener extends EventListener {
         /**
-         * @param sender The event source
          * @param value  The new value
          */
-        void onChange(ChangeableBoolean sender, boolean value);
+        void onChange(boolean value);
     }
 }

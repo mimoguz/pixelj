@@ -3,8 +3,9 @@ package pixelj.views.projectwindow.kerningpairspage;
 import javax.swing.JFrame;
 
 import pixelj.models.Project;
+import pixelj.util.Detachable;
 
-public final class KerningPairsPage extends KerningPairsPageBase {
+public final class KerningPairsPage extends KerningPairsPageBase implements Detachable {
 
     public KerningPairsPage(final Project project, final JFrame window) {
         super(new EditorPanel(project), new ListPanel(project, window));
@@ -22,5 +23,10 @@ public final class KerningPairsPage extends KerningPairsPageBase {
         });
 
         editorPanel.valueSpinner.addChangeListener(e -> project.setDirty(true));
+    }
+
+    @Override
+    public void detach() {
+        listPanel.detach();
     }
 }

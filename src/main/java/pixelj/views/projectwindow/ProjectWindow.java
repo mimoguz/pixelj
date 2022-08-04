@@ -11,7 +11,7 @@ import pixelj.views.projectwindow.glyphspage.GlyphsPage;
 import pixelj.views.projectwindow.kerningpairspage.KerningPairsPage;
 import pixelj.views.projectwindow.previewpage.PreviewPage;
 
-public class ProjectWindow extends ProjectWindowBase {
+public final class ProjectWindow extends ProjectWindowBase {
 
     public ProjectWindow(final Project project, final AppState appState) {
         setup(
@@ -44,7 +44,14 @@ public class ProjectWindow extends ProjectWindowBase {
 
         setFrameTitle(project.getTitle(), false);
         project.titleProperty.addChangeListener((sender, title) -> setFrameTitle(title, project.isDirty()));
-        project.dirtyProperty.addChangeListener((sender, dirty) -> setFrameTitle(project.getTitle(), dirty));
+        project.dirtyProperty.addChangeListener(dirty -> setFrameTitle(project.getTitle(), dirty));
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        getKerningPairsPage().detach();
+        getGlyphsPage().detach();
     }
 
     private void setFrameTitle(final String titleText, final boolean isDirty) {
