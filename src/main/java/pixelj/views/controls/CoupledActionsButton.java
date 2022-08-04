@@ -161,13 +161,12 @@ public final class CoupledActionsButton extends JButton {
     @Override
     public void paint(final Graphics g) {
         super.paint(g);
-        if (secondary.getValue()) {
-            final var g2d = (Graphics2D) g.create();
-            final var x = getWidth() - RIGHT_SIZE - BORDER;
-            g2d.setColor(Resources.get().colors.accent());
-            g2d.drawLine(x, BORDER + 2, x, getHeight() - BORDER - 2);
-            g2d.dispose();
-        }
+        final var g2d = (Graphics2D) g.create();
+        final var x = getWidth() - RIGHT_SIZE - BORDER;
+        final var res = Resources.get();
+        g2d.setColor(secondary.getValue() ? res.colors.accent() : res.colors.disabledIcon());
+        g2d.drawLine(x, BORDER + 2, x, getHeight() - BORDER - 2);
+        g2d.dispose();
     }
 
     private void onSecondaryChanged(final boolean value) {
