@@ -48,7 +48,7 @@ public final class PromptTextArea extends JTextArea {
 
         if (
             isFocusOwner() || (getText() != null && !getText().isEmpty()) || promptText == null
-            || promptText.isEmpty() || promptText.isBlank()
+                || promptText.isEmpty() || promptText.isBlank()
         ) {
             return;
         }
