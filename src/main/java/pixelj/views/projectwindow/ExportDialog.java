@@ -20,10 +20,10 @@ public final class ExportDialog extends ExportDialogBase {
     private Result result;
 
     public ExportDialog(
-            final Frame owner,
-            final Dimension defaultSize,
-            final Dimension minimumSize,
-            final LayoutStrategy strategy
+        final Frame owner,
+        final Dimension defaultSize,
+        final Dimension minimumSize,
+        final LayoutStrategy strategy
     ) {
         super(owner);
         final var layouts = new DefaultComboBoxModel<LayoutStrategy>();
@@ -32,17 +32,17 @@ public final class ExportDialog extends ExportDialogBase {
         layoutStrategyIn.setSelectedIndex(strategy.ordinal());
 
         widthIn.setModel(new SpinnerNumberModel(
-                defaultSize.width,
-                minimumSize.width,
-                MAXIMUM_SIZE,
-                STEP_SIZE
+            defaultSize.width,
+            minimumSize.width,
+            MAXIMUM_SIZE,
+            STEP_SIZE
         ));
 
         heightIn.setModel(new SpinnerNumberModel(
-                defaultSize.height,
-                minimumSize.height,
-                MAXIMUM_SIZE,
-                STEP_SIZE
+            defaultSize.height,
+            minimumSize.height,
+            MAXIMUM_SIZE,
+            STEP_SIZE
         ));
 
         exportButton.addActionListener(e -> {
@@ -57,9 +57,9 @@ public final class ExportDialog extends ExportDialogBase {
         cancelButton.addActionListener(e -> setVisible(false));
 
         helpButton.setAction(
-                new ApplicationAction("exportHelpAction", (e, action) -> Help.showPage(Help.Page.EXPORT))
-                        .setIcon(Icons.HELP)
-                        .setTooltip(Resources.get().getString("help"))
+            new ApplicationAction("exportHelpAction", (e, action) -> Help.showPage(Help.Page.EXPORT))
+                .setIcon(Icons.HELP)
+                .setTooltip(Resources.get().getString("help"))
         );
     }
 

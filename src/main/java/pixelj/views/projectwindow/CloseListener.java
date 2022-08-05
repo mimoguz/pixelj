@@ -21,10 +21,10 @@ public final class CloseListener extends WindowAdapter {
     private final Action saveAction;
 
     public CloseListener(
-            final Project project,
-            final AppState appState,
-            final Action saveAction,
-            final JFrame window
+        final Project project,
+        final AppState appState,
+        final Action saveAction,
+        final JFrame window
     ) {
         this.project = project;
         this.appState = appState;

@@ -46,20 +46,20 @@ public final class GlyphCell extends JPanel {
             picture.setZoom(0);
             final var scale = ((double) maxPictureSize) / pictureSize;
             Components.setFixedSize(
-                    picture,
-                    new Dimension(
-                            (int) Math.round(pictureWidth * scale),
-                            (int) Math.round(pictureHeight * scale)
-                    )
+                picture,
+                new Dimension(
+                    (int) Math.round(pictureWidth * scale),
+                    (int) Math.round(pictureHeight * scale)
+                )
             );
         } else {
             picture.setZoom(1);
         }
 
         scalarCell.set(
-                model.getCodePoint(),
-                Resources.get().getScalar(model.getCodePoint()).name(),
-                contentWidth - pictureWidth - Dimensions.MEDIUM_PADDING * 4
+            model.getCodePoint(),
+            Resources.get().getScalar(model.getCodePoint()).name(),
+            contentWidth - pictureWidth - Dimensions.MEDIUM_PADDING * 4
         );
     }
 
