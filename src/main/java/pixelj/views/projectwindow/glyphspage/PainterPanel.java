@@ -2,9 +2,7 @@ package pixelj.views.projectwindow.glyphspage;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JToggleButton;
@@ -16,7 +14,6 @@ import pixelj.models.Glyph;
 import pixelj.models.Project;
 import pixelj.util.Checkerboard;
 import pixelj.util.Detachable;
-import pixelj.util.MathUtils;
 import pixelj.views.controls.GlyphPainter;
 import pixelj.views.controls.Line;
 import pixelj.views.controls.Orientation;

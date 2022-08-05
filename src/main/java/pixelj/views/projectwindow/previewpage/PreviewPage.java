@@ -1,15 +1,12 @@
 package pixelj.views.projectwindow.previewpage;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseWheelEvent;
 
 import javax.swing.JFrame;
 
 import pixelj.actions.PreviewPageActions;
 import pixelj.models.Project;
 import pixelj.services.AppState;
-import pixelj.util.MathUtils;
 import pixelj.views.shared.ZoomAdapter;
 
 public final class PreviewPage extends PreviewPageBase {

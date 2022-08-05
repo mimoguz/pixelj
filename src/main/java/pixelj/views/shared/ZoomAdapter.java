@@ -28,4 +28,4 @@ public class ZoomAdapter extends MouseAdapter {
         );
         zoomSlider.setValue(zoom);
     }
-};
+}

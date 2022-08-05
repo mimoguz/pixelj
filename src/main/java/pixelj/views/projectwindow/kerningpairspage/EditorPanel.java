@@ -1,7 +1,5 @@
 package pixelj.views.projectwindow.kerningpairspage;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
 
 import javax.swing.SpinnerNumberModel;
