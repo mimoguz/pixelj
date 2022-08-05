@@ -13,6 +13,8 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 
+import pixelj.models.FilteredList;
+import pixelj.models.KerningPair;
 import pixelj.models.Project;
 import pixelj.resources.Resources;
 import pixelj.views.projectwindow.kerningpairspage.AddDialog;
@@ -33,15 +35,18 @@ public final class KerningPairListActions implements Actions {
     private final Project project;
     private final JFrame window;
     private final ListSelectionModel selectionModel;
+    private final FilteredList<KerningPair> displayListModel;
 
     public KerningPairListActions(
         final Project project,
         final ListSelectionModel selectionModel,
+        final FilteredList<KerningPair> displayListModel,
         final JFrame window
     ) {
 
         this.project = project;
         this.selectionModel = selectionModel;
+        this.displayListModel = displayListModel;
         this.window = window;
 
         addDialog = new AddDialog(window, project);
@@ -107,7 +112,7 @@ public final class KerningPairListActions implements Actions {
             return;
         }
         final var listModel = project.getKerningPairs();
-        listModel.removeAll(Arrays.stream(indices).mapToObj(listModel::getElementAt).toList());
+        listModel.removeAll(Arrays.stream(indices).mapToObj(displayListModel::getElementAt).toList());
         project.setDirty(true);
     }
 }

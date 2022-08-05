@@ -7,7 +7,7 @@ import pixelj.util.ChangeableInt;
  * Two characters are equal if their code points are equal. Hash code of a
  * character is its code point.
  */
-public final class Glyph implements Comparable<Glyph> {
+public final class Glyph implements Comparable<Glyph>, HasId {
 
     /**
      * Glyph width.
@@ -42,6 +42,11 @@ public final class Glyph implements Comparable<Glyph> {
     @Override
     public int compareTo(final Glyph that) {
         return Integer.compare(codePoint, that.codePoint);
+    }
+
+    @Override
+    public long getId() {
+        return codePoint;
     }
 
     @Override

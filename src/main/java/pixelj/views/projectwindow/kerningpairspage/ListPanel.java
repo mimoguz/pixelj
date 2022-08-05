@@ -26,15 +26,15 @@ public final class ListPanel extends ListPanelBase implements Detachable {
     public ListPanel(final Project project, final JFrame window) {
         this.window = window;
 
-        actions = new KerningPairListActions(project, selectionModel, window);
-        actions.removeAction.setEnabled(false);
-        addButton.setAction(actions.addAction);
-        removeButton.setAction(actions.removeAction);
-
         listModel = new FilteredList<>(project.getKerningPairs());
         list.setSelectionModel(selectionModel);
         list.setModel(listModel);
         selectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+        actions = new KerningPairListActions(project, selectionModel, listModel, window);
+        actions.removeAction.setEnabled(false);
+        addButton.setAction(actions.addAction);
+        removeButton.setAction(actions.removeAction);
 
         leftFilterBox.addActionListener(e -> {
             if (leftFilterBox.getSelectedItem() instanceof final Block block) {

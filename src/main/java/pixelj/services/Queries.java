@@ -29,7 +29,7 @@ final class Queries {
 
     public static final String CREATE_KERNING_PAIRS_TABLE = createQuery(
         KERNING_PAIRS_TABLE,
-        "id INT NOT NULL",
+        "id BIGINT NOT NULL",
         "left_code_point INT NOT NULL",
         "right_code_point INT NOT NULL",
         "kerning_value INT NOT NULL",

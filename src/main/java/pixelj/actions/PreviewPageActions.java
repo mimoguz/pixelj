@@ -105,7 +105,7 @@ public final class PreviewPageActions implements Actions {
     private List<Glyph> getCharactersOfLine(final String line) {
         final var characters = project.getGlyphs();
         return line.codePoints()
-            .mapToObj(cp -> cp == SPACE ? new Glyph(SPACE, 0, null) : characters.findHash(cp))
+            .mapToObj(cp -> cp == SPACE ? new Glyph(SPACE, 0, null) : characters.findId(cp))
             .filter(Objects::nonNull)
             .toList();
     }
@@ -130,7 +130,9 @@ public final class PreviewPageActions implements Actions {
                 continue;
             }
             final var right = characters.get(index + 1);
-            final var pair = kerningPairs.findHash(KerningPair.getHash(left, right));
+            final var pair = kerningPairs.findId(
+                KerningPair.calculateId(left.getCodePoint(), right.getCodePoint())
+            );
             spaces.add(pair == null || settings.isMonospaced()
                 ? letterSpacing
                 : letterSpacing + pair.getKerningValue()

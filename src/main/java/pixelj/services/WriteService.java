@@ -58,7 +58,7 @@ final class WriteService {
             statement.executeUpdate(Queries.CREATE_KERNING_PAIRS_TABLE);
             final var insertKerningPair = connection.prepareStatement(Queries.INSERT_KERNING_PAIR);
             for (var pair : kerningPairs) {
-                insertKerningPair.setInt(KerningPairsColumn.ID.getIndex(), pair.id());
+                insertKerningPair.setLong(KerningPairsColumn.ID.getIndex(), pair.id());
                 insertKerningPair.setInt(
                     KerningPairsColumn.LEFT_CODE_POINT.getIndex(),
                     pair.left()

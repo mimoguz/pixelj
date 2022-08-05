@@ -27,7 +27,7 @@ public final class BasicImageWriter implements ImageWriter {
             if (rect.getId() == 32) {
                 continue;
             }
-            final var glyph = glyphs.findHash(rect.getId());
+            final var glyph = glyphs.findId(rect.getId());
             final var md = rect.getMetadata();
             writeRect(
                 image,

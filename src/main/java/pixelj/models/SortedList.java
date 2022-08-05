@@ -10,19 +10,19 @@ import javax.swing.event.EventListenerList;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
-import org.eclipse.collections.impl.map.mutable.primitive.IntObjectHashMap;
+import org.eclipse.collections.impl.map.mutable.primitive.LongObjectHashMap;
 
 /**
  * A list model that keeps its elements always sorted.
- * It's Intended to be used for CharacterModels and KerningPairModels, and uses
- * a IntObjectHashMap for backing collection (so assumes no hash collisions).
+ * It's Intended to be used for things that implement HasId, and uses
+ * a LongObjectHashMap for backing collection (so assumes no id collisions).
  *
- * @param <E> Element type. Should have a unique hash.
+ * @param <E> Element type. Must implement HasId.
  */
-public class SortedList<E extends Comparable<E>> implements ListModel<E> {
+public class SortedList<E extends Comparable<E> & HasId> implements ListModel<E> {
     protected final ArrayList<E> display = new ArrayList<>();
     protected final EventListenerList listeners = new EventListenerList();
-    protected final IntObjectHashMap<E> source = new IntObjectHashMap<>();
+    protected final LongObjectHashMap<E> source = new LongObjectHashMap<>();
 
     public SortedList() {
     }
@@ -32,7 +32,7 @@ public class SortedList<E extends Comparable<E>> implements ListModel<E> {
             if (elem == null) {
                 continue;
             }
-            source.put(elem.hashCode(), elem);
+            source.put(elem.getId(), elem);
         }
         display.addAll(source.toList());
     }
@@ -52,7 +52,7 @@ public class SortedList<E extends Comparable<E>> implements ListModel<E> {
         if (element == null || source.contains(element)) {
             return false;
         }
-        source.put(element.hashCode(), element);
+        source.put(element.getId(), element);
         final var index = insertOrdered(element);
         fireIntervalAddedEvent(index, index);
         return true;
@@ -68,7 +68,7 @@ public class SortedList<E extends Comparable<E>> implements ListModel<E> {
             if (element == null || source.contains(element)) {
                 continue;
             }
-            source.put(element.hashCode(), element);
+            source.put(element.getId(), element);
             final var index = insertOrdered(element);
             if (index0 == -1 || index < index0) {
                 index0 = index;
@@ -124,11 +124,11 @@ public class SortedList<E extends Comparable<E>> implements ListModel<E> {
     /**
      * Get by hash code.
      *
-     * @param hashCode
+     * @param id Element Id
      * @return E or null
      */
-    public E findHash(final int hashCode) {
-        return source.get(hashCode);
+    public E findId(final long id) {
+        return source.get(id);
     }
 
     /**
@@ -156,14 +156,14 @@ public class SortedList<E extends Comparable<E>> implements ListModel<E> {
 
     /**
      * @param element The element to be removed
-     * @return If the source collection have had an element with same hash code with
+     * @return If the source collection have had an element with same id code with
      *         the parameter, removes that element from the list and returns it. Otherwise, returns null.
      */
     public E remove(final E element) {
         if (element == null) {
             return null;
         }
-        final var existing = source.remove(element.hashCode());
+        final var existing = source.remove(element.getId());
         final var index = display.indexOf(existing);
         if (display.remove(existing)) {
             fireIntervalRemovedEvent(index, index);
@@ -178,10 +178,10 @@ public class SortedList<E extends Comparable<E>> implements ListModel<E> {
         var index0 = -1;
         var index1 = -1;
         for (final var element : collection) {
-            if (element == null || !source.containsKey(element.hashCode())) {
+            if (element == null || !source.containsKey(element.getId())) {
                 continue;
             }
-            source.remove(element.hashCode());
+            source.remove(element.getId());
             final var index = display.indexOf(element);
             if (index0 == -1 || index < index0) {
                 index0 = index;
@@ -203,7 +203,7 @@ public class SortedList<E extends Comparable<E>> implements ListModel<E> {
      */
     public void removeElementAt(final int index) {
         final var element = display.get(index);
-        source.remove(element.hashCode());
+        source.remove(element.getId());
         display.remove(index);
         fireIntervalRemovedEvent(index, index);
     }
@@ -217,7 +217,7 @@ public class SortedList<E extends Comparable<E>> implements ListModel<E> {
             return;
         }
         final var elements = display.subList(from, to + 1);
-        elements.forEach(e -> source.remove(e.hashCode()));
+        elements.forEach(e -> source.remove(e.getId()));
         display.removeAll(elements);
         fireIntervalRemovedEvent(from, to - 1);
     }

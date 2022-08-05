@@ -1,6 +1,6 @@
 package pixelj.models;
 
-public record KerningPairRecord(int id, int left, int right, int value) {
+public record KerningPairRecord(long id, int left, int right, int value) {
 
     /**
      * @param pair Source
@@ -8,7 +8,7 @@ public record KerningPairRecord(int id, int left, int right, int value) {
      */
     public static KerningPairRecord from(final KerningPair pair) {
         return new KerningPairRecord(
-            pair.hashCode(),
+            pair.getId(),
             pair.getLeft().getCodePoint(),
             pair.getRight().getCodePoint(),
             pair.getKerningValue()

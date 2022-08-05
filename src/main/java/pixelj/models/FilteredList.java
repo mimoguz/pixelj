@@ -8,11 +8,11 @@ import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
 /**
- * A wrapper for HashList which adds filtering capability.
+ * A wrapper for SortedList which adds filtering capability.
  *
- * @param <E> Element type. Should have a unique hash.
+ * @param <E> Element type. Must implement HasId.
  */
-public final class FilteredList<E extends Comparable<E>> extends SortedList<E> {
+public final class FilteredList<E extends Comparable<E> & HasId> extends SortedList<E> {
 
     private final SortedList<E> delegate;
     private Predicate<E> filter = t -> true;
@@ -90,8 +90,8 @@ public final class FilteredList<E extends Comparable<E>> extends SortedList<E> {
     }
 
     @Override
-    public E findHash(final int hashCode) {
-        return delegate.findHash(hashCode);
+    public E findId(final long id) {
+        return delegate.findId(id);
     }
 
     @Override
@@ -132,8 +132,8 @@ public final class FilteredList<E extends Comparable<E>> extends SortedList<E> {
     }
 
     private int push(final E element) {
-        if (filter.test(element) && !source.containsKey(element.hashCode())) {
-            source.put(element.hashCode(), element);
+        if (filter.test(element) && !source.containsKey(element.getId())) {
+            source.put(element.getId(), element);
             return insertOrdered(element);
         }
         return -1;
@@ -143,10 +143,10 @@ public final class FilteredList<E extends Comparable<E>> extends SortedList<E> {
         var index0 = -1;
         var index1 = -1;
         for (final var element : collection) {
-            if (!filter.test(element) || source.containsKey(element.hashCode())) {
+            if (!filter.test(element) || source.containsKey(element.getId())) {
                 continue;
             }
-            source.put(element.hashCode(), element);
+            source.put(element.getId(), element);
             final var index = insertOrdered(element);
             if (index0 == -1 || index < index0) {
                 index0 = index;

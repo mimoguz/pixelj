@@ -15,11 +15,16 @@ public record Scalar(
     @JsonProperty("name") String name,
     @JsonProperty("generalCategory") GeneralCategory generalCategory,
     @JsonProperty("blockId") int blockId
-) {
+) implements HasId {
 
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public long getId() {
+        return codePoint;
     }
 
     @Override

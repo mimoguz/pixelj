@@ -63,8 +63,8 @@ final class ReadService {
     ) throws SQLException, IllegalArgumentException {
         final var list = new SortedList<KerningPair>();
         while (result.next()) {
-            final var left = glyphs.findHash(result.getInt(KerningPairsColumn.LEFT_CODE_POINT.getIndex()));
-            final var right = glyphs.findHash(result.getInt(KerningPairsColumn.RIGHT_CODE_POINT.getIndex()));
+            final var left = glyphs.findId(result.getInt(KerningPairsColumn.LEFT_CODE_POINT.getIndex()));
+            final var right = glyphs.findId(result.getInt(KerningPairsColumn.RIGHT_CODE_POINT.getIndex()));
             if (left == null || right == null) {
                 throw new IllegalArgumentException("Left or right glyph is missing");
             }

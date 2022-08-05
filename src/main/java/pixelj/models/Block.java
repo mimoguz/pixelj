@@ -7,11 +7,17 @@ public record Block(
     @JsonProperty("name") String name,
     @JsonProperty("firstCodePoint") int starts,
     @JsonProperty("lastCodePoint") int ends
-) {
+) implements HasId {
 
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public long getId() {
+        // TODO Auto-generated method stub
+        return id;
     }
 
     @Override

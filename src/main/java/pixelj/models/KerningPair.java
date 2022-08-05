@@ -7,7 +7,7 @@ import pixelj.util.ChangeableInt;
  * code of a kerning pair is calculated over its left and right scalars using
  * getHash static method.
  */
-public final class KerningPair implements Comparable<KerningPair> {
+public final class KerningPair implements Comparable<KerningPair>, HasId {
     /**
      * Kerning value.
      */
@@ -39,6 +39,11 @@ public final class KerningPair implements Comparable<KerningPair> {
     }
 
     @Override
+    public long getId() {
+        return calculateId(left.getCodePoint(), right.getCodePoint());
+    }
+
+    @Override
     public int compareTo(final KerningPair that) {
         final var leftOrder = Integer.compare(left.getCodePoint(), that.left.getCodePoint());
         if (leftOrder == 0) {
@@ -50,7 +55,7 @@ public final class KerningPair implements Comparable<KerningPair> {
 
     @Override
     public int hashCode() {
-        return getHash(left, right);
+        return (left.hashCode() << 31) | right.hashCode();
     }
 
     @Override
@@ -65,18 +70,16 @@ public final class KerningPair implements Comparable<KerningPair> {
     }
 
     /**
-     *  This is essentially a hack. I use this method to calculate a hash without
-     * creating an instance, then use that hash to search a model in a
-     * KerningPairListModel.
+     * To calculate id of a kerning pair without creating one.
      *
-     * @param left
-     * @param right
-     * @return Hash value
+     * @param leftCodePoint
+     * @param rightCodePoint
+     * @return Long hash code
      */
-    public static int getHash(final Glyph left, final Glyph right) {
+    public static long calculateId(final int leftCodePoint, final int rightCodePoint) {
         // >In the Unicode Standard, the codespace consists of the integers from 0 to
         // 0x10FFFF.<
         // 0x10FFFF occupies 21 bits, there shouldn't be any collisions here.
-        return (left.hashCode() << 24) | right.hashCode();
+        return (((long) leftCodePoint) << 31) | rightCodePoint;
     }
 }
