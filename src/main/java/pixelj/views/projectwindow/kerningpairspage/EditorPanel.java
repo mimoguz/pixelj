@@ -1,5 +1,7 @@
 package pixelj.views.projectwindow.kerningpairspage;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
 
 import javax.swing.SpinnerNumberModel;
@@ -7,6 +9,7 @@ import javax.swing.SpinnerNumberModel;
 import pixelj.models.DocumentSettings;
 import pixelj.models.KerningPair;
 import pixelj.models.Project;
+import pixelj.views.shared.ZoomAdapter;
 
 public final class EditorPanel extends EditorPanelBase {
     private final ArrayList<Integer> spaces = new ArrayList<>(java.util.List.of(0));
@@ -15,12 +18,10 @@ public final class EditorPanel extends EditorPanelBase {
 
     public EditorPanel(final Project project) {
         final var zoomSlider = zoomStrip.getSlider();
-        zoomSlider.addChangeListener(e -> {
-            if (zoomSlider.getValueIsAdjusting()) {
-                preview.setZoom(zoomSlider.getValue());
-            }
-        });
+        zoomSlider.addChangeListener(e -> preview.setZoom(zoomSlider.getValue()));
         zoomStrip.setEnabled(false);
+        final var mouseAdapter = new ZoomAdapter(zoomSlider);
+        scrollPane.addMouseWheelListener(mouseAdapter);
 
         valueSpinner.addChangeListener(e -> {
             if (model == null) {

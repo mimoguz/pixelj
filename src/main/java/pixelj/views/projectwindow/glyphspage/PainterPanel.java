@@ -2,6 +2,9 @@ package pixelj.views.projectwindow.glyphspage;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JToggleButton;
@@ -13,11 +16,14 @@ import pixelj.models.Glyph;
 import pixelj.models.Project;
 import pixelj.util.Checkerboard;
 import pixelj.util.Detachable;
+import pixelj.util.MathUtils;
 import pixelj.views.controls.GlyphPainter;
 import pixelj.views.controls.Line;
 import pixelj.views.controls.Orientation;
+import pixelj.views.shared.ZoomAdapter;
 
 public final class PainterPanel extends PainterPanelBase implements Detachable {
+
     private static final Color BASELINE = new Color(45, 147, 173);
     private static final Color CAP_HEIGHT = new Color(41, 191, 18);
     private static final int INITIAL_ZOOM = 12;
@@ -35,11 +41,7 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
         painter.setShaded(true);
 
         final var zoomSlider = zoomStrip.getSlider();
-        zoomSlider.addChangeListener(e -> {
-            if (zoomSlider.getValueIsAdjusting()) {
-                painter.setZoom(zoomSlider.getValue());
-            }
-        });
+        zoomSlider.addChangeListener(e -> painter.setZoom(zoomSlider.getValue()));
         zoomStrip.setEnabled(false);
 
         infoPanel.gridVisibleProperty.addChangeListener(isVisible -> painter.setOverlayVisible(isVisible));
@@ -56,6 +58,18 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
         });
         actions.registerShortcuts(window.getRootPane());
         fillToolbar(toolBar, actions);
+
+        final var mouseAdapter = new ZoomAdapter(zoomSlider) {
+            @Override
+            public void mousePressed(final MouseEvent e) {
+                // When clicked, move focus to scrollPane
+                scrollPane.requestFocus();
+            }
+        };
+
+        scrollPane.addMouseListener(mouseAdapter);
+        scrollPane.addMouseWheelListener(mouseAdapter);
+        painter.addMouseListener(mouseAdapter);
 
         setMetrics(project.getDocumentSettings());
         project.documentSettingsProperty.addChangeListener((source, settings) -> setMetrics(settings));

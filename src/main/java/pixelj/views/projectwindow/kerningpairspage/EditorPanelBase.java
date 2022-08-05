@@ -22,10 +22,12 @@ import pixelj.views.shared.Dimensions;
 abstract class EditorPanelBase extends JPanel {
 
     protected static final int INITIAL_ZOOM = 4;
-    protected final StringView preview = new StringView(Resources.get().colors.disabledIcon());
+
     protected final JLabel pxLabel = new JLabel(Resources.get().getString("pixels"));
     protected final JLabel spinnerLabel = new JLabel(Resources.get().getString("kerningValue"));
+    protected final JScrollPane scrollPane;
     protected final JSpinner valueSpinner = new JSpinner();
+    protected final StringView preview = new StringView(Resources.get().colors.disabledIcon());
     protected final ZoomStrip zoomStrip = new ZoomStrip(1, 48, INITIAL_ZOOM);
 
     EditorPanelBase() {
@@ -53,11 +55,12 @@ abstract class EditorPanelBase extends JPanel {
 
         final var previewPanel = new JPanel(new GridBagLayout());
         previewPanel.add(preview);
-        final var scrollPanel = new JScrollPane(previewPanel);
+
+        scrollPane = new JScrollPane(previewPanel);
         // To balance the split pane divider
-        scrollPanel.setBorder(Borders.SMALL_EMPTY_CUP_CENTER);
-        scrollPanel.setMaximumSize(Dimensions.MAXIMUM);
-        add(scrollPanel);
+        scrollPane.setBorder(Borders.SMALL_EMPTY_CUP_CENTER);
+        scrollPane.setMaximumSize(Dimensions.MAXIMUM);
+        add(scrollPane);
 
         final var spinnerPanel = new JPanel();
         spinnerPanel.setLayout(new BoxLayout(spinnerPanel, BoxLayout.X_AXIS));

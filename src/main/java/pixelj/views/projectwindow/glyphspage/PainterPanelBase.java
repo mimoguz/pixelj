@@ -1,13 +1,15 @@
 package pixelj.views.projectwindow.glyphspage;
 
 import java.awt.BorderLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 
+import javax.swing.border.Border;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -16,7 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
@@ -36,6 +37,7 @@ public abstract class PainterPanelBase extends JPanel {
     protected final ZoomStrip zoomStrip = new ZoomStrip(1, 48, 12);
     protected final InfoPanel infoPanel;
     protected final JToolBar toolBar = new JToolBar();
+    protected final JScrollPane scrollPane;
 
     private final Border focusedBorder = BorderFactory.createLineBorder(Resources.get().colors.accent(), BW);
     private final Border unfocusedBorder = BorderFactory.createEmptyBorder(BW, BW, BW, BW);
@@ -76,20 +78,14 @@ public abstract class PainterPanelBase extends JPanel {
         painterContainer.setLayout(new GridBagLayout());
         painterContainer.setMaximumSize(Dimensions.MAXIMUM);
         painterContainer.add(painterBorder);
-        final var scrollPanel = new JScrollPane(painterContainer);
-        scrollPanel.setBorder(Borders.SMALL_EMPTY_CUP_CENTER);
-        scrollPanel.setFocusable(true);
-        scrollPanel.setMaximumSize(Dimensions.MAXIMUM);
-        // When clicked, move focus to scrollPanel
-        final var moveFocus = new MouseAdapter() {
-            @Override
-            public void mousePressed(final MouseEvent e) {
-                scrollPanel.requestFocus();
-            }
-        };
-        scrollPanel.addMouseListener(moveFocus);
-        painter.addMouseListener(moveFocus);
-        scrollPanel.addFocusListener(new FocusListener() {
+
+        scrollPane = new JScrollPane(painterContainer);
+        scrollPane.setBorder(Borders.SMALL_EMPTY_CUP_CENTER);
+        scrollPane.setFocusable(true);
+        scrollPane.setMaximumSize(Dimensions.MAXIMUM);
+        editorPanel.add(scrollPane, BorderLayout.CENTER);
+
+        scrollPane.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(final FocusEvent e) {
                 painterBorder.setBorder(focusedBorder);
@@ -100,7 +96,6 @@ public abstract class PainterPanelBase extends JPanel {
                 painterBorder.setBorder(unfocusedBorder);
             }
         });
-        editorPanel.add(scrollPanel, BorderLayout.CENTER);
 
         add(editorPanel, BorderLayout.CENTER);
     }

@@ -34,6 +34,7 @@ abstract class PreviewPageBase extends JPanel {
     protected final JButton clearButton = new JButton();
     protected final JButton refreshButton = new JButton();
     protected final JPanel container = new JPanel();
+    protected final JScrollPane scrollPane;
     protected final PromptTextArea textInput = new PromptTextArea();
     protected final ZoomStrip zoomStrip = new ZoomStrip(1, 48, INITIAL_ZOOM);
 
@@ -73,10 +74,11 @@ abstract class PreviewPageBase extends JPanel {
 
         final var previewPanel = new JPanel(new GridBagLayout());
         previewPanel.add(container);
-        final var scrollPanel = new JScrollPane(previewPanel);
-        scrollPanel.setMaximumSize(Dimensions.MAXIMUM);
-        scrollPanel.setBorder(Borders.SMALL_EMPTY_CENTER_PANEL);
-        add(scrollPanel);
+
+        scrollPane = new JScrollPane(previewPanel);
+        scrollPane.setMaximumSize(Dimensions.MAXIMUM);
+        scrollPane.setBorder(Borders.SMALL_EMPTY_CENTER_PANEL);
+        add(scrollPane);
 
         final var buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
