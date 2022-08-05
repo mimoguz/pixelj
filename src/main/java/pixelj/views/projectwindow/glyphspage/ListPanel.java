@@ -36,7 +36,7 @@ public final class ListPanel extends ListPanelBase implements Detachable {
         filterBox.addActionListener(event -> {
             if (filterBox.getSelectedItem() instanceof final Block block) {
                 filteredListModel.setFilter(
-                        chr -> chr.getCodePoint() >= block.starts() && chr.getCodePoint() <= block.ends()
+                    chr -> chr.getCodePoint() >= block.starts() && chr.getCodePoint() <= block.ends()
                 );
             } else {
                 filteredListModel.setFilter(chr -> true);

@@ -130,9 +130,9 @@
     <module name="CommentsIndentation" />
     <module name="FinalParameters" />
     <module name="Indentation">
-      <property name="throwsIndent" value="8" />
-      <property name="arrayInitIndent" value="8" />
-      <property name="lineWrappingIndentation" value="8" />
+      <property name="throwsIndent" value="4" />
+      <property name="arrayInitIndent" value="4" />
+      <property name="lineWrappingIndentation" value="4" />
       <property name="forceStrictCondition" value="false" />
     </module>
     <module name="OuterTypeFilename" />

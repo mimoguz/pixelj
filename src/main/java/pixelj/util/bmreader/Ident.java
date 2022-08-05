@@ -65,7 +65,7 @@ public enum Ident implements Token {
     AMOUNT("amount");
 
     private static final Map<String, Ident> MAPPING = Arrays.stream(Ident.values())
-            .collect(Collectors.toMap(f -> f.getText(), f -> f));
+        .collect(Collectors.toMap(f -> f.getText(), f -> f));
 
     private static final Set<Ident> TAGS = EnumSet.of(INFO, COMMON, PAGE, CHARS, CHAR, KERNING);
 

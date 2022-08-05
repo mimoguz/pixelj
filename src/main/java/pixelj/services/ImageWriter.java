@@ -42,9 +42,9 @@ public interface ImageWriter {
      * @return Created image. Its image type must be TYPE_INT_ARGB.
      */
     BufferedImage getImage(
-            Dimension imageSize,
-            Collection<Rectangle<GlyphImageData>> rectangles,
-            SortedList<Glyph> glyphs,
-            DocumentSettings settings
+        Dimension imageSize,
+        Collection<Rectangle<GlyphImageData>> rectangles,
+        SortedList<Glyph> glyphs,
+        DocumentSettings settings
     );
 }

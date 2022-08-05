@@ -11,10 +11,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @param blockId
  */
 public record Scalar(
-        @JsonProperty("codePoint") int codePoint,
-        @JsonProperty("name") String name,
-        @JsonProperty("generalCategory") GeneralCategory generalCategory,
-        @JsonProperty("blockId") int blockId
+    @JsonProperty("codePoint") int codePoint,
+    @JsonProperty("name") String name,
+    @JsonProperty("generalCategory") GeneralCategory generalCategory,
+    @JsonProperty("blockId") int blockId
 ) {
 
     @Override

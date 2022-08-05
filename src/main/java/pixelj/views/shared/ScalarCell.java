@@ -47,10 +47,15 @@ public final class ScalarCell extends JPanel {
         add(title, constraints);
     }
 
-    public void set(final int codePoint, final String title, final int maximumSize) {
-        this.letter.setText(Character.toString((char) codePoint));
-        this.title.setText(title);
-        this.subtitle.setText("0x" + Integer.toHexString(codePoint));
+    /**
+     * @param codePoint
+     * @param titleText
+     * @param maximumSize
+     */
+    public void set(final int codePoint, final String titleText, final int maximumSize) {
+        letter.setText(Character.toString((char) codePoint));
+        title.setText(titleText);
+        subtitle.setText("0x" + Integer.toHexString(codePoint));
         setMaximumSize(new Dimension(maximumSize, Integer.MAX_VALUE));
     }
 

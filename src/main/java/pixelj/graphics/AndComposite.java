@@ -7,8 +7,30 @@ import java.awt.image.ColorModel;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 
-public class AndComposite implements Composite {
-    public static class IntCompositeContext implements CompositeContext {
+public final class AndComposite implements Composite {
+
+    private static final int RGB_PIXEL_SIZE = 24;
+
+    @Override
+    public CompositeContext createContext(
+        final ColorModel sourceColorModel,
+        final ColorModel destinationColorModel,
+        final RenderingHints hints
+    ) {
+        if (destinationColorModel.getPixelSize() < RGB_PIXEL_SIZE) {
+            throw new IllegalArgumentException(
+                "This destination color model isn't supported by the AndComposite"
+            );
+        }
+        if (sourceColorModel.getPixelSize() <= 8) {
+            return new ByteCompositeContext();
+        } else {
+            return new IntCompositeContext();
+        }
+    }
+
+    public static final class IntCompositeContext implements CompositeContext {
+
         @Override
         public void compose(final Raster source, final Raster in, final WritableRaster out) {
             final var height = Math.min(in.getHeight(), out.getHeight());
@@ -34,7 +56,7 @@ public class AndComposite implements Composite {
         }
     }
 
-    private static class ByteCompositeContext implements CompositeContext {
+    private static final class ByteCompositeContext implements CompositeContext {
         @Override
         public void compose(final Raster source, final Raster in, final WritableRaster out) {
             final var height = Math.min(in.getHeight(), out.getHeight());
@@ -57,26 +79,6 @@ public class AndComposite implements Composite {
         @Override
         public void dispose() {
             // Nothing to dispose
-        }
-    }
-
-    private static final int RGB_PIXEL_SIZE = 24;
-
-    @Override
-    public CompositeContext createContext(
-            final ColorModel sourceColorModel,
-            final ColorModel destinationColorModel,
-            final RenderingHints hints
-    ) {
-        if (destinationColorModel.getPixelSize() < RGB_PIXEL_SIZE) {
-            throw new IllegalArgumentException(
-                    "This destination color model isn't supported by the AndComposite"
-            );
-        }
-        if (sourceColorModel.getPixelSize() <= 8) {
-            return new ByteCompositeContext();
-        } else {
-            return new IntCompositeContext();
         }
     }
 }

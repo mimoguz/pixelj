@@ -1,6 +1,5 @@
 package pixelj.views.projectwindow.glyphspage;
 
-import java.awt.Color;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -69,9 +68,9 @@ public class AddCodePointDialog extends AddCodePointDialogBase {
         });
 
         getRootPane().registerKeyboardAction(
-                (e) -> setVisible(false),
-                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-                JComponent.WHEN_IN_FOCUSED_WINDOW
+            (e) -> setVisible(false),
+            KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+            JComponent.WHEN_IN_FOCUSED_WINDOW
         );
 
         validInput.addChangeListener(this::onValidChanged);
@@ -99,8 +98,8 @@ public class AddCodePointDialog extends AddCodePointDialogBase {
 
     private void onValidChanged(final boolean value) {
         cpIn.putClientProperty(
-                FlatClientProperties.OUTLINE,
-                value ? null : FlatClientProperties.OUTLINE_ERROR
+            FlatClientProperties.OUTLINE,
+            value ? null : FlatClientProperties.OUTLINE_ERROR
         );
         addButton.setEnabled(value);
     }
@@ -113,13 +112,11 @@ public class AddCodePointDialog extends AddCodePointDialogBase {
         }
         final var scalar = res.getScalar(cp);
         final var settings = project.getDocumentSettings();
-        project.getGlyphs().add(
-                new Glyph(
-                    scalar.codePoint(),
-                    settings.defaultWidth(),
-                    BinaryImage.of(settings.canvasWidth(), settings.canvasHeight(), true)
-                )
-        );
+        project.getGlyphs().add(new Glyph(
+            scalar.codePoint(),
+            settings.defaultWidth(),
+            BinaryImage.of(settings.canvasWidth(), settings.canvasHeight(), true)
+        ));
         cpIn.setText(DEFAULT_TEXT);
     }
 }

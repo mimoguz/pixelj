@@ -176,8 +176,8 @@ public final class CoupledActionsButton extends JButton {
         }
         final var action = value ? secondaryAction : primaryAction;
         setToolTipText(action != null && action.getValue(Action.SHORT_DESCRIPTION) instanceof String str
-                ? str
-                : null
+            ? str
+            : null
         );
         repaint();
     }

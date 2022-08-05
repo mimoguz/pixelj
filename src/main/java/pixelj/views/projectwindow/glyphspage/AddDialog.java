@@ -55,24 +55,24 @@ public final class AddDialog extends AddDialogBase {
         // TODO: Separate actions
         addButton.addActionListener(event -> addSelected());
         selectionModel.addListSelectionListener(
-                e -> addButton.setEnabled(selectionModel.getMinSelectionIndex() >= 0)
+            e -> addButton.setEnabled(selectionModel.getMinSelectionIndex() >= 0)
         );
 
         closeButton.addActionListener(event -> setVisible(false));
 
         helpButton.setAction(
-                new ApplicationAction(
-                        "documentSettingsHelpAction",
-                        (e, action) -> Help.showPage(Help.Page.GLYPHS)
-                )
-                        .setIcon(Icons.HELP)
-                        .setTooltip(Resources.get().getString("help"))
+            new ApplicationAction(
+                "documentSettingsHelpAction",
+                (e, action) -> Help.showPage(Help.Page.GLYPHS)
+            )
+                .setIcon(Icons.HELP)
+                .setTooltip(Resources.get().getString("help"))
         );
 
         getRootPane().registerKeyboardAction(
-                (e) -> setVisible(false),
-                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-                JComponent.WHEN_IN_FOCUSED_WINDOW
+            (e) -> setVisible(false),
+            KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+            JComponent.WHEN_IN_FOCUSED_WINDOW
         );
     }
 
@@ -95,13 +95,11 @@ public final class AddDialog extends AddDialogBase {
         final var canvasHeight = project.getDocumentSettings().canvasHeight();
         for (final var i : indices) {
             final var scalarData = listModel.get(i);
-            project.getGlyphs().add(
-                    new Glyph(
-                        scalarData.codePoint(),
-                        defaultWidth,
-                        BinaryImage.of(canvasWidth, canvasHeight, true)
-                    )
-            );
+            project.getGlyphs().add(new Glyph(
+                scalarData.codePoint(),
+                defaultWidth,
+                BinaryImage.of(canvasWidth, canvasHeight, true)
+            ));
         }
         selectionModel.clearSelection();
         project.setDirty(true);

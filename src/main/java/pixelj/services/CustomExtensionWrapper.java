@@ -6,7 +6,7 @@ import org.h2.store.fs.FilePathWrapper;
 /**
  * <a href=https://stackoverflow.com/a/33293800>Stackoverflow answer</a>
  */
-public class CustomExtensionWrapper extends FilePathWrapper {
+public final class CustomExtensionWrapper extends FilePathWrapper {
     private static final String MV_DB = ".mv.db";
     private static final String EXTENSION = "." + Queries.EXTENSION;
     private static final String SCHEME = Queries.PIXELJ;

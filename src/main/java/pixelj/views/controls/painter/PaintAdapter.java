@@ -106,7 +106,7 @@ public final class PaintAdapter implements MouseListener, MouseMotionListener {
         // The button1 (or any other button while control pressed) clears, any other
         // button besides the button1 paints.
         fill = !(e.getButton() == MouseEvent.BUTTON1
-                && (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == 0);
+            && (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == 0);
         setPixel(image);
     }
 

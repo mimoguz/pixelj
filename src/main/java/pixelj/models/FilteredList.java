@@ -9,7 +9,7 @@ import javax.swing.event.ListDataListener;
 
 /**
  * A wrapper for HashList which adds filtering capability.
- * 
+ *
  * @param <E> Element type. Should have a unique hash.
  */
 public final class FilteredList<E extends Comparable<E>> extends SortedList<E> {

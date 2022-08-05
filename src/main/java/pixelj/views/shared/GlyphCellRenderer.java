@@ -16,11 +16,11 @@ public final class GlyphCellRenderer implements ListCellRenderer<Glyph> {
 
     @Override
     public Component getListCellRendererComponent(
-            final JList<? extends Glyph> list,
-            final Glyph value,
-            final int index,
-            final boolean isSelected,
-            final boolean cellHasFocus
+        final JList<? extends Glyph> list,
+        final Glyph value,
+        final int index,
+        final boolean isSelected,
+        final boolean cellHasFocus
     ) {
         component.set(value, list.getWidth());
         if (isSelected) {

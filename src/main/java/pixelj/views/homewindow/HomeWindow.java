@@ -45,7 +45,7 @@ public final class HomeWindow extends HomeWindowBase {
         // Disable load button if nothing is selected
         loadSelectedButton.setEnabled(false);
         selectionModel.addListSelectionListener(e ->
-                loadSelectedButton.setEnabled(selectionModel.getMinSelectionIndex() >= 0)
+            loadSelectedButton.setEnabled(selectionModel.getMinSelectionIndex() >= 0)
         );
 
         final var closeListener = new CloseListener(appState, this);

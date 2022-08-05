@@ -25,10 +25,10 @@ public final class DocumentSettingsDialog extends DocumentSettingsDialogBase {
     private final DocumentSettings.Builder builder = DocumentSettings.Builder.getDefaultBuilder();
 
     public DocumentSettingsDialog(
-            final Frame owner,
-            final String dialogTitle,
-            final String applyButtonLabel,
-            final boolean canEditCanvasSize
+        final Frame owner,
+        final String dialogTitle,
+        final String applyButtonLabel,
+        final boolean canEditCanvasSize
     ) {
         super(owner, dialogTitle, applyButtonLabel);
         canvasWidthIn.setEnabled(canEditCanvasSize);
@@ -86,18 +86,18 @@ public final class DocumentSettingsDialog extends DocumentSettingsDialogBase {
             setVisible(false);
         });
         helpButton.setAction(
-                new ApplicationAction(
-                        "documentSettingsHelpAction",
-                        (e, action) -> Help.showPage(Help.Page.DOCUMENT_SETTINGS)
-                )
-                        .setIcon(Icons.HELP)
-                        .setTooltip(Resources.get().getString("help"))
+            new ApplicationAction(
+                "documentSettingsHelpAction",
+                (e, action) -> Help.showPage(Help.Page.DOCUMENT_SETTINGS)
+            )
+                .setIcon(Icons.HELP)
+                .setTooltip(Resources.get().getString("help"))
         );
 
         getRootPane().registerKeyboardAction(
-                (e) -> setVisible(false),
-                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-                JComponent.WHEN_IN_FOCUSED_WINDOW
+            (e) -> setVisible(false),
+            KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+            JComponent.WHEN_IN_FOCUSED_WINDOW
         );
     }
 
@@ -136,17 +136,17 @@ public final class DocumentSettingsDialog extends DocumentSettingsDialogBase {
     }
 
     private static void setupSpinner(
-            final JSpinner spinner,
-            final int minimum,
-            final ChangeableInt value,
-            final ReadOnlyBoolean valid
+        final JSpinner spinner,
+        final int minimum,
+        final ChangeableInt value,
+        final ReadOnlyBoolean valid
     ) {
         final var numberModel = new SpinnerNumberModel(value.getValue(), minimum, 512, 1);
         spinner.setModel(numberModel);
         spinner.addChangeListener(e -> value.setValue(numberModel.getNumber().intValue()));
         valid.addChangeListener(isValid -> spinner.putClientProperty(
-                FlatClientProperties.OUTLINE,
-                isValid ? null : FlatClientProperties.OUTLINE_ERROR
+            FlatClientProperties.OUTLINE,
+            isValid ? null : FlatClientProperties.OUTLINE_ERROR
         ));
     }
 }

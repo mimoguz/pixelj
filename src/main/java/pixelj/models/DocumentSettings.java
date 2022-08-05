@@ -7,20 +7,20 @@ import pixelj.util.ReadOnlyBoolean;
 import pixelj.util.ReadOnlyInt;
 
 public record DocumentSettings(
-        String title,
-        int canvasWidth,
-        int canvasHeight,
-        int ascender,
-        int descender,
-        int capHeight,
-        int xHeight,
-        int defaultWidth,
-        int letterSpacing,
-        int spaceSize,
-        int lineSpacing,
-        boolean isMonospaced,
-        boolean isBold,
-        boolean isItalic
+    String title,
+    int canvasWidth,
+    int canvasHeight,
+    int ascender,
+    int descender,
+    int capHeight,
+    int xHeight,
+    int defaultWidth,
+    int letterSpacing,
+    int spaceSize,
+    int lineSpacing,
+    boolean isMonospaced,
+    boolean isBold,
+    boolean isItalic
 ) {
 
     /**
@@ -97,8 +97,8 @@ public record DocumentSettings(
          * Check ascender.
          */
         public final ReadOnlyBoolean validAscender = new ReadOnlyInt(descender)
-                .le(canvasHeight.subtract(ascender))
-                .and(ascender.gt(0));
+            .le(canvasHeight.subtract(ascender))
+            .and(ascender.gt(0));
         /**
          * Check canvas height.
          */
@@ -140,16 +140,16 @@ public record DocumentSettings(
          * Check all.
          */
         public final ReadOnlyBoolean validAll = validTitle
-                .and(validCanvasHeight)
-                .and(validCanvasWidth)
-                .and(validAscender)
-                .and(validDescender)
-                .and(validCapHeight)
-                .and(validXHeight)
-                .and(validDefaultWidth)
-                .and(validLetterSpacing)
-                .and(validLineSpacing)
-                .and(validSpaceSize);
+            .and(validCanvasHeight)
+            .and(validCanvasWidth)
+            .and(validAscender)
+            .and(validDescender)
+            .and(validCapHeight)
+            .and(validXHeight)
+            .and(validDefaultWidth)
+            .and(validLetterSpacing)
+            .and(validLineSpacing)
+            .and(validSpaceSize);
 
         /**
          * @return Document settings
@@ -160,20 +160,20 @@ public record DocumentSettings(
                 throw new InvalidStateException("Not all fields are valid");
             }
             return new DocumentSettings(
-                    title.getValue(),
-                    canvasWidth.getValue(),
-                    canvasHeight.getValue(),
-                    ascender.getValue(),
-                    descender.getValue(),
-                    capHeight.getValue(),
-                    xHeight.getValue(),
-                    defaultWidth.getValue(),
-                    letterSpacing.getValue(),
-                    spaceSize.getValue(),
-                    lineSpacing.getValue(),
-                    isMonospaced.getValue(),
-                    isBold.getValue(),
-                    isItalic.getValue()
+                title.getValue(),
+                canvasWidth.getValue(),
+                canvasHeight.getValue(),
+                ascender.getValue(),
+                descender.getValue(),
+                capHeight.getValue(),
+                xHeight.getValue(),
+                defaultWidth.getValue(),
+                letterSpacing.getValue(),
+                spaceSize.getValue(),
+                lineSpacing.getValue(),
+                isMonospaced.getValue(),
+                isBold.getValue(),
+                isItalic.getValue()
             );
         }
 
@@ -311,20 +311,20 @@ public record DocumentSettings(
          */
         public Builder set(final DocumentSettings settings) {
             this
-                    .setTitle(settings.title())
-                    .setAscender(settings.ascender())
-                    .setBold(settings.isBold())
-                    .setCanvasHeight(settings.canvasHeight())
-                    .setCanvasWidth(settings.canvasWidth())
-                    .setCapHeight(settings.capHeight())
-                    .setDefaultWidth(settings.defaultWidth)
-                    .setDescender(settings.descender())
-                    .setItalic(settings.isItalic)
-                    .setLineSpacing(settings.lineSpacing())
-                    .setMonospaced(settings.isMonospaced())
-                    .setSpaceSize(settings.spaceSize())
-                    .setLetterSpacing(settings.letterSpacing)
-                    .setXHeight(settings.xHeight());
+                .setTitle(settings.title())
+                .setAscender(settings.ascender())
+                .setBold(settings.isBold())
+                .setCanvasHeight(settings.canvasHeight())
+                .setCanvasWidth(settings.canvasWidth())
+                .setCapHeight(settings.capHeight())
+                .setDefaultWidth(settings.defaultWidth)
+                .setDescender(settings.descender())
+                .setItalic(settings.isItalic)
+                .setLineSpacing(settings.lineSpacing())
+                .setMonospaced(settings.isMonospaced())
+                .setSpaceSize(settings.spaceSize())
+                .setLetterSpacing(settings.letterSpacing)
+                .setXHeight(settings.xHeight());
 
             return this;
         }

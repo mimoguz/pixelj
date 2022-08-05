@@ -22,9 +22,7 @@ import pixelj.util.Detachable;
 import pixelj.views.shared.Dimensions;
 
 public class GlyphView extends JPanel
-        implements
-        Changeable<GlyphView, GlyphView.ViewChangeEvent, GlyphView.ViewChangeListener>,
-        Detachable {
+    implements Changeable<GlyphView, GlyphView.ViewChangeEvent, GlyphView.ViewChangeListener>, Detachable {
 
     private static final Color SHADE = new Color(242, 27, 63, 50);
     private final Color backgroundColor;
@@ -262,8 +260,8 @@ public class GlyphView extends JPanel
         if (zoom > 0 && model != null) {
             final var image = model.getImage();
             final var dimension = model != null
-                    ? new Dimension(image.getImageWidth() * zoom, image.getImageHeight() * zoom)
-                    : Dimensions.LARGE_SQUARE;
+                ? new Dimension(image.getImageWidth() * zoom, image.getImageHeight() * zoom)
+                : Dimensions.LARGE_SQUARE;
             setMinimumSize(dimension);
             setMaximumSize(dimension);
             setPreferredSize(dimension);
@@ -306,15 +304,11 @@ public class GlyphView extends JPanel
         if (model == null || !drawShade) {
             return;
         }
-
+        final var img = model.getImage();
         g.setColor(SHADE);
-        final var x = (int) Math.round(
-                (((double) getWidth()) / model.getImage().getImageWidth())
-                * model.getWidth()
-        );
+        final var x = (int) Math.round((((double) getWidth()) / img.getImageWidth()) * model.getWidth());
         final var y = (int) Math.round(
-                (((double) getHeight()) / model.getImage().getImageHeight())
-                    * (model.getImage().getImageHeight() - top)
+            (((double) getHeight()) / img.getImageHeight()) * (model.getImage().getImageHeight() - top)
         );
         g.fillRect(x, 0, getWidth() - x, getHeight());
         g.fillRect(0, 0, x, y);

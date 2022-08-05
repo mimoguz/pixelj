@@ -17,16 +17,16 @@ public final class ScalarCellRenderer implements ListCellRenderer<Scalar> {
 
     @Override
     public Component getListCellRendererComponent(
-            final JList<? extends Scalar> list,
-            final Scalar value,
-            final int index,
-            final boolean isSelected,
-            final boolean cellHasFocus
+        final JList<? extends Scalar> list,
+        final Scalar value,
+        final int index,
+        final boolean isSelected,
+        final boolean cellHasFocus
     ) {
         component.set(
-                value.codePoint(),
-                Resources.get().getScalar(value.codePoint()).name(),
-                list.getWidth() - Dimensions.MEDIUM_PADDING * 3
+            value.codePoint(),
+            Resources.get().getScalar(value.codePoint()).name(),
+            list.getWidth() - Dimensions.MEDIUM_PADDING * 3
         );
         if (isSelected) {
             component.setBackgroundColor(list.getSelectionBackground());

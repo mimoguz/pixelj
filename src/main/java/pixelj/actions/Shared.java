@@ -25,11 +25,11 @@ public final class Shared {
         if (project.isDirty()) {
             final var res = Resources.get();
             final var result = JOptionPane.showConfirmDialog(
-                    window,
-                    res.getString("unsavedWarning"),
-                    null,
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.WARNING_MESSAGE
+                window,
+                res.getString("unsavedWarning"),
+                null,
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
             );
             if (result == JOptionPane.YES_OPTION) {
                 action.actionPerformed(null);

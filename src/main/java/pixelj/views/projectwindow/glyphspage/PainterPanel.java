@@ -42,9 +42,7 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
         });
         zoomStrip.setEnabled(false);
 
-        infoPanel.gridVisibleProperty.addChangeListener(isVisible ->
-                painter.setOverlayVisible(isVisible)
-        );
+        infoPanel.gridVisibleProperty.addChangeListener(isVisible -> painter.setOverlayVisible(isVisible));
 
         infoPanel.guidesVisibleProperty.addChangeListener(isVisible -> {
             painter.setLinesVisible(isVisible);
@@ -81,8 +79,8 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
             final var gh = value.getImage().getImageHeight();
             if (overlay == null || overlay.getWidth() != gw || overlay.getHeight() != gh) {
                 overlay = Checkerboard.create(
-                        value.getImage().getImageWidth(),
-                        value.getImage().getImageHeight()
+                    value.getImage().getImageWidth(),
+                    value.getImage().getImageHeight()
                 );
             }
             painter.setOverlay(overlay);
@@ -118,19 +116,19 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
         }
         painter.setTop(settings.descender() + settings.ascender());
         final var capHeight = new Line(
-                Orientation.HORIZONTAL,
-                settings.canvasHeight() - settings.descender() - settings.capHeight(),
-                CAP_HEIGHT
+            Orientation.HORIZONTAL,
+            settings.canvasHeight() - settings.descender() - settings.capHeight(),
+            CAP_HEIGHT
         );
         final var xHeight = new Line(
-                Orientation.HORIZONTAL,
-                settings.canvasHeight() - settings.descender() - settings.xHeight(),
-                X_HEIGHT
+            Orientation.HORIZONTAL,
+            settings.canvasHeight() - settings.descender() - settings.xHeight(),
+            X_HEIGHT
         );
         final var baseLine = new Line(
-                Orientation.HORIZONTAL,
-                settings.canvasHeight() - settings.descender(),
-                BASELINE
+            Orientation.HORIZONTAL,
+            settings.canvasHeight() - settings.descender(),
+            BASELINE
         );
         painter.addLines(capHeight, xHeight, baseLine);
     }

@@ -11,9 +11,9 @@ public final class GridPacker<M> implements Packer<M> {
 
     @Override
     public List<List<Rectangle<M>>> pack(
-            final ArrayList<Rectangle<M>> input,
-            final int boxWith,
-            final int boxHeight
+        final ArrayList<Rectangle<M>> input,
+        final int boxWith,
+        final int boxHeight
     ) throws IllegalStateException {
         final var cellSz = cellSize(input);
         final var columnsPerBox = boxWith / cellSz.width;
@@ -21,18 +21,16 @@ public final class GridPacker<M> implements Packer<M> {
         final var rectanglesPerBox = columnsPerBox * rowsPerBox;
         final var boxCount = Math.ceilDiv(input.size(), rectanglesPerBox);
         final var result = IntStream.range(0, boxCount)
-                .mapToObj(box ->
-                        input.subList(
-                                box * rectanglesPerBox,
-                                Math.min((box + 1) * rectanglesPerBox, input.size())
-                        )
-                )
-                .parallel()
-                .map(segment -> {
-                    arrange(segment, rowsPerBox, columnsPerBox, cellSz);
-                    return segment;
-                })
-                .toList();
+            .mapToObj(box -> input.subList(
+                box * rectanglesPerBox,
+                Math.min((box + 1) * rectanglesPerBox, input.size())
+            ))
+            .parallel()
+            .map(segment -> {
+                arrange(segment, rowsPerBox, columnsPerBox, cellSz);
+                return segment;
+            })
+            .toList();
         return result;
     }
 
@@ -50,7 +48,7 @@ public final class GridPacker<M> implements Packer<M> {
     }
 
     private void arrange(final List<Rectangle<M>> input, final int rowCount, final int columnCount,
-            final Dimension cellSize) {
+        final Dimension cellSize) {
         for (var row = 0; row < rowCount; row++) {
             for (var column = 0; column < columnCount; column++) {
                 final var index = row * columnCount + column;

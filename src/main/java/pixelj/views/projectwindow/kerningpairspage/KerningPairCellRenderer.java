@@ -12,6 +12,7 @@ import pixelj.views.shared.GlyphCell;
 import pixelj.views.shared.Dimensions;
 
 final class KerningPairCellRenderer implements ListCellRenderer<KerningPair> {
+
     private final JPanel component = new JPanel(new GridLayout(1, 2));
     private final GlyphCell left;
     private final GlyphCell right;
@@ -26,11 +27,11 @@ final class KerningPairCellRenderer implements ListCellRenderer<KerningPair> {
 
     @Override
     public Component getListCellRendererComponent(
-            final JList<? extends KerningPair> list,
-            final KerningPair value,
-            final int index,
-            final boolean isSelected,
-            final boolean cellHasFocus
+        final JList<? extends KerningPair> list,
+        final KerningPair value,
+        final int index,
+        final boolean isSelected,
+        final boolean cellHasFocus
     ) {
         final var partWidth = list.getWidth() / 2 - Dimensions.MEDIUM_PADDING;
         left.set(value.getLeft(), partWidth);

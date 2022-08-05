@@ -50,9 +50,9 @@ abstract class ProjectWindowBase extends JFrame {
     private PreviewPage previewPage;
 
     public void setup(
-                final GlyphsPage glyphsPg,
-                final KerningPairsPage kerningPairsPg,
-                final PreviewPage previewPg
+        final GlyphsPage glyphsPg,
+        final KerningPairsPage kerningPairsPg,
+        final PreviewPage previewPg
     ) {
         this.glyphsPage = glyphsPg;
         this.kerningPairsPage = kerningPairsPg;
@@ -90,44 +90,44 @@ abstract class ProjectWindowBase extends JFrame {
         final var res = Resources.get();
 
         content.putClientProperty(
-                FlatClientProperties.TABBED_PANE_TAB_TYPE,
-                FlatClientProperties.TABBED_PANE_TAB_TYPE_CARD
+            FlatClientProperties.TABBED_PANE_TAB_TYPE,
+            FlatClientProperties.TABBED_PANE_TAB_TYPE_CARD
         );
 
         content.addTab(
-                null,
-                res.getIcon(Icons.LIST, res.colors.active(), null),
-                glyphsPage,
-                res.getString("glyphsScreenTabTooltip")
+            null,
+            res.getIcon(Icons.LIST, res.colors.active(), null),
+            glyphsPage,
+            res.getString("glyphsScreenTabTooltip")
         );
 
         content.addTab(
-                null,
-                res.getIcon(Icons.KERNING_WIDE, res.colors.inactive(), null),
-                kerningPairsPage,
-                res.getString("kerningPairsScreenTabTooltip")
+            null,
+            res.getIcon(Icons.KERNING_WIDE, res.colors.inactive(), null),
+            kerningPairsPage,
+            res.getString("kerningPairsScreenTabTooltip")
         );
 
         content.addTab(
-                null,
-                res.getIcon(Icons.EYE, res.colors.inactive(), null),
-                previewPage,
-                res.getString("previewScreenTabTooltip")
+            null,
+            res.getIcon(Icons.EYE, res.colors.inactive(), null),
+            previewPage,
+            res.getString("previewScreenTabTooltip")
         );
 
         final Collection<ApplicationAction> tabActions = List.of(
-                new ApplicationAction(
-                        "projectViewTab0Action",
-                        (event, action) -> content.setSelectedIndex(0)
-                ).setAccelerator(KeyEvent.VK_1, ActionEvent.ALT_MASK),
-                new ApplicationAction(
-                        "projectViewTab1Action",
-                        (event, action) -> content.setSelectedIndex(1)
-                ).setAccelerator(KeyEvent.VK_2, ActionEvent.ALT_MASK),
-                new ApplicationAction(
-                        "projectViewTab2Action",
-                        (event, action) -> content.setSelectedIndex(2)
-                ).setAccelerator(KeyEvent.VK_3, ActionEvent.ALT_MASK)
+            new ApplicationAction(
+                "projectViewTab0Action",
+                (event, action) -> content.setSelectedIndex(0)
+            ).setAccelerator(KeyEvent.VK_1, ActionEvent.ALT_MASK),
+            new ApplicationAction(
+                "projectViewTab1Action",
+                (event, action) -> content.setSelectedIndex(1)
+            ).setAccelerator(KeyEvent.VK_2, ActionEvent.ALT_MASK),
+            new ApplicationAction(
+                "projectViewTab2Action",
+                (event, action) -> content.setSelectedIndex(2)
+            ).setAccelerator(KeyEvent.VK_3, ActionEvent.ALT_MASK)
         );
         for (var action : tabActions) {
             Components.registerShortcut(content, action);
@@ -143,8 +143,8 @@ abstract class ProjectWindowBase extends JFrame {
         // Show menu using a shortcut or the menu button
         final var menuKey = KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.ALT_DOWN_MASK);
         final var menuAction = new ApplicationAction("menuAction", this::handleMenu)
-                .setTooltipWithAccelerator(res.getString("menuButtonActionTooltip"), menuKey)
-                .setIcon(Icons.BURGER, res.colors.accent(), res.colors.disabledIcon());
+            .setTooltipWithAccelerator(res.getString("menuButtonActionTooltip"), menuKey)
+            .setIcon(Icons.BURGER, res.colors.accent(), res.colors.disabledIcon());
         menuButton.setAction(menuAction);
         Components.registerShortcut(getRootPane(), menuAction);
 
@@ -201,16 +201,16 @@ abstract class ProjectWindowBase extends JFrame {
         ToolTipManager.sharedInstance().setDismissDelay(3000);
 
         content.putClientProperty(
-                FlatClientProperties.TABBED_PANE_MINIMUM_TAB_WIDTH,
-                Dimensions.TAB_BAR_BUTTON_SIZE.width
+            FlatClientProperties.TABBED_PANE_MINIMUM_TAB_WIDTH,
+            Dimensions.TAB_BAR_BUTTON_SIZE.width
         );
         content.putClientProperty(
-                FlatClientProperties.TABBED_PANE_MAXIMUM_TAB_WIDTH,
-                Dimensions.TAB_BAR_BUTTON_SIZE.width
+            FlatClientProperties.TABBED_PANE_MAXIMUM_TAB_WIDTH,
+            Dimensions.TAB_BAR_BUTTON_SIZE.width
         );
         content.putClientProperty(
-                FlatClientProperties.TABBED_PANE_TAB_HEIGHT,
-                Dimensions.TAB_BAR_BUTTON_SIZE.height
+            FlatClientProperties.TABBED_PANE_TAB_HEIGHT,
+            Dimensions.TAB_BAR_BUTTON_SIZE.height
         );
         content.putClientProperty(FlatClientProperties.TABBED_PANE_TAB_ICON_PLACEMENT, SwingConstants.TOP);
         content.setTabPlacement(SwingConstants.LEFT);
@@ -250,9 +250,7 @@ abstract class ProjectWindowBase extends JFrame {
         final var res = Resources.get();
         for (var tab = 0; tab < 3; tab++) {
             if (content.getIconAt(tab) instanceof final FontIcon icn) {
-                icn.setForeground(
-                        tab == index ? res.colors.active() : res.colors.inactive()
-                );
+                icn.setForeground(tab == index ? res.colors.active() : res.colors.inactive());
             }
         }
     }
@@ -260,8 +258,8 @@ abstract class ProjectWindowBase extends JFrame {
     private static void styleTabBarButton(final AbstractButton button) {
         button.setBorder(Borders.EMPTY);
         button.putClientProperty(
-                FlatClientProperties.BUTTON_TYPE,
-                FlatClientProperties.BUTTON_TYPE_BORDERLESS
+            FlatClientProperties.BUTTON_TYPE,
+            FlatClientProperties.BUTTON_TYPE_BORDERLESS
         );
         button.putClientProperty(FlatClientProperties.BUTTON_TYPE_SQUARE, true);
         button.setFocusable(false);

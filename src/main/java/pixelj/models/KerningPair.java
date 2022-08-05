@@ -68,7 +68,7 @@ public final class KerningPair implements Comparable<KerningPair> {
      *  This is essentially a hack. I use this method to calculate a hash without
      * creating an instance, then use that hash to search a model in a
      * KerningPairListModel.
-     * 
+     *
      * @param left
      * @param right
      * @return Hash value

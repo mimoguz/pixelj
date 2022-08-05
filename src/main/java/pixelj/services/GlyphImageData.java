@@ -5,12 +5,12 @@ import pixelj.models.Glyph;
 import pixelj.util.packer.Rectangle;
 
 public record GlyphImageData(
-        int glyphWidth,
-        int glyphHeight,
-        int clipWidth,
-        int clipHeight,
-        int xOffset,
-        int yOffset
+    int glyphWidth,
+    int glyphHeight,
+    int clipWidth,
+    int clipHeight,
+    int xOffset,
+    int yOffset
 ) {
 
     /**

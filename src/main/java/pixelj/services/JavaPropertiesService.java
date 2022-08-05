@@ -54,10 +54,10 @@ public final class JavaPropertiesService implements StatePersistanceService {
         state.setPreviewText(properties.getProperty(PREVIEW_TEXT, null));
         state.setDarkTheme(getBoolean(properties, DARK_THEME, false));
         state.setExportImageWidth(
-                getInt(properties, EXPORT_IMAGE_WIDTH, AppState.DEFAULT_EXPORT_IMAGE_SIZE)
+            getInt(properties, EXPORT_IMAGE_WIDTH, AppState.DEFAULT_EXPORT_IMAGE_SIZE)
         );
         state.setExportImageHeight(
-                getInt(properties, EXPORT_IMAGE_HEIGHT, AppState.DEFAULT_EXPORT_IMAGE_SIZE)
+            getInt(properties, EXPORT_IMAGE_HEIGHT, AppState.DEFAULT_EXPORT_IMAGE_SIZE)
         );
         state.setRecentItems(readRecentItems(properties));
 
@@ -98,9 +98,9 @@ public final class JavaPropertiesService implements StatePersistanceService {
     }
 
     private static boolean getBoolean(
-            final Properties properties,
-            final String key,
-            final Boolean defaultValue
+        final Properties properties,
+        final String key,
+        final Boolean defaultValue
     ) {
         return Boolean.parseBoolean(properties.getProperty(key)) || defaultValue;
     }
@@ -121,7 +121,7 @@ public final class JavaPropertiesService implements StatePersistanceService {
      * @throws JsonProcessingException
      */
     public static Collection<RecentItem> parseRecentItems(final String source)
-            throws JsonProcessingException {
+        throws JsonProcessingException {
         final var objectMapper = new ObjectMapper();
         return Collections.unmodifiableCollection(
             objectMapper.readValue(source, new TypeReference<Collection<RecentItem>>() { })

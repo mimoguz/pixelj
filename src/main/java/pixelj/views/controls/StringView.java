@@ -121,12 +121,12 @@ public final class StringView extends JPanel {
         }
 
         final var w = characters.stream().mapToInt(Glyph::getWidth).sum()
-                + spaces.stream().mapToInt(i -> i).limit(characters.size()).reduce(0, Integer::sum);
+            + spaces.stream().mapToInt(i -> i).limit(characters.size()).reduce(0, Integer::sum);
 
         var h = characters.stream()
-                .mapToInt(chr -> chr.getImage() == null ? 0 : chr.getImage().getImageHeight())
-                .max()
-                .orElse(0);
+            .mapToInt(chr -> chr.getImage() == null ? 0 : chr.getImage().getImageHeight())
+            .max()
+            .orElse(0);
 
         if (maxY > 0) {
             h = Math.min(h, maxY);
@@ -155,11 +155,12 @@ public final class StringView extends JPanel {
     }
 
     private void resizeCanvas() {
-        final var dimensions = renderTarget == null ? Dimensions.LARGE_SQUARE
-                : new Dimension(
-                        renderTarget.getWidth() * zoom + 2 * padding,
-                        renderTarget.getHeight() * zoom + 2 * padding
-                );
+        final var dimensions = renderTarget == null
+            ? Dimensions.LARGE_SQUARE
+            : new Dimension(
+                renderTarget.getWidth() * zoom + 2 * padding,
+                renderTarget.getHeight() * zoom + 2 * padding
+            );
         setMinimumSize(dimensions);
         setMaximumSize(dimensions);
         setPreferredSize(dimensions);
@@ -179,13 +180,13 @@ public final class StringView extends JPanel {
             g2d.setColor(Color.WHITE);
             g2d.fillRect(0, 0, getWidth(), getHeight());
             g2d.drawImage(
-                    renderTarget,
-                    padding,
-                    padding,
-                    renderTarget.getWidth() * zoom,
-                    renderTarget.getHeight() * zoom,
-                    backgroundColor,
-                    null
+                renderTarget,
+                padding,
+                padding,
+                renderTarget.getWidth() * zoom,
+                renderTarget.getHeight() * zoom,
+                backgroundColor,
+                null
             );
         }
         g2d.dispose();

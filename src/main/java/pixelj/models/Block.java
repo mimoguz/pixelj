@@ -3,11 +3,12 @@ package pixelj.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record Block(
-        @JsonProperty("id") int id,
-        @JsonProperty("name") String name,
-        @JsonProperty("firstCodePoint") int starts,
-        @JsonProperty("lastCodePoint") int ends
+    @JsonProperty("id") int id,
+    @JsonProperty("name") String name,
+    @JsonProperty("firstCodePoint") int starts,
+    @JsonProperty("lastCodePoint") int ends
 ) {
+
     @Override
     public String toString() {
         return name;

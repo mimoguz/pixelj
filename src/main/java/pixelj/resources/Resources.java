@@ -68,8 +68,8 @@ public final class Resources {
 
         final var scalarsByBlock = new IntObjectHashMap<Collection<Scalar>>();
         scalarRecords.stream()
-                .collect(Collectors.groupingBy(Scalar::blockId))
-                .forEach((key, value) -> scalarsByBlock.put(key, Collections.unmodifiableCollection(value)));
+            .collect(Collectors.groupingBy(Scalar::blockId))
+            .forEach((key, value) -> scalarsByBlock.put(key, Collections.unmodifiableCollection(value)));
         scalarsInBlock = scalarsByBlock.toImmutable();
 
         iconFont = loadIconFont();
@@ -152,7 +152,7 @@ public final class Resources {
         return Stream.of(16, 24, 32, 64, 128, 256).map(size -> {
             try {
                 return new ImageIcon(
-                        Resources.class.getResource("applicationIcon/icon" + size + "px.png").getPath()
+                    Resources.class.getResource("applicationIcon/icon" + size + "px.png").getPath()
                 ).getImage();
             } catch (NullPointerException e) {
                 e.printStackTrace();
@@ -220,15 +220,15 @@ public final class Resources {
         ResourceBundle bundle;
         try {
             bundle = ResourceBundle
-                    .getBundle(BASE + bundleBase, Locale.getDefault(), Resources.class.getClassLoader());
+                .getBundle(BASE + bundleBase, Locale.getDefault(), Resources.class.getClassLoader());
         } catch (final MissingResourceException e1) {
             try {
                 bundle = ResourceBundle
-                        .getBundle(BASE + bundleBase, Locale.US, Resources.class.getClassLoader());
+                    .getBundle(BASE + bundleBase, Locale.US, Resources.class.getClassLoader());
             } catch (final MissingResourceException e2) {
                 throw new ResourceInitializationException(
-                        "Can't find strings:\n" + e1.getMessage() + "\n\n--------------------------\n\n"
-                                + e2.getMessage()
+                    "Can't find strings:\n" + e1.getMessage() + "\n\n--------------------------\n\n"
+                        + e2.getMessage()
                 );
             }
         }
@@ -236,8 +236,8 @@ public final class Resources {
     }
 
     private static <T> Collection<T> loadSerializedCollection(
-            final String resource,
-            final TypeReference<Collection<T>> typeRef
+        final String resource,
+        final TypeReference<Collection<T>> typeRef
     ) {
         final var smileMapper = new SmileMapper();
         try (var source = Resources.class.getResourceAsStream(resource)) {

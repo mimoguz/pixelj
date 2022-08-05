@@ -60,14 +60,14 @@ public final class InfoPanel extends InfoPanelBase {
             final var res = Resources.get();
             final var scalar = res.getScalar(value.getCodePoint());
             final var name = String.format(
-                    "<html><body style=\"text-align: left; \">%s</body></html>", scalar.name()
+                "<html><body style=\"text-align: left; \">%s</body></html>", scalar.name()
             );
             nameLabel.setText(name);
             codePointLabel.setText(
-                    res.formatString("codePointLabel", Integer.toHexString(scalar.codePoint()))
+                res.formatString("codePointLabel", Integer.toHexString(scalar.codePoint()))
             );
             blockNameLabel.setText(
-                    res.formatString("blockNameLabel", res.getBlockData(scalar.blockId()).name())
+                res.formatString("blockNameLabel", res.getBlockData(scalar.blockId()).name())
             );
             glyphLabel.setText(Character.toString((char) model.getCodePoint()));
             if (widthSpinner.getModel() instanceof final SpinnerNumberModel numberModel) {
@@ -86,21 +86,19 @@ public final class InfoPanel extends InfoPanelBase {
     }
 
     private void setMetrics(final DocumentSettings settings) {
-        widthSpinner.setModel(
-                new SpinnerNumberModel(
-                        model != null ? model.getWidth() : settings.defaultWidth(),
-                        0,
-                        settings.canvasWidth(),
-                        1
-                )
-        );
+        widthSpinner.setModel(new SpinnerNumberModel(
+            model != null ? model.getWidth() : settings.defaultWidth(),
+            0,
+            settings.canvasWidth(),
+            1
+        ));
         setGlyphLabelFont(settings);
     }
 
     private void setGlyphLabelFont(final DocumentSettings settings) {
         final var style = settings.isBold()
-                ? (settings.isItalic() ? Font.BOLD | Font.ITALIC : Font.BOLD)
-                : (settings.isItalic() ? Font.ITALIC : Font.PLAIN);
+            ? (settings.isItalic() ? Font.BOLD | Font.ITALIC : Font.BOLD)
+            : (settings.isItalic() ? Font.ITALIC : Font.PLAIN);
         glyphLabel.setFont(glyphLabel.getFont().deriveFont(style, GLYPH_LABEL_SIZE));
     }
 }

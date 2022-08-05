@@ -43,7 +43,7 @@ public final class AddDialog extends AddDialogBase {
         filterBox.addActionListener(event -> {
             if (filterBox.getSelectedItem() instanceof final Block block) {
                 listModel.setFilter(
-                        chr -> chr.getCodePoint() >= block.starts() && chr.getCodePoint() <= block.ends()
+                    chr -> chr.getCodePoint() >= block.starts() && chr.getCodePoint() <= block.ends()
                 );
             }
         });
@@ -67,12 +67,12 @@ public final class AddDialog extends AddDialogBase {
         });
 
         helpButton.setAction(
-                new ApplicationAction(
-                        "documentSettingsHelpAction",
-                        (e, action) -> Help.showPage(Help.Page.KERNING_PAIRS)
-                )
-                        .setIcon(Icons.HELP)
-                        .setTooltip(Resources.get().getString("help"))
+            new ApplicationAction(
+                "documentSettingsHelpAction",
+                (e, action) -> Help.showPage(Help.Page.KERNING_PAIRS)
+            )
+                .setIcon(Icons.HELP)
+                .setTooltip(Resources.get().getString("help"))
         );
 
         selectionModel.addListSelectionListener(e -> {
@@ -87,9 +87,9 @@ public final class AddDialog extends AddDialogBase {
         cancelButton.addActionListener(event -> setVisible(false));
 
         getRootPane().registerKeyboardAction(
-                (e) -> setVisible(false),
-                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-                JComponent.WHEN_IN_FOCUSED_WINDOW
+            (e) -> setVisible(false),
+            KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+            JComponent.WHEN_IN_FOCUSED_WINDOW
         );
     }
 

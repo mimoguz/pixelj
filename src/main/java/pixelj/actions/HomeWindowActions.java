@@ -57,9 +57,9 @@ public final class HomeWindowActions implements Actions {
     private final OptionsDialog optionsDialog;
 
     public HomeWindowActions(
-            final JFrame window,
-            final AppState appState,
-            final ListSelectionModel selectionModel
+        final JFrame window,
+        final AppState appState,
+        final ListSelectionModel selectionModel
     ) {
         this.window = window;
         this.appState = appState;
@@ -69,41 +69,41 @@ public final class HomeWindowActions implements Actions {
         final var res = Resources.get();
 
         newProjectAction = new ApplicationAction("newProjectAction", this::newProject)
-                .withText();
+            .withText();
 
         loadSelectedAction = new ApplicationAction("loadSelectedAction", this::openSelectedProject)
-                .withText();
+            .withText();
 
         openProjectAction = new ApplicationAction("openProjectAction", this::openProject)
-                .withText();
+            .withText();
 
         showHelpAction = new ApplicationAction("showHomeHelpAction", this::showHelp)
-                .setTooltip(res.getString("help"))
-                .setIcon(Icons.HELP, res.colors.icon(), res.colors.disabledIcon());
+            .setTooltip(res.getString("help"))
+            .setIcon(Icons.HELP, res.colors.icon(), res.colors.disabledIcon());
 
         quitAction = new ApplicationAction("quitAction", this::quit)
-                .setTooltip(res.getString("quit"))
-                .setIcon(Icons.EXIT, res.colors.icon(), res.colors.disabledIcon());
+            .setTooltip(res.getString("quit"))
+            .setIcon(Icons.EXIT, res.colors.icon(), res.colors.disabledIcon());
 
         showOptionsDialogAction = new ApplicationAction("showOptionsDialogAction", this::showOptionsDialog)
-                .setTooltip(res.getString("options"))
-                .setIcon(Icons.SETTINGS, res.colors.icon(), res.colors.disabledIcon());
+            .setTooltip(res.getString("options"))
+            .setIcon(Icons.SETTINGS, res.colors.icon(), res.colors.disabledIcon());
 
         removeRecentItemAction = new ApplicationAction("removeRecentItemAction", this::removeItem)
-                .withText()
-                .setIcon(Icons.REMOVE_ITEM, res.colors.icon(), res.colors.disabledIcon());
+            .withText()
+            .setIcon(Icons.REMOVE_ITEM, res.colors.icon(), res.colors.disabledIcon());
 
         openContainingFolderAction = new ApplicationAction("openContainingFolderAction", this::openFolder)
-                .withText()
-                .setIcon(Icons.FILE_OPEN, res.colors.icon(), res.colors.disabledIcon());
+            .withText()
+            .setIcon(Icons.FILE_OPEN, res.colors.icon(), res.colors.disabledIcon());
 
         all = List.of(
-                newProjectAction,
-                loadSelectedAction,
-                showHelpAction,
-                quitAction,
-                openProjectAction,
-                showOptionsDialogAction
+            newProjectAction,
+            loadSelectedAction,
+            showHelpAction,
+            quitAction,
+            openProjectAction,
+            showOptionsDialogAction
         );
     }
 
@@ -115,10 +115,10 @@ public final class HomeWindowActions implements Actions {
     private void newProject(final ActionEvent event, final Action action) {
         final var res = Resources.get();
         final var dialog = new DocumentSettingsDialog(
-                window,
-                res.getString("newProjectDialogTitle"),
-                res.getString("create"),
-                true
+            window,
+            res.getString("newProjectDialogTitle"),
+            res.getString("create"),
+            true
         );
         dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         dialog.set(DocumentSettings.getDefault());
@@ -126,14 +126,7 @@ public final class HomeWindowActions implements Actions {
         final var settings = dialog.getResult();
         dialog.dispose();
         if (settings != null) {
-            showProject(
-                    new Project(
-                            new SortedList<>(),
-                            new SortedList<>(),
-                            settings,
-                            null
-                    )
-            );
+            showProject(new Project(new SortedList<>(), new SortedList<>(), settings, null));
         }
     }
 
@@ -214,9 +207,9 @@ public final class HomeWindowActions implements Actions {
         final var outPath = MemoryUtil.memAllocPointer(1);
         try {
             final var dialogResult = NativeFileDialog.NFD_OpenDialog(
-                    DBFileService.EXTENSION,
-                    null,
-                    outPath
+                DBFileService.EXTENSION,
+                null,
+                outPath
             );
             if (dialogResult == NativeFileDialog.NFD_OKAY) {
                 final var pathStr = outPath.getStringUTF8();
@@ -246,11 +239,11 @@ public final class HomeWindowActions implements Actions {
 
     private void askRemoveItem(final RecentItem item) {
         final var response = JOptionPane.showConfirmDialog(
-                window,
-                Resources.get().getString("cantOpenRecentWarning"),
-                null,
-                JOptionPane.OK_CANCEL_OPTION,
-                JOptionPane.WARNING_MESSAGE
+            window,
+            Resources.get().getString("cantOpenRecentWarning"),
+            null,
+            JOptionPane.OK_CANCEL_OPTION,
+            JOptionPane.WARNING_MESSAGE
         );
         if (response == JOptionPane.OK_OPTION) {
             appState.removeRecentItem(item);

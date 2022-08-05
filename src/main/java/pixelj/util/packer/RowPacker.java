@@ -13,9 +13,9 @@ public final class RowPacker<M> implements Packer<M> {
 
     @Override
     public List<List<Rectangle<M>>> pack(
-            final ArrayList<Rectangle<M>> input,
-            final int boxWith,
-            final int boxHeight
+        final ArrayList<Rectangle<M>> input,
+        final int boxWith,
+        final int boxHeight
     ) {
         input.sort((a, b) -> Integer.compare(a.getHeight(), b.getHeight()));
 

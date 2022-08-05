@@ -35,9 +35,9 @@ public final class KerningPairListActions implements Actions {
     private final ListSelectionModel selectionModel;
 
     public KerningPairListActions(
-            final Project project,
-            final ListSelectionModel selectionModel,
-            final JFrame window
+        final Project project,
+        final ListSelectionModel selectionModel,
+        final JFrame window
     ) {
 
         this.project = project;
@@ -47,21 +47,18 @@ public final class KerningPairListActions implements Actions {
         addDialog = new AddDialog(window, project);
 
         addAction = new ApplicationAction("addKerningPairsAction", this::showAddDialog)
-                .withText()
-                .setTooltipWithAccelerator(
-                        null,
-                        KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.ALT_DOWN_MASK)
-                );
+            .withText()
+            .setTooltipWithAccelerator(
+                    null,
+                    KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.ALT_DOWN_MASK)
+            );
 
         removeAction = new ApplicationAction("removeKerningPairsAction", this::showRemoveDialog)
-                .withText()
-                .setTooltipWithAccelerator(
-                        null,
-                        KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.ALT_DOWN_MASK)
-                );
+            .withText()
+            .setTooltipWithAccelerator(null, KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.ALT_DOWN_MASK));
 
         selectionModel.addListSelectionListener(
-                e -> removeAction.setEnabled(selectionModel.getMinSelectionIndex() >= 0)
+            e -> removeAction.setEnabled(selectionModel.getMinSelectionIndex() >= 0)
         );
 
         all = List.of(addAction, removeAction);
@@ -100,11 +97,11 @@ public final class KerningPairListActions implements Actions {
         final var res = Resources.get();
         final var message = res.formatString("removingKerningPairsMessage", indices.length);
         final var result = JOptionPane.showConfirmDialog(
-                window,
-                message,
-                res.getString("nonUndoable"),
-                JOptionPane.OK_CANCEL_OPTION,
-                JOptionPane.WARNING_MESSAGE
+            window,
+            message,
+            res.getString("nonUndoable"),
+            JOptionPane.OK_CANCEL_OPTION,
+            JOptionPane.WARNING_MESSAGE
         );
         if (result != JOptionPane.OK_OPTION) {
             return;

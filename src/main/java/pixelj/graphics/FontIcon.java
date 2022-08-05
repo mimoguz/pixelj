@@ -20,10 +20,10 @@ public final class FontIcon implements Icon {
     private final int width;
 
     public FontIcon(
-            final int codePoint,
-            final Color foreground,
-            final Color disabledForeground,
-            final Font font
+        final int codePoint,
+        final Color foreground,
+        final Color disabledForeground,
+        final Font font
     ) {
         this.foreground = foreground;
         this.disabledForeground = disabledForeground;
@@ -32,9 +32,9 @@ public final class FontIcon implements Icon {
 
         // Get symbol metrics:
         final var graphics = GraphicsEnvironment.getLocalGraphicsEnvironment()
-                .createGraphics(
-                        new BufferedImage(font.getSize(), font.getSize(), BufferedImage.TYPE_INT_ARGB)
-                );
+            .createGraphics(
+                new BufferedImage(font.getSize(), font.getSize(), BufferedImage.TYPE_INT_ARGB)
+            );
         graphics.setFont(font);
         final var metrics = graphics.getFontMetrics();
         height = metrics.getHeight();

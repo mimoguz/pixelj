@@ -36,7 +36,7 @@ public class TagReaderTests {
     @Test
     public void readInfoLine() {
         final var line = "info face=\"My Font\" size=-11 bold=0 italic=0 unicode=1 stretchH=100 smooth=0"
-                + " aa=1 padding=1,2,3,4 spacing=1,1 outline=0";
+            + " aa=1 padding=1,2,3,4 spacing=1,1 outline=0";
         final Tag result;
         try {
             result = new TagReader(line).read();
@@ -48,13 +48,13 @@ public class TagReaderTests {
         assertEquals(new Text("My Font"), result.assignments().get(Ident.FACE));
         assertEquals(new Number(-11), result.assignments().get(Ident.SIZE));
         assertEquals(
-                new NumberList(List.of(
-                        new Number(1),
-                        new Number(2),
-                        new Number(3),
-                        new Number(4))
-                ),
-                result.assignments().get(Ident.PADDING)
+            new NumberList(List.of(
+                new Number(1),
+                new Number(2),
+                new Number(3),
+                new Number(4))
+            ),
+            result.assignments().get(Ident.PADDING)
         );
     }
 }

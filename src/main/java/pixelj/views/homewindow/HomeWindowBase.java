@@ -48,9 +48,9 @@ abstract class HomeWindowBase extends JFrame {
         Components.setFixedSize(openProjectButton, Dimensions.HOME_BUTTON_SIZE);
         final var pad = Dimensions.MEDIUM_PADDING;
         final var northLayout = new MigLayout(
-                "",
-                String.format("[]%dlp[]%dlp[]%dlp[grow][]", pad, pad, pad),
-                "[center]"
+            "",
+            String.format("[]%dlp[]%dlp[]%dlp[grow][]", pad, pad, pad),
+            "[center]"
         );
         final var north = new JPanel(northLayout);
         north.setBorder(Borders.LARGE_EMPTY);
@@ -104,23 +104,21 @@ abstract class HomeWindowBase extends JFrame {
             component.add(title, BorderLayout.NORTH);
             path.putClientProperty(FlatClientProperties.STYLE_CLASS, SUBTITLE_STYLE);
             component.add(path, BorderLayout.SOUTH);
-            component.setBorder(
-                    BorderFactory.createEmptyBorder(
-                            Dimensions.MEDIUM_PADDING,
-                            Dimensions.LARGE_PADDING,
-                            Dimensions.MEDIUM_PADDING,
-                            Dimensions.LARGE_PADDING
-                    )
-            );
+            component.setBorder(BorderFactory.createEmptyBorder(
+                Dimensions.MEDIUM_PADDING,
+                Dimensions.LARGE_PADDING,
+                Dimensions.MEDIUM_PADDING,
+                Dimensions.LARGE_PADDING
+            ));
         }
 
         @Override
         public Component getListCellRendererComponent(
-                final JList<? extends RecentItem> list,
-                final RecentItem value,
-                final int index,
-                final boolean isSelected,
-                final boolean cellHasFocus
+            final JList<? extends RecentItem> list,
+            final RecentItem value,
+            final int index,
+            final boolean isSelected,
+            final boolean cellHasFocus
         ) {
             if (value == null) {
                 return null;

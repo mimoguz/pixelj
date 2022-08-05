@@ -118,15 +118,15 @@ public final class ApplicationAction extends AbstractAction {
      */
     public ApplicationAction setTooltipWithAccelerator(final String tooltip, final KeyStroke accelerator) {
         final var shortDescription = tooltip != null
-                ? String.format(
-                        "<html><body>%s<br /><strong>%s</strong><body></html>",
-                        tooltip,
-                        acceleratorToString(accelerator)
-                )
-                : String.format(
-                    "<html><body><strong>%s</strong><body></html>",
-                    acceleratorToString(accelerator)
-                );
+            ? String.format(
+                "<html><body>%s<br /><strong>%s</strong><body></html>",
+                tooltip,
+                acceleratorToString(accelerator)
+            )
+            : String.format(
+                "<html><body><strong>%s</strong><body></html>",
+                acceleratorToString(accelerator)
+            );
         putValue(Action.SHORT_DESCRIPTION, shortDescription);
         putValue(Action.ACCELERATOR_KEY, accelerator);
         return this;
@@ -145,10 +145,10 @@ public final class ApplicationAction extends AbstractAction {
         final var str = accelerator.toString().replace("pressed", "+");
         // TODO: Investigate: Locale problems?
         return Arrays.stream(str.split(WORD_SEPARATOR))
-                .map(word -> word.isEmpty()
-                        ? word
-                        : Character.toTitleCase(word.charAt(0)) + word.substring(1).toLowerCase()
-                )
-                .collect(Collectors.joining(WORD_SEPARATOR));
+            .map(word -> word.isEmpty()
+                ? word
+                : Character.toTitleCase(word.charAt(0)) + word.substring(1).toLowerCase()
+            )
+            .collect(Collectors.joining(WORD_SEPARATOR));
     }
 }

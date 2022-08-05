@@ -15,18 +15,18 @@ public final class Reader {
      */
     public Reader(final String input) {
         lines = input.lines()
-                .filter(line -> !(line.isBlank()))
-                .map(line -> {
-                    try {
-                        return new TagReader(line).read();
-                    } catch (ReaderException exception) {
-                        throw new IllegalArgumentException(
-                                "Error parsing input: " + exception.getMessage(),
-                                exception.getCause()
-                        );
-                    }
-                })
-                .collect(Collectors.groupingBy(line -> line.tagType()));
+            .filter(line -> !(line.isBlank()))
+            .map(line -> {
+                try {
+                    return new TagReader(line).read();
+                } catch (ReaderException exception) {
+                    throw new IllegalArgumentException(
+                        "Error parsing input: " + exception.getMessage(),
+                        exception.getCause()
+                    );
+                }
+            })
+            .collect(Collectors.groupingBy(line -> line.tagType()));
     }
 
     public List<Tag> getTags(final Ident line) {

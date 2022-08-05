@@ -8,10 +8,10 @@ public record KerningPairRecord(int id, int left, int right, int value) {
      */
     public static KerningPairRecord from(final KerningPair pair) {
         return new KerningPairRecord(
-                pair.hashCode(),
-                pair.getLeft().getCodePoint(),
-                pair.getRight().getCodePoint(),
-                pair.getKerningValue()
+            pair.hashCode(),
+            pair.getLeft().getCodePoint(),
+            pair.getRight().getCodePoint(),
+            pair.getKerningValue()
         );
     }
 }

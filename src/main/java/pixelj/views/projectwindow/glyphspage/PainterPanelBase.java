@@ -48,7 +48,7 @@ public abstract class PainterPanelBase extends JPanel {
 
         final var editorPanel = new JPanel(new BorderLayout());
         editorPanel.setBorder(
-                BorderFactory.createMatteBorder(0, 0, 0, 1, Resources.get().colors.divider())
+            BorderFactory.createMatteBorder(0, 0, 0, 1, Resources.get().colors.divider())
         );
         editorPanel.add(zoomStrip, BorderLayout.SOUTH);
         editorPanel.add(toolBar, BorderLayout.WEST);

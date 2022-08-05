@@ -21,10 +21,10 @@ public interface ExportService {
      * @throws IOException
      */
     void export(
-            Project project,
-            Path path,
-            int textureWidth,
-            int textureHeight,
-            LayoutStrategy strategy
+        Project project,
+        Path path,
+        int textureWidth,
+        int textureHeight,
+        LayoutStrategy strategy
     ) throws IOException;
 }

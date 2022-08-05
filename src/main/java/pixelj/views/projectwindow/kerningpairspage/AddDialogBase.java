@@ -45,9 +45,9 @@ public abstract class AddDialogBase extends JDialog {
 
     AddDialogBase(final Frame owner) {
         super(
-                owner,
-                Resources.get().getString("kerningPairsAddDialogTitle"),
-                Dialog.ModalityType.MODELESS
+            owner,
+            Resources.get().getString("kerningPairsAddDialogTitle"),
+            Dialog.ModalityType.MODELESS
         );
 
         glyphList.setCellRenderer(new GlyphCellRenderer(Dimensions.MAXIMUM_PREVIEW_SIZE));
@@ -57,8 +57,8 @@ public abstract class AddDialogBase extends JDialog {
         Components.setFixedSize(cancelButton, Dimensions.TEXT_BUTTON_SIZE);
 
         helpButton.putClientProperty(
-                FlatClientProperties.BUTTON_TYPE,
-                FlatClientProperties.BUTTON_TYPE_BORDERLESS
+            FlatClientProperties.BUTTON_TYPE,
+            FlatClientProperties.BUTTON_TYPE_BORDERLESS
         );
 
         mirroredCheck.setIconTextGap(Dimensions.LARGE_PADDING);
@@ -73,13 +73,11 @@ public abstract class AddDialogBase extends JDialog {
         final var mps = Dimensions.MAXIMUM_PREVIEW_SIZE;
         final var pad = Dimensions.MEDIUM_PADDING;
 
-        final var selectionPanel = new JPanel(
-                new MigLayout(
-                        INSETS,
-                        "[]" + pad + "lp[grow]",
-                        String.format("[center, %dlp!]%dlp[center, %dlp!]%dlp[]", mps, pad, mps, pad)
-                )
-        );
+        final var selectionPanel = new JPanel(new MigLayout(
+            INSETS,
+            "[]" + pad + "lp[grow]",
+            String.format("[center, %dlp!]%dlp[center, %dlp!]%dlp[]", mps, pad, mps, pad)
+        ));
         selectionPanel.setBorder(Borders.EMPTY);
         selectionPanel.add(setLeftButton);
         selectionPanel.add(leftCell, WRAP);
@@ -89,13 +87,11 @@ public abstract class AddDialogBase extends JDialog {
 
         centerPanel.add(selectionPanel, BorderLayout.SOUTH);
 
-        final var buttonPanel = new JPanel(
-                new MigLayout(
-                    INSETS,
-                    String.format("[grow, left]%dlp[]%dlp[]", pad, pad),
-                    "[center]"
-                )
-        );
+        final var buttonPanel = new JPanel(new MigLayout(
+            INSETS,
+            String.format("[grow, left]%dlp[]%dlp[]", pad, pad),
+            "[center]"
+        ));
         buttonPanel.add(helpButton);
         buttonPanel.add(addButton);
         buttonPanel.add(cancelButton);

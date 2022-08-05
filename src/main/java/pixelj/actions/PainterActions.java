@@ -88,131 +88,129 @@ public final class PainterActions implements Actions {
             }
             action.putValue(Action.SELECTED_KEY, p.isSymmetrical());
         }))
-                .setTooltipWithAccelerator(
-                        res.getString("painterSymmetryToggleActionTooltip"),
-                        KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.ALT_DOWN_MASK)
-                )
-                .setIcon(Icons.SYMMETRY, res.colors.icon(), res.colors.disabledIcon());
+            .setTooltipWithAccelerator(
+                res.getString("painterSymmetryToggleActionTooltip"),
+                KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.ALT_DOWN_MASK)
+            )
+            .setIcon(Icons.SYMMETRY, res.colors.icon(), res.colors.disabledIcon());
 
         historyUndoAction = new ApplicationAction("painterHistoryUndoAction", this::undo)
-                .setTooltipWithAccelerator(
-                        res.getString("painterHistoryUndoActionTooltip"),
-                        KeyStroke.getKeyStroke(KeyEvent.VK_Z, menuShortcutMask)
-                )
-                .setIcon(Icons.HISTORY_UNDO, res.colors.icon(), res.colors.disabledIcon());
+            .setTooltipWithAccelerator(
+                res.getString("painterHistoryUndoActionTooltip"),
+                KeyStroke.getKeyStroke(KeyEvent.VK_Z, menuShortcutMask)
+            )
+            .setIcon(Icons.HISTORY_UNDO, res.colors.icon(), res.colors.disabledIcon());
 
         historyRedoAction = new ApplicationAction("painterHistoryRedoAction", this::redo)
-                .setTooltipWithAccelerator(
-                        res.getString("painterHistoryRedoActionTooltip"),
-                        KeyStroke.getKeyStroke(KeyEvent.VK_Y, menuShortcutMask)
-                )
-                .setIcon(Icons.HISTORY_REDO, res.colors.icon(), res.colors.disabledIcon());
+            .setTooltipWithAccelerator(
+                res.getString("painterHistoryRedoActionTooltip"),
+                KeyStroke.getKeyStroke(KeyEvent.VK_Y, menuShortcutMask)
+            )
+            .setIcon(Icons.HISTORY_REDO, res.colors.icon(), res.colors.disabledIcon());
 
         clipboardCutAction = new ApplicationAction("painterClipboardCutAction", this::cut)
-                .setTooltipWithAccelerator(
-                        res.getString("painterClipboardCutActionTooltip"),
-                        KeyStroke.getKeyStroke(KeyEvent.VK_X, menuShortcutMask)
-                )
-                .setIcon(Icons.CLIPBOARD_CUT, res.colors.icon(), res.colors.disabledIcon());
+            .setTooltipWithAccelerator(
+                res.getString("painterClipboardCutActionTooltip"),
+                KeyStroke.getKeyStroke(KeyEvent.VK_X, menuShortcutMask)
+            )
+            .setIcon(Icons.CLIPBOARD_CUT, res.colors.icon(), res.colors.disabledIcon());
 
         clipboardCopyAction = new ApplicationAction("painterClipboardCopyAction", this::copy)
-                .setTooltipWithAccelerator(
-                        res.getString("painterClipboardCopyActionTooltip"),
-                        KeyStroke.getKeyStroke(KeyEvent.VK_C, menuShortcutMask)
-                )
-                .setIcon(Icons.CLIPBOARD_COPY, res.colors.icon(), res.colors.disabledIcon());
+            .setTooltipWithAccelerator(
+                res.getString("painterClipboardCopyActionTooltip"),
+                KeyStroke.getKeyStroke(KeyEvent.VK_C, menuShortcutMask)
+            )
+            .setIcon(Icons.CLIPBOARD_COPY, res.colors.icon(), res.colors.disabledIcon());
 
         clipboardPasteAction = new ApplicationAction("painterClipboardPasteAction", this::paste)
-                .setTooltipWithAccelerator(
-                        res.getString("painterClipboardPasteActionTooltip"),
-                        KeyStroke.getKeyStroke(KeyEvent.VK_V, menuShortcutMask)
-                )
-                .setIcon(Icons.CLIPBOARD_PASTE, res.colors.icon(), res.colors.disabledIcon());
+            .setTooltipWithAccelerator(
+                res.getString("painterClipboardPasteActionTooltip"),
+                KeyStroke.getKeyStroke(KeyEvent.VK_V, menuShortcutMask)
+            )
+            .setIcon(Icons.CLIPBOARD_PASTE, res.colors.icon(), res.colors.disabledIcon());
 
         clipboardImportAction = new ApplicationAction("painterClipboardImportAction", this::importClip)
-                .setTooltipWithAccelerator(
-                        res.getString("painterClipboardImportActionTooltip"),
-                        KeyStroke.getKeyStroke(KeyEvent.VK_V, menuShortcutMask | InputEvent.SHIFT_DOWN_MASK)
-                )
-                .setIcon(Icons.CLIPBOARD_IMPORT, res.colors.icon(), res.colors.disabledIcon());
+            .setTooltipWithAccelerator(
+                res.getString("painterClipboardImportActionTooltip"),
+                KeyStroke.getKeyStroke(KeyEvent.VK_V, menuShortcutMask | InputEvent.SHIFT_DOWN_MASK)
+            )
+            .setIcon(Icons.CLIPBOARD_IMPORT, res.colors.icon(), res.colors.disabledIcon());
 
         flipVerticallyAction = new ApplicationAction(
-                "flipVerticallyAction",
-                (e, action) -> painter.flipVertically()
+            "flipVerticallyAction",
+            (e, action) -> painter.flipVertically()
         )
-                .setTooltipWithAccelerator(
-                        res.getString("painterFlipVerticalActionTooltip"),
-                        KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.ALT_DOWN_MASK)
-                )
-                .setIcon(Icons.FLIP_VERTICAL, res.colors.icon(), res.colors.disabledIcon());
+            .setTooltipWithAccelerator(
+                res.getString("painterFlipVerticalActionTooltip"),
+                KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.ALT_DOWN_MASK)
+            )
+            .setIcon(Icons.FLIP_VERTICAL, res.colors.icon(), res.colors.disabledIcon());
 
         flipHorizontallyAction = new ApplicationAction(
-                    "flipHorizontallyAction",
-                    (e, action) -> painter.flipHorizontally()
+            "flipHorizontallyAction",
+            (e, action) -> painter.flipHorizontally()
         )
-                .setTooltipWithAccelerator(
-                        res.getString("painterFlipHorizontalActionTooltip"),
-                        KeyStroke.getKeyStroke(KeyEvent.VK_H, InputEvent.ALT_DOWN_MASK)
-                )
-                .setIcon(Icons.FLIP_HORIZONTAL, res.colors.icon(), res.colors.disabledIcon());
+            .setTooltipWithAccelerator(
+                    res.getString("painterFlipHorizontalActionTooltip"),
+                    KeyStroke.getKeyStroke(KeyEvent.VK_H, InputEvent.ALT_DOWN_MASK)
+            )
+            .setIcon(Icons.FLIP_HORIZONTAL, res.colors.icon(), res.colors.disabledIcon());
 
         rotateLeftAction = new ApplicationAction("rotateLeftAction", (e, action) -> painter.rotateLeft())
-                .setTooltipWithAccelerator(
-                        res.getString("painterRotateLeftActionTooltip"),
-                        KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.ALT_DOWN_MASK)
-                )
-                .setIcon(Icons.ROTATE_LEFT, res.colors.icon(), res.colors.disabledIcon());
+            .setTooltipWithAccelerator(
+                res.getString("painterRotateLeftActionTooltip"),
+                KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.ALT_DOWN_MASK)
+            )
+            .setIcon(Icons.ROTATE_LEFT, res.colors.icon(), res.colors.disabledIcon());
 
         rotateRightAction = new ApplicationAction("rotateRightAction", (e, action) -> painter.rotateRight())
-                .setTooltipWithAccelerator(
-                        res.getString("painterRotateRightActionTooltip"),
-                        KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.ALT_DOWN_MASK)
-                )
-                .setIcon(Icons.ROTATE_RIGHT, res.colors.icon(), res.colors.disabledIcon());
+            .setTooltipWithAccelerator(
+                res.getString("painterRotateRightActionTooltip"),
+                KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.ALT_DOWN_MASK)
+            )
+            .setIcon(Icons.ROTATE_RIGHT, res.colors.icon(), res.colors.disabledIcon());
 
         moveLeftAction = new ApplicationAction("moveLeftAction", (e, action) -> painter.moveOnePixelLeft())
-                .setTooltipWithAccelerator(
-                        res.getString("painterMoveLeftActionTooltip"),
-                        KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, InputEvent.ALT_DOWN_MASK)
-                )
-                .setIcon(Icons.MOVE_LEFT, res.colors.icon(), res.colors.disabledIcon());
+            .setTooltipWithAccelerator(
+                res.getString("painterMoveLeftActionTooltip"),
+                KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, InputEvent.ALT_DOWN_MASK)
+            )
+            .setIcon(Icons.MOVE_LEFT, res.colors.icon(), res.colors.disabledIcon());
 
         moveRightAction = new ApplicationAction("moveRightAction", (e, action) -> painter.moveOnePixelRight())
-                .setTooltipWithAccelerator(
-                        res.getString("painterMoveRightActionTooltip"),
-                        KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, InputEvent.ALT_DOWN_MASK)
-                )
-                .setIcon(Icons.MOVE_RIGHT, res.colors.icon(), res.colors.disabledIcon());
+            .setTooltipWithAccelerator(
+                res.getString("painterMoveRightActionTooltip"),
+                KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, InputEvent.ALT_DOWN_MASK)
+            )
+            .setIcon(Icons.MOVE_RIGHT, res.colors.icon(), res.colors.disabledIcon());
 
         moveUpAction = new ApplicationAction("moveUpAction", (e, action) -> painter.moveOnePixelUp())
-                .setTooltipWithAccelerator(
-                        res.getString("painterMoveUpActionTooltip"),
-                        KeyStroke.getKeyStroke(KeyEvent.VK_UP, InputEvent.ALT_DOWN_MASK)
-                )
-                .setIcon(Icons.MOVE_UP, res.colors.icon(), res.colors.disabledIcon());
+            .setTooltipWithAccelerator(
+                res.getString("painterMoveUpActionTooltip"),
+                KeyStroke.getKeyStroke(KeyEvent.VK_UP, InputEvent.ALT_DOWN_MASK)
+            )
+            .setIcon(Icons.MOVE_UP, res.colors.icon(), res.colors.disabledIcon());
 
         moveDownAction = new ApplicationAction("moveDownAction", (e, action) -> painter.moveOnePixelDown())
-                .setTooltipWithAccelerator(
-                        res.getString("painterMoveDownActionTooltip"),
-                        KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.ALT_DOWN_MASK)
-                )
-                .setIcon(Icons.MOVE_DOWN, res.colors.icon(), res.colors.disabledIcon());
+            .setTooltipWithAccelerator(
+                res.getString("painterMoveDownActionTooltip"),
+                KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.ALT_DOWN_MASK)
+            )
+            .setIcon(Icons.MOVE_DOWN, res.colors.icon(), res.colors.disabledIcon());
 
         eraseAction = new ApplicationAction("eraseAction", this::erase)
-                .setTooltipWithAccelerator(
-                        res.getString("painterClearActionTooltip"),
-                        KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.ALT_DOWN_MASK)
-                )
-                .setIcon(Icons.ERASE, res.colors.icon(), res.colors.disabledIcon());
+            .setTooltipWithAccelerator(
+                res.getString("painterClearActionTooltip"),
+                KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.ALT_DOWN_MASK)
+            )
+            .setIcon(Icons.ERASE, res.colors.icon(), res.colors.disabledIcon());
 
-        all.addAll(
-                List.of(
-                        historyUndoAction, historyRedoAction, clipboardCutAction, clipboardCopyAction,
-                        clipboardPasteAction, clipboardImportAction, flipVerticallyAction,
-                        flipHorizontallyAction, rotateLeftAction, rotateRightAction, moveLeftAction,
-                        moveRightAction, moveUpAction, moveDownAction, eraseAction, symmetryToggleAction
-                )
-        );
+        all.addAll(List.of(
+            historyUndoAction, historyRedoAction, clipboardCutAction, clipboardCopyAction,
+            clipboardPasteAction, clipboardImportAction, flipVerticallyAction,
+            flipHorizontallyAction, rotateLeftAction, rotateRightAction, moveLeftAction,
+            moveRightAction, moveUpAction, moveDownAction, eraseAction, symmetryToggleAction
+        ));
 
         clipboardPasteAction.setEnabled(false);
         clipboard.addChangeListener((src, clip) -> clipboardPasteAction.setEnabled(enabled && clip != null));
@@ -271,9 +269,9 @@ public final class PainterActions implements Actions {
         clipboard.setValue(image.getSnapshot(model.getCodePoint()));
         // Send to system clipboard:
         final var rgbImage = new BufferedImage(
-                image.getImageWidth(),
-                image.getImageHeight(),
-                BufferedImage.TYPE_INT_RGB
+            image.getImageWidth(),
+            image.getImageHeight(),
+            BufferedImage.TYPE_INT_RGB
         );
         final var g2d = (Graphics2D) rgbImage.getGraphics();
         image.draw(g2d, 0, 0, image.getImageWidth(), image.getImageHeight());
@@ -350,14 +348,13 @@ public final class PainterActions implements Actions {
                 }
                 from.remove(index);
                 to.add(model.getImage().getSnapshot(model.getCodePoint()));
-                model.getImage()
-                        .setDataElements(
-                                snapshot.x(),
-                                snapshot.y(),
-                                snapshot.width(),
-                                snapshot.height(),
-                                snapshot.data()
-                        );
+                model.getImage().setDataElements(
+                    snapshot.x(),
+                    snapshot.y(),
+                    snapshot.width(),
+                    snapshot.height(),
+                    snapshot.data()
+                );
                 return;
             }
         }
@@ -385,7 +382,7 @@ public final class PainterActions implements Actions {
         @Override
         public DataFlavor[] getTransferDataFlavors() {
             return new DataFlavor[] {
-                    DataFlavor.imageFlavor
+                DataFlavor.imageFlavor
             };
         }
 

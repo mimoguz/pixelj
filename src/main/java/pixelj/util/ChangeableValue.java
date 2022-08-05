@@ -6,7 +6,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public final class ChangeableValue<T>
-        implements Changeable<ChangeableValue<T>, T, ChangeableValue.Listener<T>> {
+    implements Changeable<ChangeableValue<T>, T, ChangeableValue.Listener<T>> {
 
     private final Set<Listener<T>> listeners = new HashSet<>();
     private T value;

@@ -30,9 +30,9 @@ abstract class AddCodePointDialogBase extends JDialog {
 
     AddCodePointDialogBase(final Frame owner) {
         super(
-                owner,
-                Resources.get().getString("addCodePointDialogTitle"),
-                Dialog.ModalityType.MODELESS
+            owner,
+            Resources.get().getString("addCodePointDialogTitle"),
+            Dialog.ModalityType.MODELESS
         );
 
         Components.setFixedSize(addButton, Dimensions.TEXT_BUTTON_SIZE);
@@ -48,12 +48,12 @@ abstract class AddCodePointDialogBase extends JDialog {
         buttonPanel.add(closeButton);
 
         final var content = new JPanel(new MigLayout(
-                INSETS,
-                String.format("[25%%]%dlp[25%%]%dlp[25%%]%dlp[25%%]", pad, pad, pad),
-                String.format(
-                        "[center, 24lp]%dlp[center, 24lp]%dlp[]",
-                        pad, pad * 2
-                )
+            INSETS,
+            String.format("[25%%]%dlp[25%%]%dlp[25%%]%dlp[25%%]", pad, pad, pad),
+            String.format(
+                "[center, 24lp]%dlp[center, 24lp]%dlp[]",
+                pad, pad * 2
+            )
         ));
         content.setBorder(Borders.LARGE_EMPTY);
         content.add(dec, "span 2");

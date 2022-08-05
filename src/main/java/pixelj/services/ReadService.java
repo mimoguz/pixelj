@@ -32,34 +32,34 @@ final class ReadService {
             throw new IOException("File not found: " + pathStr);
         }
         final var url = pathStr.endsWith(EXTENSION)
-                ? pathStr.substring(0, pathStr.length() - EXTENSION.length())
-                : path;
+            ? pathStr.substring(0, pathStr.length() - EXTENSION.length())
+            : path;
         try (var connection = DriverManager.getConnection(Queries.URL_PREFIX + url, Queries.PIXELJ, "")) {
             final var statement = connection.createStatement();
             final var settings = extractSettings(statement.executeQuery(Queries.SELECT_SETTINGS));
             final var glyphs = extractGlyphs(statement.executeQuery(Queries.SELECT_GLYPHS), settings);
             final var kerningPairs = extractKerningPairs(
-                    statement.executeQuery(Queries.SELECT_KERNING_PAIRS),
-                    glyphs
+                statement.executeQuery(Queries.SELECT_KERNING_PAIRS),
+                glyphs
             );
             return new Project(glyphs, kerningPairs, settings, path);
         } catch (SQLException | IOException e) {
             cleanup(path);
             throw new IOException(
-                    String.format("Can't open or read the file %s:\n%s", path.toString(), e.getMessage())
+                String.format("Can't open or read the file %s:\n%s", path.toString(), e.getMessage())
             );
         } catch (NullPointerException | MisshapenDataException | InvalidStateException e) {
             cleanup(path);
             throw new IOException(
-                    String.format("%s file is corrupted:\n%s", path.toString(), e.getMessage())
+                String.format("%s file is corrupted:\n%s", path.toString(), e.getMessage())
             );
         }
 
     }
 
     private static SortedList<KerningPair> extractKerningPairs(
-            final ResultSet result,
-            final SortedList<Glyph> glyphs
+        final ResultSet result,
+        final SortedList<Glyph> glyphs
     ) throws SQLException, IllegalArgumentException {
         final var list = new SortedList<KerningPair>();
         while (result.next()) {
@@ -74,13 +74,13 @@ final class ReadService {
     }
 
     private static SortedList<Glyph> extractGlyphs(final ResultSet result, final DocumentSettings settings)
-            throws SQLException, IOException, MisshapenDataException {
+        throws SQLException, IOException, MisshapenDataException {
         final var list = new SortedList<Glyph>();
         while (result.next()) {
             final var zipped = new CompressedGlyph(
-                    result.getInt(GlyphsColumn.CODE_POINT.getIndex()),
-                    result.getInt(GlyphsColumn.WIDTH.getIndex()),
-                    result.getBinaryStream(GlyphsColumn.IMAGE_BYTES.getIndex()).readAllBytes()
+                result.getInt(GlyphsColumn.CODE_POINT.getIndex()),
+                result.getInt(GlyphsColumn.WIDTH.getIndex()),
+                result.getBinaryStream(GlyphsColumn.IMAGE_BYTES.getIndex()).readAllBytes()
             );
             list.add(zipped.decompress(settings.canvasWidth(), settings.canvasHeight()));
         }
@@ -88,24 +88,24 @@ final class ReadService {
     }
 
     private static DocumentSettings extractSettings(final ResultSet result)
-            throws InvalidStateException, SQLException {
+        throws InvalidStateException, SQLException {
         result.next();
         return new DocumentSettings.Builder()
-                .setTitle(result.getString(SettingsColumn.TITLE.getIndex()))
-                .setCanvasWidth(result.getInt(SettingsColumn.CANVAS_WIDTH.getIndex()))
-                .setCanvasHeight(result.getInt(SettingsColumn.CANVAS_HEIGHT.getIndex()))
-                .setAscender(result.getInt(SettingsColumn.ASCENDER.getIndex()))
-                .setDescender(result.getInt(SettingsColumn.DESCENDER.getIndex()))
-                .setCapHeight(result.getInt(SettingsColumn.CAP_HEIGHT.getIndex()))
-                .setXHeight(result.getInt(SettingsColumn.X_HEIGHT.getIndex()))
-                .setDefaultWidth(result.getInt(SettingsColumn.DEFAULT_WIDTH.getIndex()))
-                .setLetterSpacing(result.getInt(SettingsColumn.LETTER_SPACING.getIndex()))
-                .setSpaceSize(result.getInt(SettingsColumn.SPACE_SIZE.getIndex()))
-                .setLineSpacing(result.getInt(SettingsColumn.LINE_SPACING.getIndex()))
-                .setMonospaced(result.getBoolean(SettingsColumn.IS_MONOSPACED.getIndex()))
-                .setBold(result.getBoolean(SettingsColumn.IS_BOLD.getIndex()))
-                .setItalic(result.getBoolean(SettingsColumn.IS_ITALIC.getIndex()))
-                .build();
+            .setTitle(result.getString(SettingsColumn.TITLE.getIndex()))
+            .setCanvasWidth(result.getInt(SettingsColumn.CANVAS_WIDTH.getIndex()))
+            .setCanvasHeight(result.getInt(SettingsColumn.CANVAS_HEIGHT.getIndex()))
+            .setAscender(result.getInt(SettingsColumn.ASCENDER.getIndex()))
+            .setDescender(result.getInt(SettingsColumn.DESCENDER.getIndex()))
+            .setCapHeight(result.getInt(SettingsColumn.CAP_HEIGHT.getIndex()))
+            .setXHeight(result.getInt(SettingsColumn.X_HEIGHT.getIndex()))
+            .setDefaultWidth(result.getInt(SettingsColumn.DEFAULT_WIDTH.getIndex()))
+            .setLetterSpacing(result.getInt(SettingsColumn.LETTER_SPACING.getIndex()))
+            .setSpaceSize(result.getInt(SettingsColumn.SPACE_SIZE.getIndex()))
+            .setLineSpacing(result.getInt(SettingsColumn.LINE_SPACING.getIndex()))
+            .setMonospaced(result.getBoolean(SettingsColumn.IS_MONOSPACED.getIndex()))
+            .setBold(result.getBoolean(SettingsColumn.IS_BOLD.getIndex()))
+            .setItalic(result.getBoolean(SettingsColumn.IS_ITALIC.getIndex()))
+            .build();
     }
 
     // TODO: Investigate: Can I prevent creation of such files in the first place?

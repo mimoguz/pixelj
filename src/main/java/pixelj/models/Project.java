@@ -35,10 +35,10 @@ public final class Project {
     private final ChangeableValue<String> title;
 
     public Project(
-            final SortedList<Glyph> glyphs,
-            final SortedList<KerningPair> kerningPairs,
-            final DocumentSettings settings,
-            final Path path
+        final SortedList<Glyph> glyphs,
+        final SortedList<KerningPair> kerningPairs,
+        final DocumentSettings settings,
+        final Path path
     ) {
         title = new ChangeableValue<>(settings.title());
         titleProperty = new ReadOnlyValue<>(title);
@@ -125,7 +125,7 @@ public final class Project {
 
     public void setDirty(final boolean value) {
         dirtyProperty.setValue(value);
-    } 
+    }
 
     public Path getPath() {
         return pathProperty.getValue();

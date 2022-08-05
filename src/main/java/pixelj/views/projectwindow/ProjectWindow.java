@@ -15,9 +15,9 @@ public final class ProjectWindow extends ProjectWindowBase {
 
     public ProjectWindow(final Project project, final AppState appState) {
         setup(
-                new GlyphsPage(project, this),
-                new KerningPairsPage(project, this),
-                new PreviewPage(project, appState, this)
+            new GlyphsPage(project, this),
+            new KerningPairsPage(project, this),
+            new PreviewPage(project, appState, this)
         );
 
         // Invisible screens should be disabled to prevent shortcut collisions.

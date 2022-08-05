@@ -58,8 +58,8 @@ class SearchableDocument<E> extends PlainDocument {
 
                 backspaceState = switch (e.getKeyCode()) {
                     case KeyEvent.VK_BACK_SPACE -> editor.getSelectionStart() != editor.getSelectionEnd()
-                            ? BackspaceState.HIT_ON_SELECTION
-                            : BackspaceState.HIT;
+                        ? BackspaceState.HIT_ON_SELECTION
+                        : BackspaceState.HIT;
                     case KeyEvent.VK_DELETE -> BackspaceState.ERROR;
                     default -> BackspaceState.NO_HIT;
                 };
@@ -99,7 +99,7 @@ class SearchableDocument<E> extends PlainDocument {
 
     @Override
     public void insertString(final int offset, final String string, final AttributeSet attributes)
-            throws BadLocationException {
+        throws BadLocationException {
         if (selecting) {
             return;
         }
@@ -144,7 +144,7 @@ class SearchableDocument<E> extends PlainDocument {
         comboBox.putClientProperty(FlatClientProperties.OUTLINE, null);
     }
 
-    private void highlightCompletedText(int offset) {
+    private void highlightCompletedText(final int offset) {
         editor.setSelectionStart(offset);
         editor.setSelectionEnd(getLength());
         editor.setCaretPosition(getLength());

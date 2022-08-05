@@ -52,12 +52,12 @@ abstract class DocumentSettingsDialogBase extends JDialog {
         Components.setFixedSize(applyButton, Dimensions.TEXT_BUTTON_SIZE);
         Components.setFixedSize(cancelButton, Dimensions.TEXT_BUTTON_SIZE);
         helpButton.putClientProperty(
-                FlatClientProperties.BUTTON_TYPE,
-                FlatClientProperties.BUTTON_TYPE_BORDERLESS
+            FlatClientProperties.BUTTON_TYPE,
+            FlatClientProperties.BUTTON_TYPE_BORDERLESS
         );
 
         final var content = new JPanel(
-                new BorderLayout(Dimensions.MEDIUM_PADDING, Dimensions.LARGE_PADDING * 2)
+            new BorderLayout(Dimensions.MEDIUM_PADDING, Dimensions.LARGE_PADDING * 2)
         );
         content.setBorder(Borders.LARGE_EMPTY);
 
@@ -190,8 +190,8 @@ abstract class DocumentSettingsDialogBase extends JDialog {
     private void styleTitle(final JLabel title) {
         title.setBorder(BorderFactory.createEmptyBorder(0, 0, Dimensions.SMALL_PADDING, 0));
         Components.addOuterBorder(
-                title,
-                BorderFactory.createMatteBorder(0, 0, 1, 0, Resources.get().colors.divider())
+            title,
+            BorderFactory.createMatteBorder(0, 0, 1, 0, Resources.get().colors.divider())
         );
         title.putClientProperty(FlatClientProperties.STYLE_CLASS, "h4");
     }

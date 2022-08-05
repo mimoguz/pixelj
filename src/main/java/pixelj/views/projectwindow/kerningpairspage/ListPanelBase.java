@@ -32,10 +32,10 @@ abstract class ListPanelBase extends JPanel {
     protected final JButton addButton = new JButton();
     protected final JButton removeButton = new JButton();
     protected final SearchableComboBox<Block> leftFilterBox = new SearchableComboBox<>(
-            Resources.get().getBlocks()
+        Resources.get().getBlocks()
     );
     protected final SearchableComboBox<Block> rightFilterBox = new SearchableComboBox<>(
-            Resources.get().getBlocks()
+        Resources.get().getBlocks()
     );
 
     ListPanelBase() {

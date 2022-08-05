@@ -17,8 +17,9 @@ import javax.swing.JTextArea;
  * thread</a>
  */
 public final class PromptTextArea extends JTextArea {
+
     private static final Map<?, ?> HINTS = (Map<?, ?>) Toolkit.getDefaultToolkit()
-            .getDesktopProperty("awt.font.desktophints");
+        .getDesktopProperty("awt.font.desktophints");
 
     private Color promptColor;
     private String promptText;
@@ -46,8 +47,8 @@ public final class PromptTextArea extends JTextArea {
         super.paintComponent(graphics);
 
         if (
-                isFocusOwner() || (getText() != null && !getText().isEmpty()) || promptText == null
-                    || promptText.isEmpty() || promptText.isBlank()
+            isFocusOwner() || (getText() != null && !getText().isEmpty()) || promptText == null
+            || promptText.isEmpty() || promptText.isBlank()
         ) {
             return;
         }
@@ -60,9 +61,9 @@ public final class PromptTextArea extends JTextArea {
         }
         g2d.setColor(promptColor != null ? promptColor : Color.GRAY);
         g2d.drawString(
-                promptText,
-                getInsets().left,
-                graphics.getFontMetrics().getMaxAscent() + getInsets().top
+            promptText,
+            getInsets().left,
+            graphics.getFontMetrics().getMaxAscent() + getInsets().top
         );
         g2d.dispose();
     }

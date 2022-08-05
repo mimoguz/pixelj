@@ -29,7 +29,7 @@ public final class AppState {
     public final ChangeableInt exportImageHeightProperty = new ChangeableInt(DEFAULT_EXPORT_IMAGE_SIZE);
     /** Controls the packer-rectangle extractor combo to be used. */
     public final ChangeableValue<LayoutStrategy> layoutStrategyProperty = new ChangeableValue<>(
-            LayoutStrategy.GRID_LAYOUT
+        LayoutStrategy.GRID_LAYOUT
     );
 
     /** Recent projects. */

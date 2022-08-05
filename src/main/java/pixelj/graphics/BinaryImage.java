@@ -20,8 +20,8 @@ import pixelj.util.ChangeListener;
 import pixelj.util.Changeable;
 
 public final class BinaryImage
-        extends Image
-        implements Changeable<BinaryImage, Void, BinaryImage.ImageListener> {
+    extends Image
+    implements Changeable<BinaryImage, Void, BinaryImage.ImageListener> {
 
     private static final byte BYTE_0 = 0;
     private static final byte BYTE_1 = 1;
@@ -158,11 +158,11 @@ public final class BinaryImage
      */
     @SuppressWarnings("UnusedReturnValue")
     public byte[] getDataElements(
-            final int x,
-            final int y,
-            final int width,
-            final int height,
-            final byte[] target
+        final int x,
+        final int y,
+        final int width,
+        final int height,
+        final byte[] target
     ) {
         raster.getDataElements(x, y, width, height, target);
         return target;
@@ -179,11 +179,11 @@ public final class BinaryImage
      * @param source Source data of minimum size (width * height)
      */
     public void setDataElements(
-            final int x,
-            final int y,
-            final int width,
-            final int height,
-            final byte[] source
+        final int x,
+        final int y,
+        final int width,
+        final int height,
+        final byte[] source
     ) {
         setDataElements(x, y, width, height, source, true);
     }
@@ -200,12 +200,12 @@ public final class BinaryImage
      * @param notify true -> notify after | false -> don't notify
      */
     public void setDataElements(
-            final int x,
-            final int y,
-            final int width,
-            final int height,
-            final byte[] source,
-            final boolean notify
+        final int x,
+        final int y,
+        final int width,
+        final int height,
+        final byte[] source,
+        final boolean notify
     ) {
         raster.setDataElements(x, y, width, height, source);
         if (notify) {

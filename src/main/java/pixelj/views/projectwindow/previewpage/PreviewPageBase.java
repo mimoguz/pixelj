@@ -50,15 +50,13 @@ abstract class PreviewPageBase extends JPanel {
         textInput.setComponentPopupMenu(contextMenu);
 
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-        container.setBorder(
-                BorderFactory.createMatteBorder(
-                        Dimensions.MEDIUM_PADDING,
-                        Dimensions.MEDIUM_PADDING,
-                        Dimensions.MEDIUM_PADDING,
-                        Dimensions.MEDIUM_PADDING,
-                        Color.WHITE
-                )
-        );
+        container.setBorder(BorderFactory.createMatteBorder(
+            Dimensions.MEDIUM_PADDING,
+            Dimensions.MEDIUM_PADDING,
+            Dimensions.MEDIUM_PADDING,
+            Dimensions.MEDIUM_PADDING,
+            Color.WHITE
+        ));
         container.setBackground(Color.WHITE);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -112,22 +110,22 @@ abstract class PreviewPageBase extends JPanel {
         final var contextMenu = new JPopupMenu();
         final var menuShortcutMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
         contextMenu.add(
-                new ApplicationAction("previewCutAction", (event, action) -> textInput.cut())
-                        .setIcon(Icons.CLIPBOARD_CUT, res.colors.icon(), res.colors.disabledIcon())
-                        .setTextKey("cut")
-                        .setAccelerator(KeyEvent.VK_X, menuShortcutMask)
+            new ApplicationAction("previewCutAction", (event, action) -> textInput.cut())
+                .setIcon(Icons.CLIPBOARD_CUT, res.colors.icon(), res.colors.disabledIcon())
+                .setTextKey("cut")
+                .setAccelerator(KeyEvent.VK_X, menuShortcutMask)
         );
         contextMenu.add(
-                new ApplicationAction("previewCopyAction", (event, action) -> textInput.copy())
-                        .setIcon(Icons.CLIPBOARD_COPY, res.colors.icon(), res.colors.disabledIcon())
-                        .setTextKey("copy")
-                        .setAccelerator(KeyEvent.VK_C, menuShortcutMask)
+            new ApplicationAction("previewCopyAction", (event, action) -> textInput.copy())
+                .setIcon(Icons.CLIPBOARD_COPY, res.colors.icon(), res.colors.disabledIcon())
+                .setTextKey("copy")
+                .setAccelerator(KeyEvent.VK_C, menuShortcutMask)
         );
         contextMenu.add(
-                new ApplicationAction("previewPasteAction", (event, action) -> textInput.paste())
-                        .setIcon(Icons.CLIPBOARD_PASTE, res.colors.icon(), res.colors.disabledIcon())
-                        .setTextKey("paste")
-                        .setAccelerator(KeyEvent.VK_V, menuShortcutMask)
+            new ApplicationAction("previewPasteAction", (event, action) -> textInput.paste())
+                .setIcon(Icons.CLIPBOARD_PASTE, res.colors.icon(), res.colors.disabledIcon())
+                .setTextKey("paste")
+                .setAccelerator(KeyEvent.VK_V, menuShortcutMask)
         );
         return contextMenu;
     }

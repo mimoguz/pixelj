@@ -39,10 +39,10 @@ public final class PreviewPageActions implements Actions {
     private int zoom = 1;
 
     public PreviewPageActions(
-            final Project project,
-            final AppState appState,
-            final JTextArea input,
-            final JPanel container
+        final Project project,
+        final AppState appState,
+        final JTextArea input,
+        final JPanel container
     ) {
         this.project = project;
         this.appState = appState;
@@ -105,9 +105,9 @@ public final class PreviewPageActions implements Actions {
     private List<Glyph> getCharactersOfLine(final String line) {
         final var characters = project.getGlyphs();
         return line.codePoints()
-                .mapToObj(cp -> cp == SPACE ? new Glyph(SPACE, 0, null) : characters.findHash(cp))
-                .filter(Objects::nonNull)
-                .toList();
+            .mapToObj(cp -> cp == SPACE ? new Glyph(SPACE, 0, null) : characters.findHash(cp))
+            .filter(Objects::nonNull)
+            .toList();
     }
 
     private List<Integer> getSpaces(final List<Glyph> characters) {
@@ -118,8 +118,8 @@ public final class PreviewPageActions implements Actions {
         final var settings = project.getDocumentSettings();
         final var letterSpacing = settings.letterSpacing();
         final var spaceSize = settings.isMonospaced()
-                ? settings.defaultWidth() + settings.letterSpacing()
-                : settings.spaceSize();
+            ? settings.defaultWidth() + settings.letterSpacing()
+            : settings.spaceSize();
         final var kerningPairs = project.getKerningPairs();
         final var pairs = characters.size() - 1;
         final var spaces = new ArrayList<Integer>(pairs);
@@ -132,8 +132,8 @@ public final class PreviewPageActions implements Actions {
             final var right = characters.get(index + 1);
             final var pair = kerningPairs.findHash(KerningPair.getHash(left, right));
             spaces.add(pair == null || settings.isMonospaced()
-                    ? letterSpacing
-                    : letterSpacing + pair.getKerningValue()
+                ? letterSpacing
+                : letterSpacing + pair.getKerningValue()
             );
         }
         return spaces;

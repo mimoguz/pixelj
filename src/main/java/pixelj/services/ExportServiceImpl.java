@@ -38,11 +38,11 @@ public final class ExportServiceImpl implements ExportService {
 
     @Override
     public void export(
-            final Project project,
-            final Path path,
-            final int textureWidth,
-            final int textureHeight,
-            final LayoutStrategy strategy
+        final Project project,
+        final Path path,
+        final int textureWidth,
+        final int textureHeight,
+        final LayoutStrategy strategy
     ) throws IOException {
         final var settings = project.getDocumentSettings();
         final var glyphs = project.getGlyphs();
@@ -51,11 +51,11 @@ public final class ExportServiceImpl implements ExportService {
         // Get images
         final var imageSize = new Dimension(textureWidth, textureHeight);
         final var images = IntStream.range(0, packedRectangles.size())
-                .parallel()
-                .mapToObj(index -> {
-                    final var page = packedRectangles.get(index);
-                    return new PageImage(index, imageWriter.getImage(imageSize, page, glyphs, settings));
-                });
+            .parallel()
+            .mapToObj(index -> {
+                final var page = packedRectangles.get(index);
+                return new PageImage(index, imageWriter.getImage(imageSize, page, glyphs, settings));
+            });
 
         // Get out path
         final var dir = path.getParent();
@@ -78,8 +78,8 @@ public final class ExportServiceImpl implements ExportService {
 
         // Create and save fnt file
         try (var writer = new OutputStreamWriter(
-                new FileOutputStream(Paths.get(dirStr, baseName + "." + EXTENSION).toFile()),
-                StandardCharsets.UTF_8
+            new FileOutputStream(Paths.get(dirStr, baseName + "." + EXTENSION).toFile()),
+            StandardCharsets.UTF_8
         )) {
             fnt(project, baseName, packedRectangles, imageSize).forEach(block -> {
                 try {
@@ -100,10 +100,10 @@ public final class ExportServiceImpl implements ExportService {
     }
 
     private List<List<Rectangle<GlyphImageData>>> pack(
-            final Project project,
-            final int textureWidth,
-            final int textureHeight,
-            final LayoutStrategy strategy
+        final Project project,
+        final int textureWidth,
+        final int textureHeight,
+        final LayoutStrategy strategy
     ) {
         final var settings = project.getDocumentSettings();
         final var elements = new ArrayList<>(project.getGlyphs().getElements());
@@ -117,30 +117,30 @@ public final class ExportServiceImpl implements ExportService {
         switch (strategy) {
             case GRID_LAYOUT:
                 rectangleStream = elements
-                        .stream()
-                        .map(glyph -> GlyphImageData.findLoose(glyph, settings));
+                    .stream()
+                    .map(glyph -> GlyphImageData.findLoose(glyph, settings));
                 packer = new GridPacker<>();
                 break;
             default: // ROW_LAYOUT
                 rectangleStream = elements
-                        .stream()
-                        .map(glyph -> GlyphImageData.findFitting(glyph, settings));
+                    .stream()
+                    .map(glyph -> GlyphImageData.findFitting(glyph, settings));
                 packer = new RowPacker<>();
                 break;
         }
 
         final var rectangles = rectangleStream
-                .filter(rect -> rect.getMetadata() != null)
-                .collect(Collectors.toCollection(ArrayList::new));
+            .filter(rect -> rect.getMetadata() != null)
+            .collect(Collectors.toCollection(ArrayList::new));
 
         return packer.pack(rectangles, textureWidth, textureHeight);
     }
 
     private static Stream<String> fnt(
-            final Project project,
-            final String baseName,
-            final List<List<Rectangle<GlyphImageData>>> rectangles,
-            final Dimension imageSize
+        final Project project,
+        final String baseName,
+        final List<List<Rectangle<GlyphImageData>>> rectangles,
+        final Dimension imageSize
     ) {
         final var info = infoLine(project);
         final var common = commonLine(project, imageSize, rectangles.size());
@@ -148,14 +148,14 @@ public final class ExportServiceImpl implements ExportService {
         final var pages = pageStream(rectangles, baseName);
         final var characters = characterStream(rectangles, project.getDocumentSettings());
         final var kerningPairs = project.getKerningPairs().getElements().stream()
-                .map(ExportServiceImpl::kerningPairLine);
+            .map(ExportServiceImpl::kerningPairLine);
         return Stream.of(
-                Stream.of(info),
-                Stream.of(common),
-                pages,
-                Stream.of(chars),
-                characters,
-                kerningPairs
+            Stream.of(info),
+            Stream.of(common),
+            pages,
+            Stream.of(chars),
+            characters,
+            kerningPairs
         ).flatMap(a -> a);
     }
 
@@ -163,37 +163,37 @@ public final class ExportServiceImpl implements ExportService {
         final var title = project.getTitle();
         final var settings = project.getDocumentSettings();
         return new StringBuilder(120 + title.length())
-                .append("info face=\"")
-                .append(title)
-                .append("\" size=")
-                .append(-settings.capHeight())
-                .append(" bold=")
-                .append(settings.isBold() ? 1 : 0)
-                .append(" italic=")
-                .append(settings.isItalic() ? 1 : 0)
-                .append(" unicode=1 stretchH=100 smooth=0 aa=1 padding=0,0,0,0 spacing=1,1 outline=0")
-                .toString();
+            .append("info face=\"")
+            .append(title)
+            .append("\" size=")
+            .append(-settings.capHeight())
+            .append(" bold=")
+            .append(settings.isBold() ? 1 : 0)
+            .append(" italic=")
+            .append(settings.isItalic() ? 1 : 0)
+            .append(" unicode=1 stretchH=100 smooth=0 aa=1 padding=0,0,0,0 spacing=1,1 outline=0")
+            .toString();
     }
 
     private static String commonLine(
-            final Project project,
-            final Dimension imageSize,
-            final int pageCount
+        final Project project,
+        final Dimension imageSize,
+        final int pageCount
     ) {
         final var settings = project.getDocumentSettings();
         return new StringBuilder(120)
-                .append("common lineHeight=")
-                .append(settings.ascender() + settings.descender() + settings.lineSpacing())
-                .append(" base=")
-                .append(settings.ascender())
-                .append(" scaleW=")
-                .append(imageSize.width)
-                .append(" scaleH=")
-                .append(imageSize.height)
-                .append(" pages=")
-                .append(pageCount)
-                .append(" packed=0 alphaChnl=0 redChnl=4 greenChnl=4 blueChnl=4")
-                .toString();
+            .append("common lineHeight=")
+            .append(settings.ascender() + settings.descender() + settings.lineSpacing())
+            .append(" base=")
+            .append(settings.ascender())
+            .append(" scaleW=")
+            .append(imageSize.width)
+            .append(" scaleH=")
+            .append(imageSize.height)
+            .append(" pages=")
+            .append(pageCount)
+            .append(" packed=0 alphaChnl=0 redChnl=4 greenChnl=4 blueChnl=4")
+            .toString();
     }
 
     private static String pageLine(final int page, final String baseName) {
@@ -205,54 +205,56 @@ public final class ExportServiceImpl implements ExportService {
     }
 
     private static String characterLine(
-            final DocumentSettings settings,
-            final Rectangle<GlyphImageData> rect,
-            final int page
+        final DocumentSettings settings,
+        final Rectangle<GlyphImageData> rect,
+        final int page
     ) {
         final var md = rect.getMetadata();
         return new StringBuilder(100)
-                .append("char id=")
-                .append(rect.getId())
-                .append(" x=")
-                .append(rect.getX())
-                .append(" y=")
-                .append(rect.getY())
-                .append(" width=")
-                .append(md.clipWidth())
-                .append(" height=")
-                .append(md.clipHeight())
-                .append(" xoffset=")
-                .append(md.xOffset())
-                .append(" yoffset=")
-                .append(md.yOffset())
-                .append(" xadvance=")
-                .append(md.glyphWidth() + settings.letterSpacing())
-                .append(" page=")
-                .append(page)
-                .append(" chnl=15")
-                .toString();
+            .append("char id=")
+            .append(rect.getId())
+            .append(" x=")
+            .append(rect.getX())
+            .append(" y=")
+            .append(rect.getY())
+            .append(" width=")
+            .append(md.clipWidth())
+            .append(" height=")
+            .append(md.clipHeight())
+            .append(" xoffset=")
+            .append(md.xOffset())
+            .append(" yoffset=")
+            .append(md.yOffset())
+            .append(" xadvance=")
+            .append(md.glyphWidth() + settings.letterSpacing())
+            .append(" page=")
+            .append(page)
+            .append(" chnl=15")
+            .toString();
     }
 
     private static String kerningPairLine(final KerningPair pair) {
         return new StringBuilder(50)
-                .append("kerning first=")
-                .append(pair.getLeft().getCodePoint())
-                .append(" second=")
-                .append(pair.getRight().getCodePoint())
-                .append(" amount=")
-                .append(pair.getKerningValue())
-                .toString();
+            .append("kerning first=")
+            .append(pair.getLeft().getCodePoint())
+            .append(" second=")
+            .append(pair.getRight().getCodePoint())
+            .append(" amount=")
+            .append(pair.getKerningValue())
+            .toString();
     }
 
-    private static Stream<String> pageStream(final List<List<Rectangle<GlyphImageData>>> rectangles,
-            final String baseName) {
+    private static Stream<String> pageStream(
+        final List<List<Rectangle<GlyphImageData>>> rectangles,
+        final String baseName
+    ) {
         final var pageCount = rectangles.size();
         return IntStream.range(0, pageCount).mapToObj(page -> pageLine(page, baseName));
     }
 
     private static Stream<String> characterStream(
-            final List<List<Rectangle<GlyphImageData>>> rectangles,
-            final DocumentSettings settings
+        final List<List<Rectangle<GlyphImageData>>> rectangles,
+        final DocumentSettings settings
     ) {
         final var pageCount = rectangles.size();
         return IntStream.range(0, pageCount)

@@ -65,14 +65,12 @@ public final class EditorPanel extends EditorPanelBase {
         } else {
             spaces.set(0, spacing + model.getKerningValue());
             preview.set(java.util.List.of(model.getLeft(), model.getRight()), spaces);
-            valueSpinner.setModel(
-                    new SpinnerNumberModel(
-                            model.getKerningValue(),
-                            -model.getLeft().getWidth() - spacing,
-                            model.getRight().getWidth(),
-                            1
-                    )
-            );
+            valueSpinner.setModel(new SpinnerNumberModel(
+                model.getKerningValue(),
+                -model.getLeft().getWidth() - spacing,
+                model.getRight().getWidth(),
+                1
+            ));
             setEnabled(true);
         }
     }
@@ -82,14 +80,12 @@ public final class EditorPanel extends EditorPanelBase {
         if (model == null) {
             return;
         }
-        valueSpinner.setModel(
-                new SpinnerNumberModel(
-                        model.getKerningValue(),
-                        -model.getLeft().getWidth() - spacing,
-                        model.getRight().getWidth(),
-                        1
-                )
-        );
+        valueSpinner.setModel(new SpinnerNumberModel(
+            model.getKerningValue(),
+            -model.getLeft().getWidth() - spacing,
+            model.getRight().getWidth(),
+            1
+        ));
         spaces.set(0, model.getKerningValue() + spacing);
         preview.setMaxY(settings.descender() + settings.ascender());
         preview.setSpaces(spaces);

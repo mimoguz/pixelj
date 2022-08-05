@@ -11,8 +11,6 @@ import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Logger;
 
 import javax.swing.Action;
 import javax.swing.JFrame;
@@ -73,66 +71,66 @@ public final class ProjectWindowActions implements Actions {
         final var res = Resources.get();
 
         documentSettingsDialog = new DocumentSettingsDialog(
-                window,
-                res.getString("documentSettingsDialogTitle"),
-                res.getString("apply"),
-                false
+            window,
+            res.getString("documentSettingsDialogTitle"),
+            res.getString("apply"),
+            false
         );
 
         final var menuShortcutMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
 
         returnHomeAction = new ApplicationAction("returnHomeAction", this::returnHome)
-                .withText()
-                .setIcon(Icons.HOME, res.colors.icon(), res.colors.disabledIcon())
-                .setAccelerator(KeyEvent.VK_W, menuShortcutMask);
+            .withText()
+            .setIcon(Icons.HOME, res.colors.icon(), res.colors.disabledIcon())
+            .setAccelerator(KeyEvent.VK_W, menuShortcutMask);
 
         exportAction = new ApplicationAction("exportAction", this::export)
-                .withText()
-                .setIcon(Icons.FILE_EXPORT, res.colors.icon(), res.colors.disabledIcon())
-                .setAccelerator(KeyEvent.VK_E, menuShortcutMask);
+            .withText()
+            .setIcon(Icons.FILE_EXPORT, res.colors.icon(), res.colors.disabledIcon())
+            .setAccelerator(KeyEvent.VK_E, menuShortcutMask);
 
         quitAction = new ApplicationAction("quitAction", this::quit)
-                .withText()
-                .setIcon(Icons.EXIT, res.colors.icon(), res.colors.disabledIcon())
-                .setAccelerator(KeyEvent.VK_Q, menuShortcutMask);
+            .withText()
+            .setIcon(Icons.EXIT, res.colors.icon(), res.colors.disabledIcon())
+            .setAccelerator(KeyEvent.VK_Q, menuShortcutMask);
 
         saveAction = new ApplicationAction("saveAction", this::save)
-                .withText()
-                .setIcon(Icons.FILE_SAVE, res.colors.icon(), res.colors.disabledIcon())
-                .setAccelerator(KeyEvent.VK_S, menuShortcutMask);
+            .withText()
+            .setIcon(Icons.FILE_SAVE, res.colors.icon(), res.colors.disabledIcon())
+            .setAccelerator(KeyEvent.VK_S, menuShortcutMask);
 
         saveAsAction = new ApplicationAction("saveAsAction", this::saveAs)
-                .withText()
-                .setIcon(Icons.FILE_SAVE_AS, res.colors.icon(), res.colors.disabledIcon())
-                .setAccelerator(KeyEvent.VK_S, menuShortcutMask | ActionEvent.SHIFT_MASK);
+            .withText()
+            .setIcon(Icons.FILE_SAVE_AS, res.colors.icon(), res.colors.disabledIcon())
+            .setAccelerator(KeyEvent.VK_S, menuShortcutMask | ActionEvent.SHIFT_MASK);
 
         showHelpAction = new ApplicationAction("showHelpAction", this::showHelp)
-                .withText()
-                .setIcon(Icons.HELP, res.colors.icon(), res.colors.disabledIcon())
-                .setAccelerator(KeyEvent.VK_F1, 0);
+            .withText()
+            .setIcon(Icons.HELP, res.colors.icon(), res.colors.disabledIcon())
+            .setAccelerator(KeyEvent.VK_F1, 0);
 
         showDocumentSettingsAction = new ApplicationAction(
-                "showDocumentSettingsAction",
-                this::showDocumentSettings
+            "showDocumentSettingsAction",
+            this::showDocumentSettings
         )
-                .withText()
-                .setIcon(Icons.METRICS, res.colors.icon(), res.colors.disabledIcon())
-                .setAccelerator(KeyEvent.VK_D, menuShortcutMask);
+            .withText()
+            .setIcon(Icons.METRICS, res.colors.icon(), res.colors.disabledIcon())
+            .setAccelerator(KeyEvent.VK_D, menuShortcutMask);
 
         showOptionsAction = new ApplicationAction("showOptionsAction", this::showOptions)
-                .withText()
-                .setIcon(Icons.SETTINGS, res.colors.icon(), res.colors.disabledIcon())
-                .setAccelerator(KeyEvent.VK_PERIOD, menuShortcutMask);
+            .withText()
+            .setIcon(Icons.SETTINGS, res.colors.icon(), res.colors.disabledIcon())
+            .setAccelerator(KeyEvent.VK_PERIOD, menuShortcutMask);
 
         all = List.of(
-                returnHomeAction,
-                exportAction,
-                quitAction,
-                saveAction,
-                saveAsAction,
-                showHelpAction,
-                showDocumentSettingsAction,
-                showOptionsAction
+            returnHomeAction,
+            exportAction,
+            quitAction,
+            saveAction,
+            saveAsAction,
+            showHelpAction,
+            showDocumentSettingsAction,
+            showOptionsAction
         );
     }
 
@@ -158,14 +156,14 @@ public final class ProjectWindowActions implements Actions {
         final var settings = project.getDocumentSettings();
         final var minimumSize = new Dimension(settings.canvasWidth(), settings.canvasHeight());
         final var defaultSize = new Dimension(
-                Math.max(settings.canvasWidth(), appState.getExportImageWidth()),
-                Math.max(settings.canvasHeight(), appState.getExportImageHeight())
+            Math.max(settings.canvasWidth(), appState.getExportImageWidth()),
+            Math.max(settings.canvasHeight(), appState.getExportImageHeight())
         );
         final var exportDialog = new ExportDialog(
-                window,
-                defaultSize,
-                minimumSize,
-                appState.getLayoutStrategy()
+            window,
+            defaultSize,
+            minimumSize,
+            appState.getLayoutStrategy()
         );
         exportDialog.setVisible(true);
         final var options = exportDialog.getResult();
@@ -246,8 +244,8 @@ public final class ProjectWindowActions implements Actions {
         final var outPath = MemoryUtil.memAllocPointer(1);
         try {
             final var defaultPath = project.getPath() != null
-                    ? project.getPath().toAbsolutePath().toString()
-                    : null;
+                ? project.getPath().toAbsolutePath().toString()
+                : null;
             if (NativeFileDialog.NFD_SaveDialog(filter, defaultPath, outPath) == NativeFileDialog.NFD_OKAY) {
                 final var pathStr = outPath.getStringUTF8();
                 NativeFileDialog.nNFD_Free(outPath.get(0));

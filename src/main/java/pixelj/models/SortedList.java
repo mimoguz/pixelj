@@ -14,10 +14,9 @@ import org.eclipse.collections.impl.map.mutable.primitive.IntObjectHashMap;
 
 /**
  * A list model that keeps its elements always sorted.
- * 
- * <p>It's Intended to be used for CharacterModels and KerningPairModels, and uses
+ * It's Intended to be used for CharacterModels and KerningPairModels, and uses
  * a IntObjectHashMap for backing collection (so assumes no hash collisions).
- * 
+ *
  * @param <E> Element type. Should have a unique hash.
  */
 public class SortedList<E extends Comparable<E>> implements ListModel<E> {
@@ -124,7 +123,7 @@ public class SortedList<E extends Comparable<E>> implements ListModel<E> {
 
     /**
      * Get by hash code.
-     * 
+     *
      * @param hashCode
      * @return E or null
      */
@@ -225,7 +224,7 @@ public class SortedList<E extends Comparable<E>> implements ListModel<E> {
 
     /**
      * Request a notification without actually modifying the list.
-     * 
+     *
      * @param index Index to visible list
      */
     public void requestEvent(final int index) {
@@ -243,7 +242,7 @@ public class SortedList<E extends Comparable<E>> implements ListModel<E> {
         listeners.add(ListDataListener.class, listener);
     }
 
-    /** 
+    /**
      * @see javax.swing.ListModel#removeListDataListener(javax.swing.event.ListDataListener)
      */
     @Override
@@ -267,7 +266,7 @@ public class SortedList<E extends Comparable<E>> implements ListModel<E> {
         final var lst = listeners.getListeners(ListDataListener.class).clone();
         for (var index = lst.length - 1; index >= 0; index--) {
             lst[index].contentsChanged(
-                    new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, index0, index1)
+                new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, index0, index1)
             );
         }
     }
@@ -289,9 +288,8 @@ public class SortedList<E extends Comparable<E>> implements ListModel<E> {
      */
     protected void fireIntervalRemovedEvent(final int index0, final int index1) {
         final var lst = listeners.getListeners(ListDataListener.class).clone();
-        for (var index = lst.length - 1; index >= 0; index--) {
-            lst[index]
-                    .intervalRemoved(new ListDataEvent(this, ListDataEvent.INTERVAL_REMOVED, index0, index1));
+        for (var idx = lst.length - 1; idx >= 0; idx--) {
+            lst[idx].intervalRemoved(new ListDataEvent(this, ListDataEvent.INTERVAL_REMOVED, index0, index1));
         }
     }
 
