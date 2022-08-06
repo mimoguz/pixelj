@@ -9,7 +9,6 @@ import javax.swing.ListCellRenderer;
 
 import pixelj.models.KerningPair;
 import pixelj.views.shared.GlyphCell;
-import pixelj.views.shared.Dimensions;
 
 final class KerningPairCellRenderer implements ListCellRenderer<KerningPair> {
 
@@ -33,9 +32,8 @@ final class KerningPairCellRenderer implements ListCellRenderer<KerningPair> {
         final boolean isSelected,
         final boolean cellHasFocus
     ) {
-        final var partWidth = list.getWidth() / 2 - Dimensions.MEDIUM_PADDING;
-        left.set(value.getLeft(), partWidth);
-        right.set(value.getRight(), partWidth);
+        left.set(value.getLeft());
+        right.set(value.getRight());
 
         if (isSelected) {
             left.setBackgroundColor(list.getSelectionBackground());

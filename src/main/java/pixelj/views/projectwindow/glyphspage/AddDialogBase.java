@@ -76,9 +76,9 @@ abstract class AddDialogBase extends JDialog {
         content.add(scrollPanel, BorderLayout.CENTER);
         content.add(buttonPanel, BorderLayout.SOUTH);
         content.setBorder(Borders.MEDIUM_EMPTY);
+
         setContentPane(content);
         getRootPane().setDefaultButton(closeButton);
-
         pack();
         scalarList.requestFocusInWindow();
         setSize(400, 600);

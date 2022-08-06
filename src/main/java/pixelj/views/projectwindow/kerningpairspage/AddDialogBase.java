@@ -75,23 +75,22 @@ public abstract class AddDialogBase extends JDialog {
 
         final var selectionPanel = new JPanel(new MigLayout(
             INSETS,
-            "[]" + pad + "lp[grow]",
-            String.format("[center, %dlp!]%dlp[center, %dlp!]%dlp[]", mps, pad, mps, pad)
+            "[left, min!]" + pad + "lp[left, min!]",
+            String.format("[center, %dlp!]%dlp[center, %dlp!]", mps, pad, mps, pad)
         ));
         selectionPanel.setBorder(Borders.EMPTY);
         selectionPanel.add(setLeftButton);
         selectionPanel.add(leftCell, WRAP);
         selectionPanel.add(setRightButton);
-        selectionPanel.add(rightCell, WRAP);
-        selectionPanel.add(mirroredCheck, "span, align right");
-
+        selectionPanel.add(rightCell);
         centerPanel.add(selectionPanel, BorderLayout.SOUTH);
 
         final var buttonPanel = new JPanel(new MigLayout(
             INSETS,
             String.format("[grow, left]%dlp[]%dlp[]", pad, pad),
-            "[center]"
+            "[center]" + pad * 2 + "lp[center]"
         ));
+        buttonPanel.add(mirroredCheck, "spanx 3, right, wrap");
         buttonPanel.add(helpButton);
         buttonPanel.add(addButton);
         buttonPanel.add(cancelButton);

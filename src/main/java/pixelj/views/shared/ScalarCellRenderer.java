@@ -23,11 +23,7 @@ public final class ScalarCellRenderer implements ListCellRenderer<Scalar> {
         final boolean isSelected,
         final boolean cellHasFocus
     ) {
-        component.set(
-            value.codePoint(),
-            Resources.get().getScalar(value.codePoint()).name(),
-            list.getWidth() - Dimensions.MEDIUM_PADDING * 3
-        );
+        component.set(value.codePoint(), Resources.get().getScalar(value.codePoint()).name());
         if (isSelected) {
             component.setBackgroundColor(list.getSelectionBackground());
             component.setForegroundColor(list.getSelectionForeground());

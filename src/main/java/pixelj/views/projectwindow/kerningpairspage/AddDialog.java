@@ -52,7 +52,7 @@ public final class AddDialog extends AddDialogBase {
         setLeftButton.addActionListener(event -> {
             if (selectionModel.getMinSelectionIndex() >= 0) {
                 left = listModel.getElementAt(selectionModel.getMinSelectionIndex());
-                leftCell.set(left, Integer.MAX_VALUE);
+                leftCell.set(left);
                 addButton.setEnabled(right != null && left != null);
             }
         });
@@ -61,7 +61,7 @@ public final class AddDialog extends AddDialogBase {
         setRightButton.addActionListener(event -> {
             if (selectionModel.getMinSelectionIndex() >= 0) {
                 right = listModel.getElementAt(selectionModel.getMinSelectionIndex());
-                rightCell.set(right, Integer.MAX_VALUE);
+                rightCell.set(right);
                 addButton.setEnabled(right != null && left != null);
             }
         });
@@ -80,9 +80,9 @@ public final class AddDialog extends AddDialogBase {
             setRightButton.setEnabled(selectionModel.getMinSelectionIndex() >= 0);
         });
 
-        addButton.setEnabled(false);
         // TODO: Separate events
         addButton.addActionListener(event -> addKerningPair());
+        addButton.setEnabled(false);
 
         cancelButton.addActionListener(event -> setVisible(false));
 

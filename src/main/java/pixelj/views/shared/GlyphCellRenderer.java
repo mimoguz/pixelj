@@ -22,7 +22,7 @@ public final class GlyphCellRenderer implements ListCellRenderer<Glyph> {
         final boolean isSelected,
         final boolean cellHasFocus
     ) {
-        component.set(value, list.getWidth());
+        component.set(value);
         if (isSelected) {
             component.setBackgroundColor(list.getSelectionBackground());
             component.setForegroundColor(list.getSelectionForeground());
