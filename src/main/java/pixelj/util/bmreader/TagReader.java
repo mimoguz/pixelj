@@ -5,8 +5,7 @@ import java.util.HashMap;
 
 // TODO: Maybe less type casting?
 /**
- * Parse a single line of a BmFont config file.
- * (You can easily see that I've never written a parser before :D)
+ * Read a single line of a BmFont config file.
  */
 public final class TagReader {
 
