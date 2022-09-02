@@ -9,7 +9,7 @@ import java.awt.Dialog;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -17,10 +17,11 @@ import javax.swing.JPanel;
 import com.formdev.flatlaf.FlatClientProperties;
 
 import pixelj.resources.Resources;
+import pixelj.services.AppState;
 
 public abstract class OptionsDialogBase extends JDialog {
 
-    protected final JCheckBox themeIn = new JCheckBox();
+    protected final JComboBox<AppState.Theme> themeIn = new JComboBox<>();
     protected final JButton saveButton = new JButton(Resources.get().getString("save"));
     protected final JButton cancelButton = new JButton(Resources.get().getString("cancel"));
 
@@ -39,7 +40,7 @@ public abstract class OptionsDialogBase extends JDialog {
         cons.gridx = 0;
         cons.gridy = 0;
         cons.anchor = GridBagConstraints.WEST;
-        content.add(new JLabel(res.getString("useDarkTheme")), cons);
+        content.add(new JLabel(res.getString("appTheme")), cons);
 
         cons.gridy = 1;
         final var footnote = new JLabel(res.getString("requiresRestart"));
@@ -58,10 +59,9 @@ public abstract class OptionsDialogBase extends JDialog {
         cons.gridwidth = 2;
         cons.gridheight = 1;
         cons.insets = new Insets(Dimensions.LARGE_PADDING * 2, 0, 0, 0);
-        cons.anchor = GridBagConstraints.WEST;
+        cons.anchor = GridBagConstraints.EAST;
         final var buttonBox = new JPanel();
         buttonBox.setLayout(new BoxLayout(buttonBox, BoxLayout.X_AXIS));
-        buttonBox.add(Box.createHorizontalGlue());
         buttonBox.add(saveButton);
         buttonBox.add(Box.createRigidArea(Dimensions.MEDIUM_SQUARE));
         buttonBox.add(cancelButton);

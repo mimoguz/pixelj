@@ -25,7 +25,7 @@ import pixelj.views.projectwindow.LayoutStrategy;
 public final class JavaPropertiesService implements StatePersistanceService {
 
     private static final String PREVIEW_TEXT = "previewText";
-    private static final String DARK_THEME = "darkTheme";
+    private static final String THEME = "theme";
     private static final String EXPORT_IMAGE_WIDTH = "exportImageWidth";
     private static final String EXPORT_IMAGE_HEIGHT = "exportImageHeight";
     private static final String LAYOUT_STRATEGY = "layoutStrategy";
@@ -36,7 +36,7 @@ public final class JavaPropertiesService implements StatePersistanceService {
         final var properties = new Properties();
         final var previewText = state.getPreviewText() == null ? "" : state.getPreviewText();
         properties.setProperty(PREVIEW_TEXT, previewText);
-        properties.setProperty(DARK_THEME, Boolean.toString(state.isDarkTheme()));
+        properties.setProperty(THEME, Integer.toString(state.getTheme().ordinal()));
         properties.setProperty(EXPORT_IMAGE_WIDTH, Integer.toString(state.getExportImageWidth()));
         properties.setProperty(EXPORT_IMAGE_HEIGHT, Integer.toString(state.getExportImageHeight()));
         properties.setProperty(LAYOUT_STRATEGY, Integer.toString(state.getLayoutStrategy().ordinal()));
@@ -52,7 +52,6 @@ public final class JavaPropertiesService implements StatePersistanceService {
             properties.loadFromXML(inStream);
         }
         state.setPreviewText(properties.getProperty(PREVIEW_TEXT, null));
-        state.setDarkTheme(getBoolean(properties, DARK_THEME, false));
         state.setExportImageWidth(
             getInt(properties, EXPORT_IMAGE_WIDTH, AppState.DEFAULT_EXPORT_IMAGE_SIZE)
         );
@@ -65,6 +64,12 @@ public final class JavaPropertiesService implements StatePersistanceService {
             state.setLayoutStrategy(LayoutStrategy.values()[getInt(properties, LAYOUT_STRATEGY, 0)]);
         } catch (IndexOutOfBoundsException e) {
             state.setLayoutStrategy(LayoutStrategy.values()[0]);
+        }
+
+        try {
+            state.setTheme(AppState.Theme.values()[getInt(properties, THEME, 0)]);
+        } catch (IndexOutOfBoundsException e) {
+            state.setTheme(AppState.Theme.SYSTEM);
         }
     }
 
@@ -95,14 +100,6 @@ public final class JavaPropertiesService implements StatePersistanceService {
         } catch (NumberFormatException e) {
             return defaultValue;
         }
-    }
-
-    private static boolean getBoolean(
-        final Properties properties,
-        final String key,
-        final Boolean defaultValue
-    ) {
-        return Boolean.parseBoolean(properties.getProperty(key)) || defaultValue;
     }
 
     private static OSPair<Path> getPath() throws IOException {

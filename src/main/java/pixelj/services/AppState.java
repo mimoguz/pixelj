@@ -8,7 +8,9 @@ import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.ListModel;
 
-import pixelj.util.ChangeableBoolean;
+import com.jthemedetecor.OsThemeDetector;
+
+import pixelj.resources.Resources;
 import pixelj.util.ChangeableInt;
 import pixelj.util.ChangeableValue;
 import pixelj.views.projectwindow.LayoutStrategy;
@@ -21,8 +23,8 @@ public final class AppState {
 
     /** Text for the preview tab. */
     public final ChangeableValue<String> previewTextProperty = new ChangeableValue<>(null);
-    /** Use dark theme.  */
-    public final ChangeableBoolean darkThemeProperty = new ChangeableBoolean();
+    /** Current theme.  */
+    public final ChangeableValue<Theme> themeProperty = new ChangeableValue<>(Theme.SYSTEM);
     /** Width of the exported images. */
     public final ChangeableInt exportImageWidthProperty = new ChangeableInt(DEFAULT_EXPORT_IMAGE_SIZE);
     /** Height of the exported images. */
@@ -32,8 +34,13 @@ public final class AppState {
         LayoutStrategy.GRID_LAYOUT
     );
 
+    private boolean darkTheme;
     /** Recent projects. */
     private final DefaultListModel<RecentItem> recentItems = new DefaultListModel<>();
+
+    public AppState() {
+        setTheme(AppState.Theme.SYSTEM);
+    }
 
     public ListModel<RecentItem> getRecentItemsListModel() {
         return recentItems;
@@ -48,11 +55,21 @@ public final class AppState {
     }
 
     public boolean isDarkTheme() {
-        return darkThemeProperty.getValue();
+        return darkTheme;
     }
 
-    public void setDarkTheme(final boolean value) {
-        darkThemeProperty.setValue(value);
+    public Theme getTheme() {
+        return themeProperty.getValue();
+    }
+
+    public void setTheme(final Theme value) {
+        themeProperty.setValue(value);
+        if (value == Theme.SYSTEM) {
+            final var detector = OsThemeDetector.getDetector();
+            darkTheme = detector.isDark();
+        } else {
+            darkTheme = value == Theme.DARK;
+        }
     }
 
     public int getExportImageWidth() {
@@ -145,5 +162,14 @@ public final class AppState {
             }
         }
         return index;
+    }
+
+    public enum Theme {
+        SYSTEM, DARK, LIGHT;
+
+        @Override
+        public String toString() {
+            return Resources.get().getString("theme_" + this.ordinal());
+        }
     }
 }

@@ -24,11 +24,18 @@
     <lwjgl.version>3.3.1</lwjgl.version> <!-- LWJGL3 provides a wrapper for NativeFileDialog library -->
     <jackson.version>2.13.3</jackson.version>
     <javapackager.version>1.6.7</javapackager.version>
+    <jSystemThemeDetector.version>3.8</jSystemThemeDetector.version>
     <junit.version>5.9.0</junit.version>
     <miglayout.version>11.0</miglayout.version>
     <maven.assembly.plugin.version>3.4.2</maven.assembly.plugin.version>
     <maven.compiler.plugin.version>3.10.1</maven.compiler.plugin.version>
   </properties>
+  <repositories>
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
+	</repositories>
   <profiles>
     <profile>
       <id>lwjgl-natives-linux-amd64</id>
@@ -150,33 +157,6 @@
           <target>18</target>
         </configuration>
       </plugin>
-      <!-- Disable maven-assembly plugin till I find a way to create  multiplatform package.
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>${maven.assembly.plugin.version}</version>
-        <configuration>
-          <descriptorRefs>
-            <descriptorRef>jar-with-dependencies</descriptorRef>
-            <descriptorRef>project</descriptorRef>
-          </descriptorRefs>
-          <archive>
-            <manifest>
-              <mainClass>pixelj.Main</mainClass>
-            </manifest>
-          </archive>
-        </configuration>
-        <executions>
-          <execution>
-            <id>make-assembly</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      -->
       <plugin>
         <groupId>io.github.fvarrui</groupId>
         <artifactId>javapackager</artifactId>
@@ -297,5 +277,10 @@
       <version>${lwjgl.version}</version>
       <classifier>${lwjgl.natives}</classifier>
     </dependency>
+    <dependency>
+	    <groupId>com.github.Dansoftowner</groupId>
+	    <artifactId>jSystemThemeDetector</artifactId>
+	    <version>${jSystemThemeDetector.version}</version>
+	</dependency>
   </dependencies>
 </project>
