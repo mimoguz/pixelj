@@ -71,7 +71,7 @@ public final class JavaPropertiesService implements StatePersistanceService {
         try {
             state.setTheme(AppState.Theme.values()[getInt(properties, THEME, 0)]);
         } catch (IndexOutOfBoundsException e) {
-            state.setTheme(AppState.Theme.SYSTEM);
+            // Leave default
         }
     }
 

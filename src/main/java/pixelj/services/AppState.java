@@ -11,8 +11,6 @@ import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.ListModel;
 
-import com.jthemedetecor.OsThemeDetector;
-
 import pixelj.resources.Resources;
 import pixelj.util.ChangeableInt;
 import pixelj.util.ChangeableValue;
@@ -26,8 +24,12 @@ public final class AppState {
 
     /** Text for the preview tab. */
     public final ChangeableValue<String> previewTextProperty = new ChangeableValue<>(null);
+
+    // FIXME: There is a problem with the jSystemThemeDetector's dependencies.
+    // public final ChangeableValue<Theme> themeProperty = new ChangeableValue<>(Theme.SYSTEM);
+
     /** Current theme.  */
-    public final ChangeableValue<Theme> themeProperty = new ChangeableValue<>(Theme.SYSTEM);
+    public final ChangeableValue<Theme> themeProperty = new ChangeableValue<>(Theme.LIGHT);
     /** Width of the exported images. */
     public final ChangeableInt exportImageWidthProperty = new ChangeableInt(DEFAULT_EXPORT_IMAGE_SIZE);
     /** Height of the exported images. */
@@ -42,7 +44,7 @@ public final class AppState {
     private final DefaultListModel<RecentItem> recentItems = new DefaultListModel<>();
 
     public AppState() {
-        setTheme(AppState.Theme.SYSTEM);
+        setTheme(themeProperty.getValue());
     }
 
     public ListModel<RecentItem> getRecentItemsListModel() {
@@ -67,12 +69,14 @@ public final class AppState {
 
     public void setTheme(final Theme value) {
         themeProperty.setValue(value);
-        if (value == Theme.SYSTEM) {
-            final var detector = OsThemeDetector.getDetector();
-            darkTheme = detector.isDark();
-        } else {
-            darkTheme = value == Theme.DARK;
-        }
+        // FIXME: There is a problem with the jSystemThemeDetector's dependencies.
+        // if (value == Theme.SYSTEM) {
+        //     final var detector = OsThemeDetector.getDetector();
+        //     darkTheme = detector.isDark();
+        // } else {
+        //     darkTheme = value == Theme.DARK;
+        // }
+        darkTheme = value == Theme.DARK;
     }
 
     public int getExportImageWidth() {
@@ -189,11 +193,16 @@ public final class AppState {
     }
 
     public enum Theme {
-        SYSTEM, DARK, LIGHT;
+        /*
+           FIXME: There is a problem with the jSystemThemeDetector's dependencies.
+           Removing theme detection for now.
+        */
+        // SYSTEM,
+        LIGHT, DARK;
 
         @Override
         public String toString() {
-            return Resources.get().getString("theme_" + this.ordinal());
+            return Resources.get().getString("theme_" + this.name());
         }
     }
 }

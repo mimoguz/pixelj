@@ -282,10 +282,14 @@
       <version>${lwjgl.version}</version>
       <classifier>${lwjgl.natives}</classifier>
     </dependency>
-    <dependency>
-	    <groupId>com.github.Dansoftowner</groupId>
-	    <artifactId>jSystemThemeDetector</artifactId>
-	    <version>${jSystemThemeDetector.version}</version>
-	</dependency>
+    <!--
+      Error:
+      Exception in thread "main" java.lang.module.FindException: Module com.sun.jna not found, required by jfa
+      <dependency>
+        <groupId>com.github.Dansoftowner</groupId>
+        <artifactId>jSystemThemeDetector</artifactId>
+        <version>${jSystemThemeDetector.version}</version>
+      </dependency>
+    -->
   </dependencies>
 </project>
