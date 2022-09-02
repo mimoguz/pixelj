@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.nio.file.Paths;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,8 @@ import org.opentest4j.AssertionFailedError;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 public class JavaPropertiesServiceTests {
 
@@ -18,11 +21,13 @@ public class JavaPropertiesServiceTests {
     @Test
     public void recentItems() {
         final var userHome = System.getProperty("user.home");
+        final var date = OffsetDateTime.now();
         final var items = List.of(
-            new RecentItem("Item 1", Paths.get(userHome, "foo.txt")),
-            new RecentItem("Item 2", Paths.get(userHome, "bar.txt"))
+            new RecentItem("Item 1", Paths.get(userHome, "foo.txt"), date),
+            new RecentItem("Item 2", Paths.get(userHome, "bar.txt"), date)
         );
-        final var objectMapper = new ObjectMapper();
+        final var objectMapper = JavaPropertiesService.getObjectMapper();
+
         try {
             final var json = objectMapper.writeValueAsString(items);
             final var itemsBack = JavaPropertiesService.parseRecentItems(json).stream().toArray();

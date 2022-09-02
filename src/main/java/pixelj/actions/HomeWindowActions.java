@@ -4,6 +4,7 @@ import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -138,7 +139,9 @@ public final class HomeWindowActions implements Actions {
         try {
             // TODO: DI
             final var project = new DBFileService().readFile(path);
-            appState.addRecentItem(new RecentItem(project.getTitle(), project.getPath()));
+            appState.addRecentItem(
+                new RecentItem(project.getTitle(), project.getPath(), OffsetDateTime.now())
+            );
             showProject(new DBFileService().readFile(path));
         } catch (IOException e) {
             JOptionPane.showMessageDialog(window, e.getMessage());
@@ -152,6 +155,7 @@ public final class HomeWindowActions implements Actions {
         }
         final var item = appState.getRecentItem(index);
         try {
+            appState.replaceRecentItemDate(item.path(), OffsetDateTime.now());
             showProject(new DBFileService().readFile(item.path()));
         } catch (IOException e) {
             askRemoveItem(item);

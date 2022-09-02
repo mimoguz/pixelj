@@ -15,6 +15,8 @@ import java.util.Properties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import pixelj.util.FileSystemUtilities;
 import pixelj.util.FileSystemUtilities.OS;
@@ -85,7 +87,7 @@ public final class JavaPropertiesService implements StatePersistanceService {
 
     /** Deserialize to JSON and write. */
     private static void saveRecentItems(final Properties properties, final List<RecentItem> recentItems) {
-        final var objectMapper = new ObjectMapper();
+        final var objectMapper = getObjectMapper();
         try {
             final var json = objectMapper.writeValueAsString(recentItems);
             properties.setProperty(RECENT_ITEMS, json);
@@ -119,7 +121,7 @@ public final class JavaPropertiesService implements StatePersistanceService {
      */
     public static Collection<RecentItem> parseRecentItems(final String source)
         throws JsonProcessingException {
-        final var objectMapper = new ObjectMapper();
+        final var objectMapper = getObjectMapper();
         return Collections.unmodifiableCollection(
             objectMapper.readValue(source, new TypeReference<Collection<RecentItem>>() { })
         );
@@ -141,5 +143,14 @@ public final class JavaPropertiesService implements StatePersistanceService {
         try (var outStream = Files.newOutputStream(osPair.value())) {
             properties.storeToXML(outStream, "Pixelj application state");
         }
+    }
+
+    public static ObjectMapper getObjectMapper() {
+        final var objectMapper = new ObjectMapper();
+        objectMapper
+            .registerModule(new JavaTimeModule())
+            .enable(SerializationFeature.WRITE_DATES_WITH_ZONE_ID)
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        return objectMapper;
     }
 }

@@ -1,8 +1,11 @@
 package pixelj.services;
 
 import java.nio.file.Path;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
@@ -102,9 +105,13 @@ public final class AppState {
 
     public void setRecentItems(final Collection<RecentItem> items) {
         recentItems.clear();
-        for (var item : items) {
-            recentItems.addElement(item);
-        }
+        items.stream()
+            .sorted(Comparator.<RecentItem, OffsetDateTime>comparing(it ->
+                it.lastOpened() != null
+                    ? it.lastOpened()
+                    : OffsetDateTime.of(1, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC)
+            ).reversed())
+            .forEach(recentItems::addElement);
     }
 
     public RecentItem getRecentItem(final int index) {
@@ -123,8 +130,25 @@ public final class AppState {
             return;
         }
         final var item = recentItems.get(index);
-        final var newItem = new RecentItem(title, item.path());
+        final var newItem = new RecentItem(title, item.path(), item.lastOpened());
         recentItems.set(index, newItem);
+    }
+
+    /**
+     * Replace the last opened info of a recent project.
+     *
+     * @param path
+     * @param dateTime
+     */
+    public void replaceRecentItemDate(final Path path, final OffsetDateTime dateTime) {
+        final var index = findItemIdex(path);
+        if (index < 0) {
+            return;
+        }
+        final var item = recentItems.get(index);
+        final var newItem = new RecentItem(item.title(), item.path(), dateTime);
+        recentItems.set(index, newItem);
+        setRecentItems(getRecentItems()); // Reorder
     }
 
     /**

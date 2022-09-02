@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.BufferUnderflowException;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
+import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -230,7 +231,7 @@ public final class ProjectWindowActions implements Actions {
             if (path.getFileName() != null) {
                 // TODO: DI
                 new DBFileService().writeFile(project, path);
-                appState.addRecentItem(new RecentItem(project.getTitle(), path));
+                appState.addRecentItem(new RecentItem(project.getTitle(), path, OffsetDateTime.now()));
                 project.setPath(path);
                 project.setDirty(false);
             }
