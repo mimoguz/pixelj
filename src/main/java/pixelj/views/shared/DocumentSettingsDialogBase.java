@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneLayout;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
@@ -104,7 +105,7 @@ abstract class DocumentSettingsDialogBase extends JDialog {
         cons.gridx = 0;
         cons.gridy = 0;
         cons.weightx = 1.0;
-        cons.ipady = 0;
+        cons.weighty = 0.0;
         cons.insets = new Insets(0, 0, Dimensions.SMALL_PADDING, Dimensions.MEDIUM_PADDING);
         cons.anchor = GridBagConstraints.LINE_START;
         panel.add(new JLabel(res.getString("documentCanvasWidth")), cons);
@@ -129,10 +130,17 @@ abstract class DocumentSettingsDialogBase extends JDialog {
         isItalicLabel.setBorder(labelBorder);
         panel.add(isItalicLabel, cons);
 
+        cons.insets = new Insets(0, 0, 0, 0);
+        cons.gridwidth = 2;
+        cons.weighty = 1.0;
+        panel.add(new JPanel(), cons);
+
         /* --------------------------------- Inputs --------------------------------- */
         cons.gridx = 1;
         cons.gridy = 0;
+        cons.gridwidth = 1;
         cons.weightx = 0.0;
+        cons.weighty = 0.0;
         cons.insets = new Insets(0, 0, Dimensions.SMALL_PADDING, 0);
         cons.fill = GridBagConstraints.NONE;
         cons.anchor = GridBagConstraints.LINE_END;
@@ -164,14 +172,12 @@ abstract class DocumentSettingsDialogBase extends JDialog {
     }
 
     private void addMetricsPanel(final JPanel content, final JPanel metricsPanel) {
-        final var centerPanel = new JPanel(new BorderLayout(0, Dimensions.MEDIUM_PADDING - 3));
         final var metricsLabel = new JLabel(Resources.get().getString("metricsSectionTitle"));
         styleTitle(metricsLabel);
-        centerPanel.add(metricsLabel, BorderLayout.NORTH);
 
-        final var scroll = new JScrollPane(metricsPanel);
-        scroll.setBorder(Borders.EMPTY);
-        centerPanel.add(scroll, BorderLayout.CENTER);
+        final var centerPanel = new JPanel(new BorderLayout(0, Dimensions.MEDIUM_PADDING));
+        centerPanel.add(metricsLabel, BorderLayout.NORTH);
+        centerPanel.add(metricsPanel, BorderLayout.CENTER);
         content.add(centerPanel, BorderLayout.CENTER);
     }
 
