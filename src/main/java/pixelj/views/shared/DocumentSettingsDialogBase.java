@@ -1,7 +1,6 @@
 package pixelj.views.shared;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
