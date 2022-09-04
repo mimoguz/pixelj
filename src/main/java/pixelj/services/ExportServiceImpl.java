@@ -15,6 +15,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
+import javax.print.Doc;
 
 import pixelj.models.DocumentSettings;
 import pixelj.models.Glyph;
@@ -44,23 +45,33 @@ public final class ExportServiceImpl implements ExportService {
         final int textureHeight,
         final LayoutStrategy strategy
     ) throws IOException {
-        final var settings = project.getDocumentSettings();
-        final var glyphs = project.getGlyphs();
-        final var packedRectangles = pack(project, textureWidth, textureHeight, strategy);
 
-        // Get images
         final var imageSize = new Dimension(textureWidth, textureHeight);
-        final var images = IntStream.range(0, packedRectangles.size())
-            .parallel()
-            .mapToObj(index -> {
-                final var page = packedRectangles.get(index);
-                return new PageImage(index, imageWriter.getImage(imageSize, page, glyphs, settings));
-            });
+        final var baseName = extensionRemoved(path.getFileName().toString());
+
+        final List<List<Rectangle<GlyphImageData>>> packedRectangles;
+        final Stream<String> config;
+        final Stream<PageImage> images;
+
+        synchronized (project) {
+            packedRectangles = pack(project, textureWidth, textureHeight, strategy);
+            config = fnt(project, baseName, packedRectangles, imageSize);
+            images = IntStream.range(0, packedRectangles.size())
+                .parallel()
+                .mapToObj(index -> {
+                    final var page = packedRectangles.get(index);
+                    return new PageImage(index, imageWriter.getImage(
+                        imageSize,
+                        page,
+                        project.getGlyphs(),
+                        project.getDocumentSettings()
+                    ));
+                });
+        }
 
         // Get out path
         final var dir = path.getParent();
         final var dirStr = dir.toAbsolutePath().toString();
-        final var baseName = extensionRemoved(path.getFileName().toString());
 
         // Save images
         try {
@@ -81,7 +92,7 @@ public final class ExportServiceImpl implements ExportService {
             new FileOutputStream(Paths.get(dirStr, baseName + "." + EXTENSION).toFile()),
             StandardCharsets.UTF_8
         )) {
-            fnt(project, baseName, packedRectangles, imageSize).forEach(block -> {
+            config.forEach(block -> {
                 try {
                     writer.write(block);
                     writer.write('\n');
@@ -147,8 +158,8 @@ public final class ExportServiceImpl implements ExportService {
         final var chars = charsLine(project);
         final var pages = pageStream(rectangles, baseName);
         final var characters = characterStream(rectangles, project.getDocumentSettings());
-        final var kerningPairs = project.getKerningPairs().getElements().stream()
-            .map(ExportServiceImpl::kerningPairLine);
+        final var kerningPairs = kerningPairStream(project);
+
         return Stream.of(
             Stream.of(info),
             Stream.of(common),
@@ -264,6 +275,14 @@ public final class ExportServiceImpl implements ExportService {
                                 .map(rect -> characterLine(settings, rect, page))
                 )
                 .flatMap(a -> a);
+    }
+
+    private static Stream<String> kerningPairStream(final Project project) {
+        if (project.getDocumentSettings().isMonospaced()) {
+            // Ignore kerning pairs for monospaced fonts.
+            return Stream.<String>empty();
+        }
+        return project.getKerningPairs().getElements().stream().map(ExportServiceImpl::kerningPairLine);
     }
 
     private static String imageName(final int page, final String base) {

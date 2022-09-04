@@ -130,13 +130,10 @@ public final class PreviewPageActions implements Actions {
                 continue;
             }
             final var right = characters.get(index + 1);
-            final var pair = kerningPairs.findId(
-                KerningPair.calculateId(left.getCodePoint(), right.getCodePoint())
-            );
-            spaces.add(pair == null || settings.isMonospaced()
-                ? letterSpacing
-                : letterSpacing + pair.getKerningValue()
-            );
+            final var pair = settings.isMonospaced()
+                ? null
+                : kerningPairs.findId(KerningPair.calculateId(left.getCodePoint(), right.getCodePoint()));
+            spaces.add(pair == null ? letterSpacing : letterSpacing + pair.getKerningValue());
         }
         return spaces;
     }
