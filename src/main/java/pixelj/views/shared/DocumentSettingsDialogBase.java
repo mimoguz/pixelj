@@ -1,6 +1,7 @@
 package pixelj.views.shared;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
@@ -104,6 +105,7 @@ abstract class DocumentSettingsDialogBase extends JDialog {
         cons.gridx = 0;
         cons.gridy = 0;
         cons.weightx = 1.0;
+        cons.ipady = 0;
         cons.insets = new Insets(0, 0, Dimensions.SMALL_PADDING, Dimensions.MEDIUM_PADDING);
         cons.anchor = GridBagConstraints.LINE_START;
         panel.add(new JLabel(res.getString("documentCanvasWidth")), cons);
@@ -163,7 +165,7 @@ abstract class DocumentSettingsDialogBase extends JDialog {
     }
 
     private void addMetricsPanel(final JPanel content, final JPanel metricsPanel) {
-        final var centerPanel = new JPanel(new BorderLayout(0, Dimensions.MEDIUM_PADDING));
+        final var centerPanel = new JPanel(new BorderLayout(0, Dimensions.MEDIUM_PADDING - 3));
         final var metricsLabel = new JLabel(Resources.get().getString("metricsSectionTitle"));
         styleTitle(metricsLabel);
         centerPanel.add(metricsLabel, BorderLayout.NORTH);
