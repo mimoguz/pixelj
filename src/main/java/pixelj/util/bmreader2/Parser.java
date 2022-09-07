@@ -30,6 +30,7 @@ public final class Parser {
      * @throws ReadError
      */
     public Tag parse() throws ReadError {
+        assignments.clear();
         return line();
     }
 
@@ -43,7 +44,7 @@ public final class Parser {
             assignment();
         }
 
-        return new Tag(tag, assignments);
+        return new Tag(tag.value(), assignments);
     }
 
     private boolean assignment() throws ReadError {
@@ -58,7 +59,7 @@ public final class Parser {
         if (value == null) {
             throw new ReadError(identifier + " is missing its value");
         }
-        assignments.put(identifier, value);
+        assignments.put(identifier.value(), value);
         return true;
     }
 
@@ -87,14 +88,6 @@ public final class Parser {
         return new Value.Numbers(result);
     }
 
-    private Token.Number number() {
-        if (input.get(cursor) instanceof Token.Number n) {
-            cursor++;
-            return n;
-        }
-        return null;
-    }
-
     private Value.Text text() {
         if (input.get(cursor) instanceof Token.Text t) {
             cursor++;
@@ -103,10 +96,18 @@ public final class Parser {
         return null;
     }
 
-    private String identifier() {
+    private Token.Number number() {
+        if (input.get(cursor) instanceof Token.Number n) {
+            cursor++;
+            return n;
+        }
+        return null;
+    }
+
+    private Token.Identifier identifier() {
         if (input.get(cursor) instanceof Token.Identifier identifier) {
             cursor++;
-            return identifier.value();
+            return identifier;
         }
         return null;
     }
@@ -124,10 +125,11 @@ public final class Parser {
         @Override
         public String toString() {
             final var builder = new StringBuilder();
-            builder.append("Tag: ").append(tag).append('\n');
+            builder.append(tag).append("[\n");
             values.forEach((k, v) ->
-                builder.append("    ") .append(k) .append(" = ") .append(v) .append('\n')
+                builder.append("    ").append(k).append("=").append(v).append(",\n")
             );
+            builder.append(']');
             return builder.toString();
         }
     }
