@@ -8,14 +8,8 @@ import org.eclipse.collections.impl.list.mutable.primitive.IntArrayList;
 
 public final class Parser {
 
-    /*
-     * line: Identifier assignment+
-     * assignment: Identifier Equals value
-     * value: Text | numbers
-     * numbers: Number (Comma Number)*
-     */
     private final List<Token> input;
-    private final Map<String, Value> assignments = new HashMap<>();
+    private final Map<Word, Value> assignments = new HashMap<>();
 
     private int cursor;
 
@@ -29,14 +23,14 @@ public final class Parser {
      * @return Parsed tag
      * @throws ReadError
      */
-    public Tag parse() throws ReadError {
+    public Result parse() throws ReadError {
         assignments.clear();
         return line();
     }
 
-    private Tag line() throws ReadError {
-        final var tag = identifier();
-        if (tag == null) {
+    private Result line() throws ReadError {
+        final var title = identifier();
+        if (title == null) {
             throw new ReadError("Missing tag name");
         }
 
@@ -44,7 +38,7 @@ public final class Parser {
             assignment();
         }
 
-        return new Tag(tag.value(), assignments);
+        return new Result(title, assignments);
     }
 
     private boolean assignment() throws ReadError {
@@ -59,7 +53,7 @@ public final class Parser {
         if (value == null) {
             throw new ReadError(identifier + " is missing its value");
         }
-        assignments.put(identifier.value(), value);
+        assignments.put(identifier, value);
         return true;
     }
 
@@ -104,10 +98,14 @@ public final class Parser {
         return null;
     }
 
-    private Token.Identifier identifier() {
+    private Word identifier() throws ReadError {
         if (input.get(cursor) instanceof Token.Identifier identifier) {
             cursor++;
-            return identifier;
+            final var word = Word.fromString(identifier.value());
+            if (word == null) {
+                throw new ReadError("Unknown key " + identifier.value());
+            }
+            return word;
         }
         return null;
     }
@@ -120,17 +118,5 @@ public final class Parser {
         return false;
     }
 
-    public record Tag(String tag, Map<String, Value> values) {
-
-        @Override
-        public String toString() {
-            final var builder = new StringBuilder();
-            builder.append(tag).append("[\n");
-            values.forEach((k, v) ->
-                builder.append("    ").append(k).append("=").append(v).append(",\n")
-            );
-            builder.append(']');
-            return builder.toString();
-        }
-    }
+    public record Result(Word title, Map<Word, Value> values) { }
 }
