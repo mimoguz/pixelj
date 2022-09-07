@@ -3,7 +3,7 @@ package pixelj.util.bmreader2;
 import java.util.ArrayList;
 import java.util.List;
 
-final class Scanner {
+public final class Scanner {
 
     private static final char NIL = '\0';
 
@@ -13,10 +13,14 @@ final class Scanner {
     private int mark;
     private int cursor;
 
-    Scanner(final String source) {
+    public Scanner(final String source) {
         this.source = source;
     }
 
+    /**
+     * @return Token list
+     * @throws ReadError
+     */
     public List<Token> scan() throws ReadError {
         tokens.clear();
         while (!eol()) {

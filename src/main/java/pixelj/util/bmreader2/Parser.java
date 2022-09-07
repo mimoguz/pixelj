@@ -14,7 +14,6 @@ public final class Parser {
      * value: Text | numbers
      * numbers: Number (Comma Number)*
      */
-
     private final List<Token> input;
     private final Map<String, Value> assignments = new HashMap<>();
 
@@ -36,7 +35,7 @@ public final class Parser {
 
     private Tag line() throws ReadError {
         final var tag = identifier();
-        if (identifier() == null) {
+        if (tag == null) {
             throw new ReadError("Missing tag name");
         }
 
@@ -52,7 +51,7 @@ public final class Parser {
         if (identifier == null) {
             return false;
         }
-        if (!match(Token.Comma.INSTANCE)) {
+        if (!match(Token.Equals.INSTANCE)) {
             throw new ReadError("Expected equals after the identifier " + identifier);
         }
         final var value = value();
@@ -105,7 +104,7 @@ public final class Parser {
     }
 
     private String identifier() {
-        if (cursor <= input.size() && input.get(cursor) instanceof Token.Identifier identifier) {
+        if (input.get(cursor) instanceof Token.Identifier identifier) {
             cursor++;
             return identifier.value();
         }
@@ -120,5 +119,16 @@ public final class Parser {
         return false;
     }
 
-    public record Tag(String tag, Map<String, Value> values) { }
+    public record Tag(String tag, Map<String, Value> values) {
+
+        @Override
+        public String toString() {
+            final var builder = new StringBuilder();
+            builder.append("Tag: ").append(tag).append('\n');
+            values.forEach((k, v) ->
+                builder.append("    ") .append(k) .append(" = ") .append(v) .append('\n')
+            );
+            return builder.toString();
+        }
+    }
 }
