@@ -22,7 +22,7 @@ public sealed interface Tag permits Tag.Info, Tag.Common, Tag.Page, Tag.Chars, T
          * @param result Parser result
          * @return Tag from parser result
          */
-        public Info fromResult(final Parser.Result result) throws ReadError {
+        public static Info fromResult(final Parser.Result result) throws ReadError {
             return new Info(
                 Util.getString(result.values(), Word.FACE),
                 Util.getInt(result.values(), Word.SIZE),
@@ -56,8 +56,19 @@ public sealed interface Tag permits Tag.Info, Tag.Common, Tag.Page, Tag.Chars, T
          * @param result Parser result
          * @return Tag from parser result
          */
-        public Common fromResult(final Parser.Result result) throws ReadError {
-            return null;
+        public static Common fromResult(final Parser.Result result) throws ReadError {
+            return new Common(
+                Util.getInt(result.values(), Word.LINE_HEIGHT),
+                Util.getInt(result.values(), Word.BASE),
+                Util.getInt(result.values(), Word.SCALE_W),
+                Util.getInt(result.values(), Word.SCALE_H),
+                Util.getInt(result.values(), Word.PAGES),
+                Util.getInt(result.values(), Word.PACKED),
+                Util.getInt(result.values(), Word.ALPHA_CHANNEL),
+                Util.getInt(result.values(), Word.RED_CHANNEL),
+                Util.getInt(result.values(), Word.GREEN_CHANNEL),
+                Util.getInt(result.values(), Word.BLUE_CHANNEL)
+            );
         }
     }
 
@@ -67,8 +78,11 @@ public sealed interface Tag permits Tag.Info, Tag.Common, Tag.Page, Tag.Chars, T
          * @param result Parser result
          * @return Tag from parser result
          */
-        public Page fromResult(final Parser.Result result) throws ReadError {
-            return null;
+        public static Page fromResult(final Parser.Result result) throws ReadError {
+            return new Page(
+                Util.getInt(result.values(), Word.ID),
+                Util.getString(result.values(), Word.FILE)
+            );
         }
     }
 
@@ -78,8 +92,10 @@ public sealed interface Tag permits Tag.Info, Tag.Common, Tag.Page, Tag.Chars, T
          * @param result Parser result
          * @return Tag from parser result
          */
-        public Chars fromResult(final Parser.Result result) throws ReadError {
-            return null;
+        public static Chars fromResult(final Parser.Result result) throws ReadError {
+            return new Chars(
+                Util.getInt(result.values(), Word.COUNT)
+            );
         }
     }
 
@@ -100,8 +116,19 @@ public sealed interface Tag permits Tag.Info, Tag.Common, Tag.Page, Tag.Chars, T
          * @param result Parser result
          * @return Tag from parser result
          */
-        public Char fromResult(final Parser.Result result) throws ReadError {
-            return null;
+        public static Char fromResult(final Parser.Result result) throws ReadError {
+            return new Char(
+                Util.getInt(result.values(), Word.ID),
+                Util.getInt(result.values(), Word.X),
+                Util.getInt(result.values(), Word.Y),
+                Util.getInt(result.values(), Word.WIDTH),
+                Util.getInt(result.values(), Word.HEIGHT),
+                Util.getInt(result.values(), Word.X_OFFSET),
+                Util.getInt(result.values(), Word.Y_OFFSET),
+                Util.getInt(result.values(), Word.X_ADVANCE),
+                Util.getInt(result.values(), Word.PAGE),
+                Util.getInt(result.values(), Word.CHANNEL)
+            );
         }
     }
 
@@ -111,8 +138,12 @@ public sealed interface Tag permits Tag.Info, Tag.Common, Tag.Page, Tag.Chars, T
          * @param result Parser result
          * @return Tag from parser result
          */
-        public Kerning fromResult(final Parser.Result result) throws ReadError {
-            return null;
+        public static Kerning fromResult(final Parser.Result result) throws ReadError {
+            return new Kerning(
+                Util.getInt(result.values(), Word.FIRST),
+                Util.getInt(result.values(), Word.SECOND),
+                Util.getInt(result.values(), Word.AMOUNT)
+            );
         }
     }
 }

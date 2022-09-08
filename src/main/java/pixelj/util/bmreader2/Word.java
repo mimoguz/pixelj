@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/** Words of a BmFont config file. */
 public enum Word {
 
     AA("aa"),
