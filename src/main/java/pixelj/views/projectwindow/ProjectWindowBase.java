@@ -39,15 +39,16 @@ import pixelj.views.shared.Dimensions;
 
 /** Project window design. */
 abstract class ProjectWindowBase extends JFrame {
+    
+    private GlyphsPage glyphsPage;
+    private KerningPairsPage kerningPairsPage;
+    private PreviewPage previewPage;
+    
     protected final JTabbedPane content = new JTabbedPane();
     protected final JToggleButton menuButton = new JToggleButton();
     protected final JButton optionsButton = new JButton();
     protected final JButton helpButton = new JButton();
     protected final JPopupMenu mainMenu = new JPopupMenu();
-
-    private GlyphsPage glyphsPage;
-    private KerningPairsPage kerningPairsPage;
-    private PreviewPage previewPage;
 
     public void setup(
         final GlyphsPage glyphsPg,
@@ -91,7 +92,7 @@ abstract class ProjectWindowBase extends JFrame {
 
         content.putClientProperty(
             FlatClientProperties.TABBED_PANE_TAB_TYPE,
-            FlatClientProperties.TABBED_PANE_TAB_TYPE_CARD
+            FlatClientProperties.TABBED_PANE_TAB_TYPE_UNDERLINED
         );
 
         content.addTab(
@@ -138,13 +139,15 @@ abstract class ProjectWindowBase extends JFrame {
 
     private void addLeading() {
         final var leadingContainer = new JPanel();
+        leadingContainer.setBackground(content.getBackground());
+        
         final var res = Resources.get();
 
         // Show menu using a shortcut or the menu button
         final var menuKey = KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.ALT_DOWN_MASK);
         final var menuAction = new ApplicationAction("menuAction", this::handleMenu)
             .setTooltipWithAccelerator(res.getString("menuButtonActionTooltip"), menuKey)
-            .setIcon(Icons.BURGER, res.colors.accent(), res.colors.disabledIcon());
+            .setIcon(Icons.ELLIPSIS, res.colors.accent(), res.colors.disabledIcon());
         menuButton.setAction(menuAction);
         Components.registerShortcut(getRootPane(), menuAction);
 
@@ -181,15 +184,15 @@ abstract class ProjectWindowBase extends JFrame {
         trailingContainer.setBorder(Borders.EMPTY);
         final var constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.BOTH;
-        constraints.weighty = 1.0;
+        constraints.weightx = 1.0;
         constraints.gridx = 0;
         constraints.gridy = 0;
         final var emptyBox = new JPanel();
         emptyBox.setMaximumSize(Dimensions.MAXIMUM);
         emptyBox.setBackground(content.getBackground());
         trailingContainer.add(emptyBox, constraints);
-        constraints.weighty = 0.0;
-        constraints.gridy = GridBagConstraints.RELATIVE;
+        constraints.weightx = 0.0;
+        constraints.gridx = GridBagConstraints.RELATIVE;
         trailingContainer.add(optionsButton, constraints);
         trailingContainer.add(helpButton, constraints);
 
@@ -202,18 +205,20 @@ abstract class ProjectWindowBase extends JFrame {
 
         content.putClientProperty(
             FlatClientProperties.TABBED_PANE_MINIMUM_TAB_WIDTH,
-            Dimensions.TAB_BAR_BUTTON_SIZE.width
+            Dimensions.TAB_BAR_BUTTON_SIZE.width + Dimensions.LARGE_PADDING
         );
         content.putClientProperty(
             FlatClientProperties.TABBED_PANE_MAXIMUM_TAB_WIDTH,
-            Dimensions.TAB_BAR_BUTTON_SIZE.width
+            Dimensions.TAB_BAR_BUTTON_SIZE.width + Dimensions.LARGE_PADDING
         );
         content.putClientProperty(
             FlatClientProperties.TABBED_PANE_TAB_HEIGHT,
             Dimensions.TAB_BAR_BUTTON_SIZE.height
         );
         content.putClientProperty(FlatClientProperties.TABBED_PANE_TAB_ICON_PLACEMENT, SwingConstants.TOP);
-        content.setTabPlacement(SwingConstants.LEFT);
+        content.putClientProperty(FlatClientProperties.TABBED_PANE_TAB_AREA_ALIGNMENT, SwingConstants.CENTER);
+        content.putClientProperty(FlatClientProperties.TABBED_PANE_SHOW_CONTENT_SEPARATOR, false);
+        content.setTabPlacement(SwingConstants.TOP);
         content.setFocusable(false);
     }
 
@@ -257,11 +262,8 @@ abstract class ProjectWindowBase extends JFrame {
 
     private static void styleTabBarButton(final AbstractButton button) {
         button.setBorder(Borders.EMPTY);
-        button.putClientProperty(
-            FlatClientProperties.BUTTON_TYPE,
-            FlatClientProperties.BUTTON_TYPE_BORDERLESS
-        );
-        button.putClientProperty(FlatClientProperties.BUTTON_TYPE_SQUARE, true);
+        button.putClientProperty(FlatClientProperties.STYLE_CLASS, "tabBarButton");
+        // button.putClientProperty(FlatClientProperties.BUTTON_TYPE_SQUARE, true);
         button.setFocusable(false);
         Components.setFixedSize(button, Dimensions.TAB_BAR_BUTTON_SIZE);
     }
