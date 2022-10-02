@@ -15,10 +15,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.ScrollPaneLayout;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
@@ -69,7 +67,6 @@ abstract class DocumentSettingsDialogBase extends JDialog {
 
         setContentPane(content);
         getRootPane().setDefaultButton(applyButton);
-        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
         pack();
         metricsPanel.doLayout();
         setSize(300, 680);
@@ -198,7 +195,7 @@ abstract class DocumentSettingsDialogBase extends JDialog {
         title.setBorder(BorderFactory.createEmptyBorder(0, 0, Dimensions.SMALL_PADDING, 0));
         Components.addOuterBorder(
             title,
-            BorderFactory.createMatteBorder(0, 0, 1, 0, Resources.get().colors.divider())
+            BorderFactory.createMatteBorder(0, 0, 1, 0, Resources.get().colors.separator())
         );
         title.putClientProperty(FlatClientProperties.STYLE_CLASS, "h4");
     }

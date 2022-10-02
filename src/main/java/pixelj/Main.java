@@ -25,7 +25,7 @@ public final class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Resources.initialize(appState.isDarkTheme());
+        Resources.initialize(appState.getColorTheme(), appState.getIconTheme());
         FlatLaf.registerCustomDefaultsSource("pixelj.themes");
         if (appState.isDarkTheme()) {
             FlatDarkLaf.setup();

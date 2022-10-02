@@ -44,11 +44,12 @@ public final class Shared {
      * @param appState
      */
     public static void getOptions(final OptionsDialog dialog, final AppState appState) {
-        dialog.setTheme(appState.getTheme());
+        dialog.setTheme(appState.getColorTheme(), appState.getIconTheme());
         dialog.setVisible(true);
         final var result = dialog.getResult();
         if (result != null) {
-            appState.setTheme(result);
+            appState.setColorTheme(result.colorTheme());
+            appState.setIconTheme(result.iconTheme());
         }
     }
 }

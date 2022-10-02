@@ -8,8 +8,9 @@ public final class DarkColors implements Colors {
     private final Color active = new Color(229, 115, 26);
     private final Color disabledIcon = new Color(68, 75, 89);
     private final Color divider = new Color(33, 37, 43);
-    private final Color faintIcon = new Color(106, 112, 122);
+    private final Color inactive = new Color(106, 112, 122);
     private final Color icon = new Color(151, 159, 173);
+    private final Color separator = new Color(53, 64, 72);
 
     @Override
     public Color accent() {
@@ -17,7 +18,7 @@ public final class DarkColors implements Colors {
     }
 
     @Override
-    public Color active() {
+    public Color activeTab() {
         return active;
     }
 
@@ -38,7 +39,11 @@ public final class DarkColors implements Colors {
 
     @Override
     public Color inactive() {
-        return faintIcon;
+        return inactive;
     }
-
+    
+    @Override
+    public Color separator() {
+        return separator;
+    }
 }

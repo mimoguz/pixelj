@@ -25,6 +25,7 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import javax.swing.Box;
 
 import pixelj.actions.ApplicationAction;
 import pixelj.graphics.FontIcon;
@@ -70,7 +71,6 @@ abstract class ProjectWindowBase extends JFrame {
         setIconImages(res.applicationIcons);
         pack();
         setSize(1200, 720);
-        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
     }
@@ -97,7 +97,7 @@ abstract class ProjectWindowBase extends JFrame {
 
         content.addTab(
             null,
-            res.getIcon(Icons.LIST, res.colors.active(), null),
+            res.getIcon(Icons.LIST, res.colors.activeTab(), null),
             glyphsPage,
             res.getString("glyphsScreenTabTooltip")
         );
@@ -140,6 +140,7 @@ abstract class ProjectWindowBase extends JFrame {
     private void addLeading() {
         final var leadingContainer = new JPanel();
         leadingContainer.setBackground(content.getBackground());
+        leadingContainer.setLayout(new BoxLayout(leadingContainer, BoxLayout.X_AXIS));
         
         final var res = Resources.get();
 
@@ -148,7 +149,6 @@ abstract class ProjectWindowBase extends JFrame {
         final var menuAction = new ApplicationAction("menuAction", this::handleMenu)
             .setTooltipWithAccelerator(res.getString("menuButtonActionTooltip"), menuKey)
             .setIcon(Icons.ELLIPSIS, res.colors.accent(), res.colors.disabledIcon());
-        menuButton.setAction(menuAction);
         Components.registerShortcut(getRootPane(), menuAction);
 
         // Deselect menu button when the menu is becoming invisible
@@ -169,9 +169,13 @@ abstract class ProjectWindowBase extends JFrame {
             }
         });
 
+        menuButton.setAction(menuAction);
         styleTabBarButton(menuButton);
-        leadingContainer.setLayout(new BoxLayout(leadingContainer, BoxLayout.Y_AXIS));
         leadingContainer.add(menuButton);
+        
+        // Balance the leading and the trailing containers. 
+        leadingContainer.add(Box.createRigidArea(Dimensions.TAB_BAR_BUTTON_SIZE));
+        
         content.putClientProperty(FlatClientProperties.TABBED_PANE_LEADING_COMPONENT, leadingContainer);
     }
 
@@ -255,7 +259,7 @@ abstract class ProjectWindowBase extends JFrame {
         final var res = Resources.get();
         for (var tab = 0; tab < 3; tab++) {
             if (content.getIconAt(tab) instanceof final FontIcon icn) {
-                icn.setForeground(tab == index ? res.colors.active() : res.colors.inactive());
+                icn.setForeground(tab == index ? res.colors.activeTab() : res.colors.inactive());
             }
         }
     }

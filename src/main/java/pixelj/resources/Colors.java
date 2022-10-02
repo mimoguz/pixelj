@@ -12,7 +12,7 @@ public interface Colors {
     /**
      * @return Active tab icon color.
      */
-    Color active();
+    Color activeTab();
 
     /**
      * @return Disabled icon foreground color.
@@ -20,7 +20,7 @@ public interface Colors {
     Color disabledIcon();
 
     /**
-     * @return Background color for dividers (separators, borders etc.)
+     * @return Background color for dividers.
      */
     Color divider();
 
@@ -33,4 +33,9 @@ public interface Colors {
      * @return Inactive window title text color.
      */
     Color inactive();
+    
+    /**
+     * @return Background color for separators.
+     */
+    Color separator();
 }

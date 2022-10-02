@@ -11,16 +11,22 @@ import pixelj.services.AppState;
 
 public final class OptionsDialog extends OptionsDialogBase {
 
-    private AppState.Theme result;
+    private Result result;
 
     public OptionsDialog(final Frame owner) {
         super(owner);
 
-        themeIn.setModel(new DefaultComboBoxModel<>(AppState.Theme.values()));
-        themeIn.setSelectedIndex(0);
+        colorThemeIn.setModel(new DefaultComboBoxModel<>(AppState.ColorTheme.values()));
+        colorThemeIn.setSelectedIndex(0);
+        
+        iconThemeIn.setModel(new DefaultComboBoxModel<>(AppState.IconTheme.values()));
+        iconThemeIn.setSelectedIndex(0);
 
         saveButton.addActionListener(e -> {
-            result = AppState.Theme.values()[themeIn.getSelectedIndex()];
+            result = new Result(
+                    AppState.ColorTheme.values()[colorThemeIn.getSelectedIndex()],
+                    AppState.IconTheme.values()[iconThemeIn.getSelectedIndex()]
+            );
             setVisible(false);
         });
 
@@ -33,11 +39,12 @@ public final class OptionsDialog extends OptionsDialogBase {
         );
     }
 
-    public void setTheme(final AppState.Theme theme) {
-        themeIn.setSelectedIndex(theme.ordinal());
+    public void setTheme(final AppState.ColorTheme colorTheme, final AppState.IconTheme iconTheme) {
+        colorThemeIn.setSelectedIndex(colorTheme.ordinal());
+        iconThemeIn.setSelectedIndex(iconTheme.ordinal());
     }
 
-    public AppState.Theme getResult() {
+    public Result getResult() {
         return result;
     }
 
@@ -48,4 +55,6 @@ public final class OptionsDialog extends OptionsDialogBase {
         }
         super.setVisible(visible);
     }
+    
+    public record Result(AppState.ColorTheme colorTheme, AppState.IconTheme iconTheme) { }
 }

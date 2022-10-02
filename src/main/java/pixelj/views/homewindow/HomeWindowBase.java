@@ -88,7 +88,6 @@ abstract class HomeWindowBase extends JFrame {
         final var res = Resources.get();
         setTitle(res.getString("applicationName"));
         setIconImages(res.applicationIcons);
-        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
         setContentPane(content);
         pack();
         setSize(new Dimension(720, 600));
