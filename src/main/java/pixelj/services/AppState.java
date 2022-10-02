@@ -28,8 +28,10 @@ public final class AppState {
     // FIXME: There is a problem with the jSystemThemeDetector's dependencies.
     // public final ChangeableValue<Theme> themeProperty = new ChangeableValue<>(Theme.SYSTEM);
 
-    /** Current theme.  */
-    public final ChangeableValue<Theme> themeProperty = new ChangeableValue<>(Theme.LIGHT);
+    /** Current color theme.  */
+    public final ChangeableValue<ColorTheme> colorThemeProperty = new ChangeableValue<>(ColorTheme.LIGHT);
+    /** Current icon theme.  */
+    public final ChangeableValue<IconTheme> iconThemeProperty = new ChangeableValue<>(IconTheme.LINE);
     /** Width of the exported images. */
     public final ChangeableInt exportImageWidthProperty = new ChangeableInt(DEFAULT_EXPORT_IMAGE_SIZE);
     /** Height of the exported images. */
@@ -44,7 +46,7 @@ public final class AppState {
     private final DefaultListModel<RecentItem> recentItems = new DefaultListModel<>();
 
     public AppState() {
-        setTheme(themeProperty.getValue());
+        setColorTheme(colorThemeProperty.getValue());
     }
 
     public ListModel<RecentItem> getRecentItemsListModel() {
@@ -63,12 +65,12 @@ public final class AppState {
         return darkTheme;
     }
 
-    public Theme getTheme() {
-        return themeProperty.getValue();
+    public ColorTheme getColorTheme() {
+        return colorThemeProperty.getValue();
     }
 
-    public void setTheme(final Theme value) {
-        themeProperty.setValue(value);
+    public void setColorTheme(final ColorTheme value) {
+        colorThemeProperty.setValue(value);
         // FIXME: There is a problem with the jSystemThemeDetector's dependencies.
         // if (value == Theme.SYSTEM) {
         //     final var detector = OsThemeDetector.getDetector();
@@ -76,7 +78,15 @@ public final class AppState {
         // } else {
         //     darkTheme = value == Theme.DARK;
         // }
-        darkTheme = value == Theme.DARK;
+        darkTheme = value == ColorTheme.DARK;
+    }
+    
+    public IconTheme getIconTheme() {
+        return iconThemeProperty.getValue();
+    }
+    
+    public void setIconTheme(final IconTheme value) {
+        iconThemeProperty.setValue(value);
     }
 
     public int getExportImageWidth() {
@@ -192,7 +202,7 @@ public final class AppState {
         return index;
     }
 
-    public enum Theme {
+    public enum ColorTheme {
         /*
            FIXME: There is a problem with the jSystemThemeDetector's dependencies.
            Removing theme detection for now.
@@ -205,4 +215,15 @@ public final class AppState {
             return Resources.get().getString("theme_" + this.name());
         }
     }
+    
+    public enum IconTheme {
+        LINE, BLOCK;
+
+        @Override
+        public String toString() {
+            return Resources.get().getString("icon_" + this.name());
+        }
+    }
+    
+    
 }

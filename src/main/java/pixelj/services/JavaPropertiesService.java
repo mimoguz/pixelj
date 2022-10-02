@@ -27,7 +27,8 @@ import pixelj.views.projectwindow.LayoutStrategy;
 public final class JavaPropertiesService implements StatePersistanceService {
 
     private static final String PREVIEW_TEXT = "previewText";
-    private static final String THEME = "theme";
+    private static final String COLOR_THEME = "theme";
+    private static final String ICON_THEME = "icons";
     private static final String EXPORT_IMAGE_WIDTH = "exportImageWidth";
     private static final String EXPORT_IMAGE_HEIGHT = "exportImageHeight";
     private static final String LAYOUT_STRATEGY = "layoutStrategy";
@@ -38,7 +39,8 @@ public final class JavaPropertiesService implements StatePersistanceService {
         final var properties = new Properties();
         final var previewText = state.getPreviewText() == null ? "" : state.getPreviewText();
         properties.setProperty(PREVIEW_TEXT, previewText);
-        properties.setProperty(THEME, Integer.toString(state.getTheme().ordinal()));
+        properties.setProperty(COLOR_THEME, Integer.toString(state.getColorTheme().ordinal()));
+        properties.setProperty(ICON_THEME, Integer.toString(state.getIconTheme().ordinal()));
         properties.setProperty(EXPORT_IMAGE_WIDTH, Integer.toString(state.getExportImageWidth()));
         properties.setProperty(EXPORT_IMAGE_HEIGHT, Integer.toString(state.getExportImageHeight()));
         properties.setProperty(LAYOUT_STRATEGY, Integer.toString(state.getLayoutStrategy().ordinal()));
@@ -69,10 +71,39 @@ public final class JavaPropertiesService implements StatePersistanceService {
         }
 
         try {
-            state.setTheme(AppState.Theme.values()[getInt(properties, THEME, 0)]);
+            state.setColorTheme(AppState.ColorTheme.values()[getInt(properties, COLOR_THEME, 0)]);
         } catch (IndexOutOfBoundsException e) {
             // Leave default
         }
+        try {
+            state.setIconTheme(AppState.IconTheme.values()[getInt(properties, ICON_THEME, 0)]);
+        } catch (IndexOutOfBoundsException e) {
+            // Leave default
+        }
+    }
+    
+    /**
+     * This is only public because I want to test it.
+     *
+     * @param source Serialized JSON
+     * @return Collection of deserialized recent items.
+     * @throws JsonProcessingException
+     */
+    public static Collection<RecentItem> parseRecentItems(final String source)
+        throws JsonProcessingException {
+        final var objectMapper = getObjectMapper();
+        return Collections.unmodifiableCollection(
+            objectMapper.readValue(source, new TypeReference<Collection<RecentItem>>() { })
+        );
+    }
+    
+    public static ObjectMapper getObjectMapper() {
+        final var objectMapper = new ObjectMapper();
+        objectMapper
+            .registerModule(new JavaTimeModule())
+            .enable(SerializationFeature.WRITE_DATES_WITH_ZONE_ID)
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        return objectMapper;
     }
 
     /** Read and parse JSON. */
@@ -112,21 +143,6 @@ public final class JavaPropertiesService implements StatePersistanceService {
         );
     }
 
-    /**
-     * This is only public because I want to test it.
-     *
-     * @param source Serialized JSON
-     * @return Collection of deserialized recent items.
-     * @throws JsonProcessingException
-     */
-    public static Collection<RecentItem> parseRecentItems(final String source)
-        throws JsonProcessingException {
-        final var objectMapper = getObjectMapper();
-        return Collections.unmodifiableCollection(
-            objectMapper.readValue(source, new TypeReference<Collection<RecentItem>>() { })
-        );
-    }
-
     private static void saveXML(final Properties properties) throws IOException {
         final var osPair = getPath();
         if (osPair.os() == OS.LINUX) {
@@ -143,14 +159,5 @@ public final class JavaPropertiesService implements StatePersistanceService {
         try (var outStream = Files.newOutputStream(osPair.value())) {
             properties.storeToXML(outStream, "Pixelj application state");
         }
-    }
-
-    public static ObjectMapper getObjectMapper() {
-        final var objectMapper = new ObjectMapper();
-        objectMapper
-            .registerModule(new JavaTimeModule())
-            .enable(SerializationFeature.WRITE_DATES_WITH_ZONE_ID)
-            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        return objectMapper;
     }
 }

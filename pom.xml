@@ -18,7 +18,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <eclipse.collections.version>11.1.0</eclipse.collections.version>
-    <flatlaf.version>2.4</flatlaf.version>
+    <flatlaf.version>2.5</flatlaf.version>
     <guice.version>5.1.0</guice.version>
     <h2.version>2.1.214</h2.version>
     <lwjgl.version>3.3.1</lwjgl.version> <!-- LWJGL3 provides a wrapper for NativeFileDialog library -->
@@ -29,13 +29,14 @@
     <miglayout.version>11.0</miglayout.version>
     <maven.assembly.plugin.version>3.4.2</maven.assembly.plugin.version>
     <maven.compiler.plugin.version>3.10.1</maven.compiler.plugin.version>
+    <checkstyle.version>3.2.0</checkstyle.version>
   </properties>
   <repositories>
-		<repository>
-		    <id>jitpack.io</id>
-		    <url>https://jitpack.io</url>
-		</repository>
-	</repositories>
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </repository>
+  </repositories>
   <profiles>
     <profile>
       <id>lwjgl-natives-linux-amd64</id>
@@ -193,6 +194,14 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${checkstyle.version}</version>
+        <configuration>
+            <configLocation>checkstyle-config.xml</configLocation>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
   <dependencyManagement>
@@ -263,23 +272,19 @@
     <dependency>
       <groupId>org.lwjgl</groupId>
       <artifactId>lwjgl</artifactId>
-      <version>${lwjgl.version}</version>
     </dependency>
     <dependency>
       <groupId>org.lwjgl</groupId>
       <artifactId>lwjgl-nfd</artifactId>
-      <version>${lwjgl.version}</version>
     </dependency>
     <dependency>
       <groupId>org.lwjgl</groupId>
       <artifactId>lwjgl</artifactId>
-      <version>${lwjgl.version}</version>
       <classifier>${lwjgl.natives}</classifier>
     </dependency>
     <dependency>
       <groupId>org.lwjgl</groupId>
       <artifactId>lwjgl-nfd</artifactId>
-      <version>${lwjgl.version}</version>
       <classifier>${lwjgl.natives}</classifier>
     </dependency>
     <!--

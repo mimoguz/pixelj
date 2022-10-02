@@ -92,7 +92,6 @@ abstract class ExportDialogBase extends JDialog {
 
         setContentPane(content);
         getRootPane().setDefaultButton(exportButton);
-        getRootPane().putClientProperty(FlatClientProperties.TITLE_BAR_SHOW_ICON, false);
         pack();
         setResizable(false);
         setLocationRelativeTo(owner);

@@ -29,6 +29,7 @@ import com.fasterxml.jackson.dataformat.smile.databind.SmileMapper;
 import pixelj.graphics.FontIcon;
 import pixelj.models.Block;
 import pixelj.models.Scalar;
+import pixelj.services.AppState;
 
 public final class Resources {
 
@@ -47,7 +48,7 @@ public final class Resources {
     private final Font iconFont;
     private final Strings strings;
 
-    private Resources(final boolean useDarkTheme) {
+    private Resources(final AppState.ColorTheme colorTheme, final AppState.IconTheme iconTheme) {
         final var blockList = new ArrayList<Block>();
         blockList.add(new Block(0, "All", 0, Integer.MAX_VALUE));
         blockList.addAll(loadBlocks());
@@ -72,9 +73,9 @@ public final class Resources {
             .forEach((key, value) -> scalarsByBlock.put(key, Collections.unmodifiableCollection(value)));
         scalarsInBlock = scalarsByBlock.toImmutable();
 
-        iconFont = loadIconFont();
+        iconFont = iconTheme == AppState.IconTheme.LINE ? registerPxf16Line() : registerPxf16();
+        colors = colorTheme == AppState.ColorTheme.DARK ? new DarkColors() : new LightColors();
         strings = new Strings(loadResourceBundle());
-        colors = useDarkTheme ? new DarkColors() : new LightColors();
         applicationIcons = loadApplicationIcons();
 
         registerUIFonts();
@@ -134,18 +135,19 @@ public final class Resources {
      */
     public static Resources get() {
         if (instance == null) {
-            initialize(true);
+            initialize(AppState.ColorTheme.LIGHT, AppState.IconTheme.LINE);
         }
         return instance;
     }
 
     /**
      * Initialize instance.
-     *
-     * @param useDarkTheme
+     * 
+     * @param colorTheme
+     * @param iconTheme
      */
-    public static void initialize(final boolean useDarkTheme) {
-        instance = new Resources(useDarkTheme);
+    public static void initialize(final AppState.ColorTheme colorTheme, final AppState.IconTheme iconTheme) {
+        instance = new Resources(colorTheme, iconTheme);
     }
 
     private static List<Image> loadApplicationIcons() {
@@ -173,8 +175,16 @@ public final class Resources {
         });
     }
 
-    private static Font loadIconFont() {
-        try (var stream = Resources.class.getResourceAsStream("fonts/pxf16.otf")) {
+    private static Font registerPxf16() {
+        return registerIconFont("fonts/pxf16.otf");
+    }
+    
+     private static Font registerPxf16Line() {
+        return registerIconFont("fonts/pxf16_line.otf");
+    }
+    
+    private static Font registerIconFont(final String path) {
+        try (var stream = Resources.class.getResourceAsStream(path)) {
             return loadFont(stream, Font.PLAIN, 16);
         } catch (final IOException e) {
             throw new ResourceInitializationException(e);
