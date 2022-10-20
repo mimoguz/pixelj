@@ -19,8 +19,8 @@ import pixelj.graphics.BinaryImage;
 import pixelj.models.Glyph;
 import pixelj.models.KerningPair;
 import pixelj.models.Project;
-import pixelj.resources.Icons;
 import pixelj.resources.Resources;
+import pixelj.resources.Icon;
 import pixelj.views.projectwindow.glyphspage.AddCodePointDialog;
 import pixelj.views.projectwindow.glyphspage.AddDialog;
 
@@ -61,7 +61,7 @@ public final class GlyphListActions implements Actions {
                 );
 
         addCodePointAction = new ApplicationAction("addCodePointAction", this::showAddCodePointDialog)
-            .setIcon(Icons.NUMBER)
+            .setIcon(Icon.NUMBER)
             .setTooltipWithAccelerator(
                 Resources.get().getString("addCodePointActionTooltip"),
                 KeyStroke.getKeyStroke(

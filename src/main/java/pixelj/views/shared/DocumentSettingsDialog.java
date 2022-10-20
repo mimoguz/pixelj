@@ -14,7 +14,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 
 import pixelj.actions.ApplicationAction;
 import pixelj.models.DocumentSettings;
-import pixelj.resources.Icons;
+import pixelj.resources.Icon;
 import pixelj.resources.Resources;
 import pixelj.util.ChangeableInt;
 import pixelj.util.ReadOnlyBoolean;
@@ -85,12 +85,11 @@ public final class DocumentSettingsDialog extends DocumentSettingsDialogBase {
             result = null;
             setVisible(false);
         });
-        helpButton.setAction(
-            new ApplicationAction(
+        helpButton.setAction(new ApplicationAction(
                 "documentSettingsHelpAction",
                 (e, action) -> Help.showPage(Help.Page.DOCUMENT_SETTINGS)
             )
-                .setIcon(Icons.HELP)
+                .setIcon(Icon.HELP)
                 .setTooltip(Resources.get().getString("help"))
         );
 

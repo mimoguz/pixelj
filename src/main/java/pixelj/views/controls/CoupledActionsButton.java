@@ -14,7 +14,6 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.event.MouseInputAdapter;
 
-import pixelj.graphics.FontIcon;
 import pixelj.resources.Resources;
 import pixelj.util.ChangeableBoolean;
 import pixelj.views.shared.Borders;
@@ -132,10 +131,6 @@ public final class CoupledActionsButton extends JButton {
         }
         final var border = (RIGHT_SIZE - icon.getIconWidth()) / 2;
         secondaryActionLabel.setBorder(BorderFactory.createEmptyBorder(0, border, 0, border));
-        if (secondaryActionLabel.getIcon() instanceof FontIcon icn) {
-            final var res = Resources.get();
-            icn.setForeground(secondary.getValue() ? res.colors.accent() : res.colors.icon());
-        }
     }
 
     @Override
@@ -170,10 +165,6 @@ public final class CoupledActionsButton extends JButton {
     }
 
     private void onSecondaryChanged(final boolean value) {
-        if (secondaryActionLabel.getIcon() instanceof FontIcon icn) {
-            final var res = Resources.get();
-            icn.setForeground(value ? res.colors.accent() : res.colors.icon());
-        }
         final var action = value ? secondaryAction : primaryAction;
         setToolTipText(action != null && action.getValue(Action.SHORT_DESCRIPTION) instanceof String str
             ? str

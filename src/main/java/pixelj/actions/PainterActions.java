@@ -22,7 +22,7 @@ import javax.swing.JToggleButton;
 import javax.swing.KeyStroke;
 
 import pixelj.graphics.Snapshot;
-import pixelj.resources.Icons;
+import pixelj.resources.Icon;
 import pixelj.resources.Resources;
 import pixelj.util.ChangeableValue;
 import pixelj.views.controls.GlyphPainter;
@@ -92,49 +92,49 @@ public final class PainterActions implements Actions {
                 res.getString("painterSymmetryToggleActionTooltip"),
                 KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.ALT_DOWN_MASK)
             )
-            .setIcon(Icons.SYMMETRY, res.colors.icon(), res.colors.disabledIcon());
+            .setIcon(Icon.SYMMETRY);
 
         historyUndoAction = new ApplicationAction("painterHistoryUndoAction", this::undo)
             .setTooltipWithAccelerator(
                 res.getString("painterHistoryUndoActionTooltip"),
                 KeyStroke.getKeyStroke(KeyEvent.VK_Z, menuShortcutMask)
             )
-            .setIcon(Icons.HISTORY_UNDO, res.colors.icon(), res.colors.disabledIcon());
+            .setIcon(Icon.HISTORY_UNDO);
 
         historyRedoAction = new ApplicationAction("painterHistoryRedoAction", this::redo)
             .setTooltipWithAccelerator(
                 res.getString("painterHistoryRedoActionTooltip"),
                 KeyStroke.getKeyStroke(KeyEvent.VK_Y, menuShortcutMask)
             )
-            .setIcon(Icons.HISTORY_REDO, res.colors.icon(), res.colors.disabledIcon());
+            .setIcon(Icon.HISTORY_REDO);
 
         clipboardCutAction = new ApplicationAction("painterClipboardCutAction", this::cut)
             .setTooltipWithAccelerator(
                 res.getString("painterClipboardCutActionTooltip"),
                 KeyStroke.getKeyStroke(KeyEvent.VK_X, menuShortcutMask)
             )
-            .setIcon(Icons.CLIPBOARD_CUT, res.colors.icon(), res.colors.disabledIcon());
+            .setIcon(Icon.CLIPBOARD_CUT);
 
         clipboardCopyAction = new ApplicationAction("painterClipboardCopyAction", this::copy)
             .setTooltipWithAccelerator(
                 res.getString("painterClipboardCopyActionTooltip"),
                 KeyStroke.getKeyStroke(KeyEvent.VK_C, menuShortcutMask)
             )
-            .setIcon(Icons.CLIPBOARD_COPY, res.colors.icon(), res.colors.disabledIcon());
+            .setIcon(Icon.CLIPBOARD_COPY);
 
         clipboardPasteAction = new ApplicationAction("painterClipboardPasteAction", this::paste)
             .setTooltipWithAccelerator(
                 res.getString("painterClipboardPasteActionTooltip"),
                 KeyStroke.getKeyStroke(KeyEvent.VK_V, menuShortcutMask)
             )
-            .setIcon(Icons.CLIPBOARD_PASTE, res.colors.icon(), res.colors.disabledIcon());
+            .setIcon(Icon.CLIPBOARD_PASTE);
 
         clipboardImportAction = new ApplicationAction("painterClipboardImportAction", this::importClip)
             .setTooltipWithAccelerator(
                 res.getString("painterClipboardImportActionTooltip"),
                 KeyStroke.getKeyStroke(KeyEvent.VK_V, menuShortcutMask | InputEvent.SHIFT_DOWN_MASK)
             )
-            .setIcon(Icons.CLIPBOARD_IMPORT, res.colors.icon(), res.colors.disabledIcon());
+            .setIcon(Icon.CLIPBOARD_IMPORT);
 
         flipVerticallyAction = new ApplicationAction(
             "flipVerticallyAction",
@@ -144,7 +144,7 @@ public final class PainterActions implements Actions {
                 res.getString("painterFlipVerticalActionTooltip"),
                 KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.ALT_DOWN_MASK)
             )
-            .setIcon(Icons.FLIP_VERTICAL, res.colors.icon(), res.colors.disabledIcon());
+            .setIcon(Icon.FLIP_VERTICAL);
 
         flipHorizontallyAction = new ApplicationAction(
             "flipHorizontallyAction",
@@ -154,56 +154,56 @@ public final class PainterActions implements Actions {
                     res.getString("painterFlipHorizontalActionTooltip"),
                     KeyStroke.getKeyStroke(KeyEvent.VK_H, InputEvent.ALT_DOWN_MASK)
             )
-            .setIcon(Icons.FLIP_HORIZONTAL, res.colors.icon(), res.colors.disabledIcon());
+            .setIcon(Icon.FLIP_HORIZONTAL);
 
         rotateLeftAction = new ApplicationAction("rotateLeftAction", (e, action) -> painter.rotateLeft())
             .setTooltipWithAccelerator(
                 res.getString("painterRotateLeftActionTooltip"),
                 KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.ALT_DOWN_MASK)
             )
-            .setIcon(Icons.ROTATE_LEFT, res.colors.icon(), res.colors.disabledIcon());
+            .setIcon(Icon.ROTATE_LEFT);
 
         rotateRightAction = new ApplicationAction("rotateRightAction", (e, action) -> painter.rotateRight())
             .setTooltipWithAccelerator(
                 res.getString("painterRotateRightActionTooltip"),
                 KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.ALT_DOWN_MASK)
             )
-            .setIcon(Icons.ROTATE_RIGHT, res.colors.icon(), res.colors.disabledIcon());
+            .setIcon(Icon.ROTATE_RIGHT);
 
         moveLeftAction = new ApplicationAction("moveLeftAction", (e, action) -> painter.moveOnePixelLeft())
             .setTooltipWithAccelerator(
                 res.getString("painterMoveLeftActionTooltip"),
                 KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, InputEvent.ALT_DOWN_MASK)
             )
-            .setIcon(Icons.MOVE_LEFT, res.colors.icon(), res.colors.disabledIcon());
+            .setIcon(Icon.MOVE_LEFT);
 
         moveRightAction = new ApplicationAction("moveRightAction", (e, action) -> painter.moveOnePixelRight())
             .setTooltipWithAccelerator(
                 res.getString("painterMoveRightActionTooltip"),
                 KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, InputEvent.ALT_DOWN_MASK)
             )
-            .setIcon(Icons.MOVE_RIGHT, res.colors.icon(), res.colors.disabledIcon());
+            .setIcon(Icon.MOVE_RIGHT);
 
         moveUpAction = new ApplicationAction("moveUpAction", (e, action) -> painter.moveOnePixelUp())
             .setTooltipWithAccelerator(
                 res.getString("painterMoveUpActionTooltip"),
                 KeyStroke.getKeyStroke(KeyEvent.VK_UP, InputEvent.ALT_DOWN_MASK)
             )
-            .setIcon(Icons.MOVE_UP, res.colors.icon(), res.colors.disabledIcon());
+            .setIcon(Icon.MOVE_UP);
 
         moveDownAction = new ApplicationAction("moveDownAction", (e, action) -> painter.moveOnePixelDown())
             .setTooltipWithAccelerator(
                 res.getString("painterMoveDownActionTooltip"),
                 KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, InputEvent.ALT_DOWN_MASK)
             )
-            .setIcon(Icons.MOVE_DOWN, res.colors.icon(), res.colors.disabledIcon());
+            .setIcon(Icon.MOVE_DOWN);
 
         eraseAction = new ApplicationAction("eraseAction", this::erase)
             .setTooltipWithAccelerator(
                 res.getString("painterClearActionTooltip"),
                 KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.ALT_DOWN_MASK)
             )
-            .setIcon(Icons.ERASE, res.colors.icon(), res.colors.disabledIcon());
+            .setIcon(Icon.ERASE);
 
         all.addAll(List.of(
             historyUndoAction, historyRedoAction, clipboardCutAction, clipboardCopyAction,

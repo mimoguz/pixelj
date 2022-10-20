@@ -15,7 +15,7 @@ import pixelj.models.Block;
 import pixelj.models.Glyph;
 import pixelj.models.Project;
 import pixelj.models.Scalar;
-import pixelj.resources.Icons;
+import pixelj.resources.Icon;
 import pixelj.resources.Resources;
 import pixelj.views.shared.Help;
 import pixelj.views.shared.ScalarCellRenderer;
@@ -60,12 +60,11 @@ public final class AddDialog extends AddDialogBase {
 
         closeButton.addActionListener(event -> setVisible(false));
 
-        helpButton.setAction(
-            new ApplicationAction(
+        helpButton.setAction(new ApplicationAction(
                 "documentSettingsHelpAction",
                 (e, action) -> Help.showPage(Help.Page.GLYPHS)
             )
-                .setIcon(Icons.HELP)
+                .setIcon(Icon.HELP)
                 .setTooltip(Resources.get().getString("help"))
         );
 

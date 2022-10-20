@@ -12,6 +12,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.ListModel;
 
 import pixelj.resources.Resources;
+import pixelj.services.RecentItem;
 import pixelj.util.ChangeableInt;
 import pixelj.util.ChangeableValue;
 import pixelj.views.projectwindow.LayoutStrategy;
@@ -31,7 +32,7 @@ public final class AppState {
     /** Current color theme.  */
     public final ChangeableValue<ColorTheme> colorThemeProperty = new ChangeableValue<>(ColorTheme.LIGHT);
     /** Current icon theme.  */
-    public final ChangeableValue<IconTheme> iconThemeProperty = new ChangeableValue<>(IconTheme.LINE);
+    public final ChangeableValue<IconTheme> iconThemeProperty = new ChangeableValue<>(IconTheme.COLOR);
     /** Width of the exported images. */
     public final ChangeableInt exportImageWidthProperty = new ChangeableInt(DEFAULT_EXPORT_IMAGE_SIZE);
     /** Height of the exported images. */
@@ -80,11 +81,11 @@ public final class AppState {
         // }
         darkTheme = value == ColorTheme.DARK;
     }
-    
+
     public IconTheme getIconTheme() {
         return iconThemeProperty.getValue();
     }
-    
+
     public void setIconTheme(final IconTheme value) {
         iconThemeProperty.setValue(value);
     }
@@ -215,15 +216,15 @@ public final class AppState {
             return Resources.get().getString("theme_" + this.name());
         }
     }
-    
+
     public enum IconTheme {
-        LINE, BLOCK;
+        COLOR, MONOCHROME;
 
         @Override
         public String toString() {
             return Resources.get().getString("icon_" + this.name());
         }
     }
-    
-    
+
+
 }

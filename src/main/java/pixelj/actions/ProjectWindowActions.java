@@ -21,7 +21,7 @@ import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.util.nfd.NativeFileDialog;
 
 import pixelj.models.Project;
-import pixelj.resources.Icons;
+import pixelj.resources.Icon;
 import pixelj.resources.Resources;
 import pixelj.services.AppState;
 import pixelj.services.BasicImageWriter;
@@ -82,32 +82,32 @@ public final class ProjectWindowActions implements Actions {
 
         returnHomeAction = new ApplicationAction("returnHomeAction", this::returnHome)
             .withText()
-            .setIcon(Icons.HOME, res.colors.icon(), res.colors.disabledIcon())
+            .setIcon(Icon.HOME)
             .setAccelerator(KeyEvent.VK_W, menuShortcutMask);
 
         exportAction = new ApplicationAction("exportAction", this::export)
             .withText()
-            .setIcon(Icons.FILE_EXPORT, res.colors.icon(), res.colors.disabledIcon())
+            .setIcon(Icon.FILE_EXPORT)
             .setAccelerator(KeyEvent.VK_E, menuShortcutMask);
 
         quitAction = new ApplicationAction("quitAction", this::quit)
             .withText()
-            .setIcon(Icons.EXIT, res.colors.icon(), res.colors.disabledIcon())
+            .setIcon(Icon.EXIT)
             .setAccelerator(KeyEvent.VK_Q, menuShortcutMask);
 
         saveAction = new ApplicationAction("saveAction", this::save)
             .withText()
-            .setIcon(Icons.FILE_SAVE, res.colors.icon(), res.colors.disabledIcon())
+            .setIcon(Icon.FILE_SAVE)
             .setAccelerator(KeyEvent.VK_S, menuShortcutMask);
 
         saveAsAction = new ApplicationAction("saveAsAction", this::saveAs)
             .withText()
-            .setIcon(Icons.FILE_SAVE_AS, res.colors.icon(), res.colors.disabledIcon())
+            .setIcon(Icon.FILE_SAVE_AS)
             .setAccelerator(KeyEvent.VK_S, menuShortcutMask | ActionEvent.SHIFT_MASK);
 
         showHelpAction = new ApplicationAction("showHelpAction", this::showHelp)
             .withText()
-            .setIcon(Icons.HELP, res.colors.icon(), res.colors.disabledIcon())
+            .setIcon(Icon.HELP)
             .setAccelerator(KeyEvent.VK_F1, 0);
 
         showDocumentSettingsAction = new ApplicationAction(
@@ -115,12 +115,12 @@ public final class ProjectWindowActions implements Actions {
             this::showDocumentSettings
         )
             .withText()
-            .setIcon(Icons.METRICS, res.colors.icon(), res.colors.disabledIcon())
+            .setIcon(Icon.METRICS)
             .setAccelerator(KeyEvent.VK_D, menuShortcutMask);
 
         showOptionsAction = new ApplicationAction("showOptionsAction", this::showOptions)
             .withText()
-            .setIcon(Icons.SETTINGS, res.colors.icon(), res.colors.disabledIcon())
+            .setIcon(Icon.SETTINGS)
             .setAccelerator(KeyEvent.VK_PERIOD, menuShortcutMask);
 
         all = List.of(

@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.swing.AbstractButton;
 import javax.swing.Action;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -25,11 +26,10 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 import com.formdev.flatlaf.FlatClientProperties;
-import javax.swing.Box;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
 
 import pixelj.actions.ApplicationAction;
-import pixelj.graphics.FontIcon;
-import pixelj.resources.Icons;
+import pixelj.resources.Icon;
 import pixelj.resources.Resources;
 import pixelj.views.projectwindow.glyphspage.GlyphsPage;
 import pixelj.views.projectwindow.kerningpairspage.KerningPairsPage;
@@ -40,16 +40,28 @@ import pixelj.views.shared.Dimensions;
 
 /** Project window design. */
 abstract class ProjectWindowBase extends JFrame {
-    
+
     private GlyphsPage glyphsPage;
     private KerningPairsPage kerningPairsPage;
     private PreviewPage previewPage;
-    
+
+    private final FlatSVGIcon.ColorFilter inactiveFilter;
+    private final FlatSVGIcon.ColorFilter activeFilter;
+
+
+
     protected final JTabbedPane content = new JTabbedPane();
     protected final JToggleButton menuButton = new JToggleButton();
     protected final JButton optionsButton = new JButton();
     protected final JButton helpButton = new JButton();
     protected final JPopupMenu mainMenu = new JPopupMenu();
+
+    public ProjectWindowBase()
+    {
+        final var res = Resources.get();
+        inactiveFilter = new FlatSVGIcon.ColorFilter(color -> res.colors.inactive());
+        activeFilter = new FlatSVGIcon.ColorFilter(color -> res.colors.activeTab());
+    }
 
     public void setup(
         final GlyphsPage glyphsPg,
@@ -95,23 +107,24 @@ abstract class ProjectWindowBase extends JFrame {
             FlatClientProperties.TABBED_PANE_TAB_TYPE_UNDERLINED
         );
 
+        final var listIcon = res.getIcon(Icon.LIST);
+        listIcon.setColorFilter(activeFilter);
+
         content.addTab(
             null,
-            res.getIcon(Icons.LIST, res.colors.activeTab(), null),
+            listIcon,
             glyphsPage,
             res.getString("glyphsScreenTabTooltip")
         );
 
-        content.addTab(
-            null,
-            res.getIcon(Icons.KERNING_WIDE, res.colors.inactive(), null),
+        content.addTab(null,
+            res.getIcon(Icon.KERNING_WIDE),
             kerningPairsPage,
             res.getString("kerningPairsScreenTabTooltip")
         );
 
-        content.addTab(
-            null,
-            res.getIcon(Icons.EYE, res.colors.inactive(), null),
+        content.addTab(null,
+            res.getIcon(Icon.EYE),
             previewPage,
             res.getString("previewScreenTabTooltip")
         );
@@ -141,14 +154,14 @@ abstract class ProjectWindowBase extends JFrame {
         final var leadingContainer = new JPanel();
         leadingContainer.setBackground(content.getBackground());
         leadingContainer.setLayout(new BoxLayout(leadingContainer, BoxLayout.X_AXIS));
-        
+
         final var res = Resources.get();
 
         // Show menu using a shortcut or the menu button
         final var menuKey = KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.ALT_DOWN_MASK);
         final var menuAction = new ApplicationAction("menuAction", this::handleMenu)
             .setTooltipWithAccelerator(res.getString("menuButtonActionTooltip"), menuKey)
-            .setIcon(Icons.ELLIPSIS, res.colors.accent(), res.colors.disabledIcon());
+            .setIcon(Icon.ELLIPSIS);
         Components.registerShortcut(getRootPane(), menuAction);
 
         // Deselect menu button when the menu is becoming invisible
@@ -172,10 +185,10 @@ abstract class ProjectWindowBase extends JFrame {
         menuButton.setAction(menuAction);
         styleTabBarButton(menuButton);
         leadingContainer.add(menuButton);
-        
-        // Balance the leading and the trailing containers. 
+
+        // Balance the leading and the trailing containers.
         leadingContainer.add(Box.createRigidArea(Dimensions.TAB_BAR_BUTTON_SIZE));
-        
+
         content.putClientProperty(FlatClientProperties.TABBED_PANE_LEADING_COMPONENT, leadingContainer);
     }
 
@@ -258,8 +271,8 @@ abstract class ProjectWindowBase extends JFrame {
         // Fix icon color
         final var res = Resources.get();
         for (var tab = 0; tab < 3; tab++) {
-            if (content.getIconAt(tab) instanceof final FontIcon icn) {
-                icn.setForeground(tab == index ? res.colors.activeTab() : res.colors.inactive());
+            if (content.getIconAt(tab) instanceof final FlatSVGIcon icn) {
+                icn.setColorFilter(tab == index ? activeFilter : inactiveFilter);
             }
         }
     }

@@ -18,7 +18,7 @@ import javax.swing.JScrollPane;
 import com.formdev.flatlaf.FlatClientProperties;
 
 import pixelj.actions.ApplicationAction;
-import pixelj.resources.Icons;
+import pixelj.resources.Icon;
 import pixelj.resources.Resources;
 import pixelj.views.controls.PromptTextArea;
 import pixelj.views.controls.ZoomStrip;
@@ -111,21 +111,18 @@ abstract class PreviewPageBase extends JPanel {
         final var res = Resources.get();
         final var contextMenu = new JPopupMenu();
         final var menuShortcutMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
-        contextMenu.add(
-            new ApplicationAction("previewCutAction", (event, action) -> textInput.cut())
-                .setIcon(Icons.CLIPBOARD_CUT, res.colors.icon(), res.colors.disabledIcon())
+        contextMenu.add(new ApplicationAction("previewCutAction", (event, action) -> textInput.cut())
+                .setIcon(Icon.CLIPBOARD_CUT)
                 .setTextKey("cut")
                 .setAccelerator(KeyEvent.VK_X, menuShortcutMask)
         );
-        contextMenu.add(
-            new ApplicationAction("previewCopyAction", (event, action) -> textInput.copy())
-                .setIcon(Icons.CLIPBOARD_COPY, res.colors.icon(), res.colors.disabledIcon())
+        contextMenu.add(new ApplicationAction("previewCopyAction", (event, action) -> textInput.copy())
+                .setIcon(Icon.CLIPBOARD_COPY)
                 .setTextKey("copy")
                 .setAccelerator(KeyEvent.VK_C, menuShortcutMask)
         );
-        contextMenu.add(
-            new ApplicationAction("previewPasteAction", (event, action) -> textInput.paste())
-                .setIcon(Icons.CLIPBOARD_PASTE, res.colors.icon(), res.colors.disabledIcon())
+        contextMenu.add(new ApplicationAction("previewPasteAction", (event, action) -> textInput.paste())
+                .setIcon(Icon.CLIPBOARD_PASTE)
                 .setTextKey("paste")
                 .setAccelerator(KeyEvent.VK_V, menuShortcutMask)
         );

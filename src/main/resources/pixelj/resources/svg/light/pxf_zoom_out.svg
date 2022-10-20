@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1,0,0,1,-144,-96)">
+        <g id="green">
+        </g>
+        <g id="red">
+            <path d="M148.985,106.308C148.369,105.538 148,104.562 148,103.5C148,101.016 150.016,99 152.5,99C154.984,99 157,101.016 157,103.5C157,105.984 154.984,108 152.5,108C151.438,108 150.462,107.631 149.692,107.015L146.354,110.354C146.158,110.549 145.842,110.549 145.646,110.354C145.451,110.158 145.451,109.842 145.646,109.646L148.985,106.308ZM150.5,104L154.5,104C154.776,104 155,103.776 155,103.5C155,103.224 154.776,103 154.5,103L150.5,103C150.224,103 150,103.224 150,103.5C150,103.776 150.224,104 150.5,104Z" style="fill:rgb(144,50,61);"/>
+        </g>
+        <g id="gray">
+        </g>
+        <g id="yellow">
+        </g>
+        <g id="icon">
+        </g>
+    </g>
+</svg>

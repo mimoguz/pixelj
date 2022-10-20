@@ -1,10 +1,11 @@
 package pixelj.views.shared;
 
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Frame;
-import java.awt.Dialog;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -15,7 +16,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.formdev.flatlaf.FlatClientProperties;
-import java.awt.Dimension;
 
 import pixelj.resources.Resources;
 import pixelj.services.AppState;
@@ -49,11 +49,11 @@ public abstract class OptionsDialogBase extends JDialog {
         final var footnote1 = new JLabel(res.getString("requiresRestart"));
         footnote1.putClientProperty(FlatClientProperties.STYLE_CLASS, "small");
         content.add(footnote1, cons);
-        
+
         cons.gridy = 2;
         cons.insets = new Insets(0, 0, 0, 0);
         content.add(Box.createRigidArea(Dimensions.LARGE_SQUARE), cons);
-        
+
         cons.insets = new Insets(0, 0, 0, Dimensions.LARGE_PADDING);
         cons.gridy = 3;
         cons.anchor = GridBagConstraints.WEST;
@@ -69,8 +69,9 @@ public abstract class OptionsDialogBase extends JDialog {
         cons.gridheight = 2;
         cons.insets = new Insets(0, Dimensions.LARGE_PADDING, 0, 0);
         cons.anchor = GridBagConstraints.EAST;
+        cons.fill = GridBagConstraints.HORIZONTAL;
         content.add(colorThemeIn, cons);
-        
+
         cons.gridy = 3;
         cons.gridheight = 2;
         content.add(iconThemeIn, cons);
@@ -81,6 +82,7 @@ public abstract class OptionsDialogBase extends JDialog {
         cons.gridheight = 1;
         cons.insets = new Insets(Dimensions.LARGE_PADDING * 2, 0, 0, 0);
         cons.anchor = GridBagConstraints.EAST;
+        cons.fill = GridBagConstraints.NONE;
         final var buttonBox = new JPanel();
         buttonBox.setLayout(new BoxLayout(buttonBox, BoxLayout.X_AXIS));
         buttonBox.add(saveButton);
@@ -91,7 +93,7 @@ public abstract class OptionsDialogBase extends JDialog {
         setContentPane(content);
         getRootPane().setDefaultButton(saveButton);
         pack();
-        setSize(new Dimension(232, 192));
+        setSize(new Dimension(256, 192));
         setResizable(false);
     }
 

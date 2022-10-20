@@ -20,7 +20,7 @@ import org.lwjgl.util.nfd.NativeFileDialog;
 import pixelj.models.DocumentSettings;
 import pixelj.models.Project;
 import pixelj.models.SortedList;
-import pixelj.resources.Icons;
+import pixelj.resources.Icon;
 import pixelj.resources.Resources;
 import pixelj.services.AppState;
 import pixelj.services.DBFileService;
@@ -80,23 +80,23 @@ public final class HomeWindowActions implements Actions {
 
         showHelpAction = new ApplicationAction("showHomeHelpAction", this::showHelp)
             .setTooltip(res.getString("help"))
-            .setIcon(Icons.HELP, res.colors.icon(), res.colors.disabledIcon());
+            .setIcon(Icon.HELP);
 
         quitAction = new ApplicationAction("quitAction", this::quit)
             .setTooltip(res.getString("quit"))
-            .setIcon(Icons.EXIT, res.colors.icon(), res.colors.disabledIcon());
+            .setIcon(Icon.EXIT);
 
         showOptionsDialogAction = new ApplicationAction("showOptionsDialogAction", this::showOptionsDialog)
             .setTooltip(res.getString("options"))
-            .setIcon(Icons.SETTINGS, res.colors.icon(), res.colors.disabledIcon());
+            .setIcon(Icon.SETTINGS);
 
         removeRecentItemAction = new ApplicationAction("removeRecentItemAction", this::removeItem)
             .withText()
-            .setIcon(Icons.REMOVE_ITEM, res.colors.icon(), res.colors.disabledIcon());
+            .setIcon(Icon.REMOVE_ITEM);
 
         openContainingFolderAction = new ApplicationAction("openContainingFolderAction", this::openFolder)
             .withText()
-            .setIcon(Icons.FILE_OPEN, res.colors.icon(), res.colors.disabledIcon());
+            .setIcon(Icon.FILE_OPEN);
 
         all = List.of(
             newProjectAction,

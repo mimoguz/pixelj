@@ -1,6 +1,5 @@
 package pixelj.actions;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.util.Arrays;
 import java.util.function.BiConsumer;
@@ -10,7 +9,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
-import pixelj.resources.Icons;
+import pixelj.resources.Icon;
 import pixelj.resources.Resources;
 
 public final class ApplicationAction extends AbstractAction {
@@ -62,26 +61,13 @@ public final class ApplicationAction extends AbstractAction {
     }
 
     /**
-     * Create a font icon using the icon variant, set it as both small and large icons.
-     *
-     * @param iconVariant Icon variant
-     * @return This action
-     */
-    public ApplicationAction setIcon(final Icons iconVariant) {
-        return setIcon(iconVariant, null, null);
-    }
-
-    /**
-     * Create a font icon using the icon variant and the colors, set it as both small and large icons.
+     * Create an icon using a SVG resource.
      *
      * @param iconVariant   Icon variant
-     * @param color         Icon color
-     * @param disabledColor Disabled icon color
      * @return This action
      */
-    public ApplicationAction setIcon(final Icons iconVariant, final Color color, final Color disabledColor) {
-        final var res = Resources.get();
-        final var icon = res.getIcon(iconVariant, color, disabledColor);
+    public ApplicationAction setIcon(final Icon iconVariant) {
+        final var icon = Resources.get().getThemeIcon(iconVariant);
         putValue(Action.SMALL_ICON, icon);
         putValue(Action.LARGE_ICON_KEY, icon);
         return this;

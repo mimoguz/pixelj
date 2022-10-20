@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1,0,0,1,-72,-96)">
+        <path d="M88,96L72,96L72,112L88,112L88,96ZM75.008,109L83,109L86.5,107L83,105L75.008,105C74.451,105 74,105.451 74,106.008L74,107.992C74,108.549 74.451,109 75.008,109ZM76,106L76,108C76,108 75.008,108 75.008,108C75.004,108 75,107.996 75,107.992C75,107.992 75,106.008 75,106.008C75,106.004 75.004,106 75.008,106L76,106ZM77,108L82,108L82,106L77,106L77,108ZM83,106.152L83,107.848L84.484,107L83,106.152ZM75.008,103L83,103L86.5,101L83,99L75.008,99C74.451,99 74,99.451 74,100.008L74,101.992C74,102.549 74.451,103 75.008,103ZM76,100L76,102C76,102 75.008,102 75.008,102C75.004,102 75,101.996 75,101.992C75,101.992 75,100.008 75,100.008C75,100.004 75.004,100 75.008,100L76,100ZM77,102L82,102L82,100L77,100L77,102ZM83,100.152L83,101.848L84.484,101L83,100.152Z" style="fill:rgb(114,114,114);"/>
+        <g id="green_dark">
+        </g>
+        <g id="red_dark">
+        </g>
+        <g id="gray_dark">
+        </g>
+        <g id="yellow_dark">
+        </g>
+        <g id="icon_dark">
+        </g>
+    </g>
+</svg>

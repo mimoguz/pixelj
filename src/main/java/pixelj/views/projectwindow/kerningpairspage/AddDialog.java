@@ -14,7 +14,7 @@ import pixelj.models.FilteredList;
 import pixelj.models.Glyph;
 import pixelj.models.KerningPair;
 import pixelj.models.Project;
-import pixelj.resources.Icons;
+import pixelj.resources.Icon;
 import pixelj.resources.Resources;
 import pixelj.views.shared.Dimensions;
 import pixelj.views.shared.GlyphCellRenderer;
@@ -66,12 +66,11 @@ public final class AddDialog extends AddDialogBase {
             }
         });
 
-        helpButton.setAction(
-            new ApplicationAction(
+        helpButton.setAction(new ApplicationAction(
                 "documentSettingsHelpAction",
                 (e, action) -> Help.showPage(Help.Page.KERNING_PAIRS)
             )
-                .setIcon(Icons.HELP)
+                .setIcon(Icon.HELP)
                 .setTooltip(Resources.get().getString("help"))
         );
 
