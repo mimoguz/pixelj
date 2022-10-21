@@ -18,7 +18,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <eclipse.collections.version>11.1.0</eclipse.collections.version>
-    <flatlaf.version>2.5</flatlaf.version>
+    <flatlaf.version>2.6</flatlaf.version>
     <guice.version>5.1.0</guice.version>
     <h2.version>2.1.214</h2.version>
     <lwjgl.version>3.3.1</lwjgl.version> <!-- LWJGL3 provides a wrapper for NativeFileDialog library -->
