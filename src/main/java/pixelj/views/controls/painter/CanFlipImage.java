@@ -2,8 +2,11 @@ package pixelj.views.controls.painter;
 
 public interface CanFlipImage extends Painter {
 
-    /** Reverses the byte array in-place. */
-    private static void reverseArray(byte[] array) {
+    /** Reverses the byte array in-place.
+    *
+    * @param array Input
+    */
+    private static void reverseArray(final byte[] array) {
         final var half = array.length / 2;
         for (var left = 0; left < half; left++) {
             final var temp = array[left];

@@ -327,7 +327,8 @@ public final class PainterActions implements Actions {
         if (model == null || clip == null) {
             return;
         }
-        addToUndoBuffer(model.getImage().getSnapshot(model.getCodePoint()));
+        // TODO: Better way to set the document dirty???
+        addToUndoBuffer(painter.takeSnapshot());
         model.getImage().setDataElements(clip.x(), clip.y(), clip.width(), clip.height(), clip.data());
     }
 

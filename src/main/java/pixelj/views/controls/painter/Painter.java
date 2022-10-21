@@ -1,5 +1,6 @@
 package pixelj.views.controls.painter;
 
+import pixelj.graphics.Snapshot;
 import pixelj.models.Glyph;
 
 public interface Painter {
@@ -12,6 +13,7 @@ public interface Painter {
 
     /**
      * Take a snapshot of the current state.
+     * @return A snapshot, or null if the model is null
      */
-    void takeSnapshot();
+    Snapshot takeSnapshot();
 }

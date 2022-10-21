@@ -60,10 +60,13 @@ public final class GlyphPainter extends GlyphView implements CanFlipImage, CanRo
     }
 
     @Override
-    public void takeSnapshot() {
+    public Snapshot takeSnapshot() {
         final var model = getModel();
         if (model != null) {
-            snapshotConsumer.accept(model.getImage().getSnapshot(model.getCodePoint()));
+            final var snapshot = model.getImage().getSnapshot(model.getCodePoint());
+            snapshotConsumer.accept(snapshot);
+            return  snapshot;
         }
+        return  null;
     }
 }
