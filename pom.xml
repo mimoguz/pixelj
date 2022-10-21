@@ -23,6 +23,7 @@
     <h2.version>2.1.214</h2.version>
     <lwjgl.version>3.3.1</lwjgl.version> <!-- LWJGL3 provides a wrapper for NativeFileDialog library -->
     <jackson.version>2.13.4</jackson.version>
+    <jackson.databind.version>2.13.4</jackson.databind.version>
     <javapackager.version>1.6.7</javapackager.version>
     <jSystemThemeDetector.version>3.8</jSystemThemeDetector.version>
     <junit.version>5.9.1</junit.version>
@@ -224,7 +225,7 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>${jackson.version}</version>
+      <version>${jackson.databind.version}</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
