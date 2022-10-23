@@ -286,11 +286,11 @@ public final class PainterActions implements Actions {
     }
 
     private void erase(final ActionEvent event, final Action action) {
-        final var model = painter.getModel();
-        if (model == null) {
+        final var snapshot = painter.takeSnapshot();
+        if (snapshot == null) {
             return;
         }
-        addToUndoBuffer(model.getImage().getSnapshot(model.getCodePoint()));
+        addToUndoBuffer(snapshot);
         painter.erase();
     }
 
