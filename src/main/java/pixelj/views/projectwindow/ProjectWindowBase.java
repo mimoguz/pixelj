@@ -59,7 +59,7 @@ abstract class ProjectWindowBase extends JFrame {
     public ProjectWindowBase()
     {
         final var res = Resources.get();
-        inactiveFilter = new FlatSVGIcon.ColorFilter(color -> res.colors.inactive());
+        inactiveFilter = new FlatSVGIcon.ColorFilter(color -> res.colors.icon());
         activeFilter = new FlatSVGIcon.ColorFilter(color -> res.colors.activeTab());
     }
 
@@ -108,7 +108,12 @@ abstract class ProjectWindowBase extends JFrame {
         );
 
         final var listIcon = res.getIcon(Icon.LIST);
+        final var kerningIcon = res.getIcon(Icon.KERNING_WIDE);
+        final var eyeIcon = res.getIcon(Icon.EYE);
+        
         listIcon.setColorFilter(activeFilter);
+        kerningIcon.setColorFilter(inactiveFilter);
+        eyeIcon.setColorFilter(inactiveFilter);
 
         content.addTab(
             null,
@@ -118,13 +123,13 @@ abstract class ProjectWindowBase extends JFrame {
         );
 
         content.addTab(null,
-            res.getIcon(Icon.KERNING_WIDE),
+            kerningIcon,
             kerningPairsPage,
             res.getString("kerningPairsScreenTabTooltip")
         );
 
         content.addTab(null,
-            res.getIcon(Icon.EYE),
+            eyeIcon,
             previewPage,
             res.getString("previewScreenTabTooltip")
         );
