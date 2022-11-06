@@ -10,6 +10,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 
 import pixelj.resources.Resources;
 import pixelj.services.AppState;
+import pixelj.services.DefaultLogger;
 import pixelj.services.JavaPropertiesService;
 import pixelj.views.homewindow.HomeWindow;
 
@@ -23,8 +24,9 @@ public final class Main {
         try {
             new JavaPropertiesService().set(appState);
         } catch (IOException e) {
-            e.printStackTrace();
+            DefaultLogger.get().logInfo("Can't load the previous state: " + e.getLocalizedMessage());
         }
+        
         Resources.initialize(appState.getColorTheme(), appState.getIconTheme());
         FlatLaf.registerCustomDefaultsSource("pixelj.themes");
         if (appState.isDarkTheme()) {
