@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
-    <g id="green_dark">
-        <rect x="10" y="1" width="5" height="14" style="fill:rgb(41,121,255);"/>
+    <g id="dark">
+        <g id="green">
+            <path d="M10,1.747c-0,-0.198 0.079,-0.388 0.219,-0.528c0.14,-0.14 0.33,-0.219 0.528,-0.219c0.945,0 2.561,0 3.506,0c0.198,0 0.388,0.079 0.528,0.219c0.14,0.14 0.219,0.33 0.219,0.528c0,2.428 0,10.078 0,12.506c0,0.198 -0.079,0.388 -0.219,0.528c-0.14,0.14 -0.33,0.219 -0.528,0.219c-0.945,0 -2.561,0 -3.506,0c-0.198,-0 -0.388,-0.079 -0.528,-0.219c-0.14,-0.14 -0.219,-0.33 -0.219,-0.528c0,-2.428 0,-10.078 0,-12.506Z" style="fill:rgb(41,121,255);"/>
+        </g>
+        <g id="red">
+        </g>
+        <g id="gray">
+            <path d="M9,11l-7,0l0,3l7,0l0,1l-8,0l-0,-5l8,0l0,1Z" style="fill:rgb(114,114,114);"/>
+        </g>
+        <g id="yellow">
+        </g>
+        <g id="icon">
+            <path d="M7,5l0,1.011c-0,1.651 -1.338,2.989 -2.989,2.989c-0.813,0 -1.511,0 -1.511,0c-0.276,-0 -0.5,-0.224 -0.5,-0.5c0,-0.276 0.224,-0.5 0.5,-0.5l1.511,0c1.099,-0 1.989,-0.89 1.989,-1.989l-0,-1.011l-2.5,0l3,-3l3,3l-2.5,0Z" style="fill:rgb(151,159,173);"/>
+        </g>
     </g>
-    <g id="red_dark">
-    </g>
-    <g id="gray_dark">
-        <rect x="1" y="10" width="8" height="5" style="fill:rgb(114,114,114);"/>
-    </g>
-    <g id="yellow_dark">
-    </g>
-    <g id="icon_dark">
-        <path d="M7,5L7,6.011C7,7.662 5.662,9 4.011,9C3.198,9 2.5,9 2.5,9C2.224,9 2,8.776 2,8.5C2,8.224 2.224,8 2.5,8L4.011,8C5.11,8 6,7.11 6,6.011L6,5L3.5,5L6.5,2L9.5,5L7,5Z" style="fill:rgb(151,159,173);"/>
+    <g id="menu">
     </g>
 </svg>

@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
-    <g id="green_dark">
-        <path d="M1,1L1,15L7,12L7,4L1,1ZM15,1L15,15L9,12L9,4L15,1Z" style="fill:rgb(41,121,255);"/>
+    <g id="dark">
+        <g id="green">
+            <path d="M2.085,1.542c-0.232,-0.116 -0.508,-0.103 -0.729,0.033c-0.221,0.137 -0.356,0.378 -0.356,0.638c0,2.649 0,8.925 0,11.574c-0,0.26 0.135,0.501 0.356,0.638c0.221,0.136 0.497,0.149 0.729,0.033c1.729,-0.865 4.915,-2.458 4.915,-2.458l0,-8c0,0 -3.186,-1.593 -4.915,-2.458Zm11.83,0c0.232,-0.116 0.508,-0.103 0.729,0.033c0.221,0.137 0.356,0.378 0.356,0.638c0,2.649 -0,8.925 0,11.574c0,0.26 -0.135,0.501 -0.356,0.638c-0.221,0.136 -0.497,0.149 -0.729,0.033c-1.729,-0.865 -4.915,-2.458 -4.915,-2.458l0,-8c0,0 3.186,-1.593 4.915,-2.458Z" style="fill:rgb(41,121,255);"/>
+        </g>
+        <g id="red">
+        </g>
+        <g id="gray">
+        </g>
+        <g id="yellow">
+        </g>
+        <g id="icon">
+        </g>
     </g>
-    <g id="red_dark">
-    </g>
-    <g id="gray_dark">
-    </g>
-    <g id="yellow_dark">
-    </g>
-    <g id="icon_dark">
+    <g id="menu">
     </g>
 </svg>

@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
-    <g id="green">
-        <path d="M10,5L10,1L14.457,5.5L10,10L10,6L6.499,6C5.571,6 4.681,6.369 4.025,7.025C3.369,7.681 3,8.571 3,9.499C3,9.5 3,9.5 3,9.501C3,11.433 4.567,13 6.499,13L7,13C7.276,13 7.5,13.224 7.5,13.5C7.5,13.775 7.278,13.998 7.003,14L7,14L6.383,13.999C3.952,13.937 2,11.947 2,9.501C2,9.5 2,9.5 2,9.499C2,8.306 2.474,7.162 3.318,6.318C4.162,5.474 5.306,5 6.499,5L10,5Z" style="fill:rgb(41,121,255);"/>
+    <g id="light">
+        <g id="green">
+            <path d="M10,5l0,-4l4.457,4.5l-4.457,4.5l0,-4l-3.501,0c-0.928,-0 -1.818,0.369 -2.474,1.025c-0.656,0.656 -1.025,1.546 -1.025,2.474c0,0.001 0,0.001 0,0.002c-0,1.932 1.567,3.499 3.499,3.499l0.501,-0c0.276,-0 0.5,0.224 0.5,0.5c0,0.275 -0.222,0.498 -0.497,0.5l-0.003,-0l-0.617,-0.001c-2.431,-0.062 -4.383,-2.052 -4.383,-4.498c0,-0.001 0,-0.001 0,-0.002c-0,-1.193 0.474,-2.337 1.318,-3.181c0.844,-0.844 1.988,-1.318 3.181,-1.318l3.501,0Z" style="fill:rgb(41,121,255);"/>
+        </g>
+        <g id="red">
+        </g>
+        <g id="gray">
+        </g>
+        <g id="yellow">
+        </g>
+        <g id="icon">
+        </g>
     </g>
-    <g id="red">
-    </g>
-    <g id="gray">
-    </g>
-    <g id="yellow">
-    </g>
-    <g id="icon">
+    <g id="menu">
     </g>
 </svg>

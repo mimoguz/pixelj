@@ -14,7 +14,6 @@ public enum Icon {
     EXIT("pxf_exit.svg"),
     EYE("pxf_eye.svg"),
     FILE_EXPORT("pxf_file_export.svg"),
-    FILE_OPEN_SELECTED("pxf_file_open_selected.svg"),
     FILE_OPEN("pxf_file_open.svg"),
     FILE_SAVE_AS("pxf_file_save_as.svg"),
     FILE_SAVE("pxf_file_save.svg"),

@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
-    <g transform="matrix(1,0,0,1,0,-96)">
-        <g id="green_dark">
+    <g id="dark">
+        <g id="green">
         </g>
-        <g id="red_dark">
+        <g id="red">
         </g>
-        <g id="gray_dark">
+        <g id="gray">
         </g>
-        <g id="yellow_dark">
+        <g id="yellow">
         </g>
-        <g id="icon_dark">
+        <g id="icon">
+            <circle cx="3" cy="8" r="1.5" style="fill:rgb(151,159,173);"/>
+            <circle cx="8" cy="8" r="1.5" style="fill:rgb(151,159,173);"/>
+            <circle cx="13" cy="8" r="1.5" style="fill:rgb(151,159,173);"/>
         </g>
-        <g id="menu">
-            <g transform="matrix(1,0,0,1,1.5,0.5)">
-                <circle cx="1.5" cy="103.5" r="1.5" style="fill:rgb(41,121,255);"/>
-            </g>
-            <g transform="matrix(1,0,0,1,6.5,0.5)">
-                <circle cx="1.5" cy="103.5" r="1.5" style="fill:rgb(41,121,255);"/>
-            </g>
-            <g transform="matrix(1,0,0,1,11.5,0.5)">
-                <circle cx="1.5" cy="103.5" r="1.5" style="fill:rgb(41,121,255);"/>
-            </g>
-        </g>
+    </g>
+    <g id="menu">
+        <circle cx="3" cy="8" r="1.5" style="fill:rgb(41,121,255);"/>
+        <circle cx="8" cy="8" r="1.5" style="fill:rgb(41,121,255);"/>
+        <circle cx="13" cy="8" r="1.5" style="fill:rgb(41,121,255);"/>
     </g>
 </svg>

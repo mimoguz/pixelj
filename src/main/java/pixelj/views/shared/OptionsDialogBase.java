@@ -29,6 +29,9 @@ public abstract class OptionsDialogBase extends JDialog {
 
     OptionsDialogBase(final Frame owner) {
         super(owner, Resources.get().getString("optionsDialogTitle"), Dialog.ModalityType.APPLICATION_MODAL);
+        
+        Components.setFixedSize(saveButton, Dimensions.TEXT_BUTTON_SIZE);
+        Components.setFixedSize(cancelButton, Dimensions.TEXT_BUTTON_SIZE);
 
         final var content = new JPanel(new GridBagLayout());
         content.setBorder(Borders.LARGE_EMPTY);
@@ -39,7 +42,7 @@ public abstract class OptionsDialogBase extends JDialog {
         final var cons = new GridBagConstraints();
         cons.fill = GridBagConstraints.NONE;
 
-        cons.insets = new Insets(0, 0, 0, Dimensions.LARGE_PADDING);
+        cons.insets = new Insets(0, 0, 0, Dimensions.LARGE_PADDING * 2);
         cons.gridx = 0;
         cons.gridy = 0;
         cons.anchor = GridBagConstraints.WEST;
@@ -54,7 +57,7 @@ public abstract class OptionsDialogBase extends JDialog {
         cons.insets = new Insets(0, 0, 0, 0);
         content.add(Box.createRigidArea(Dimensions.LARGE_SQUARE), cons);
 
-        cons.insets = new Insets(0, 0, 0, Dimensions.LARGE_PADDING);
+        cons.insets = new Insets(0, 0, 0, Dimensions.LARGE_PADDING * 2);
         cons.gridy = 3;
         cons.anchor = GridBagConstraints.WEST;
         content.add(new JLabel(res.getString("iconTheme")), cons);
@@ -93,7 +96,7 @@ public abstract class OptionsDialogBase extends JDialog {
         setContentPane(content);
         getRootPane().setDefaultButton(saveButton);
         pack();
-        setSize(new Dimension(256, 192));
+        setSize(new Dimension(272, 192));
         setResizable(false);
     }
 

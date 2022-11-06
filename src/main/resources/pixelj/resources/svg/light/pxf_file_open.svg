@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
-    <g id="green">
+    <g id="light">
+        <g id="green">
+        </g>
+        <g id="red">
+        </g>
+        <g id="gray">
+        </g>
+        <g id="yellow">
+            <path d="M2.503,14c-0.83,-0 -1.503,-0.673 -1.503,-1.503c0,-3.221 0,-10.497 0,-10.497l5.5,0l2,2l4.5,0l0,2l2.5,0c0,0 -1.173,4.693 -1.723,6.89c-0.163,0.652 -0.749,1.11 -1.421,1.11c-2.266,0 -7.322,0 -9.853,0Zm9.497,-8l-7.5,0c0,0 -1.337,5.348 -1.674,6.695c-0.045,0.179 -0.206,0.305 -0.391,0.305c-0.01,0 -0.021,0 -0.032,0c-0.223,0 -0.403,-0.18 -0.403,-0.403c-0,-1.868 -0,-9.597 -0,-9.597l4.086,0c-0,-0 2,2 2,2l3.914,0l0,1Z" style="fill:rgb(229,115,26);"/>
+        </g>
+        <g id="icon">
+        </g>
     </g>
-    <g id="red">
-    </g>
-    <g id="gray">
-    </g>
-    <g id="yellow">
-        <path d="M2.503,14C1.673,14 1,13.327 1,12.497C1,9.276 1,2 1,2L6.5,2L8.5,4L13,4L13,6L15.5,6C15.5,6 14.327,10.693 13.777,12.89C13.614,13.542 13.028,14 12.356,14C10.09,14 5.034,14 2.503,14ZM12,6L4.5,6C4.5,6 3.163,11.348 2.826,12.695C2.781,12.874 2.62,13 2.435,13C2.425,13 2.414,13 2.403,13C2.18,13 2,12.82 2,12.597C2,10.729 2,3 2,3L6.086,3C6.086,3 8.086,5 8.086,5L12,5L12,6Z" style="fill:rgb(229,115,26);"/>
-    </g>
-    <g id="icon">
+    <g id="menu">
     </g>
 </svg>

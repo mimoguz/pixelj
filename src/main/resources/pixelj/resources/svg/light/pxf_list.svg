@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
-    <g transform="matrix(1,0,0,1,-72,-96)">
-        <path d="M88,112L88,96L72,96L72,112L88,112ZM76,105L74.992,105C74.444,105 74,105.444 74,105.992C74,106.318 74,106.682 74,107.008C74,107.556 74.444,108 74.992,108L76,108L76,105ZM83,105L77,105L77,108L83,108L83,105ZM87,106.5L84,108L84,105L87,106.5ZM76,100L74.992,100C74.444,100 74,100.444 74,100.992C74,101.318 74,101.682 74,102.008C74,102.556 74.444,103 74.992,103L76,103L76,100ZM83,100L77,100L77,103L83,103L83,100ZM87,101.5L84,103L84,100L87,101.5Z" style="fill:rgb(114,114,114);"/>
-        <g id="light">
-            <g id="green">
-            </g>
-            <g id="red">
-            </g>
-            <g id="gray">
-            </g>
-            <g id="yellow">
-            </g>
-            <g id="icon">
-            </g>
+    <g id="light">
+        <g id="green">
         </g>
-        <g id="menu">
+        <g id="red">
         </g>
+        <g id="gray">
+        </g>
+        <g id="yellow">
+        </g>
+        <g id="icon">
+            <path d="M15.253,16c0.412,-0 0.747,-0.335 0.747,-0.747l0,-14.506c-0,-0.412 -0.335,-0.747 -0.747,-0.747c-2.685,-0 -11.821,-0 -14.506,-0c-0.412,0 -0.747,0.335 -0.747,0.747c0,3.159 0,15.253 0,15.253l15.253,0Zm-11.253,-7l-1.008,0c-0.548,-0 -0.992,0.444 -0.992,0.992c0,0.326 0,0.69 0,1.016c0,0.548 0.444,0.992 0.992,0.992l1.008,0l0,-3Zm7,0l-6,0l0,3l6,0l0,-3Zm4,1.5l-3,1.5l0,-3l3,1.5Zm-11,-6.5l-1.008,0c-0.548,-0 -0.992,0.444 -0.992,0.992c0,0.326 0,0.69 0,1.016c0,0.548 0.444,0.992 0.992,0.992l1.008,0l0,-3Zm7,0l-6,0l0,3l6,0l0,-3Zm4,1.5l-3,1.5l0,-3l3,1.5Z" style="fill:rgb(72,72,74);"/>
+        </g>
+    </g>
+    <g id="menu">
     </g>
 </svg>
