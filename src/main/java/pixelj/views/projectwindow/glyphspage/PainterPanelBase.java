@@ -10,6 +10,7 @@ import javax.swing.border.Border;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -23,17 +24,23 @@ import pixelj.views.controls.GlyphPainter;
 import pixelj.views.controls.ZoomStrip;
 import pixelj.views.shared.Borders;
 import pixelj.views.shared.Dimensions;
+import pixelj.views.shared.ToolLayout;
 
-/**  PainterPanel design. */
+/**
+ * PainterPanel design.
+ */
 public abstract class PainterPanelBase extends JPanel {
 
-    /** Focus border width. */
+    /**
+     * Focus border width.
+     */
     private static final int BW = 4;
 
     protected final GlyphPainter painter = new GlyphPainter(Resources.get().colors.disabledIcon());
     protected final ZoomStrip zoomStrip = new ZoomStrip(1, 48, 12);
     protected final InfoPanel infoPanel;
     protected final JToolBar toolBar = new JToolBar();
+    protected final JButton overflowButton = new JButton();
     protected final JScrollPane scrollPane;
 
     private final Border focusedBorder = BorderFactory.createLineBorder(Resources.get().colors.accent(), BW);
@@ -50,7 +57,17 @@ public abstract class PainterPanelBase extends JPanel {
             BorderFactory.createMatteBorder(0, 0, 0, 1, Resources.get().colors.divider())
         );
         editorPanel.add(zoomStrip, BorderLayout.SOUTH);
-        editorPanel.add(toolBar, BorderLayout.WEST);
+
+        final var toolsPanel = new JPanel(new BorderLayout());
+        toolsPanel.add(toolBar, BorderLayout.CENTER);
+        editorPanel.add(toolsPanel, BorderLayout.WEST);
+        overflowButton.putClientProperty(
+            FlatClientProperties.BUTTON_TYPE,
+            FlatClientProperties.BUTTON_TYPE_TOOLBAR_BUTTON
+        );
+        overflowButton.setText("v");
+        overflowButton.setFocusable(false);
+        toolsPanel.add(overflowButton, BorderLayout.SOUTH);
 
         toolBar.setOrientation(SwingConstants.VERTICAL);
         toolBar.setBorder(Borders.SMALL_EMPTY_CUP);
