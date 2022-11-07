@@ -60,14 +60,14 @@ public abstract class PainterPanelBase extends JPanel {
 
         final var toolsPanel = new JPanel(new BorderLayout());
         toolsPanel.add(toolBar, BorderLayout.CENTER);
-        editorPanel.add(toolsPanel, BorderLayout.WEST);
         overflowButton.putClientProperty(
             FlatClientProperties.BUTTON_TYPE,
             FlatClientProperties.BUTTON_TYPE_TOOLBAR_BUTTON
         );
-        overflowButton.setText("v");
         overflowButton.setFocusable(false);
         toolsPanel.add(overflowButton, BorderLayout.SOUTH);
+
+        editorPanel.add(toolsPanel, BorderLayout.WEST);
 
         toolBar.setOrientation(SwingConstants.VERTICAL);
         toolBar.setBorder(Borders.SMALL_EMPTY_CUP);

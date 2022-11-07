@@ -48,8 +48,6 @@ abstract class ProjectWindowBase extends JFrame {
     private final FlatSVGIcon.ColorFilter inactiveFilter;
     private final FlatSVGIcon.ColorFilter activeFilter;
 
-
-
     protected final JTabbedPane content = new JTabbedPane();
     protected final JToggleButton menuButton = new JToggleButton();
     protected final JButton optionsButton = new JButton();
