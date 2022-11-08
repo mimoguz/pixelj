@@ -30,6 +30,7 @@ public enum Icon {
     MOVE_LEFT("pxf_move_left.svg"),
     MOVE_RIGHT("pxf_move_right.svg"),
     MOVE_UP("pxf_move_up.svg"),
+    OVERFLOW("pxf_overflow.svg"),
     NUMBER("pxf_number.svg"),
     REMOVE_ITEM("pxf_remove_item.svg"),
     ROTATE_LEFT("pxf_rotate_left.svg"),

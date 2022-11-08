@@ -32,8 +32,8 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
 
     private final PainterActions actions = new PainterActions();
     private BufferedImage overlay;
-    private JPopupMenu overflowMenu = new JPopupMenu();
-    private ChangeableInt.Listener cutoffChangeListener;
+    private final JPopupMenu overflowMenu = new JPopupMenu();
+    private final ChangeableInt.Listener cutoffChangeListener;
 
     public PainterPanel(final Project project, final JFrame window) {
         super(new InfoPanel(project));
@@ -49,20 +49,16 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
         toolBarLayout.cutoffProperty.addChangeListener(cutoffChangeListener);
         toolBar.setLayout(toolBarLayout);
 
-        final var overflowButtonAction = new ApplicationAction(
-                "painterToolBarOverflowAction",
-                (event, action) -> {
-                    overflowMenu.show(overflowButton, overflowButton.getWidth() + Dimensions.SMALL_PADDING, 0);
-                }
-        ).setIcon(Icon.ELLIPSIS);
+        final var overflowButtonAction = new ApplicationAction("painterToolBarOverflowAction", (event, action) -> {
+            overflowMenu.show(overflowButton, overflowButton.getWidth() + Dimensions.SMALL_PADDING, 0);
+        }).setIcon(Icon.OVERFLOW);
         overflowButton.setAction(overflowButtonAction);
-
 
         final var zoomSlider = zoomStrip.getSlider();
         zoomSlider.addChangeListener(e -> painter.setZoom(zoomSlider.getValue()));
         zoomStrip.setEnabled(false);
 
-        infoPanel.gridVisibleProperty.addChangeListener(isVisible -> painter.setOverlayVisible(isVisible));
+        infoPanel.gridVisibleProperty.addChangeListener(painter::setOverlayVisible);
 
         infoPanel.guidesVisibleProperty.addChangeListener(isVisible -> {
             painter.setLinesVisible(isVisible);
@@ -110,10 +106,7 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
             final var gw = value.getImage().getImageWidth();
             final var gh = value.getImage().getImageHeight();
             if (overlay == null || overlay.getWidth() != gw || overlay.getHeight() != gh) {
-                overlay = Checkerboard.create(
-                    value.getImage().getImageWidth(),
-                    value.getImage().getImageHeight()
-                );
+                overlay = Checkerboard.create(value.getImage().getImageWidth(), value.getImage().getImageHeight());
             }
             painter.setOverlay(overlay);
         } else {
@@ -150,21 +143,19 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
             return;
         }
         painter.setTop(settings.descender() + settings.ascender());
-        final var capHeight = new Line(
-            Orientation.HORIZONTAL,
-            settings.canvasHeight() - settings.descender() - settings.capHeight(),
-            CAP_HEIGHT
-        );
-        final var xHeight = new Line(
-            Orientation.HORIZONTAL,
-            settings.canvasHeight() - settings.descender() - settings.xHeight(),
-            X_HEIGHT
-        );
-        final var baseLine = new Line(
-            Orientation.HORIZONTAL,
-            settings.canvasHeight() - settings.descender(),
-            BASELINE
-        );
+        final var
+            capHeight =
+            new Line(Orientation.HORIZONTAL,
+                settings.canvasHeight() - settings.descender() - settings.capHeight(),
+                CAP_HEIGHT
+            );
+        final var
+            xHeight =
+            new Line(Orientation.HORIZONTAL,
+                settings.canvasHeight() - settings.descender() - settings.xHeight(),
+                X_HEIGHT
+            );
+        final var baseLine = new Line(Orientation.HORIZONTAL, settings.canvasHeight() - settings.descender(), BASELINE);
         painter.addLines(capHeight, xHeight, baseLine);
     }
 
@@ -175,21 +166,28 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
             for (var i = newValue; i < components.length; i++) {
                 final var component = toolBar.getComponent(i);
                 if (component instanceof JButton btn) {
-                    final var item = new JMenuItem(btn.getAction());
+                    final var item = new JButton(btn.getAction());
+                    item.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_TOOLBAR_BUTTON);
+                    item.setFocusable(false);
                     overflowMenu.add(item);
                 } else if (component instanceof JToggleButton btn) {
-                    final var item = new JCheckBoxMenuItem();
+                    final var item = new JToggleButton();
+                    item.putClientProperty(FlatClientProperties.BUTTON_TYPE,
+                        FlatClientProperties.BUTTON_TYPE_TOOLBAR_BUTTON
+                    );
+                    item.setFocusable(false);
                     item.setSelected(btn.isSelected());
                     item.setAction(btn.getAction());
                     overflowMenu.add(item);
-                } else if (component instanceof JSeparator)
-                {
+                } else if (component instanceof JSeparator) {
                     overflowMenu.addSeparator();
                 }
             }
+            overflowButton.setVisible(true);
             overflowButton.setEnabled(true);
         } else {
             overflowMenu.removeAll();
+            overflowButton.setVisible(false);
             overflowButton.setEnabled(false);
         }
     }
