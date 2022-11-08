@@ -65,7 +65,7 @@ abstract class PreviewPageBase extends JPanel {
         final var title = new JLabel(res.getString("previewTitle"));
         title.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
         final var titlePanel = new JPanel();
-        titlePanel.setBorder(Borders.TITLE_CENTER);
+        titlePanel.setBorder(Borders.TITLE);
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.X_AXIS));
         titlePanel.add(Box.createHorizontalStrut(Dimensions.LARGE_PADDING));
         titlePanel.add(title);

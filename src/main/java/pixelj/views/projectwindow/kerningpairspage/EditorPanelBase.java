@@ -47,7 +47,7 @@ abstract class EditorPanelBase extends JPanel {
         title.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
         final var titlePanel = new JPanel();
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.X_AXIS));
-        titlePanel.setBorder(Borders.TITLE_CENTER);
+        titlePanel.setBorder(Borders.TITLE);
         titlePanel.add(Box.createHorizontalStrut(Dimensions.LARGE_PADDING));
         titlePanel.add(title);
         titlePanel.add(Box.createHorizontalGlue());

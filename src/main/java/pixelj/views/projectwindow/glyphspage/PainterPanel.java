@@ -1,27 +1,20 @@
 package pixelj.views.projectwindow.glyphspage;
 
-import java.awt.Color;
-import java.awt.image.BufferedImage;
-import java.awt.event.MouseEvent;
-
-import javax.swing.*;
-
-import com.formdev.flatlaf.FlatClientProperties;
-import pixelj.actions.ApplicationAction;
 import pixelj.actions.PainterActions;
 import pixelj.models.DocumentSettings;
 import pixelj.models.Glyph;
 import pixelj.models.Project;
-import pixelj.resources.Icon;
-import pixelj.util.ChangeableInt;
 import pixelj.util.Checkerboard;
 import pixelj.util.Detachable;
 import pixelj.views.controls.GlyphPainter;
 import pixelj.views.controls.Line;
 import pixelj.views.controls.Orientation;
-import pixelj.views.shared.Dimensions;
-import pixelj.views.shared.ToolLayout;
 import pixelj.views.shared.ZoomAdapter;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 
 public final class PainterPanel extends PainterPanelBase implements Detachable {
 
@@ -33,7 +26,6 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
     private final PainterActions actions = new PainterActions();
     private BufferedImage overlay;
     private final JPopupMenu overflowMenu = new JPopupMenu();
-    private final ChangeableInt.Listener cutoffChangeListener;
 
     public PainterPanel(final Project project, final JFrame window) {
         super(new InfoPanel(project));
@@ -42,17 +34,6 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
         painter.setOverlayVisible(true);
         painter.setLinesVisible(true);
         painter.setShaded(true);
-
-        cutoffChangeListener = this::onCutoffIndexChanged;
-
-        final var toolBarLayout = new ToolLayout();
-        toolBarLayout.cutoffProperty.addChangeListener(cutoffChangeListener);
-        toolBar.setLayout(toolBarLayout);
-
-        final var overflowButtonAction = new ApplicationAction("painterToolBarOverflowAction", (event, action) -> {
-            overflowMenu.show(overflowButton, overflowButton.getWidth() + Dimensions.SMALL_PADDING, 0);
-        }).setIcon(Icon.OVERFLOW);
-        overflowButton.setAction(overflowButtonAction);
 
         final var zoomSlider = zoomStrip.getSlider();
         zoomSlider.addChangeListener(e -> painter.setZoom(zoomSlider.getValue()));
@@ -123,9 +104,6 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
     @Override
     public void detach() {
         actions.detach();
-        if (toolBar.getLayout() instanceof ToolLayout toolLayout) {
-            toolLayout.cutoffProperty.removeChangeListener(cutoffChangeListener);
-        }
     }
 
     @Override
@@ -159,43 +137,9 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
         painter.addLines(capHeight, xHeight, baseLine);
     }
 
-    private void onCutoffIndexChanged(final int newValue) {
-        final var components = toolBar.getComponents();
-        if (newValue < components.length) {
-            overflowMenu.removeAll();
-            for (var i = newValue; i < components.length; i++) {
-                final var component = toolBar.getComponent(i);
-                if (component instanceof JButton btn) {
-                    final var item = new JButton(btn.getAction());
-                    item.putClientProperty(FlatClientProperties.BUTTON_TYPE, FlatClientProperties.BUTTON_TYPE_TOOLBAR_BUTTON);
-                    item.setFocusable(false);
-                    overflowMenu.add(item);
-                } else if (component instanceof JToggleButton btn) {
-                    final var item = new JToggleButton();
-                    item.putClientProperty(FlatClientProperties.BUTTON_TYPE,
-                        FlatClientProperties.BUTTON_TYPE_TOOLBAR_BUTTON
-                    );
-                    item.setFocusable(false);
-                    item.setSelected(btn.isSelected());
-                    item.setAction(btn.getAction());
-                    overflowMenu.add(item);
-                } else if (component instanceof JSeparator) {
-                    overflowMenu.addSeparator();
-                }
-            }
-            overflowButton.setVisible(true);
-            overflowButton.setEnabled(true);
-        } else {
-            overflowMenu.removeAll();
-            overflowButton.setVisible(false);
-            overflowButton.setEnabled(false);
-        }
-    }
-
     private static void fillToolbar(final JToolBar toolBar, final PainterActions actions) {
         toolBar.add(actions.historyUndoAction);
         toolBar.add(actions.historyRedoAction);
-        toolBar.addSeparator();
         toolBar.add(actions.clipboardCutAction);
         toolBar.add(actions.clipboardCopyAction);
         toolBar.add(actions.clipboardPasteAction);
@@ -205,7 +149,6 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
         toolBar.add(actions.flipVerticallyAction);
         toolBar.add(actions.rotateLeftAction);
         toolBar.add(actions.rotateRightAction);
-        toolBar.addSeparator();
         toolBar.add(actions.moveLeftAction);
         toolBar.add(actions.moveRightAction);
         toolBar.add(actions.moveUpAction);

@@ -6,16 +6,8 @@ import java.awt.event.FocusListener;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 
+import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JToolBar;
-import javax.swing.SwingConstants;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
@@ -24,7 +16,7 @@ import pixelj.views.controls.GlyphPainter;
 import pixelj.views.controls.ZoomStrip;
 import pixelj.views.shared.Borders;
 import pixelj.views.shared.Dimensions;
-import pixelj.views.shared.ToolLayout;
+import pixelj.views.shared.VerticalFlowLayout;
 
 /**
  * PainterPanel design.
@@ -40,7 +32,6 @@ public abstract class PainterPanelBase extends JPanel {
     protected final ZoomStrip zoomStrip = new ZoomStrip(1, 48, 12);
     protected final InfoPanel infoPanel;
     protected final JToolBar toolBar = new JToolBar();
-    protected final JButton overflowButton = new JButton();
     protected final JScrollPane scrollPane;
 
     private final Border focusedBorder = BorderFactory.createLineBorder(Resources.get().colors.accent(), BW);
@@ -48,6 +39,10 @@ public abstract class PainterPanelBase extends JPanel {
 
     public PainterPanelBase(final InfoPanel infoPanel) {
         this.infoPanel = infoPanel;
+
+        toolBar.setBorder(BorderFactory.createEmptyBorder(0, Dimensions.SMALL_PADDING, 0, Dimensions.SMALL_PADDING));
+        toolBar.setOrientation(SwingConstants.VERTICAL);
+        toolBar.setLayout(new VerticalFlowLayout());
 
         setLayout(new BorderLayout());
         add(infoPanel, BorderLayout.EAST);
@@ -57,32 +52,14 @@ public abstract class PainterPanelBase extends JPanel {
             BorderFactory.createMatteBorder(0, 0, 0, 1, Resources.get().colors.divider())
         );
         editorPanel.add(zoomStrip, BorderLayout.SOUTH);
-
-        final var toolsPanel = new JPanel(new BorderLayout());
-        toolsPanel.add(toolBar, BorderLayout.CENTER);
-
-        overflowButton.putClientProperty(
-            FlatClientProperties.BUTTON_TYPE,
-            FlatClientProperties.BUTTON_TYPE_TOOLBAR_BUTTON
-        );
-        overflowButton.setFocusable(false);
-        overflowButton.setVisible(false);
-        overflowButton.setFocusable(false);
-        final var overflowPanel = new JPanel();
-        overflowPanel.add(overflowButton);
-        toolsPanel.add(overflowPanel, BorderLayout.SOUTH);
-
-        editorPanel.add(toolsPanel, BorderLayout.WEST);
-
-        toolBar.setOrientation(SwingConstants.VERTICAL);
-        toolBar.setBorder(Borders.SMALL_EMPTY_CUP);
+        editorPanel.add(toolBar, BorderLayout.WEST);
 
         /* ------------------------------- Panel title ------------------------------ */
         final var title = new JLabel(Resources.get().getString("painterTitle"));
         title.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
         final var titlePanel = new JPanel();
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.X_AXIS));
-        titlePanel.setBorder(Borders.TITLE_CENTER);
+        titlePanel.setBorder(Borders.TITLE);
         titlePanel.add(Box.createHorizontalStrut(Dimensions.LARGE_PADDING));
         titlePanel.add(title);
         titlePanel.add(Box.createHorizontalGlue());
