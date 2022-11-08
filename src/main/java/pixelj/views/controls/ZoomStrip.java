@@ -1,17 +1,13 @@
 package pixelj.views.controls;
 
-import java.awt.Dimension;
-
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSlider;
-
 import pixelj.resources.Icon;
 import pixelj.resources.Resources;
 import pixelj.views.shared.Borders;
 import pixelj.views.shared.Components;
+import pixelj.views.shared.Dimensions;
+
+import javax.swing.*;
+import java.awt.*;
 
 public final class ZoomStrip extends JPanel {
     private final JSlider slider;
@@ -28,7 +24,7 @@ public final class ZoomStrip extends JPanel {
 
         add(Box.createHorizontalGlue());
 
-        Components.setFixedSize(zoomOut, new Dimension(16, 16));
+        Components.setFixedSize(zoomOut, new Dimension(Dimensions.ICON_SIZE, Dimensions.ICON_SIZE));
         zoomOut.setIcon(res.getThemeIcon(Icon.ZOOM_OUT));
         add(zoomOut);
 
@@ -36,7 +32,7 @@ public final class ZoomStrip extends JPanel {
         slider.setMaximumSize(new Dimension(256, 24));
         add(slider);
 
-        Components.setFixedSize(zoomIn, new Dimension(16, 16));
+        Components.setFixedSize(zoomIn, new Dimension(Dimensions.ICON_SIZE, Dimensions.ICON_SIZE));
         zoomIn.setIcon(res.getThemeIcon(Icon.ZOOM_IN));
         add(zoomIn);
 

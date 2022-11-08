@@ -1,7 +1,7 @@
 package pixelj.resources;
 
-
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import pixelj.views.shared.Dimensions;
 
 public enum Icon {
 
@@ -50,8 +50,10 @@ public enum Icon {
     }
 
     public FlatSVGIcon createIcon(boolean isDark) {
-        return new FlatSVGIcon("pixelj/resources/svg/" + (isDark ? "dark/" : "light/") +  file, 16, 16);
+        return new FlatSVGIcon(
+            "pixelj/resources/svg/" + (isDark ? "dark/" : "light/") + file,
+            Dimensions.ICON_SIZE,
+            Dimensions.ICON_SIZE
+        );
     }
-
-
 }

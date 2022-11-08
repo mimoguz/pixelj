@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+<svg width="100%" height="100%" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <g id="light">
-        <g id="green">
-            <path d="M15,1.749c-0,-0.414 -0.335,-0.749 -0.749,-0.749c-2.429,-0 -10.073,-0 -12.502,-0c-0.414,-0 -0.749,0.335 -0.749,0.749c0,1.158 0,3.251 0,3.251l14,0l0,-3.251Z" style="fill:rgb(41,121,255);"/>
+        <g id="blue">
+            <path d="M19,6L19,1.752C19,1.337 18.663,1 18.248,1C15.318,1 4.682,1 1.752,1C1.337,1 1,1.337 1,1.752C1,3.148 1,6 1,6L19,6Z" style="fill:rgb(41,121,255);"/>
+        </g>
+        <g id="yellow">
         </g>
         <g id="red">
         </g>
         <g id="gray">
         </g>
-        <g id="yellow">
+        <g id="text">
+            <path d="M19,7L1,7L1,18.248C1,18.663 1.337,19 1.752,19C4.682,19 15.318,19 18.248,19C18.663,19 19,18.663 19,18.248C19,15.619 19,7 19,7ZM11,15C11,14.448 10.552,14 10,14C9.45,14 9.003,14.445 9,14.994L9,15L9,17L6,17L6,14L4,14L10,8.5L16,14L14,14L14,17L11,17L11,15Z" style="fill:rgb(72,72,74);"/>
         </g>
-        <g id="icon">
-            <path d="M15,6l-14,0l-0,8.251c0,0.414 0.335,0.749 0.749,0.749c2.429,0 10.073,0 12.502,0c0.414,0 0.749,-0.335 0.749,-0.749c-0,-2.16 -0,-8.251 -0,-8.251Zm-8,6.5l-0,1.5l-2,0l-0,-3l-2,0l5,-4l5,4l-2,0l-0,3l-2,-0l-0,-1.5c-0,-0.552 -0.448,-1 -1,-1c-0.55,0 -0.997,0.445 -1,0.994l-0,0.006Z" style="fill:rgb(72,72,74);"/>
+        <g id="working">
         </g>
-    </g>
-    <g id="menu">
     </g>
 </svg>

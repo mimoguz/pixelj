@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+<svg width="100%" height="100%" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <g id="dark">
-        <g id="green">
-            <path d="M10.308,11.015l3.338,3.339c0.196,0.195 0.512,0.195 0.708,-0c0.195,-0.196 0.195,-0.512 -0,-0.708l-3.339,-3.338c0.616,-0.77 0.985,-1.746 0.985,-2.808c0,-2.484 -2.016,-4.5 -4.5,-4.5c-2.484,0 -4.5,2.016 -4.5,4.5c0,2.484 2.016,4.5 4.5,4.5c1.062,0 2.038,-0.369 2.808,-0.985Zm-3.308,-4.015l-1.5,-0c-0.276,-0 -0.5,0.224 -0.5,0.5c-0,0.276 0.224,0.5 0.5,0.5l1.5,0l-0,1.5c-0,0.276 0.224,0.5 0.5,0.5c0.276,0 0.5,-0.224 0.5,-0.5l-0,-1.5l1.5,0c0.276,-0 0.5,-0.224 0.5,-0.5c-0,-0.276 -0.224,-0.5 -0.5,-0.5l-1.5,0l-0,-1.5c-0,-0.276 -0.224,-0.5 -0.5,-0.5c-0.276,0 -0.5,0.224 -0.5,0.5l-0,1.5Z" style="fill:rgb(41,121,255);"/>
+        <g id="blue">
+            <path d="M6.395,12.191C5.519,11.022 5,9.571 5,8C5,4.137 8.137,1 12,1C15.863,1 19,4.137 19,8C19,11.863 15.863,15 12,15C10.429,15 8.978,14.481 7.809,13.605L2.707,18.707C2.317,19.097 1.683,19.097 1.293,18.707C0.903,18.317 0.903,17.683 1.293,17.293L6.395,12.191ZM11,7L8.5,7C7.948,7 7.5,7.448 7.5,8C7.5,8.552 7.948,9 8.5,9L11,9L11,11.5C11,12.052 11.448,12.5 12,12.5C12.552,12.5 13,12.052 13,11.5L13,9L15.5,9C16.052,9 16.5,8.552 16.5,8C16.5,7.448 16.052,7 15.5,7L13,7L13,4.5C13,3.948 12.552,3.5 12,3.5C11.448,3.5 11,3.948 11,4.5L11,7Z" style="fill:rgb(41,121,255);"/>
+        </g>
+        <g id="yellow">
         </g>
         <g id="red">
         </g>
         <g id="gray">
         </g>
-        <g id="yellow">
+        <g id="text">
         </g>
-        <g id="icon">
+        <g id="working">
         </g>
-    </g>
-    <g id="menu">
     </g>
 </svg>

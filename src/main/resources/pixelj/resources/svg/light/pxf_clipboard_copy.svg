@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+<svg width="100%" height="100%" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <g id="light">
-        <g id="green">
-            <path d="M14,6.5l-2.5,-2.5l-5.753,0c-0.198,0 -0.388,0.079 -0.528,0.219c-0.14,0.14 -0.219,0.33 -0.219,0.528c0,2.153 0,8.353 0,10.506c-0,0.198 0.079,0.388 0.219,0.528c0.14,0.14 0.33,0.219 0.528,0.219c1.694,0 5.812,0 7.506,0c0.198,0 0.388,-0.079 0.528,-0.219c0.14,-0.14 0.219,-0.33 0.219,-0.528c0,-2.242 0,-8.753 0,-8.753Zm-1,0.5l-2,-2l0,2l2,0Z" style="fill:rgb(41,121,255);"/>
+        <g id="blue">
+            <path d="M18,8.5L14.5,5L7.749,5C7.55,5 7.36,5.079 7.219,5.219C7.079,5.36 7,5.55 7,5.749C7,8.178 7,15.822 7,18.251C7,18.665 7.335,19 7.749,19C9.86,19 15.813,19 17.502,19C17.777,19 18,18.777 18,18.502C18,16.12 18,8.5 18,8.5ZM13.5,9.5L13.5,6.5L16.5,9.5L13.5,9.5Z" style="fill:rgb(41,121,255);"/>
+        </g>
+        <g id="yellow">
         </g>
         <g id="red">
         </g>
         <g id="gray">
         </g>
-        <g id="yellow">
+        <g id="text">
+            <path d="M6,15C6,15 6,8.511 6,5.501C6,4.672 6.672,4 7.501,4C8.032,4 8.5,4 8.5,4L8.5,2.5L10,4L12.5,4L9.5,1L2.749,1C2.55,1 2.36,1.079 2.219,1.219C2.079,1.36 2,1.55 2,1.749C2,4.178 2,11.822 2,14.251C2,14.665 2.335,15 2.749,15C3.907,15 6,15 6,15Z" style="fill:rgb(72,72,74);"/>
         </g>
-        <g id="icon">
-            <path d="M10,2.5l-2.5,-2.5l-5.753,0c-0.198,0 -0.388,0.079 -0.528,0.219c-0.14,0.14 -0.219,0.33 -0.219,0.528c0,2.153 0,8.353 0,10.506c-0,0.412 0.335,0.747 0.747,0.747c0.889,0 2.253,0 2.253,0l0,-7.503c-0,-0.397 0.158,-0.778 0.439,-1.058c0.28,-0.281 0.661,-0.439 1.058,-0.439c0.751,0 1.503,0 1.503,0l0,-2l2,2l1,0l0,-0.5Z" style="fill:rgb(72,72,74);"/>
+        <g id="working">
         </g>
-    </g>
-    <g id="menu">
     </g>
 </svg>

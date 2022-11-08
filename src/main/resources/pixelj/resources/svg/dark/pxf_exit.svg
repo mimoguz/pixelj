@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+<svg width="100%" height="100%" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <g id="dark">
-        <g id="green">
-        </g>
-        <g id="red">
-            <path d="M8.51,8l3.49,0l0,2.5l3,-3l-3,-3l0,2.5l-3.5,-0c-0.276,-0 -0.5,0.224 -0.5,0.5c0,0.276 0.224,0.5 0.5,0.5c0.003,0 0.007,0 0.01,-0Z" style="fill:rgb(144,50,61);"/>
-        </g>
-        <g id="gray">
+        <g id="blue">
         </g>
         <g id="yellow">
         </g>
-        <g id="icon">
-            <path d="M1,2l7.243,0c0.201,0 0.393,0.08 0.535,0.222c0.142,0.142 0.222,0.334 0.222,0.535c0,1.16 0,3.243 0,3.243l-1,0l0,-3l-4,-0c-0,-0 1.621,0.54 2.48,0.827c0.311,0.103 0.52,0.394 0.52,0.721c0,1.805 0,7.452 0,7.452l1,0l0,-3l1,0l0,3.243c0,0.201 -0.08,0.393 -0.222,0.535c-0.142,0.142 -0.334,0.222 -0.535,0.222c-0.566,0 -1.243,0 -1.243,0l0,1.08c0,0.213 -0.102,0.413 -0.275,0.538c-0.173,0.125 -0.395,0.159 -0.598,0.091c-1.664,-0.555 -5.127,-1.709 -5.127,-1.709l0,-11Z" style="fill:rgb(151,159,173);"/>
+        <g id="red">
+            <path d="M14,9L9,9C8.448,9 8,9.448 8,10C8,10.552 8.448,11 9,11L14,11L14,12.964C14,13.155 14.11,13.33 14.282,13.413C14.455,13.496 14.659,13.472 14.809,13.353C16.224,12.221 19,10 19,10C19,10 16.224,7.779 14.809,6.647C14.659,6.528 14.455,6.504 14.282,6.587C14.11,6.67 14,6.845 14,7.036L14,9Z" style="fill:rgb(144,50,61);"/>
         </g>
-    </g>
-    <g id="menu">
+        <g id="gray">
+        </g>
+        <g id="text">
+            <path d="M2,3C2,3 5.113,1.755 6.426,1.23C6.555,1.178 6.701,1.194 6.816,1.272C6.931,1.349 7,1.479 7,1.618C7,2.205 7,3 7,3L11.251,3C11.665,3 12,3.335 12,3.749L12,8L10,8L10,5L7,5L7,15L10,15L10,12L12,12L12,16.251C12,16.665 11.665,17 11.251,17L7,17L7,18.382C7,18.521 6.931,18.651 6.816,18.728C6.701,18.806 6.555,18.822 6.426,18.77C5.113,18.245 2,17 2,17L2,3Z" style="fill:rgb(151,159,173);"/>
+        </g>
+        <g id="working">
+        </g>
     </g>
 </svg>

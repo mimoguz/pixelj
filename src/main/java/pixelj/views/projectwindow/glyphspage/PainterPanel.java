@@ -140,6 +140,7 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
     private static void fillToolbar(final JToolBar toolBar, final PainterActions actions) {
         toolBar.add(actions.historyUndoAction);
         toolBar.add(actions.historyRedoAction);
+        toolBar.addSeparator();
         toolBar.add(actions.clipboardCutAction);
         toolBar.add(actions.clipboardCopyAction);
         toolBar.add(actions.clipboardPasteAction);
@@ -149,6 +150,7 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
         toolBar.add(actions.flipVerticallyAction);
         toolBar.add(actions.rotateLeftAction);
         toolBar.add(actions.rotateRightAction);
+        toolBar.addSeparator();
         toolBar.add(actions.moveLeftAction);
         toolBar.add(actions.moveRightAction);
         toolBar.add(actions.moveUpAction);

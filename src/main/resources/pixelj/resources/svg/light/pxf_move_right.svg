@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+<svg width="100%" height="100%" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <g id="light">
-        <g id="green">
-            <path d="M8,9.75c0,-0.414 0.336,-0.75 0.75,-0.75l4.5,0c0.414,0 0.75,0.336 0.75,0.75l0,4.5c-0,0.414 -0.336,0.75 -0.75,0.75l-4.5,0c-0.414,-0 -0.75,-0.336 -0.75,-0.75l0,-4.5Z" style="fill:rgb(41,121,255);"/>
+        <g id="blue">
+            <path d="M18.251,10C18.449,10 18.64,9.921 18.78,9.78C18.921,9.64 19,9.449 19,9.251C19,7.725 19,4.275 19,2.749C19,2.551 18.921,2.36 18.78,2.22C18.64,2.079 18.449,2 18.251,2C16.556,2 12.444,2 10.749,2C10.551,2 10.36,2.079 10.22,2.22C10.079,2.36 10,2.551 10,2.749C10,4.275 10,7.725 10,9.251C10,9.449 10.079,9.64 10.22,9.78C10.36,9.921 10.551,10 10.749,10C12.444,10 16.556,10 18.251,10Z" style="fill:rgb(41,121,255);"/>
+        </g>
+        <g id="yellow">
         </g>
         <g id="red">
         </g>
         <g id="gray">
-            <path d="M7,9l0,6c0,-0 -2.854,-0 -4.25,-0c-0.414,-0 -0.75,-0.336 -0.75,-0.75c-0,-1.153 -0,-3.347 -0,-4.5c0,-0.414 0.336,-0.75 0.75,-0.75c1.396,0 4.25,0 4.25,0Z" style="fill:rgb(114,114,114);"/>
+            <path d="M9,2L9,4L3,4L3,8L9,8L9,10C9,10 3.739,10 1.749,10C1.551,10 1.36,9.921 1.22,9.78C1.079,9.64 1,9.449 1,9.251L1,2.749C1,2.551 1.079,2.36 1.22,2.22C1.36,2.079 1.551,2 1.749,2C3.739,2 9,2 9,2Z" style="fill:rgb(114,114,114);"/>
         </g>
-        <g id="yellow">
+        <g id="text">
+            <path d="M11,13.962L5,13.962C4.448,13.962 4,14.41 4,14.962C4,15.514 4.448,15.962 5,15.962L11,15.962L11,17.964C11,18.155 11.11,18.33 11.282,18.413C11.455,18.496 11.659,18.472 11.809,18.353C13.224,17.221 16,15 16,15C16,15 13.224,12.779 11.809,11.647C11.659,11.528 11.455,11.504 11.282,11.587C11.11,11.67 11,11.845 11,12.036L11,13.962Z" style="fill:rgb(72,72,74);"/>
         </g>
-        <g id="icon">
-            <path d="M2.51,4l8.49,0l0,2.5l3,-3l-3,-3l0,2.5l-8.5,-0c-0.276,-0 -0.5,0.224 -0.5,0.5c0,0.276 0.224,0.5 0.5,0.5c0.003,0 0.007,0 0.01,-0Z" style="fill:rgb(72,72,74);"/>
+        <g id="working">
         </g>
-    </g>
-    <g id="menu">
     </g>
 </svg>
