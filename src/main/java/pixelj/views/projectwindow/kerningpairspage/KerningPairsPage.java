@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 
 import pixelj.models.Project;
 import pixelj.util.Detachable;
+import pixelj.util.Messenger;
 
 public final class KerningPairsPage extends KerningPairsPageBase implements Detachable {
 
@@ -22,7 +23,7 @@ public final class KerningPairsPage extends KerningPairsPageBase implements Deta
             }
         });
 
-        editorPanel.valueSpinner.addChangeListener(e -> project.setDirty(true));
+        editorPanel.valueSpinner.addChangeListener(e -> Messenger.getDefault().send(Project.ProjectModifiedMessage.get()));
     }
 
     @Override

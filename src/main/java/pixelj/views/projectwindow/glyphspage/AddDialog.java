@@ -17,6 +17,7 @@ import pixelj.models.Project;
 import pixelj.models.Scalar;
 import pixelj.resources.Icon;
 import pixelj.resources.Resources;
+import pixelj.util.Messenger;
 import pixelj.views.shared.Help;
 import pixelj.views.shared.ScalarCellRenderer;
 
@@ -101,6 +102,6 @@ public final class AddDialog extends AddDialogBase {
             ));
         }
         selectionModel.clearSelection();
-        project.setDirty(true);
+        Messenger.getDefault().send(Project.ProjectModifiedMessage.get());
     }
 }

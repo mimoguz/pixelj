@@ -7,9 +7,10 @@ public final class LightColors implements Colors {
     private final Color accent = new Color(41, 121, 255);
     private final Color activeTab = new Color(229, 115, 26);
     private final Color disabledIcon = new Color(176, 176, 176);
-    private final Color divider = new Color(234, 224, 235);
+    private final Color divider = new Color(224, 224, 235);
     private final Color inactive = new Color(114, 114, 114);
-    private final Color icon = new Color(72, 72, 74);
+    // private final Color icon = new Color(72, 72, 74);
+    private final Color icon = new Color(96, 96, 100);
     private final Color separator = new Color(219, 219, 220);
 
     @Override

@@ -20,7 +20,7 @@ public final class ZoomStrip extends JPanel {
         final var res = Resources.get();
 
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-        setBorder(Borders.SMALL_EMPTY_CUP_CENTER);
+        setBorder(Borders.SMALL_EMPTY_CENTER_PANEL);
 
         add(Box.createHorizontalGlue());
 

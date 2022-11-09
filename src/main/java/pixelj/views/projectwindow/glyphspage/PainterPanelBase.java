@@ -70,16 +70,17 @@ public abstract class PainterPanelBase extends JPanel {
         painterContainer.add(painterBorder);
 
         scrollPane = new JScrollPane(painterContainer);
-        scrollPane.setBorder(Borders.SMALL_EMPTY_CUP_CENTER);
+        //scrollPane.setBorder(Borders.SMALL_EMPTY_CUP_CENTER);
+        scrollPane.setBorder(null);
         scrollPane.setFocusable(true);
         scrollPane.setMaximumSize(Dimensions.MAXIMUM);
 
         final var editorPanel = new JPanel(new BorderLayout());
-        editorPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Resources.get().colors.divider()));
         editorPanel.add(scrollPane, BorderLayout.CENTER);
         editorPanel.add(zoomStrip, BorderLayout.SOUTH);
 
         final var centerPanel = new JPanel(new BorderLayout());
+        centerPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Resources.get().colors.divider()));
         centerPanel.add(titlePanel, BorderLayout.NORTH);
         centerPanel.add(toolBar, BorderLayout.WEST);
         centerPanel.add(editorPanel, BorderLayout.CENTER);
