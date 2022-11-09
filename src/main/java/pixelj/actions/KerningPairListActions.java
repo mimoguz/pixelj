@@ -17,6 +17,7 @@ import pixelj.models.FilteredList;
 import pixelj.models.KerningPair;
 import pixelj.models.Project;
 import pixelj.resources.Resources;
+import pixelj.util.Messenger;
 import pixelj.views.projectwindow.kerningpairspage.AddDialog;
 
 public final class KerningPairListActions implements Actions {
@@ -90,7 +91,7 @@ public final class KerningPairListActions implements Actions {
         final var result = addDialog.getResult();
         if (result != null) {
             project.getKerningPairs().add(result);
-            project.setDirty(true);
+            Messenger.getDefault().send(Project.ProjectModifiedMessage.get());
         }
     }
 
@@ -113,6 +114,7 @@ public final class KerningPairListActions implements Actions {
         }
         final var listModel = project.getKerningPairs();
         listModel.removeAll(Arrays.stream(indices).mapToObj(displayListModel::getElementAt).toList());
-        project.setDirty(true);
+        Messenger.getDefault().send(Project.ProjectModifiedMessage.get());
+
     }
 }

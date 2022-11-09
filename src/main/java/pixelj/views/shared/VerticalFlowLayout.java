@@ -75,19 +75,18 @@ public final class VerticalFlowLayout implements LayoutManager {
                 continue;
             }
             final var prefSize = component.getPreferredSize();
-            if (columnHeight + prefSize.height > maxHeight || i == componentCount - 1) {
+            if (columnHeight + prefSize.height > maxHeight) {
                 minHeight = Math.max(minHeight, columnHeight);
                 minWidth += columnWidth;
                 columnHeight = 0;
                 columnWidth = 0;
             }
-            if (i == componentCount - 1 && columnWidth < component.getWidth()) {
-                minWidth += component.getWidth();
-                minHeight = Math.max(columnHeight + component.getHeight(), minHeight);
-            }
             columnWidth = Math.max(columnWidth, prefSize.width);
             columnHeight += prefSize.height;
         }
+
+        minWidth = minWidth + columnWidth;
+        minHeight = Math.max(minHeight, columnHeight);
 
         return new Dimension(minWidth + insets.left + insets.right, minHeight + insets.top + insets.bottom);
     }

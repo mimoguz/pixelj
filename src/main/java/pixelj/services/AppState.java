@@ -15,6 +15,8 @@ import pixelj.resources.Resources;
 import pixelj.services.RecentItem;
 import pixelj.util.ChangeableInt;
 import pixelj.util.ChangeableValue;
+import pixelj.util.Messenger;
+import pixelj.util.Receiver;
 import pixelj.views.projectwindow.LayoutStrategy;
 
 // TODO: MAJOR: Better state management!
@@ -209,7 +211,7 @@ public final class AppState {
            Removing theme detection for now.
         */
         // SYSTEM,
-        LIGHT, DARK;
+        DARK, LIGHT;
 
         @Override
         public String toString() {
@@ -225,6 +227,4 @@ public final class AppState {
             return Resources.get().getString("icon_" + this.name());
         }
     }
-
-
 }

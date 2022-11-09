@@ -6,6 +6,7 @@ import pixelj.models.Glyph;
 import pixelj.models.Project;
 import pixelj.util.Checkerboard;
 import pixelj.util.Detachable;
+import pixelj.util.Messenger;
 import pixelj.views.controls.GlyphPainter;
 import pixelj.views.controls.Line;
 import pixelj.views.controls.Orientation;
@@ -49,7 +50,7 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
         actions.setPainter(painter);
         painter.setSnapshotConsumer(s -> {
             actions.snapshotConsumer.accept(s);
-            project.setDirty(true);
+            Messenger.getDefault().send(Project.ProjectModifiedMessage.get());
         });
         actions.registerShortcuts(window.getRootPane());
         fillToolbar(toolBar, actions);

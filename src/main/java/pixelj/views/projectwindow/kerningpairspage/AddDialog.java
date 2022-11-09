@@ -16,6 +16,7 @@ import pixelj.models.KerningPair;
 import pixelj.models.Project;
 import pixelj.resources.Icon;
 import pixelj.resources.Resources;
+import pixelj.util.Messenger;
 import pixelj.views.shared.Dimensions;
 import pixelj.views.shared.GlyphCellRenderer;
 import pixelj.views.shared.Help;
@@ -111,7 +112,7 @@ public final class AddDialog extends AddDialogBase {
             if (mirroredCheck.isSelected()) {
                 project.getKerningPairs().add(new KerningPair(right, left, 0));
             }
-            project.setDirty(true);
+            Messenger.getDefault().send(Project.ProjectModifiedMessage.get());
         }
     }
 }

@@ -21,6 +21,7 @@ import pixelj.models.KerningPair;
 import pixelj.models.Project;
 import pixelj.resources.Resources;
 import pixelj.resources.Icon;
+import pixelj.util.Messenger;
 import pixelj.views.projectwindow.glyphspage.AddCodePointDialog;
 import pixelj.views.projectwindow.glyphspage.AddDialog;
 
@@ -106,7 +107,7 @@ public final class GlyphListActions implements Actions {
                 new Glyph(codePoint, defaultWidth, BinaryImage.of(canvasSize.width, canvasSize.height))
             );
         }
-        project.setDirty(true);
+        Messenger.getDefault().send(Project.ProjectModifiedMessage.get());
     }
 
     @Override

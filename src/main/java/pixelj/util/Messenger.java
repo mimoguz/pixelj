@@ -8,10 +8,10 @@ import java.util.WeakHashMap;
 public class Messenger {
     private static Messenger DEFAULT;
 
-    private final WeakHashMap<Receiver, Class<?>> receivers = new WeakHashMap<>();
+    private final WeakHashMap<Receiver, Void> receivers = new WeakHashMap<>();
 
-    public void register(Receiver receiver, Class<?> messageType) {
-        receivers.put(receiver, messageType);
+    public void register(Receiver receiver) {
+        receivers.put(receiver, null);
     }
 
     public void unregister(Receiver receiver, Class<?> messageType) {
@@ -19,8 +19,8 @@ public class Messenger {
     }
 
     public void send(Object message) {
-        receivers.forEach((receiver, messageType) -> {
-            if (receiver != null && message.getClass() == messageType) {
+        receivers.keySet().forEach(receiver -> {
+            if (receiver != null && message.getClass() == receiver.messageType()) {
                 receiver.receive(message);
             }
         });

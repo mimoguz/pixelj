@@ -9,7 +9,9 @@ import javax.swing.event.ListDataListener;
 
 import pixelj.util.ChangeableBoolean;
 import pixelj.util.ChangeableValue;
+import pixelj.util.Messenger;
 import pixelj.util.ReadOnlyValue;
+import pixelj.util.Receiver;
 
 public final class Project {
 
@@ -33,6 +35,7 @@ public final class Project {
     private final SortedList<Glyph> glyphs;
     private final SortedList<KerningPair> kerningPairs;
     private final ChangeableValue<String> title;
+    private final Receiver projectModifiedReceiver;
 
     public Project(
         final SortedList<Glyph> glyphs,
@@ -84,6 +87,20 @@ public final class Project {
         };
 
         glyphs.addListDataListener(kerningPairRemover);
+
+        projectModifiedReceiver = new Receiver() {
+            @Override
+            public Class<?> messageType() {
+                return ProjectModifiedMessage.class;
+            }
+
+            @Override
+            public void receive(final Object message) {
+                Project.this.setDirty(true);
+            }
+        };
+
+        Messenger.getDefault().register(projectModifiedReceiver);
     }
 
     /**
@@ -116,6 +133,7 @@ public final class Project {
 
     public void setDocumentSettings(final DocumentSettings value) {
         documentSettingsProperty.setValue(value);
+        setDirty(true);
         title.setValue(value.title());
     }
 
@@ -137,5 +155,15 @@ public final class Project {
 
     public String getTitle() {
         return titleProperty.getValue();
+    }
+
+    public static class ProjectModifiedMessage {
+        private static final  ProjectModifiedMessage INSTANCE = new ProjectModifiedMessage();
+
+        public static ProjectModifiedMessage get() {
+            return  INSTANCE;
+        }
+
+        private ProjectModifiedMessage() {}
     }
 }

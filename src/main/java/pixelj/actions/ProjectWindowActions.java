@@ -30,6 +30,7 @@ import pixelj.services.ExportServiceImpl;
 import pixelj.services.FileService;
 import pixelj.services.JavaPropertiesService;
 import pixelj.services.RecentItem;
+import pixelj.util.Messenger;
 import pixelj.views.homewindow.HomeWindow;
 import pixelj.views.projectwindow.ExportDialog;
 import pixelj.views.shared.Components;
@@ -274,7 +275,6 @@ public final class ProjectWindowActions implements Actions {
         final var result = documentSettingsDialog.getResult();
         if (result != null && !project.getDocumentSettings().equals(result)) {
             project.setDocumentSettings(result);
-            project.setDirty(true);
         }
     }
 

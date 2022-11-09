@@ -1,8 +1,16 @@
 package pixelj.actions;
 
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Toolkit;
+import pixelj.graphics.Snapshot;
+import pixelj.models.Project;
+import pixelj.resources.Icon;
+import pixelj.resources.Resources;
+import pixelj.util.ChangeableValue;
+import pixelj.util.Messenger;
+import pixelj.views.controls.GlyphPainter;
+import pixelj.views.controls.painter.Painter;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -17,63 +25,88 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
-import javax.swing.Action;
-import javax.swing.JToggleButton;
-import javax.swing.KeyStroke;
-
-import pixelj.graphics.Snapshot;
-import pixelj.resources.Icon;
-import pixelj.resources.Resources;
-import pixelj.util.ChangeableValue;
-import pixelj.views.controls.GlyphPainter;
-import pixelj.views.controls.painter.Painter;
-
-/** In sake of simplicity, all actions assume painter is not null when they are  called. */
+/**
+ * In sake of simplicity, all actions assume painter is not null when they are  called.
+ */
 public final class PainterActions implements Actions {
 
     private static final int MAX_UNDO = 64;
 
-    /** Copy image to both the application and the system clipboards. */
+    /**
+     * Copy image to both the application and the system clipboards.
+     */
     public final ApplicationAction clipboardCopyAction;
-    /** Cut image, put it to both the application and the system clipboards. */
+    /**
+     * Cut image, put it to both the application and the system clipboards.
+     */
     public final ApplicationAction clipboardCutAction;
-    /** Paste from the system clipboard. This is relatively costly, and may fail. */
+    /**
+     * Paste from the system clipboard. This is relatively costly, and may fail.
+     */
     public final ApplicationAction clipboardImportAction;
-    /** Paste from the application clipboard. */
+    /**
+     * Paste from the application clipboard.
+     */
     public final ApplicationAction clipboardPasteAction;
-    /** Clear the image contents. */
+    /**
+     * Clear the image contents.
+     */
     public final ApplicationAction eraseAction;
-    /** Flip the image horizontally. */
+    /**
+     * Flip the image horizontally.
+     */
     public final ApplicationAction flipHorizontallyAction;
-    /** Flip the image vertically. */
+    /**
+     * Flip the image vertically.
+     */
     public final ApplicationAction flipVerticallyAction;
-    /** Redo. */
+    /**
+     * Redo.
+     */
     public final ApplicationAction historyRedoAction;
-    /** Undo. */
+    /**
+     * Undo.
+     */
     public final ApplicationAction historyUndoAction;
-    /** Move image contents one pixel down. The overflowing line will be lost. */
+    /**
+     * Move image contents one pixel down. The overflowing line will be lost.
+     */
     public final ApplicationAction moveDownAction;
-    /** Move image contents one pixel left. The O-overflowing line will be lost. */
+    /**
+     * Move image contents one pixel left. The O-overflowing line will be lost.
+     */
     public final ApplicationAction moveLeftAction;
-    /** Move image contents one pixel right. The overflowing line will be lost. */
+    /**
+     * Move image contents one pixel right. The overflowing line will be lost.
+     */
     public final ApplicationAction moveRightAction;
-    /** Move image contents one pixel up. The overflowing line will be lost. */
+    /**
+     * Move image contents one pixel up. The overflowing line will be lost.
+     */
     public final ApplicationAction moveUpAction;
-    /** Rotate the image 90 degrees left. */
+    /**
+     * Rotate the image 90 degrees left.
+     */
     public final ApplicationAction rotateLeftAction;
-    /** Rotate the image 90 right left. */
+    /**
+     * Rotate the image 90 right left.
+     */
     public final ApplicationAction rotateRightAction;
-    /** When an image modified, its previous state will be sent to this consumer. */
+    /**
+     * When an image modified, its previous state will be sent to this consumer.
+     */
     public final Consumer<Snapshot> snapshotConsumer;
-    /** Toggle horizontal symmetry. */
+    /**
+     * Toggle horizontal symmetry.
+     */
     public final ApplicationAction symmetryToggleAction;
 
     private final Collection<ApplicationAction> all = new ArrayList<>();
-    private boolean enabled = true;
-    private GlyphPainter painter;
     private final ArrayList<Snapshot> undoBuffer = new ArrayList<>(MAX_UNDO);
     private final ArrayList<Snapshot> redoBuffer = new ArrayList<>(MAX_UNDO);
     private final ChangeableValue<Snapshot> clipboard = new ChangeableValue<>(null);
+    private boolean enabled = true;
+    private GlyphPainter painter;
 
     public PainterActions() {
         final var res = Resources.get();
@@ -151,8 +184,8 @@ public final class PainterActions implements Actions {
             (e, action) -> painter.flipHorizontally()
         )
             .setTooltipWithAccelerator(
-                    res.getString("painterFlipHorizontalActionTooltip"),
-                    KeyStroke.getKeyStroke(KeyEvent.VK_H, InputEvent.ALT_DOWN_MASK)
+                res.getString("painterFlipHorizontalActionTooltip"),
+                KeyStroke.getKeyStroke(KeyEvent.VK_H, InputEvent.ALT_DOWN_MASK)
             )
             .setIcon(Icon.FLIP_HORIZONTAL);
 
@@ -356,6 +389,7 @@ public final class PainterActions implements Actions {
                     snapshot.height(),
                     snapshot.data()
                 );
+                Messenger.getDefault().send(Project.ProjectModifiedMessage.get());
                 return;
             }
         }
@@ -373,16 +407,8 @@ public final class PainterActions implements Actions {
         }
 
         @Override
-        public Object getTransferData(final DataFlavor flavor) throws UnsupportedFlavorException {
-            if (flavor.equals(DataFlavor.imageFlavor)) {
-                return image;
-            }
-            throw new UnsupportedFlavorException(flavor);
-        }
-
-        @Override
         public DataFlavor[] getTransferDataFlavors() {
-            return new DataFlavor[] {
+            return new DataFlavor[]{
                 DataFlavor.imageFlavor
             };
         }
@@ -390,6 +416,14 @@ public final class PainterActions implements Actions {
         @Override
         public boolean isDataFlavorSupported(final DataFlavor flavor) {
             return Arrays.stream(getTransferDataFlavors()).anyMatch(f -> f.equals(flavor));
+        }
+
+        @Override
+        public Object getTransferData(final DataFlavor flavor) throws UnsupportedFlavorException {
+            if (flavor.equals(DataFlavor.imageFlavor)) {
+                return image;
+            }
+            throw new UnsupportedFlavorException(flavor);
         }
     }
 }

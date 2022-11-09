@@ -1,10 +1,8 @@
 package pixelj.views.projectwindow.glyphspage;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -15,6 +13,7 @@ import pixelj.resources.Resources;
 import pixelj.views.controls.GlyphPainter;
 import pixelj.views.controls.ZoomStrip;
 import pixelj.views.shared.Borders;
+import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 import pixelj.views.shared.VerticalFlowLayout;
 
@@ -41,18 +40,14 @@ public abstract class PainterPanelBase extends JPanel {
         this.infoPanel = infoPanel;
 
         toolBar.setBorder(BorderFactory.createEmptyBorder(0, Dimensions.SMALL_PADDING, 0, Dimensions.SMALL_PADDING));
+        Components.addOuterBorder(toolBar,
+            BorderFactory.createMatteBorder(0, 0, 0, 1, Resources.get().colors.divider())
+        );
         toolBar.setOrientation(SwingConstants.VERTICAL);
         toolBar.setLayout(new VerticalFlowLayout());
 
         setLayout(new BorderLayout());
         add(infoPanel, BorderLayout.EAST);
-
-        final var editorPanel = new JPanel(new BorderLayout());
-        editorPanel.setBorder(
-            BorderFactory.createMatteBorder(0, 0, 0, 1, Resources.get().colors.divider())
-        );
-        editorPanel.add(zoomStrip, BorderLayout.SOUTH);
-        editorPanel.add(toolBar, BorderLayout.WEST);
 
         /* ------------------------------- Panel title ------------------------------ */
         final var title = new JLabel(Resources.get().getString("painterTitle"));
@@ -63,7 +58,6 @@ public abstract class PainterPanelBase extends JPanel {
         titlePanel.add(Box.createHorizontalStrut(Dimensions.LARGE_PADDING));
         titlePanel.add(title);
         titlePanel.add(Box.createHorizontalGlue());
-        editorPanel.add(titlePanel, BorderLayout.NORTH);
 
         /* --------------------------------- Canvas --------------------------------- */
         // TODO: Focus border is a temporary solution. I need to make shortcut keys always work.
@@ -76,10 +70,21 @@ public abstract class PainterPanelBase extends JPanel {
         painterContainer.add(painterBorder);
 
         scrollPane = new JScrollPane(painterContainer);
-        scrollPane.setBorder(Borders.SMALL_EMPTY_CUP_CENTER);
+        //scrollPane.setBorder(Borders.SMALL_EMPTY_CUP_CENTER);
+        scrollPane.setBorder(null);
         scrollPane.setFocusable(true);
         scrollPane.setMaximumSize(Dimensions.MAXIMUM);
+
+        final var editorPanel = new JPanel(new BorderLayout());
         editorPanel.add(scrollPane, BorderLayout.CENTER);
+        editorPanel.add(zoomStrip, BorderLayout.SOUTH);
+
+        final var centerPanel = new JPanel(new BorderLayout());
+        centerPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Resources.get().colors.divider()));
+        centerPanel.add(titlePanel, BorderLayout.NORTH);
+        centerPanel.add(toolBar, BorderLayout.WEST);
+        centerPanel.add(editorPanel, BorderLayout.CENTER);
+        add(centerPanel, BorderLayout.CENTER);
 
         scrollPane.addFocusListener(new FocusListener() {
             @Override
@@ -92,7 +97,5 @@ public abstract class PainterPanelBase extends JPanel {
                 painterBorder.setBorder(unfocusedBorder);
             }
         });
-
-        add(editorPanel, BorderLayout.CENTER);
     }
 }
