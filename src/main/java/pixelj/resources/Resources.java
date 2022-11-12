@@ -32,6 +32,7 @@ import pixelj.models.Block;
 import pixelj.models.Scalar;
 import pixelj.services.AppState;
 import pixelj.services.AppState.IconTheme;
+import pixelj.views.shared.GrayscaleFilter;
 
 public final class Resources {
 
@@ -81,7 +82,7 @@ public final class Resources {
         strings = new Strings(loadResourceBundle());
         applicationIcons = loadApplicationIcons();
         this.iconTheme = iconTheme;
-        monochromeFilter = new FlatSVGIcon.ColorFilter(color -> colors.icon());
+        monochromeFilter = new GrayscaleFilter();
 
         final var globalFilter = FlatSVGIcon.ColorFilter.getInstance();
         // globalFilter.setMapper(color -> color.equals(Color.BLACK) ? Color.RED : color);

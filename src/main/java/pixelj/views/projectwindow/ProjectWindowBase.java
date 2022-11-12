@@ -1,5 +1,6 @@
 package pixelj.views.projectwindow;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -37,6 +38,7 @@ import pixelj.views.projectwindow.previewpage.PreviewPage;
 import pixelj.views.shared.Borders;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
+import pixelj.views.shared.GrayscaleFilter;
 
 /** Project window design. */
 abstract class ProjectWindowBase extends JFrame {
@@ -56,9 +58,8 @@ abstract class ProjectWindowBase extends JFrame {
 
     public ProjectWindowBase()
     {
-        final var res = Resources.get();
-        inactiveFilter = new FlatSVGIcon.ColorFilter(color -> res.colors.icon());
-        activeFilter = new FlatSVGIcon.ColorFilter(color -> res.colors.activeTab());
+        inactiveFilter = new GrayscaleFilter();
+        activeFilter = new FlatSVGIcon.ColorFilter(color -> color);
     }
 
     public void setup(
@@ -108,8 +109,8 @@ abstract class ProjectWindowBase extends JFrame {
         final var listIcon = res.getIcon(Icon.LIST);
         final var kerningIcon = res.getIcon(Icon.KERNING_WIDE);
         final var eyeIcon = res.getIcon(Icon.EYE);
-        
-        listIcon.setColorFilter(activeFilter);
+
+        listIcon.setColorFilter(null);
         kerningIcon.setColorFilter(inactiveFilter);
         eyeIcon.setColorFilter(inactiveFilter);
 
@@ -275,7 +276,7 @@ abstract class ProjectWindowBase extends JFrame {
         final var res = Resources.get();
         for (var tab = 0; tab < 3; tab++) {
             if (content.getIconAt(tab) instanceof final FlatSVGIcon icn) {
-                icn.setColorFilter(tab == index ? activeFilter : inactiveFilter);
+                icn.setColorFilter(tab == index ? null : inactiveFilter);
             }
         }
     }

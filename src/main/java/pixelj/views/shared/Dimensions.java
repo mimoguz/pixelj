@@ -11,7 +11,7 @@ public final class Dimensions {
     /**
      * Icon width & height
      */
-    public static final int ICON_SIZE = 20;
+    public static final int ICON_SIZE = 16;
     /**
      * Large padding.
      */
