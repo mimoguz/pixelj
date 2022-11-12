@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="100%" height="100%" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+<svg width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <g id="light">
-        <g id="blue">
-        </g>
         <g id="yellow">
-            <path d="M10,1C14.967,1 19,5.033 19,10C19,14.967 14.967,19 10,19C5.033,19 1,14.967 1,10C1,5.033 5.033,1 10,1ZM10,14.5C10.828,14.5 11.5,15.172 11.5,16C11.5,16.828 10.828,17.5 10,17.5C9.172,17.5 8.5,16.828 8.5,16C8.5,15.172 9.172,14.5 10,14.5ZM7.997,7.079C8.101,5.761 9.345,5.5 10,5.5C11.426,5.5 12,6.36 12,7C12,7.536 11.718,7.897 11.397,8.227C11.073,8.56 10.701,8.862 10.363,9.187C9.595,9.925 9,10.768 9,12C9,12.552 9.448,13 10,13C10.552,13 11,12.552 11,12C11,11.464 11.282,11.103 11.603,10.773C11.927,10.44 12.299,10.138 12.637,9.813C13.405,9.075 14,8.232 14,7C14,5.639 13.032,3.5 10,3.5C8.648,3.5 6.219,4.203 6.003,6.921C5.959,7.471 6.371,7.953 6.921,7.997C7.471,8.041 7.953,7.629 7.997,7.079Z" style="fill:rgb(229,115,26);"/>
+            <circle cx="8" cy="8" r="8" style="fill:rgb(229,115,26);"/>
+            <path d="M8,0C12.415,0 16,3.585 16,8C16,12.415 12.415,16 8,16C3.585,16 0,12.415 0,8C0,3.585 3.585,0 8,0ZM8,0.5C12.139,0.5 15.5,3.861 15.5,8C15.5,12.139 12.139,15.5 8,15.5C3.861,15.5 0.5,12.139 0.5,8C0.5,3.861 3.861,0.5 8,0.5Z" style="fill:url(#_Linear1);"/>
+            <path d="M6.204,6.005C6.466,5.665 6.791,5.337 7.206,5.149C7.565,4.985 8.007,4.906 8.5,4.977C9.215,5.08 9.513,5.807 9.513,6.032C9.513,6.654 9.26,7.247 8.866,7.605C8.508,7.931 7.854,8.472 7.506,9.084C7.278,9.485 7.14,10.244 7.134,11L8.866,11C8.863,10.556 9.058,9.672 9.612,9.251C9.998,8.958 10.768,8.338 11.079,7.767C11.349,7.271 11.498,6.71 11.487,5.968C11.471,5.334 11.24,4.513 10.667,3.925C10.108,3.351 9.243,3.013 8.5,3.023C7.673,3.046 6.977,3.227 6.398,3.536C5.725,3.894 5.195,4.396 4.796,4.995L6.204,6.005Z" style="fill:white;"/>
+            <circle cx="8" cy="13" r="1" style="fill:white;"/>
         </g>
-        <g id="red">
         </g>
-        <g id="text">
+    <g id="Layer1">
         </g>
-        <g id="working">
-        </g>
-    </g>
+    <defs>
+        <linearGradient id="_Linear1" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(6.15385,15.3846,-15.3846,6.15385,3.69231,0.615385)"><stop offset="0" style="stop-color:white;stop-opacity:0.3"/><stop offset="1" style="stop-color:white;stop-opacity:0"/></linearGradient>
+        <filter id="_Effect2" filterUnits="userSpaceOnUse" x="-2.35876" y="22.5346" width="20.3241" height="20.3241">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="0.5"/>
+        </filter>
+    </defs>
 </svg>
