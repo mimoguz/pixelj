@@ -51,7 +51,7 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
         actions.setPainter(painter);
         painter.setSnapshotConsumer(s -> {
             actions.snapshotConsumer.accept(s);
-            Messenger.getDefault().send(ProjectModifiedMessage.get());
+            Messenger.forClass(ProjectModifiedMessage.class).send(ProjectModifiedMessage.get());
         });
         actions.registerShortcuts(window.getRootPane());
         fillToolbar(toolBar, actions);

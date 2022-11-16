@@ -1,7 +1,7 @@
 package pixelj.util;
 
-public interface Receiver {
-    public Class messageType();
+public interface Receiver<T> {
+    public Class<T> messageType();
 
-    public void receive(Object message);
+    public void receive(T message);
 }

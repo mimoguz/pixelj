@@ -40,9 +40,9 @@ public final class Project {
     private final SortedList<Glyph> glyphs;
     private final SortedList<KerningPair> kerningPairs;
     private final ChangeableValue<String> title;
-    private final Receiver projectModifiedReceiver;
-    private final Receiver addCharactersReceiver;
-    private final Receiver addKerningPairReceiver;
+    private final Receiver<ProjectModifiedMessage> projectModifiedReceiver;
+    private final Receiver<AddCharactersMessage> addCharactersReceiver;
+    private final Receiver<AddKerningPairMessage> addKerningPairReceiver;
     private final DocumentSettings settings;
 
     public Project(
@@ -97,49 +97,45 @@ public final class Project {
 
         glyphs.addListDataListener(kerningPairRemover);
 
-        projectModifiedReceiver = new Receiver() {
+        projectModifiedReceiver = new Receiver<>() {
             @Override
-            public Class<?> messageType() {
+            public Class<ProjectModifiedMessage> messageType() {
                 return ProjectModifiedMessage.class;
             }
 
             @Override
-            public void receive(final Object message) {
+            public void receive(final ProjectModifiedMessage message) {
                 Project.this.setDirty(true);
             }
         };
 
-        addCharactersReceiver = new Receiver() {
+        addCharactersReceiver = new Receiver<>() {
             @Override
-            public Class<?> messageType() {
+            public Class<AddCharactersMessage> messageType() {
                 return AddCharactersMessage.class;
             }
 
             @Override
-            public void receive(final Object message) {
-                if (message instanceof AddCharactersMessage msg) {
-                    Project.this.addCharacters(msg.condePoints());
-                }
+            public void receive(final AddCharactersMessage message) {
+                Project.this.addCharacters(message.condePoints());
             }
         };
 
-        addKerningPairReceiver = new Receiver() {
+        addKerningPairReceiver = new Receiver<>() {
             @Override
-            public Class<?> messageType() {
+            public Class<AddKerningPairMessage> messageType() {
                 return AddKerningPairMessage.class;
             }
 
             @Override
-            public void receive(final Object message) {
-                if (message instanceof  AddKerningPairMessage msg) {
-                    Project.this.addKerningPair(msg.left(), msg.right(), msg.addMirror());
-                }
+            public void receive(final AddKerningPairMessage message) {
+                Project.this.addKerningPair(message.left(), message.right(), message.addMirror());
             }
         };
 
-        Messenger.getDefault().register(projectModifiedReceiver);
-        Messenger.getDefault().register(addCharactersReceiver);
-        Messenger.getDefault().register(addKerningPairReceiver);
+        Messenger.forClass(ProjectModifiedMessage.class).register(projectModifiedReceiver);
+        Messenger.forClass(AddCharactersMessage.class).register(addCharactersReceiver);
+        Messenger.forClass(AddKerningPairMessage.class).register(addKerningPairReceiver);
     }
 
     /**
@@ -196,8 +192,7 @@ public final class Project {
         return titleProperty.getValue();
     }
 
-    public void addCharacters(final int... codePoints)
-    {
+    public void addCharacters(final int... codePoints) {
         glyphs.addAll(
             Arrays
                 .stream(codePoints)

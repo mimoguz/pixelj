@@ -107,7 +107,7 @@ public final class GlyphListActions implements Actions {
                 new Glyph(codePoint, defaultWidth, BinaryImage.of(canvasSize.width, canvasSize.height))
             );
         }
-        Messenger.getDefault().send(ProjectModifiedMessage.get());
+        Messenger.forClass(ProjectModifiedMessage.class).send(ProjectModifiedMessage.get());
     }
 
     @Override

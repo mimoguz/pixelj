@@ -89,11 +89,6 @@ public final class KerningPairListActions implements Actions {
 
     private void showAddDialog(final ActionEvent event, final Action action) {
         addDialog.setVisible(true);
-        final var result = addDialog.getResult();
-        if (result != null) {
-            project.getKerningPairs().add(result);
-            Messenger.getDefault().send(ProjectModifiedMessage.get());
-        }
     }
 
     private void showRemoveDialog(final ActionEvent event, final Action action) {
@@ -115,7 +110,7 @@ public final class KerningPairListActions implements Actions {
         }
         final var listModel = project.getKerningPairs();
         listModel.removeAll(Arrays.stream(indices).mapToObj(displayListModel::getElementAt).toList());
-        Messenger.getDefault().send(ProjectModifiedMessage.get());
+        Messenger.forClass(ProjectModifiedMessage.class).send(ProjectModifiedMessage.get());
 
     }
 }

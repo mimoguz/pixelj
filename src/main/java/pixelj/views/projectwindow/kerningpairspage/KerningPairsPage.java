@@ -24,7 +24,9 @@ public final class KerningPairsPage extends KerningPairsPageBase implements Deta
             }
         });
 
-        editorPanel.valueSpinner.addChangeListener(e -> Messenger.getDefault().send(ProjectModifiedMessage.get()));
+        editorPanel.valueSpinner.addChangeListener(e -> Messenger
+            .forClass(ProjectModifiedMessage.class)
+            .send(ProjectModifiedMessage.get()));
     }
 
     @Override

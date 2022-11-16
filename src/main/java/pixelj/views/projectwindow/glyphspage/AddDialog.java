@@ -90,6 +90,6 @@ public final class AddDialog extends AddDialogBase {
             final var selectedIndex = indices[i];
             indices[i] = listModel.get(selectedIndex).codePoint();
         }
-        Messenger.getDefault().send(new AddCharactersMessage(indices));
+        Messenger.forClass(AddCharactersMessage.class).send(new AddCharactersMessage(indices));
     }
 }
