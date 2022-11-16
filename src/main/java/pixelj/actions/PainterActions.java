@@ -1,11 +1,11 @@
 package pixelj.actions;
 
 import pixelj.graphics.Snapshot;
-import pixelj.models.Project;
+import pixelj.messaging.ProjectModifiedMessage;
 import pixelj.resources.Icon;
 import pixelj.resources.Resources;
 import pixelj.util.ChangeableValue;
-import pixelj.util.Messenger;
+import pixelj.messaging.Messenger;
 import pixelj.views.controls.GlyphPainter;
 import pixelj.views.controls.painter.Painter;
 
@@ -389,7 +389,7 @@ public final class PainterActions implements Actions {
                     snapshot.height(),
                     snapshot.data()
                 );
-                Messenger.getDefault().send(Project.ProjectModifiedMessage.get());
+                Messenger.getDefault().send(ProjectModifiedMessage.get());
                 return;
             }
         }

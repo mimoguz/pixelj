@@ -1,12 +1,13 @@
 package pixelj.views.projectwindow.glyphspage;
 
 import pixelj.actions.PainterActions;
+import pixelj.messaging.ProjectModifiedMessage;
 import pixelj.models.DocumentSettings;
 import pixelj.models.Glyph;
 import pixelj.models.Project;
 import pixelj.util.Checkerboard;
 import pixelj.util.Detachable;
-import pixelj.util.Messenger;
+import pixelj.messaging.Messenger;
 import pixelj.views.controls.GlyphPainter;
 import pixelj.views.controls.Line;
 import pixelj.views.controls.Orientation;
@@ -50,7 +51,7 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
         actions.setPainter(painter);
         painter.setSnapshotConsumer(s -> {
             actions.snapshotConsumer.accept(s);
-            Messenger.getDefault().send(Project.ProjectModifiedMessage.get());
+            Messenger.getDefault().send(ProjectModifiedMessage.get());
         });
         actions.registerShortcuts(window.getRootPane());
         fillToolbar(toolBar, actions);

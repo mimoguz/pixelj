@@ -2,14 +2,19 @@ package pixelj.models;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
+import pixelj.graphics.BinaryImage;
+import pixelj.messaging.AddCharactersMessage;
+import pixelj.messaging.AddKerningPairMessage;
+import pixelj.messaging.ProjectModifiedMessage;
 import pixelj.util.ChangeableBoolean;
 import pixelj.util.ChangeableValue;
-import pixelj.util.Messenger;
+import pixelj.messaging.Messenger;
 import pixelj.util.ReadOnlyValue;
 import pixelj.util.Receiver;
 
@@ -36,6 +41,9 @@ public final class Project {
     private final SortedList<KerningPair> kerningPairs;
     private final ChangeableValue<String> title;
     private final Receiver projectModifiedReceiver;
+    private final Receiver addCharactersReceiver;
+    private final Receiver addKerningPairReceiver;
+    private final DocumentSettings settings;
 
     public Project(
         final SortedList<Glyph> glyphs,
@@ -47,6 +55,7 @@ public final class Project {
         titleProperty = new ReadOnlyValue<>(title);
         this.glyphs = glyphs;
         this.kerningPairs = kerningPairs;
+        this.settings = settings;
         pathProperty = new ChangeableValue<>(path);
         documentSettingsProperty = new ChangeableValue<>(settings);
 
@@ -100,7 +109,37 @@ public final class Project {
             }
         };
 
+        addCharactersReceiver = new Receiver() {
+            @Override
+            public Class<?> messageType() {
+                return AddCharactersMessage.class;
+            }
+
+            @Override
+            public void receive(final Object message) {
+                if (message instanceof AddCharactersMessage msg) {
+                    Project.this.addCharacters(msg.condePoints());
+                }
+            }
+        };
+
+        addKerningPairReceiver = new Receiver() {
+            @Override
+            public Class<?> messageType() {
+                return AddKerningPairMessage.class;
+            }
+
+            @Override
+            public void receive(final Object message) {
+                if (message instanceof  AddKerningPairMessage msg) {
+                    Project.this.addKerningPair(msg.left(), msg.right(), msg.addMirror());
+                }
+            }
+        };
+
         Messenger.getDefault().register(projectModifiedReceiver);
+        Messenger.getDefault().register(addCharactersReceiver);
+        Messenger.getDefault().register(addKerningPairReceiver);
     }
 
     /**
@@ -157,13 +196,28 @@ public final class Project {
         return titleProperty.getValue();
     }
 
-    public static class ProjectModifiedMessage {
-        private static final  ProjectModifiedMessage INSTANCE = new ProjectModifiedMessage();
+    public void addCharacters(final int... codePoints)
+    {
+        glyphs.addAll(
+            Arrays
+                .stream(codePoints)
+                .mapToObj(codePoint -> new Glyph(
+                    codePoint,
+                    settings.defaultWidth(),
+                    BinaryImage.of(settings.canvasWidth(), settings.canvasHeight(), true)
+                ))
+                .toList()
+        );
+        setDirty(true);
+    }
 
-        public static ProjectModifiedMessage get() {
-            return  INSTANCE;
+    private void addKerningPair(final Glyph left, final Glyph right, final boolean addMirror) {
+        if (left != null && right != null) {
+            kerningPairs.add(new KerningPair(left, right, 0));
+            if (addMirror) {
+                kerningPairs.add(new KerningPair(right, left, 0));
+            }
+            setDirty(true);
         }
-
-        private ProjectModifiedMessage() {}
     }
 }

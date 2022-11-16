@@ -10,14 +10,12 @@ import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 
 import pixelj.actions.ApplicationAction;
-import pixelj.graphics.BinaryImage;
+import pixelj.messaging.AddCharactersMessage;
 import pixelj.models.Block;
-import pixelj.models.Glyph;
-import pixelj.models.Project;
 import pixelj.models.Scalar;
 import pixelj.resources.Icon;
 import pixelj.resources.Resources;
-import pixelj.util.Messenger;
+import pixelj.messaging.Messenger;
 import pixelj.views.shared.Help;
 import pixelj.views.shared.ScalarCellRenderer;
 
@@ -28,11 +26,9 @@ public final class AddDialog extends AddDialogBase {
 
     private final DefaultListModel<Scalar> listModel = new DefaultListModel<>();
     private final ListSelectionModel selectionModel = new DefaultListSelectionModel();
-    private final Project project;
 
-    public AddDialog(final Frame owner, final Project project) {
+    public AddDialog(final Frame owner) {
         super(owner);
-        this.project = project;
 
         selectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         scalarList.setModel(listModel);
@@ -90,18 +86,10 @@ public final class AddDialog extends AddDialogBase {
 
     private void addSelected() {
         final var indices = selectionModel.getSelectedIndices();
-        final var defaultWidth = project.getDocumentSettings().defaultWidth();
-        final var canvasWidth = project.getDocumentSettings().canvasWidth();
-        final var canvasHeight = project.getDocumentSettings().canvasHeight();
-        for (final var i : indices) {
-            final var scalarData = listModel.get(i);
-            project.getGlyphs().add(new Glyph(
-                scalarData.codePoint(),
-                defaultWidth,
-                BinaryImage.of(canvasWidth, canvasHeight, true)
-            ));
+        for (var i = 0; i < indices.length; i++) {
+            final var selectedIndex = indices[i];
+            indices[i] = listModel.get(selectedIndex).codePoint();
         }
-        selectionModel.clearSelection();
-        Messenger.getDefault().send(Project.ProjectModifiedMessage.get());
+        Messenger.getDefault().send(new AddCharactersMessage(indices));
     }
 }

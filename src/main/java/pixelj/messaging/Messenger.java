@@ -1,4 +1,6 @@
-package pixelj.util;
+package pixelj.messaging;
+
+import pixelj.util.Receiver;
 
 import java.util.WeakHashMap;
 
@@ -6,6 +8,7 @@ import java.util.WeakHashMap;
  * A very simple in-thread message dispatcher that uses weak references to the receivers.
  **/
 public class Messenger {
+
     private static Messenger DEFAULT;
 
     private final WeakHashMap<Receiver, Void> receivers = new WeakHashMap<>();

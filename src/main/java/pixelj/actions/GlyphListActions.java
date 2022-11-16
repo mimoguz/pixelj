@@ -16,12 +16,13 @@ import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 
 import pixelj.graphics.BinaryImage;
+import pixelj.messaging.ProjectModifiedMessage;
 import pixelj.models.Glyph;
 import pixelj.models.KerningPair;
 import pixelj.models.Project;
 import pixelj.resources.Resources;
 import pixelj.resources.Icon;
-import pixelj.util.Messenger;
+import pixelj.messaging.Messenger;
 import pixelj.views.projectwindow.glyphspage.AddCodePointDialog;
 import pixelj.views.projectwindow.glyphspage.AddDialog;
 
@@ -51,7 +52,7 @@ public final class GlyphListActions implements Actions {
         this.project = project;
         this.selectionModel = selectionModel;
         this.window = window;
-        addDialog = new AddDialog(window, project);
+        addDialog = new AddDialog(window);
         addCodePointDialog = new AddCodePointDialog(window, project);
 
         addGlyphsAction = new ApplicationAction("addGlyphsAction", this::showAddDialog)
@@ -100,14 +101,13 @@ public final class GlyphListActions implements Actions {
         this.defaultWidth = defaultCharacterWidth;
     }
 
-    @SuppressWarnings("unused")
     private void addCharacters(final int... codePoints) {
         for (final var codePoint : codePoints) {
             project.getGlyphs().add(
                 new Glyph(codePoint, defaultWidth, BinaryImage.of(canvasSize.width, canvasSize.height))
             );
         }
-        Messenger.getDefault().send(Project.ProjectModifiedMessage.get());
+        Messenger.getDefault().send(ProjectModifiedMessage.get());
     }
 
     @Override
