@@ -4,6 +4,8 @@ import java.awt.Font;
 
 import javax.swing.SpinnerNumberModel;
 
+import pixelj.messaging.GlyphChangedMessage;
+import pixelj.messaging.Messenger;
 import pixelj.models.DocumentSettings;
 import pixelj.models.Glyph;
 import pixelj.models.Project;
@@ -34,6 +36,7 @@ public final class InfoPanel extends InfoPanelBase {
                 final var value = numberModel.getNumber().intValue();
                 if (value != model.getWidth()) {
                     model.setWidth(value);
+                    Messenger.get(GlyphChangedMessage.class).send(new GlyphChangedMessage(model.getCodePoint()));
                 }
             }
         });

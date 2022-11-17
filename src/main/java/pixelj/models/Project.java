@@ -14,6 +14,8 @@ import pixelj.graphics.BinaryImage;
 import pixelj.messaging.AddCharactersMessage;
 import pixelj.messaging.AddKerningPairMessage;
 import pixelj.messaging.DependentPairsQuestion;
+import pixelj.messaging.GlyphChangedMessage;
+import pixelj.messaging.KerningPairChangedMessage;
 import pixelj.messaging.ProjectModifiedMessage;
 import pixelj.messaging.RemoveGlyphsMessage;
 import pixelj.messaging.RemoveKerningPairsMessage;
@@ -46,13 +48,16 @@ public final class Project implements Detachable {
     private final SortedList<Glyph> glyphs;
     private final SortedList<KerningPair> kerningPairs;
     private final ChangeableValue<String> title;
-    private final Receiver<ProjectModifiedMessage, Void> projectModifiedReceiver;
+    private final DocumentSettings settings;
+
     private final Receiver<AddCharactersMessage, Void> addCharactersReceiver;
     private final Receiver<AddKerningPairMessage, Void> addKerningPairReceiver;
-    private final Receiver<RemoveKerningPairsMessage, Void> removeKerningPairsReceiver;
-    private final Receiver<RemoveGlyphsMessage, Void> removeGlyphsReceiver;
     private final Receiver<DependentPairsQuestion, Integer> dependentPairsResponder;
-    private final DocumentSettings settings;
+    private final Receiver<GlyphChangedMessage, Void> glyphChangedReceiver;
+    private final Receiver<KerningPairChangedMessage, Void> kerningPairChangedReceiver;
+    private final Receiver<ProjectModifiedMessage, Void> projectModifiedReceiver;
+    private final Receiver<RemoveGlyphsMessage, Void> removeGlyphsReceiver;
+    private final Receiver<RemoveKerningPairsMessage, Void> removeKerningPairsReceiver;
 
     public Project(
         final SortedList<Glyph> glyphs,
@@ -126,6 +131,14 @@ public final class Project implements Detachable {
             removeGlyphs(msg.glyphs());
             return null;
         };
+        glyphChangedReceiver = msg -> {
+            setDirty(true);
+            return null;
+        };
+        kerningPairChangedReceiver = msg -> {
+            setDirty(true);
+            return null;
+        };
         dependentPairsResponder = q -> countDependent(q.glyphs());
 
         Messenger.get(ProjectModifiedMessage.class).register(projectModifiedReceiver);
@@ -133,13 +146,16 @@ public final class Project implements Detachable {
         Messenger.get(AddKerningPairMessage.class).register(addKerningPairReceiver);
         Messenger.get(RemoveKerningPairsMessage.class).register(removeKerningPairsReceiver);
         Messenger.get(RemoveGlyphsMessage.class).register(removeGlyphsReceiver);
+        Messenger.get(GlyphChangedMessage.class).register(glyphChangedReceiver);
+        Messenger.get(KerningPairChangedMessage.class).register(kerningPairChangedReceiver);
         Messenger.get(DependentPairsQuestion.class, Integer.class).register(dependentPairsResponder);
     }
 
     /**
-     * @param glyph
-     * @return Number of the kerning pairs that includes the glyphs
+     * @param glyph The glyph that will be searched for
+     * @return Number of the kerning pairs that includes the glyph
      */
+    @SuppressWarnings("unused")
     public int countDependent(final Glyph glyph) {
         return kerningPairs.countWhere(p -> p.getLeft().equals(glyph) || p.getRight().equals(glyph));
     }
@@ -149,7 +165,7 @@ public final class Project implements Detachable {
     }
 
     /**
-     * @param glyph
+     * @param glyph The glyph that will be searched for
      * @return List of the kerning pairs that includes the glyphs
      */
     public List<KerningPair> findDependent(final Glyph glyph) {
@@ -218,6 +234,7 @@ public final class Project implements Detachable {
         }
     }
 
+    @SuppressWarnings("unused")
     private void removeKerningPairs(final KerningPair... pairs) {
         removeKerningPairs(Arrays.stream(pairs).toList());
     }
@@ -239,6 +256,8 @@ public final class Project implements Detachable {
         Messenger.get(AddKerningPairMessage.class).unregister(addKerningPairReceiver);
         Messenger.get(RemoveKerningPairsMessage.class).unregister(removeKerningPairsReceiver);
         Messenger.get(RemoveGlyphsMessage.class).unregister(removeGlyphsReceiver);
+        Messenger.get(GlyphChangedMessage.class).unregister(glyphChangedReceiver);
+        Messenger.get(KerningPairChangedMessage.class).unregister(kerningPairChangedReceiver);
         Messenger.get(DependentPairsQuestion.class).unregister(dependentPairsResponder);
     }
 }

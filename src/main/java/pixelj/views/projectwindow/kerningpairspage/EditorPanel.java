@@ -50,6 +50,10 @@ public final class EditorPanel extends EditorPanelBase {
         }
     }
 
+    public KerningPair getModel() {
+        return model;
+    }
+
     /**
      * @param value May be null.
      */

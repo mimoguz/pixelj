@@ -1,6 +1,7 @@
 package pixelj.views.projectwindow.glyphspage;
 
 import pixelj.actions.PainterActions;
+import pixelj.messaging.GlyphChangedMessage;
 import pixelj.messaging.ProjectModifiedMessage;
 import pixelj.models.DocumentSettings;
 import pixelj.models.Glyph;
@@ -50,7 +51,7 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
         actions.setPainter(painter);
         painter.setSnapshotConsumer(s -> {
             actions.snapshotConsumer.accept(s);
-            Messenger.get(ProjectModifiedMessage.class).send(ProjectModifiedMessage.get());
+            Messenger.get(GlyphChangedMessage.class).send(new GlyphChangedMessage(painter.getModel().getCodePoint()));
         });
         actions.registerShortcuts(window.getRootPane());
         fillToolbar(toolBar, actions);
