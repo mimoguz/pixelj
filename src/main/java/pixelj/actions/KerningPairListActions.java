@@ -13,7 +13,6 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 
-import pixelj.messaging.ProjectModifiedMessage;
 import pixelj.messaging.RemoveKerningPairsMessage;
 import pixelj.models.FilteredList;
 import pixelj.models.KerningPair;
@@ -108,7 +107,7 @@ public final class KerningPairListActions implements Actions {
             return;
         }
         final var pairs = Arrays.stream(indices).mapToObj(displayListModel::getElementAt).toList();
-        Messenger.sendTo(new RemoveKerningPairsMessage(pairs), RemoveKerningPairsMessage.class);
+        Messenger.get(RemoveKerningPairsMessage.class).send(new RemoveKerningPairsMessage(pairs));
 
     }
 }

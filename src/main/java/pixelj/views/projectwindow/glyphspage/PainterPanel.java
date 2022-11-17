@@ -27,7 +27,6 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
 
     private final PainterActions actions = new PainterActions();
     private BufferedImage overlay;
-    private final JPopupMenu overflowMenu = new JPopupMenu();
 
     public PainterPanel(final Project project, final JFrame window) {
         super(new InfoPanel(project));
@@ -51,7 +50,7 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
         actions.setPainter(painter);
         painter.setSnapshotConsumer(s -> {
             actions.snapshotConsumer.accept(s);
-            Messenger.sendTo(ProjectModifiedMessage.get(), ProjectModifiedMessage.class);
+            Messenger.get(ProjectModifiedMessage.class).send(ProjectModifiedMessage.get());
         });
         actions.registerShortcuts(window.getRootPane());
         fillToolbar(toolBar, actions);

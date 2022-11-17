@@ -1,5 +1,5 @@
 package pixelj.messaging;
 
-public interface Receiver<T> {
-    void receive(T message);
+public interface Receiver<M, R> {
+    R receive(M message);
 }

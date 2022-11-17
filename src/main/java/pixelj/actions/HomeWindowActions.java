@@ -156,7 +156,8 @@ public final class HomeWindowActions implements Actions {
         final var item = appState.getRecentItem(index);
         try {
             appState.replaceRecentItemDate(item.path(), OffsetDateTime.now());
-            showProject(new DBFileService().readFile(item.path()));
+            final var project = new DBFileService().readFile(item.path());
+            showProject(project);
         } catch (IOException e) {
             askRemoveItem(item);
         }

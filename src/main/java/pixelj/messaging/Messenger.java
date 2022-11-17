@@ -8,27 +8,18 @@ import java.util.WeakHashMap;
 /**
  * A very simple in-thread message dispatcher that uses weak references to the receivers.
  **/
-public class Messenger<M> {
+public class Messenger<M, R> {
 
-    private static final Map<Class<?>, Messenger<?>> MESSENGERS = new HashMap<>();
+    private static final Map<Class<?>, Messenger<?, ?>> MESSENGERS = new HashMap<>();
 
-    private final WeakHashMap<Receiver<M>, Void> receivers = new WeakHashMap<>();
-    private final WeakHashMap<Responder<M>, Void> responders = new WeakHashMap<>();
+    private final WeakHashMap<Receiver<M, R>, Void> receivers = new WeakHashMap<>();
 
-    public void register(Receiver<M> receiver) {
+    public void register(Receiver<M, R> receiver) {
         receivers.put(receiver, null);
     }
 
-    public void register(Responder<M> responder) {
-        responders.put(responder, null);
-    }
-
-    public void unregister(Receiver<M> receiver) {
+    public void unregister(Receiver<M, ?> receiver) {
         receivers.remove(receiver);
-    }
-
-    public void unregister(Responder<M> responder) {
-        responders.remove(responder);
     }
 
     public void send(final M message) {
@@ -39,46 +30,56 @@ public class Messenger<M> {
         });
     }
 
-    public List<Object> ask(final M question) {
-        return responders.keySet().stream().map(r -> r.answer(question)).toList();
+    @SuppressWarnings("unused")
+    public List<R> askAll(final M question) {
+        return receivers
+            .keySet()
+            .stream()
+            .map(r -> r.receive(question))
+            .toList();
     }
 
-    public static <T> Messenger<T> messengerFor(final Class<T> messageClass) {
+    public R askOne(final M question) {
+        return receivers
+            .keySet()
+            .stream()
+            .findFirst()
+            .map(r -> r.receive(question))
+            .orElse(null);
+    }
+
+    public static <Msg> Messenger<Msg, Void> get(final Class<Msg> messageClass) {
         final var messenger = MESSENGERS.get(messageClass);
         if (messenger != null) {
-            return (Messenger<T>) messenger;
+            //noinspection unchecked
+            return (Messenger<Msg, Void>) messenger;
         } else {
-            final var messengerU = new Messenger<T>();
-            MESSENGERS.put(messageClass, messengerU);
-            return messengerU;
+            final var messengerMsg = new Messenger<Msg, Void>();
+            MESSENGERS.put(messageClass, messengerMsg);
+            return messengerMsg;
         }
     }
 
-    public static <Q> Messenger<Q> responderFor(final Class<Q> questionClass) {
-        final var responder = MESSENGERS.get(questionClass);
-        if (responder != null) {
-            return (Messenger<Q>) responder;
+    public static <Msg, Res> Messenger<Msg, Res> get(
+        final Class<Msg> messageClass,
+        final Class<Res> ignoredResponseClass
+    ) {
+        final var messenger = MESSENGERS.get(messageClass);
+        if (messenger != null) {
+            //noinspection unchecked
+            return (Messenger<Msg, Res>) messenger;
         } else {
-            final var responderQ = new Messenger<Q>();
-            MESSENGERS.put(questionClass, responderQ);
-            return responderQ;
+            final var messengerMsg = new Messenger<Msg, Res>();
+            MESSENGERS.put(messageClass, messengerMsg);
+            return messengerMsg;
         }
     }
 
-    public static <T> void sendTo(T message, final Class<T> messageClass) {
-        final var messenger = messengerFor(messageClass);
-        messenger.send(message);
-    }
-
-    public static <Q> List<Object> askTo(Q question, final Class<Q> messageClass) {
-        final var messenger = responderFor(messageClass);
-        return messenger.ask(question);
-    }
-
+    @SuppressWarnings("unused")
     public static void removeUnused() {
         final var messengerClasses = MESSENGERS.keySet().stream().toList();
-        for (var cls :messengerClasses) {
-            if (MESSENGERS.get(cls).receivers.isEmpty() && MESSENGERS.get(cls).responders.isEmpty()) {
+        for (var cls : messengerClasses) {
+            if (MESSENGERS.get(cls).receivers.isEmpty()) {
                 MESSENGERS.remove(cls);
             }
         }

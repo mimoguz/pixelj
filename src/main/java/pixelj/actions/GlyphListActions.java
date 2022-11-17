@@ -28,6 +28,7 @@ import pixelj.messaging.Messenger;
 import pixelj.views.projectwindow.glyphspage.AddCodePointDialog;
 import pixelj.views.projectwindow.glyphspage.AddDialog;
 
+@SuppressWarnings("unused")
 public final class GlyphListActions implements Actions {
 
     /**
@@ -107,7 +108,7 @@ public final class GlyphListActions implements Actions {
                 .getGlyphs()
                 .add(new Glyph(codePoint, defaultWidth, BinaryImage.of(canvasSize.width, canvasSize.height)));
         }
-        Messenger.sendTo(ProjectModifiedMessage.get(), ProjectModifiedMessage.class);
+        Messenger.get(ProjectModifiedMessage.class).send(ProjectModifiedMessage.get());
     }
 
     @Override
@@ -140,8 +141,9 @@ public final class GlyphListActions implements Actions {
 
         final var listModel = project.getGlyphs();
         final var removed = Arrays.stream(indices).mapToObj(listModel::getElementAt).toList();
-        final int affected =
-            (int) Messenger.askTo(new DependentPairsQuestion(removed), DependentPairsQuestion.class).get(0);
+        final int affected = Messenger
+            .get(DependentPairsQuestion.class, Integer.class)
+            .askOne(new DependentPairsQuestion(removed));
 
         final var res = Resources.get();
         final var
@@ -165,7 +167,7 @@ public final class GlyphListActions implements Actions {
         }
 
         // Project model should take care of removing the affected kerning pairs.
-        Messenger.sendTo(new RemoveGlyphsMessage(removed), RemoveGlyphsMessage.class);
+        Messenger.get(RemoveGlyphsMessage.class).send(new RemoveGlyphsMessage(removed));
     }
 
     @Override

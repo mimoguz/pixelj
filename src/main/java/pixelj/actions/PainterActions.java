@@ -389,7 +389,7 @@ public final class PainterActions implements Actions {
                     snapshot.height(),
                     snapshot.data()
                 );
-                Messenger.sendTo(ProjectModifiedMessage.get(), ProjectModifiedMessage.class);
+                Messenger.get(ProjectModifiedMessage.class).send(ProjectModifiedMessage.get());
                 return;
             }
         }
