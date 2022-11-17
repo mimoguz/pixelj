@@ -14,6 +14,7 @@ import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 
 import pixelj.messaging.ProjectModifiedMessage;
+import pixelj.messaging.RemoveKerningPairsMessage;
 import pixelj.models.FilteredList;
 import pixelj.models.KerningPair;
 import pixelj.models.Project;
@@ -34,7 +35,6 @@ public final class KerningPairListActions implements Actions {
 
     private final Collection<ApplicationAction> all;
     private final AddDialog addDialog;
-    private final Project project;
     private final JFrame window;
     private final ListSelectionModel selectionModel;
     private final FilteredList<KerningPair> displayListModel;
@@ -46,7 +46,6 @@ public final class KerningPairListActions implements Actions {
         final JFrame window
     ) {
 
-        this.project = project;
         this.selectionModel = selectionModel;
         this.displayListModel = displayListModel;
         this.window = window;
@@ -108,9 +107,8 @@ public final class KerningPairListActions implements Actions {
         if (result != JOptionPane.OK_OPTION) {
             return;
         }
-        final var listModel = project.getKerningPairs();
-        listModel.removeAll(Arrays.stream(indices).mapToObj(displayListModel::getElementAt).toList());
-        Messenger.forClass(ProjectModifiedMessage.class).send(ProjectModifiedMessage.get());
+        final var pairs = Arrays.stream(indices).mapToObj(displayListModel::getElementAt).toList();
+        Messenger.sendTo(new RemoveKerningPairsMessage(pairs), RemoveKerningPairsMessage.class);
 
     }
 }

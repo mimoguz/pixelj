@@ -107,7 +107,7 @@ public final class AddDialog extends AddDialogBase {
 
     private void addKerningPair() {
         if (left != null && right != null) {
-            Messenger.forClass(AddKerningPairMessage.class).send(new AddKerningPairMessage(left, right, mirroredCheck.isSelected()));
+            Messenger.messengerFor(AddKerningPairMessage.class).send(new AddKerningPairMessage(left, right, mirroredCheck.isSelected()));
         }
     }
 }

@@ -202,7 +202,8 @@ public final class ProjectWindowActions implements Actions {
 
     private void returnHome(final ActionEvent event, final Action action) {
         Shared.checkUnsaved(project, window, saveAction);
-        Components.switchFrames((JFrame) window, new HomeWindow(appState));
+        project.detach();
+        Components.switchFrames(window, new HomeWindow(appState));
     }
 
     private void save(final ActionEvent event, final Action action) {

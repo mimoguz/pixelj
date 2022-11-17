@@ -16,7 +16,9 @@ import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 
 import pixelj.graphics.BinaryImage;
+import pixelj.messaging.DependentPairsQuestion;
 import pixelj.messaging.ProjectModifiedMessage;
+import pixelj.messaging.RemoveGlyphsMessage;
 import pixelj.models.Glyph;
 import pixelj.models.KerningPair;
 import pixelj.models.Project;
@@ -28,11 +30,17 @@ import pixelj.views.projectwindow.glyphspage.AddDialog;
 
 public final class GlyphListActions implements Actions {
 
-    /** Display a dialog to add new glyphs to the project. */
+    /**
+     * Display a dialog to add new glyphs to the project.
+     */
     public final ApplicationAction addGlyphsAction;
-    /** Display a dialog to add a glyph using its code point. */
+    /**
+     * Display a dialog to add a glyph using its code point.
+     */
     public final ApplicationAction addCodePointAction;
-    /** Remove the selected glyphs. */
+    /**
+     * Remove the selected glyphs.
+     */
     public final ApplicationAction removeGlyphsAction;
 
     private final Collection<ApplicationAction> all;
@@ -45,9 +53,7 @@ public final class GlyphListActions implements Actions {
     private final ListSelectionModel selectionModel;
 
     public GlyphListActions(
-        final Project project,
-        final ListSelectionModel selectionModel,
-        final JFrame window
+        final Project project, final ListSelectionModel selectionModel, final JFrame window
     ) {
         this.project = project;
         this.selectionModel = selectionModel;
@@ -55,28 +61,23 @@ public final class GlyphListActions implements Actions {
         addDialog = new AddDialog(window);
         addCodePointDialog = new AddCodePointDialog(window, project);
 
-        addGlyphsAction = new ApplicationAction("addGlyphsAction", this::showAddDialog)
+        addGlyphsAction =
+            new ApplicationAction("addGlyphsAction", this::showAddDialog)
                 .withText()
+                .setTooltipWithAccelerator(null, KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.ALT_DOWN_MASK));
+
+        addCodePointAction =
+            new ApplicationAction("addCodePointAction", this::showAddCodePointDialog)
+                .setIcon(Icon.NUMBER)
                 .setTooltipWithAccelerator(
-                    null,
-                    KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.ALT_DOWN_MASK)
+                    Resources.get().getString("addCodePointActionTooltip"),
+                    KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.ALT_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK)
                 );
 
-        addCodePointAction = new ApplicationAction("addCodePointAction", this::showAddCodePointDialog)
-            .setIcon(Icon.NUMBER)
-            .setTooltipWithAccelerator(
-                Resources.get().getString("addCodePointActionTooltip"),
-                KeyStroke.getKeyStroke(
-                    KeyEvent.VK_N, InputEvent.ALT_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK
-                )
-            );
-
-        removeGlyphsAction = new ApplicationAction("removeGlyphsAction", this::showRemoveDialog)
+        removeGlyphsAction =
+            new ApplicationAction("removeGlyphsAction", this::showRemoveDialog)
                 .withText()
-                .setTooltipWithAccelerator(
-                    null,
-                    KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.ALT_DOWN_MASK)
-                );
+                .setTooltipWithAccelerator(null, KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.ALT_DOWN_MASK));
 
         all = List.of(addGlyphsAction, addCodePointAction, removeGlyphsAction);
 
@@ -88,9 +89,8 @@ public final class GlyphListActions implements Actions {
             defaultWidth = settings.defaultWidth();
         });
 
-        selectionModel.addListSelectionListener(e ->
-            removeGlyphsAction.setEnabled(selectionModel.getMinSelectionIndex() >= 0)
-        );
+        selectionModel.addListSelectionListener(e -> removeGlyphsAction.setEnabled(selectionModel.getMinSelectionIndex() >=
+            0));
     }
 
     public int getDefaultCharacterWidth() {
@@ -103,11 +103,11 @@ public final class GlyphListActions implements Actions {
 
     private void addCharacters(final int... codePoints) {
         for (final var codePoint : codePoints) {
-            project.getGlyphs().add(
-                new Glyph(codePoint, defaultWidth, BinaryImage.of(canvasSize.width, canvasSize.height))
-            );
+            project
+                .getGlyphs()
+                .add(new Glyph(codePoint, defaultWidth, BinaryImage.of(canvasSize.width, canvasSize.height)));
         }
-        Messenger.forClass(ProjectModifiedMessage.class).send(ProjectModifiedMessage.get());
+        Messenger.sendTo(ProjectModifiedMessage.get(), ProjectModifiedMessage.class);
     }
 
     @Override
@@ -140,27 +140,32 @@ public final class GlyphListActions implements Actions {
 
         final var listModel = project.getGlyphs();
         final var removed = Arrays.stream(indices).mapToObj(listModel::getElementAt).toList();
-        final var affected = countAffectedKerningPairs(removed);
-        final var res = Resources.get();
-        final var message = affected == 0
-            ? res.formatString("removingGlyphsMessage", indices.length)
-            : res.formatString("removingGlyphsAndKerningPairsMessage", indices.length, affected);
+        final int affected =
+            (int) Messenger.askTo(new DependentPairsQuestion(removed), DependentPairsQuestion.class).get(0);
 
-        final var result = JOptionPane.showConfirmDialog(
-            window,
-            message,
-            res.getString("nonUndoable"),
-            JOptionPane.OK_CANCEL_OPTION,
-            JOptionPane.WARNING_MESSAGE
-        );
+        final var res = Resources.get();
+        final var
+            message =
+            affected == 0
+                ? res.formatString("removingGlyphsMessage", indices.length)
+                : res.formatString("removingGlyphsAndKerningPairsMessage", indices.length, affected);
+
+        final var
+            result =
+            JOptionPane.showConfirmDialog(
+                window,
+                message,
+                res.getString("nonUndoable"),
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.WARNING_MESSAGE
+            );
 
         if (result != JOptionPane.OK_OPTION) {
             return;
         }
 
         // Project model should take care of removing the affected kerning pairs.
-        listModel.removeAll(removed);
-        project.setDirty(true);
+        Messenger.sendTo(new RemoveGlyphsMessage(removed), RemoveGlyphsMessage.class);
     }
 
     @Override
