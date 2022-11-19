@@ -19,6 +19,7 @@ import javax.swing.ListCellRenderer;
 import javax.swing.SwingUtilities;
 
 import com.formdev.flatlaf.FlatClientProperties;
+
 import javax.swing.Box;
 
 import net.miginfocom.swing.MigLayout;
@@ -48,7 +49,7 @@ abstract class HomeWindowBase extends JFrame {
         Components.setFixedSize(loadSelectedButton, Dimensions.HOME_BUTTON_SIZE);
         Components.setFixedSize(openProjectButton, Dimensions.HOME_BUTTON_SIZE);
         toolBar.putClientProperty(FlatClientProperties.STYLE_CLASS, "header");
-        
+
         final var pad = Dimensions.MEDIUM_PADDING;
         final var northLayout = new MigLayout(
             "",
@@ -58,6 +59,10 @@ abstract class HomeWindowBase extends JFrame {
         final var north = new JPanel(northLayout);
         north.putClientProperty(FlatClientProperties.STYLE_CLASS, "header");
         north.setBorder(Borders.LARGE_EMPTY);
+        Components.addOuterBorder(
+            north,
+            BorderFactory.createMatteBorder(0, 0, 1, 0, Resources.get().colors.separator())
+        );
         north.add(newProjectButton);
         north.add(loadSelectedButton);
         north.add(openProjectButton);

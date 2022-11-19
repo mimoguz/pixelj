@@ -16,22 +16,23 @@ public final class ListPanel extends ListPanelBase implements Detachable {
 
     private final GlyphListActions actions;
     private final ListSelectionModel selectionModel = new DefaultListSelectionModel();
-    private final SortedList<Glyph> listModel;
+    private final FilteredList<Glyph> listModel;
     private final JFrame window;
 
     public ListPanel(final Project project, final JFrame window) {
         this.window = window;
-        actions = new GlyphListActions(project, selectionModel, window);
-        actions.removeGlyphsAction.setEnabled(false);
-        addButton.setPrimaryAction(actions.addGlyphsAction);
-        addButton.setSecondaryAction(actions.addCodePointAction);
-        removeButton.setAction(actions.removeGlyphsAction);
 
         final var filteredListModel = new FilteredList<>(project.getGlyphs());
         listModel = filteredListModel;
         list.setModel(filteredListModel);
         list.setSelectionModel(selectionModel);
         selectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+        actions = new GlyphListActions(project, selectionModel, listModel, window);
+        actions.removeGlyphsAction.setEnabled(false);
+        addButton.setPrimaryAction(actions.addGlyphsAction);
+        addButton.setSecondaryAction(actions.addCodePointAction);
+        removeButton.setAction(actions.removeGlyphsAction);
 
         filterBox.addActionListener(event -> {
             if (filterBox.getSelectedItem() instanceof final Block block) {

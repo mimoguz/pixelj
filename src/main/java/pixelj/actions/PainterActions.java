@@ -1,11 +1,11 @@
 package pixelj.actions;
 
 import pixelj.graphics.Snapshot;
-import pixelj.models.Project;
+import pixelj.messaging.GlyphChangedMessage;
 import pixelj.resources.Icon;
 import pixelj.resources.Resources;
 import pixelj.util.ChangeableValue;
-import pixelj.util.Messenger;
+import pixelj.messaging.Messenger;
 import pixelj.views.controls.GlyphPainter;
 import pixelj.views.controls.painter.Painter;
 
@@ -389,7 +389,7 @@ public final class PainterActions implements Actions {
                     snapshot.height(),
                     snapshot.data()
                 );
-                Messenger.getDefault().send(Project.ProjectModifiedMessage.get());
+                Messenger.get(GlyphChangedMessage.class).send(new GlyphChangedMessage(model.getCodePoint()));
                 return;
             }
         }
@@ -399,31 +399,26 @@ public final class PainterActions implements Actions {
         timeTravel(undoBuffer, redoBuffer);
     }
 
-    private static final class TransferableImage implements Transferable {
-        private final Image image;
-
-        TransferableImage(final Image image) {
-            this.image = image;
-        }
+    private record TransferableImage(Image image) implements Transferable {
 
         @Override
-        public DataFlavor[] getTransferDataFlavors() {
-            return new DataFlavor[]{
-                DataFlavor.imageFlavor
-            };
-        }
-
-        @Override
-        public boolean isDataFlavorSupported(final DataFlavor flavor) {
-            return Arrays.stream(getTransferDataFlavors()).anyMatch(f -> f.equals(flavor));
-        }
-
-        @Override
-        public Object getTransferData(final DataFlavor flavor) throws UnsupportedFlavorException {
-            if (flavor.equals(DataFlavor.imageFlavor)) {
-                return image;
+            public DataFlavor[] getTransferDataFlavors() {
+                return new DataFlavor[]{
+                    DataFlavor.imageFlavor
+                };
             }
-            throw new UnsupportedFlavorException(flavor);
+
+            @Override
+            public boolean isDataFlavorSupported(final DataFlavor flavor) {
+                return Arrays.stream(getTransferDataFlavors()).anyMatch(f -> f.equals(flavor));
+            }
+
+            @Override
+            public Object getTransferData(final DataFlavor flavor) throws UnsupportedFlavorException {
+                if (flavor.equals(DataFlavor.imageFlavor)) {
+                    return image;
+                }
+                throw new UnsupportedFlavorException(flavor);
+            }
         }
-    }
 }

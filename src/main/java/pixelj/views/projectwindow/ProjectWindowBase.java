@@ -1,34 +1,7 @@
 package pixelj.views.projectwindow;
 
-import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.util.Collection;
-import java.util.List;
-
-import javax.swing.AbstractButton;
-import javax.swing.Action;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JTabbedPane;
-import javax.swing.JToggleButton;
-import javax.swing.KeyStroke;
-import javax.swing.SwingConstants;
-import javax.swing.ToolTipManager;
-import javax.swing.WindowConstants;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
-
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
-
 import pixelj.actions.ApplicationAction;
 import pixelj.resources.Icon;
 import pixelj.resources.Resources;
@@ -40,7 +13,19 @@ import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 import pixelj.views.shared.GrayscaleFilter;
 
-/** Project window design. */
+import javax.swing.*;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.util.Collection;
+import java.util.List;
+
+/**
+ * Project window design.
+ */
 abstract class ProjectWindowBase extends JFrame {
 
     private GlyphsPage glyphsPage;
@@ -48,18 +33,14 @@ abstract class ProjectWindowBase extends JFrame {
     private PreviewPage previewPage;
 
     private final FlatSVGIcon.ColorFilter inactiveFilter;
-    private final FlatSVGIcon.ColorFilter activeFilter;
-
     protected final JTabbedPane content = new JTabbedPane();
     protected final JToggleButton menuButton = new JToggleButton();
     protected final JButton optionsButton = new JButton();
     protected final JButton helpButton = new JButton();
     protected final JPopupMenu mainMenu = new JPopupMenu();
 
-    public ProjectWindowBase()
-    {
+    public ProjectWindowBase() {
         inactiveFilter = new GrayscaleFilter();
-        activeFilter = new FlatSVGIcon.ColorFilter(color -> color);
     }
 
     public void setup(
@@ -101,11 +82,6 @@ abstract class ProjectWindowBase extends JFrame {
     private void addTabs() {
         final var res = Resources.get();
 
-        content.putClientProperty(
-            FlatClientProperties.TABBED_PANE_TAB_TYPE,
-            FlatClientProperties.TABBED_PANE_TAB_TYPE_UNDERLINED
-        );
-
         final var listIcon = res.getIcon(Icon.LIST);
         final var kerningIcon = res.getIcon(Icon.KERNING_WIDE);
         final var eyeIcon = res.getIcon(Icon.EYE);
@@ -121,13 +97,15 @@ abstract class ProjectWindowBase extends JFrame {
             res.getString("glyphsScreenTabTooltip")
         );
 
-        content.addTab(null,
+        content.addTab(
+            null,
             kerningIcon,
             kerningPairsPage,
             res.getString("kerningPairsScreenTabTooltip")
         );
 
-        content.addTab(null,
+        content.addTab(
+            null,
             eyeIcon,
             previewPage,
             res.getString("previewScreenTabTooltip")
@@ -190,8 +168,8 @@ abstract class ProjectWindowBase extends JFrame {
         styleTabBarButton(menuButton);
         leadingContainer.add(menuButton);
 
-        // Balance the leading and the trailing containers.
-        leadingContainer.add(Box.createRigidArea(Dimensions.TAB_BAR_BUTTON_SIZE));
+        // Balance both sides
+        leadingContainer.add(Box.createHorizontalStrut(Dimensions.TAB_BAR_BUTTON_SIZE.width));
 
         content.putClientProperty(FlatClientProperties.TABBED_PANE_LEADING_COMPONENT, leadingContainer);
     }
@@ -225,20 +203,28 @@ abstract class ProjectWindowBase extends JFrame {
         ToolTipManager.sharedInstance().setDismissDelay(3000);
 
         content.putClientProperty(
-            FlatClientProperties.TABBED_PANE_MINIMUM_TAB_WIDTH,
-            Dimensions.TAB_BAR_BUTTON_SIZE.width + Dimensions.LARGE_PADDING
+            FlatClientProperties.TABBED_PANE_TAB_TYPE,
+            FlatClientProperties.TABBED_PANE_TAB_TYPE_UNDERLINED
         );
+
+        content.putClientProperty(
+            FlatClientProperties.TABBED_PANE_MINIMUM_TAB_WIDTH,
+            Dimensions.TAB_BAR_BUTTON_SIZE.width + Dimensions.SMALL_PADDING * 2
+        );
+
         content.putClientProperty(
             FlatClientProperties.TABBED_PANE_MAXIMUM_TAB_WIDTH,
-            Dimensions.TAB_BAR_BUTTON_SIZE.width + Dimensions.LARGE_PADDING
+            Dimensions.TAB_BAR_BUTTON_SIZE.width + Dimensions.SMALL_PADDING * 2
         );
+
         content.putClientProperty(
             FlatClientProperties.TABBED_PANE_TAB_HEIGHT,
             Dimensions.TAB_BAR_BUTTON_SIZE.height
         );
+
         content.putClientProperty(FlatClientProperties.TABBED_PANE_TAB_ICON_PLACEMENT, SwingConstants.TOP);
         content.putClientProperty(FlatClientProperties.TABBED_PANE_TAB_AREA_ALIGNMENT, SwingConstants.CENTER);
-        content.putClientProperty(FlatClientProperties.TABBED_PANE_SHOW_CONTENT_SEPARATOR, false);
+        content.putClientProperty(FlatClientProperties.TABBED_PANE_SHOW_CONTENT_SEPARATOR, true);
         content.setTabPlacement(SwingConstants.TOP);
         content.setFocusable(false);
     }
@@ -273,7 +259,6 @@ abstract class ProjectWindowBase extends JFrame {
         }
 
         // Fix icon color
-        final var res = Resources.get();
         for (var tab = 0; tab < 3; tab++) {
             if (content.getIconAt(tab) instanceof final FlatSVGIcon icn) {
                 icn.setColorFilter(tab == index ? null : inactiveFilter);
@@ -284,7 +269,6 @@ abstract class ProjectWindowBase extends JFrame {
     private static void styleTabBarButton(final AbstractButton button) {
         button.setBorder(Borders.EMPTY);
         button.putClientProperty(FlatClientProperties.STYLE_CLASS, "tabBarButton");
-        // button.putClientProperty(FlatClientProperties.BUTTON_TYPE_SQUARE, true);
         button.setFocusable(false);
         Components.setFixedSize(button, Dimensions.TAB_BAR_BUTTON_SIZE);
     }

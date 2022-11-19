@@ -9,6 +9,7 @@ import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 
 import pixelj.actions.ApplicationAction;
+import pixelj.messaging.AddKerningPairMessage;
 import pixelj.models.Block;
 import pixelj.models.FilteredList;
 import pixelj.models.Glyph;
@@ -16,7 +17,7 @@ import pixelj.models.KerningPair;
 import pixelj.models.Project;
 import pixelj.resources.Icon;
 import pixelj.resources.Resources;
-import pixelj.util.Messenger;
+import pixelj.messaging.Messenger;
 import pixelj.views.shared.Dimensions;
 import pixelj.views.shared.GlyphCellRenderer;
 import pixelj.views.shared.Help;
@@ -24,14 +25,12 @@ import pixelj.views.shared.Help;
 public final class AddDialog extends AddDialogBase {
 
     private final ListSelectionModel selectionModel = new DefaultListSelectionModel();
-    private final Project project;
     private Glyph left;
     private Glyph right;
     private KerningPair result;
 
     public AddDialog(final Frame owner, final Project project) {
         super(owner);
-        this.project = project;
 
         final var listModel = new FilteredList<>(project.getGlyphs());
         glyphList.setModel(listModel);
@@ -108,11 +107,7 @@ public final class AddDialog extends AddDialogBase {
 
     private void addKerningPair() {
         if (left != null && right != null) {
-            project.getKerningPairs().add(new KerningPair(left, right, 0));
-            if (mirroredCheck.isSelected()) {
-                project.getKerningPairs().add(new KerningPair(right, left, 0));
-            }
-            Messenger.getDefault().send(Project.ProjectModifiedMessage.get());
+            Messenger.get(AddKerningPairMessage.class).send(new AddKerningPairMessage(left, right, mirroredCheck.isSelected()));
         }
     }
 }

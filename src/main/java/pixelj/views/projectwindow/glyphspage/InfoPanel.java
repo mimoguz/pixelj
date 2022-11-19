@@ -4,6 +4,8 @@ import java.awt.Font;
 
 import javax.swing.SpinnerNumberModel;
 
+import pixelj.messaging.GlyphChangedMessage;
+import pixelj.messaging.Messenger;
 import pixelj.models.DocumentSettings;
 import pixelj.models.Glyph;
 import pixelj.models.Project;
@@ -13,8 +15,8 @@ import pixelj.util.ReadOnlyBoolean;
 
 public final class InfoPanel extends InfoPanelBase {
 
-    protected final ChangeableBoolean gridVisible = new ChangeableBoolean(true);
-    protected final ChangeableBoolean guidesVisible = new ChangeableBoolean(true);
+    private final ChangeableBoolean gridVisible = new ChangeableBoolean(true);
+    private final ChangeableBoolean guidesVisible = new ChangeableBoolean(true);
     /**  Show/hide grid. */
     public final ReadOnlyBoolean gridVisibleProperty = new ReadOnlyBoolean(gridVisible);
     /** Show/hide guides. */
@@ -34,6 +36,7 @@ public final class InfoPanel extends InfoPanelBase {
                 final var value = numberModel.getNumber().intValue();
                 if (value != model.getWidth()) {
                     model.setWidth(value);
+                    Messenger.get(GlyphChangedMessage.class).send(new GlyphChangedMessage(model.getCodePoint()));
                 }
             }
         });

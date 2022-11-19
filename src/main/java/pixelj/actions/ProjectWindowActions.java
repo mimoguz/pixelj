@@ -30,7 +30,6 @@ import pixelj.services.ExportServiceImpl;
 import pixelj.services.FileService;
 import pixelj.services.JavaPropertiesService;
 import pixelj.services.RecentItem;
-import pixelj.util.Messenger;
 import pixelj.views.homewindow.HomeWindow;
 import pixelj.views.projectwindow.ExportDialog;
 import pixelj.views.shared.Components;
@@ -203,7 +202,8 @@ public final class ProjectWindowActions implements Actions {
 
     private void returnHome(final ActionEvent event, final Action action) {
         Shared.checkUnsaved(project, window, saveAction);
-        Components.switchFrames((JFrame) window, new HomeWindow(appState));
+        project.detach();
+        Components.switchFrames(window, new HomeWindow(appState));
     }
 
     private void save(final ActionEvent event, final Action action) {
@@ -259,9 +259,7 @@ public final class ProjectWindowActions implements Actions {
             e.printStackTrace();
             return null;
         } finally {
-            if (outPath != null) {
-                MemoryUtil.memFree(outPath);
-            }
+            MemoryUtil.memFree(outPath);
         }
     }
 

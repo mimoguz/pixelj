@@ -13,11 +13,12 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 
+import pixelj.messaging.RemoveKerningPairsMessage;
 import pixelj.models.FilteredList;
 import pixelj.models.KerningPair;
 import pixelj.models.Project;
 import pixelj.resources.Resources;
-import pixelj.util.Messenger;
+import pixelj.messaging.Messenger;
 import pixelj.views.projectwindow.kerningpairspage.AddDialog;
 
 public final class KerningPairListActions implements Actions {
@@ -33,7 +34,6 @@ public final class KerningPairListActions implements Actions {
 
     private final Collection<ApplicationAction> all;
     private final AddDialog addDialog;
-    private final Project project;
     private final JFrame window;
     private final ListSelectionModel selectionModel;
     private final FilteredList<KerningPair> displayListModel;
@@ -45,7 +45,6 @@ public final class KerningPairListActions implements Actions {
         final JFrame window
     ) {
 
-        this.project = project;
         this.selectionModel = selectionModel;
         this.displayListModel = displayListModel;
         this.window = window;
@@ -88,11 +87,6 @@ public final class KerningPairListActions implements Actions {
 
     private void showAddDialog(final ActionEvent event, final Action action) {
         addDialog.setVisible(true);
-        final var result = addDialog.getResult();
-        if (result != null) {
-            project.getKerningPairs().add(result);
-            Messenger.getDefault().send(Project.ProjectModifiedMessage.get());
-        }
     }
 
     private void showRemoveDialog(final ActionEvent event, final Action action) {
@@ -112,9 +106,8 @@ public final class KerningPairListActions implements Actions {
         if (result != JOptionPane.OK_OPTION) {
             return;
         }
-        final var listModel = project.getKerningPairs();
-        listModel.removeAll(Arrays.stream(indices).mapToObj(displayListModel::getElementAt).toList());
-        Messenger.getDefault().send(Project.ProjectModifiedMessage.get());
+        final var pairs = Arrays.stream(indices).mapToObj(displayListModel::getElementAt).toList();
+        Messenger.get(RemoveKerningPairsMessage.class).send(new RemoveKerningPairsMessage(pairs));
 
     }
 }

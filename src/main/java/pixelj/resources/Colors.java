@@ -2,6 +2,7 @@ package pixelj.resources;
 
 import java.awt.Color;
 
+@SuppressWarnings("unused")
 public interface Colors {
 
     /**
@@ -18,11 +19,6 @@ public interface Colors {
      * @return Disabled icon foreground color.
      */
     Color disabledIcon();
-
-    /**
-     * @return Background color for dividers.
-     */
-    Color divider();
 
     /**
      * @return Icon foreground color.

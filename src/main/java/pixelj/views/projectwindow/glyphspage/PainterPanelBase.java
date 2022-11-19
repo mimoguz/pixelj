@@ -41,7 +41,7 @@ public abstract class PainterPanelBase extends JPanel {
 
         toolBar.setBorder(BorderFactory.createEmptyBorder(0, Dimensions.SMALL_PADDING, 0, Dimensions.SMALL_PADDING));
         Components.addOuterBorder(toolBar,
-            BorderFactory.createMatteBorder(0, 0, 0, 1, Resources.get().colors.divider())
+            BorderFactory.createMatteBorder(0, 0, 0, 1, Resources.get().colors.separator())
         );
         toolBar.setOrientation(SwingConstants.VERTICAL);
         toolBar.setLayout(new VerticalFlowLayout());
@@ -80,7 +80,7 @@ public abstract class PainterPanelBase extends JPanel {
         editorPanel.add(zoomStrip, BorderLayout.SOUTH);
 
         final var centerPanel = new JPanel(new BorderLayout());
-        centerPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Resources.get().colors.divider()));
+        centerPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Resources.get().colors.separator()));
         centerPanel.add(titlePanel, BorderLayout.NORTH);
         centerPanel.add(toolBar, BorderLayout.WEST);
         centerPanel.add(editorPanel, BorderLayout.CENTER);

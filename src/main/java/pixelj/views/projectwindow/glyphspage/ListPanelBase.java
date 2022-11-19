@@ -43,7 +43,7 @@ abstract class ListPanelBase extends JPanel {
         setPreferredSize(new Dimension(300, 100));
         setMinimumSize(new Dimension(220, 100));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Resources.get().colors.divider()));
+        setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Resources.get().colors.separator()));
 
         final var buttonPanel = new JPanel();
         buttonPanel.setBorder(Borders.SMALL_EMPTY);

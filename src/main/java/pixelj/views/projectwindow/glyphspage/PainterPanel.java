@@ -1,12 +1,13 @@
 package pixelj.views.projectwindow.glyphspage;
 
 import pixelj.actions.PainterActions;
+import pixelj.messaging.GlyphChangedMessage;
+import pixelj.messaging.Messenger;
 import pixelj.models.DocumentSettings;
 import pixelj.models.Glyph;
 import pixelj.models.Project;
 import pixelj.util.Checkerboard;
 import pixelj.util.Detachable;
-import pixelj.util.Messenger;
 import pixelj.views.controls.GlyphPainter;
 import pixelj.views.controls.Line;
 import pixelj.views.controls.Orientation;
@@ -26,7 +27,6 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
 
     private final PainterActions actions = new PainterActions();
     private BufferedImage overlay;
-    private final JPopupMenu overflowMenu = new JPopupMenu();
 
     public PainterPanel(final Project project, final JFrame window) {
         super(new InfoPanel(project));
@@ -50,7 +50,7 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
         actions.setPainter(painter);
         painter.setSnapshotConsumer(s -> {
             actions.snapshotConsumer.accept(s);
-            Messenger.getDefault().send(Project.ProjectModifiedMessage.get());
+            Messenger.get(GlyphChangedMessage.class).send(new GlyphChangedMessage(painter.getModel().getCodePoint()));
         });
         actions.registerShortcuts(window.getRootPane());
         fillToolbar(toolBar, actions);
