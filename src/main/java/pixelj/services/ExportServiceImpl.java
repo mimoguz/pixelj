@@ -158,6 +158,7 @@ public final class ExportServiceImpl implements ExportService {
         final var chars = charsLine(project);
         final var pages = pageStream(rectangles, baseName);
         final var characters = characterStream(rectangles, project.getDocumentSettings());
+        final var kerning = kerningPairsLine(project);
         final var kerningPairs = kerningPairStream(project);
 
         return Stream.of(
@@ -166,6 +167,7 @@ public final class ExportServiceImpl implements ExportService {
             pages,
             Stream.of(chars),
             characters,
+            Stream.of(kerning),
             kerningPairs
         ).flatMap(a -> a);
     }
@@ -242,6 +244,10 @@ public final class ExportServiceImpl implements ExportService {
             .append(page)
             .append(" chnl=15")
             .toString();
+    }
+
+    private static String kerningPairsLine(final Project project) {
+        return "kernings count=" + project.getKerningPairs().countWhere(a -> true);
     }
 
     private static String kerningPairLine(final KerningPair pair) {
