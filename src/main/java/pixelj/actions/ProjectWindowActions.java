@@ -32,6 +32,7 @@ import pixelj.services.JavaPropertiesService;
 import pixelj.services.RecentItem;
 import pixelj.views.homewindow.HomeWindow;
 import pixelj.views.projectwindow.ExportDialog;
+import pixelj.views.projectwindow.SvgExportDialogBase;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.DocumentSettingsDialog;
 import pixelj.views.shared.Help;
@@ -41,8 +42,10 @@ public final class ProjectWindowActions implements Actions {
 
     /** * Return to home screen. */
     public final ApplicationAction returnHomeAction;
-    /** * Export project. */
-    public final ApplicationAction exportAction;
+    /** * Export fnt. */
+    public final ApplicationAction fntExportAction;
+    /** * Export svg. */
+    public final ApplicationAction svgExportAction;
     /** Quit the application. */
     public final ApplicationAction quitAction;
     /** Save project. Calls saveAsAction if no path was set for the project. */
@@ -85,10 +88,14 @@ public final class ProjectWindowActions implements Actions {
             .setIcon(Icon.HOME)
             .setAccelerator(KeyEvent.VK_W, menuShortcutMask);
 
-        exportAction = new ApplicationAction("exportAction", this::export)
+        fntExportAction = new ApplicationAction("exportAction", this::exportFnt)
             .withText()
             .setIcon(Icon.FILE_EXPORT)
             .setAccelerator(KeyEvent.VK_E, menuShortcutMask);
+
+        svgExportAction = new ApplicationAction("svgExportAction", this::exportSvg)
+            .withText()
+            .setIcon(Icon.FILE_EXPORT);
 
         quitAction = new ApplicationAction("quitAction", this::quit)
             .withText()
@@ -125,7 +132,8 @@ public final class ProjectWindowActions implements Actions {
 
         all = List.of(
             returnHomeAction,
-            exportAction,
+            fntExportAction,
+            svgExportAction,
             quitAction,
             saveAction,
             saveAsAction,
@@ -153,7 +161,7 @@ public final class ProjectWindowActions implements Actions {
         }
     }
 
-    private void export(final ActionEvent event, final Action action) {
+    private void exportFnt(final ActionEvent event, final Action action) {
         final var settings = project.getDocumentSettings();
         final var minimumSize = new Dimension(settings.canvasWidth(), settings.canvasHeight());
         final var defaultSize = new Dimension(
@@ -188,6 +196,11 @@ public final class ProjectWindowActions implements Actions {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void exportSvg(final ActionEvent event, final Action action) {
+       final var exportDialog = new SvgExportDialogBase(window);
+       exportDialog.setVisible(true);
     }
 
     private void quit(final ActionEvent event, final Action action) {
