@@ -20,7 +20,6 @@ public class Svg {
     private final int height;
     private final int id;
     private final String path;
-
     public Svg(final Glyph glyph, DocumentSettings prefs) {
         width = prefs.isMonospaced() ? prefs.defaultWidth() : glyph.getWidth();
         height = prefs.ascender() + prefs.descender();
@@ -33,6 +32,10 @@ public class Svg {
             builder.append(node.str()).append(' ');
         }
         path = builder.toString();
+    }
+
+    public int getId() {
+        return id;
     }
 
     public int getWidth() {

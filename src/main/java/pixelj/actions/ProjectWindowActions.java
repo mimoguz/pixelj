@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import java.io.IOError;
 import java.io.IOException;
 import java.nio.BufferUnderflowException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
@@ -15,6 +16,7 @@ import java.nio.file.StandardOpenOption;
 import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.swing.Action;
 import javax.swing.JFrame;
@@ -37,7 +39,6 @@ import pixelj.services.Svg;
 import pixelj.views.homewindow.HomeWindow;
 import pixelj.views.projectwindow.FntExportDialog;
 import pixelj.views.projectwindow.SvgExportDialog;
-import pixelj.views.projectwindow.SvgExportDialogBase;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.DocumentSettingsDialog;
 import pixelj.views.shared.Help;
@@ -227,27 +228,117 @@ public final class ProjectWindowActions implements Actions {
         exportDialog.setVisible(true);
         final var path = exportDialog.getResult();
         exportDialog.dispose();
-
-        if (path == null) {
-            return;
+        if (path != null) {
+            savePe(path);
         }
+    }
 
+    private void saveSvg(final Path path) {
+        final var svgStream = getSvg();
+        try {
+            svgStream.forEach(svg -> {
+                final var out = Paths.get(path.toString(), "g" + svg.getId() + ".svg");
+                try {
+                    final var file = out.toFile();
+                    if (file.exists()) {
+                        file.delete();
+                    }
+                    Files.writeString(out, svg.getXml(), StandardOpenOption.CREATE);
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(window, Resources.get().formatString(out.getFileName().toString()));
+                    throw new RuntimeException("break");
+                }
+            });
+        } catch (RuntimeException e) {
+            // Pass
+        }
+    }
+
+    private void savePe(final Path path) {
+        final var settings = project.getDocumentSettings();
+        final var pePath = Paths.get(
+            path.toString(),
+            project.getPath() != null
+                ? project.getPath().getFileName().toString() + ".pe"
+                : "untitled.pe"
+        );
+        try {
+            final var peFile = pePath.toFile();
+            if (peFile.exists()) {
+                peFile.delete();
+            }
+            final var peStream = Files.newOutputStream(pePath, StandardOpenOption.CREATE);
+            peStream.write("New()\n".getBytes(StandardCharsets.UTF_8));
+            peStream.write((
+                "ScaleToEm(" +
+                    (settings.ascender() * Svg.UNITS_PER_PIXEL) +
+                    ", " +
+                    (settings.descender() * Svg.UNITS_PER_PIXEL) +
+                    ")\n\n"
+            ).getBytes(
+                StandardCharsets.UTF_8));
+
+            final var svgStream = getSvg();
+            try {
+                svgStream.forEach(svg -> {
+                    final var out = Paths.get(path.toString(), "g" + svg.getId() + ".svg");
+                    try {
+
+                        peStream.write(("Select(" + svg.getId() + ")\n").getBytes(StandardCharsets.UTF_8));
+                        peStream.write((
+                            "Import(\"" +
+                                out.toAbsolutePath().toString().replace('\\', '/') +
+                                "\")\n"
+                        ).getBytes(
+                            StandardCharsets.UTF_8));
+                        peStream.write("Simplify()\n".getBytes(StandardCharsets.UTF_8));
+                        peStream.write(("SetWidth(" + svg.getWidth() + ")\n").getBytes(StandardCharsets.UTF_8));
+                        peStream.write("SetLBearing(0)\n".getBytes(StandardCharsets.UTF_8));
+                        peStream.write((
+                            "SetRBearing(" +
+                                (settings.letterSpacing() * Svg.UNITS_PER_PIXEL) +
+                                ")\n"
+                        ).getBytes(StandardCharsets.UTF_8));
+                        peStream.write(("SetGlyphName(NameFromUnicode(" + svg.getId() + "))\n\n").getBytes(
+                            StandardCharsets.UTF_8));
+
+                        final var file = out.toFile();
+                        if (file.exists()) {
+                            file.delete();
+                        }
+                        Files.writeString(out, svg.getXml(), StandardOpenOption.CREATE);
+                    } catch (IOException e) {
+                        JOptionPane.showMessageDialog(
+                            window,
+                            Resources.get().formatString("svgWriteError", out.getFileName().toString())
+                        );
+
+                        throw new RuntimeException("break");
+                    }
+                });
+            } catch (RuntimeException e) {
+                try {
+                    peStream.close();
+                } catch (IOException ex) {
+                    // TODO
+                }
+            }
+
+            final var projectPath = project.getPath() != null
+                ? project.getPath().getFileName().toString() + ".sfd"
+                : "untitled.sfd";
+
+            peStream.write(("Save(\"" + projectPath.replace('\\', '/') + "\")\n\n").getBytes(StandardCharsets.UTF_8));
+            peStream.close();
+        } catch (IOException e) {
+            // TODO
+        }
+    }
+
+    private Stream<Svg> getSvg() {
         final var glyphs = project.getGlyphs().getElements();
         final var settings = project.getDocumentSettings();
-        for (var glyph : glyphs) {
-            final var svg = new Svg(glyph, settings);
-            final var out = Paths.get(path.toString(), "g" + glyph.getCodePoint() + ".svg");
-            try {
-                final var file = out.toFile();
-                if (file.exists()) {
-                    file.delete();
-                }
-                Files.writeString(out, svg.getXml(), StandardOpenOption.CREATE);
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(window, Resources.get().formatString(out.getFileName().toString()));
-                return;
-            }
-        }
+        return glyphs.stream().map(g -> new Svg(g, settings));
     }
 
     private void quit(final ActionEvent event, final Action action) {
