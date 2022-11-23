@@ -36,11 +36,11 @@ public class Svg {
     }
 
     public int getWidth() {
-        return width;
+        return width * UNITS_PER_PIXEL;
     }
 
     public int getHeight() {
-        return height;
+        return height * UNITS_PER_PIXEL;
     }
 
     public String getXml() {
@@ -48,10 +48,10 @@ public class Svg {
         // @formatter:off
         builder
             .append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n")
-            .append("<svg width=\"").append(width).append('\n')
-            .append("     height=\"").append(height).append('\n')
-            .append("     viewBox=\"0 0").append(width).append(' ').append(height).append("\"\n")
-            .append("     version=\"1.1\"")
+            .append("<svg width=\"").append(getWidth()).append("\"\n")
+            .append("     height=\"").append(getHeight()).append("\"\n")
+            .append("     viewBox=\"0 0 ").append(getWidth()).append(' ').append(getHeight()).append("\"\n")
+            .append("     version=\"1.1\"\n")
             .append("     id=\"g").append(id).append("\"\n")
             .append("     xmlns=\"http://www.w3.org/2000/svg\"\n")
             .append("     xmlns:svg=\"http://www.w3.org/2000/svg\">\n")
@@ -67,7 +67,8 @@ public class Svg {
         final var path = new Path2D.Double();
         for (var y = 0; y < height; y++) {
             for (var x = 0; x < width; x++) {
-                if (image.get(x, y)) {
+                // Glyph pixel is filled if the image pixel is not.
+                if (!image.get(x, y)) {
                     path.append(new Rectangle2D.Double(x * UNITS_PER_PIXEL,
                         y * UNITS_PER_PIXEL,
                         UNITS_PER_PIXEL,
