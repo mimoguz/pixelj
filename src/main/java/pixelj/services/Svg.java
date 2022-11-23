@@ -26,7 +26,7 @@ public class Svg {
         height = prefs.ascender() + prefs.descender();
         id = glyph.getCodePoint();
 
-        final var area = toArea(glyph, height, width);
+        final var area = toArea(glyph, prefs.canvasHeight() - height, height, width);
         final var nodes = reduce(area);
         final var builder = new StringBuilder();
         for (var node : nodes) {
@@ -62,13 +62,13 @@ public class Svg {
         return builder.toString();
     }
 
-    private static Area toArea(final Glyph glyph, final int height, final int width) {
+    private static Area toArea(final Glyph glyph, final int y0, final int height, final int width) {
         final var image = glyph.getImage();
         final var path = new Path2D.Double();
         for (var y = 0; y < height; y++) {
             for (var x = 0; x < width; x++) {
                 // Glyph pixel is filled if the image pixel is not.
-                if (!image.get(x, y)) {
+                if (!image.get(x, y + y0)) {
                     path.append(new Rectangle2D.Double(x * UNITS_PER_PIXEL,
                         y * UNITS_PER_PIXEL,
                         UNITS_PER_PIXEL,

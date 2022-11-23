@@ -12,14 +12,14 @@ import pixelj.resources.Resources;
 import pixelj.resources.Icon;
 import pixelj.views.shared.Help;
 
-public final class ExportDialog extends ExportDialogBase {
+public final class FntExportDialog extends FntExportDialogBase {
 
     private static final int MAXIMUM_SIZE = 4096;
     private static final int STEP_SIZE = 8;
 
     private Result result;
 
-    public ExportDialog(
+    public FntExportDialog(
         final Frame owner,
         final Dimension defaultSize,
         final Dimension minimumSize,

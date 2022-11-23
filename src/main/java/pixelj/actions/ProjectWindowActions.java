@@ -7,8 +7,11 @@ import java.awt.event.KeyEvent;
 import java.io.IOError;
 import java.io.IOException;
 import java.nio.BufferUnderflowException;
+import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -30,8 +33,10 @@ import pixelj.services.ExportServiceImpl;
 import pixelj.services.FileService;
 import pixelj.services.JavaPropertiesService;
 import pixelj.services.RecentItem;
+import pixelj.services.Svg;
 import pixelj.views.homewindow.HomeWindow;
-import pixelj.views.projectwindow.ExportDialog;
+import pixelj.views.projectwindow.FntExportDialog;
+import pixelj.views.projectwindow.SvgExportDialog;
 import pixelj.views.projectwindow.SvgExportDialogBase;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.DocumentSettingsDialog;
@@ -40,23 +45,41 @@ import pixelj.views.shared.OptionsDialog;
 
 public final class ProjectWindowActions implements Actions {
 
-    /** * Return to home screen. */
+    /**
+     * Return to home screen.
+     */
     public final ApplicationAction returnHomeAction;
-    /** * Export fnt. */
+    /**
+     * Export fnt.
+     */
     public final ApplicationAction fntExportAction;
-    /** * Export svg. */
+    /**
+     * Export svg.
+     */
     public final ApplicationAction svgExportAction;
-    /** Quit the application. */
+    /**
+     * Quit the application.
+     */
     public final ApplicationAction quitAction;
-    /** Save project. Calls saveAsAction if no path was set for the project. */
+    /**
+     * Save project. Calls saveAsAction if no path was set for the project.
+     */
     public final ApplicationAction saveAction;
-    /** Display a save dialog. */
+    /**
+     * Display a save dialog.
+     */
     public final ApplicationAction saveAsAction;
-    /** Display online help. */
+    /**
+     * Display online help.
+     */
     public final ApplicationAction showHelpAction;
-    /** Display the document settings dialog. */
+    /**
+     * Display the document settings dialog.
+     */
     public final ApplicationAction showDocumentSettingsAction;
-    /** Display the application settings dialog. */
+    /**
+     * Display the application settings dialog.
+     */
     public final ApplicationAction showOptionsAction;
 
     private final Collection<ApplicationAction> all;
@@ -168,7 +191,7 @@ public final class ProjectWindowActions implements Actions {
             Math.max(settings.canvasWidth(), appState.getExportImageWidth()),
             Math.max(settings.canvasHeight(), appState.getExportImageHeight())
         );
-        final var exportDialog = new ExportDialog(
+        final var exportDialog = new FntExportDialog(
             window,
             defaultSize,
             minimumSize,
@@ -176,6 +199,7 @@ public final class ProjectWindowActions implements Actions {
         );
         exportDialog.setVisible(true);
         final var options = exportDialog.getResult();
+        exportDialog.dispose();
         if (options == null) {
             return;
         }
@@ -192,15 +216,38 @@ public final class ProjectWindowActions implements Actions {
         try {
             // TODO: DI
             new ExportServiceImpl(new BasicImageWriter())
-                    .export(project, path, options.width(), options.height(), options.strategy());
+                .export(project, path, options.width(), options.height(), options.strategy());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private void exportSvg(final ActionEvent event, final Action action) {
-       final var exportDialog = new SvgExportDialogBase(window);
-       exportDialog.setVisible(true);
+        final var exportDialog = new SvgExportDialog(window);
+        exportDialog.setVisible(true);
+        final var path = exportDialog.getResult();
+        exportDialog.dispose();
+
+        if (path == null) {
+            return;
+        }
+
+        final var glyphs = project.getGlyphs().getElements();
+        final var settings = project.getDocumentSettings();
+        for (var glyph : glyphs) {
+            final var svg = new Svg(glyph, settings);
+            final var out = Paths.get(path.toString(), "g" + glyph.getCodePoint() + ".svg");
+            try {
+                final var file = out.toFile();
+                if (file.exists()) {
+                    file.delete();
+                }
+                Files.writeString(out, svg.getXml(), StandardOpenOption.CREATE);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(window, Resources.get().formatString(out.getFileName().toString()));
+                return;
+            }
+        }
     }
 
     private void quit(final ActionEvent event, final Action action) {
