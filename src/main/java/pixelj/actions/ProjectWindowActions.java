@@ -7,11 +7,8 @@ import java.awt.event.KeyEvent;
 import java.io.IOError;
 import java.io.IOException;
 import java.nio.BufferUnderflowException;
-import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -32,7 +29,6 @@ import pixelj.services.BasicImageWriter;
 import pixelj.services.DBFileService;
 import pixelj.services.ExportServiceImpl;
 import pixelj.services.FileService;
-import pixelj.services.FontMetadata;
 import pixelj.services.JavaPropertiesService;
 import pixelj.services.RecentItem;
 import pixelj.services.Svg;
@@ -227,10 +223,14 @@ public final class ProjectWindowActions implements Actions {
     private void exportSvg(final ActionEvent event, final Action action) {
         final var exportDialog = new SvgExportDialog(window);
         exportDialog.setVisible(true);
-        final var path = exportDialog.getResult();
+        final var result = exportDialog.getResult();
         exportDialog.dispose();
-        if (path != null) {
-            saveFontScript(path);
+        if (result != null) {
+            if (result.generateScript()) {
+                saveFontScript(result.path());
+            } else {
+                saveSvg(result.path());
+            }
         }
     }
 
@@ -246,13 +246,12 @@ public final class ProjectWindowActions implements Actions {
 
     private void saveFontScript(final Path path) {
         final var settings = project.getDocumentSettings();
-        final var script = project.getPath() != null
+        final var documentName = project.getPath() != null
             ? project.getPath().getFileName().toString()
             : "untitled";
         final var service = new SvgExportServiceImpl();
-        final var md = new FontMetadata();
         try {
-            service.write(path, project.getGlyphs().getElements(), settings, script, md);
+            service.writeWithScript(path, project.getGlyphs().getElements(), settings, documentName);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(window, e.getMessage());
         }

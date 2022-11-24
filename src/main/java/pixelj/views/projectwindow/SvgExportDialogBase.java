@@ -1,6 +1,7 @@
 package pixelj.views.projectwindow;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import net.miginfocom.swing.MigLayout;
 import pixelj.resources.Resources;
 import pixelj.views.shared.Borders;
 import pixelj.views.shared.Components;
@@ -14,6 +15,7 @@ public class SvgExportDialogBase extends JDialog {
     protected final JButton exportButton = new JButton(Resources.get().getString("export"));
     protected final JButton cancelButton = new JButton(Resources.get().getString("cancel"));
     protected final JTextField pathField = new JTextField();
+    protected final JCheckBox genScriptCheckBox = new JCheckBox(Resources.get().getString("genFontForgeScript"));
     protected final JButton selectPathButton = new JButton(Resources.get().getString("selectOutDirectory"));
     protected final JButton helpButton = new JButton();
 
@@ -29,16 +31,18 @@ public class SvgExportDialogBase extends JDialog {
         );
 
         final var content = new JPanel(new BorderLayout());
-
-        final var inputPanel = new JPanel();
-        inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.X_AXIS));
+        final var inputPanel = new JPanel(new MigLayout(
+            "insets 2lp",
+            "[left, min!]" + Dimensions.LARGE_PADDING + "lp[left, grow]" + Dimensions.MEDIUM_PADDING + "lp[left, min!]",
+            "[center, min!]" + Dimensions.LARGE_PADDING + "lp[center, min!]"
+        ));
         inputPanel.setBorder(Borders.LARGE_EMPTY);
         inputPanel.add(new JLabel(Resources.get().getString("outDirectory")));
-        inputPanel.add(Box.createHorizontalStrut(Dimensions.MEDIUM_PADDING));
-        inputPanel.add(pathField);
-        inputPanel.add(Box.createHorizontalStrut(Dimensions.SMALL_PADDING));
-        inputPanel.add(selectPathButton);
-        content.add(inputPanel, BorderLayout.NORTH);
+        inputPanel.add(pathField, "grow");
+        inputPanel.add(selectPathButton, "wrap");
+        inputPanel.add(genScriptCheckBox, "span, right");
+
+        content.add(inputPanel, BorderLayout.CENTER);
 
         final var buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
@@ -53,7 +57,7 @@ public class SvgExportDialogBase extends JDialog {
         setContentPane(content);
         getRootPane().setDefaultButton(exportButton);
         pack();
-        setSize(640, 152);
+        setSize(640, 172);
         setResizable(false);
         setLocationRelativeTo(owner);
     }

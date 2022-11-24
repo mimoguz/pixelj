@@ -10,11 +10,10 @@ import java.util.Collection;
 public interface SvgExportService {
     void write(final Path outDir, final Collection<Glyph> glyphs, final DocumentSettings settings) throws IOException;
 
-    void write(
+    void writeWithScript(
         final Path outDir,
         final Collection<Glyph> glyphs,
         final DocumentSettings settings,
-        final String fontForgeScriptName,
-        final FontMetadata metadata
+        final String fontForgeScriptName
     ) throws IOException;
 }

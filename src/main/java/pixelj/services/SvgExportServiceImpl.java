@@ -1,8 +1,8 @@
 package pixelj.services;
 
+import pixelj.graphics.BinaryImage;
 import pixelj.models.DocumentSettings;
 import pixelj.models.Glyph;
-import pixelj.util.bmreader2.Tag;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -10,9 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SvgExportServiceImpl implements SvgExportService {
@@ -31,14 +29,13 @@ public class SvgExportServiceImpl implements SvgExportService {
     }
 
     @Override
-    public void write(
+    public void writeWithScript(
         final Path outDir,
         final Collection<Glyph> glyphs,
         final DocumentSettings settings,
-        final String documentName,
-        final FontMetadata metadata
+        final String documentName
     ) throws IOException {
-        // TODO: Kerning pairs, space size, line height, integer coordinates.
+        // TODO: Kerning pairs, space size (implemented but not yet checked), line height, integer coordinates.
 
         if (!outDir.toFile().isDirectory()) {
             throw new IOException("Out path is not a directory");
@@ -51,7 +48,7 @@ public class SvgExportServiceImpl implements SvgExportService {
         final var script = Files.newOutputStream(scriptPath, StandardOpenOption.CREATE);
 
         try {
-            writeScriptHeader(script, settings, metadata);
+            writeScriptHeader(script, settings);
 
             try {
                 getSvgStream(glyphs, settings).forEach(svg -> {
@@ -61,6 +58,11 @@ public class SvgExportServiceImpl implements SvgExportService {
             } catch (IOWrapper wrapper) {
                 throw wrapper.getInner();
             }
+
+            final var space = getSpace(settings);
+            writeSvg(space, outDir);
+            writeGlyphScript(script, outDir, space, settings);
+
             script.write("Save(".getBytes(StandardCharsets.UTF_8));
             script.write(
                 escape(outDir.resolve(documentName + ".sfd").toAbsolutePath().toString())
@@ -78,6 +80,17 @@ public class SvgExportServiceImpl implements SvgExportService {
         return glyphs.stream().map(g -> new Svg(g, settings));
     }
 
+    private static Svg getSpace(final DocumentSettings settings) {
+        return new Svg(
+            new Glyph(
+                32,
+                settings.isMonospaced() ? settings.defaultWidth() : settings.spaceSize(),
+                BinaryImage.of(settings.canvasWidth(), settings.canvasHeight(), true)
+            ),
+            settings
+        );
+    }
+
     private static void writeSvg(final Svg svg, final Path outDir) {
         final var out = outDir.resolve("g" + svg.getId() + ".svg");
         final var file = out.toFile();
@@ -91,52 +104,18 @@ public class SvgExportServiceImpl implements SvgExportService {
         }
     }
 
-    private static void writeScriptHeader(
-        final OutputStream output,
-        final DocumentSettings settings,
-        final FontMetadata md
-    ) throws IOException {
+    private static void writeScriptHeader(final OutputStream output, final DocumentSettings settings) throws
+        IOException {
         output.write("New()\n".getBytes(StandardCharsets.UTF_8));
 
         final var asc = settings.ascender() * Svg.UNITS_PER_PIXEL;
         final var desc = settings.descender() * Svg.UNITS_PER_PIXEL;
         output.write(("ScaleToEm(" + asc + ", " + desc + ")\n").getBytes(StandardCharsets.UTF_8));
 
-        final var fontName = md.fontName() != null ? md.fontName() : makeName(settings.title());
-        final var fullName = md.fullName() != null ? md.fullName() : settings.title();
-        final var family = md.familyName() != null ? md.familyName() : fontName;
-
-        var weight = md.weight();
-        if (weight == null) {
-            if (settings.isBold() && settings.isBold()) {
-                weight = "Bold Italic";
-            } else if (settings.isBold()) {
-                weight = "Bold";
-            } else if (settings.isItalic()) {
-                weight = "Italic";
-            } else {
-                weight = "Regular";
-            }
-        }
-
-        final var copyright = md.copyright() != null
-            ? md.copyright()
-            : Integer.toString(Calendar.getInstance().get(Calendar.YEAR));
-
-        final var version = md.version() != null ? md.version() : "1.0";
-
         output.write("SetFontNames(".getBytes(StandardCharsets.UTF_8));
-        output.write(escape(fontName).getBytes(StandardCharsets.UTF_8));
+        output.write(escape(makeName(settings.title())).getBytes(StandardCharsets.UTF_8));
         output.write(", ".getBytes(StandardCharsets.UTF_8));
-        output.write(escape(family).getBytes(StandardCharsets.UTF_8));
-        output.write(", ".getBytes(StandardCharsets.UTF_8));
-        output.write(escape(fullName).getBytes(StandardCharsets.UTF_8));
-        output.write(", ".getBytes(StandardCharsets.UTF_8));
-        output.write(escape(weight).getBytes(StandardCharsets.UTF_8));
-        output.write(", ".getBytes(StandardCharsets.UTF_8));
-        output.write(escape(copyright).getBytes(StandardCharsets.UTF_8));
-        output.write(", ".getBytes(StandardCharsets.UTF_8));
-        output.write(escape(version).getBytes(StandardCharsets.UTF_8));
+        output.write(escape(settings.title()).getBytes(StandardCharsets.UTF_8));
         output.write(")\n".getBytes(StandardCharsets.UTF_8));
         output.write("Reencode(\"unicode\")\n\n".getBytes(StandardCharsets.UTF_8));
     }
