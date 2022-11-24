@@ -2,6 +2,7 @@ package pixelj.services;
 
 public record FontMetadata(
     String fontName,
+    String fullName,
     String familyName,
     String weight,
     String version,
@@ -9,6 +10,6 @@ public record FontMetadata(
     String comments
 ) {
     public FontMetadata() {
-        this(null, null, null, null, null, null);
+        this(null, null, null, null, null, null, null);
     }
 }

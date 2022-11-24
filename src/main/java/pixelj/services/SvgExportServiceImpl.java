@@ -2,6 +2,7 @@ package pixelj.services;
 
 import pixelj.models.DocumentSettings;
 import pixelj.models.Glyph;
+import pixelj.util.bmreader2.Tag;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -11,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SvgExportServiceImpl implements SvgExportService {
@@ -36,6 +38,8 @@ public class SvgExportServiceImpl implements SvgExportService {
         final String documentName,
         final FontMetadata metadata
     ) throws IOException {
+        // TODO: Kerning pairs, space size, line height, integer coordinates.
+
         if (!outDir.toFile().isDirectory()) {
             throw new IOException("Out path is not a directory");
         }
@@ -92,16 +96,14 @@ public class SvgExportServiceImpl implements SvgExportService {
         final DocumentSettings settings,
         final FontMetadata md
     ) throws IOException {
-
-        // TODO: Font name can't have spaces?
-
         output.write("New()\n".getBytes(StandardCharsets.UTF_8));
 
         final var asc = settings.ascender() * Svg.UNITS_PER_PIXEL;
         final var desc = settings.descender() * Svg.UNITS_PER_PIXEL;
         output.write(("ScaleToEm(" + asc + ", " + desc + ")\n").getBytes(StandardCharsets.UTF_8));
 
-        final var fontName = md.fontName() != null ? md.fontName() : settings.title();
+        final var fontName = md.fontName() != null ? md.fontName() : makeName(settings.title());
+        final var fullName = md.fullName() != null ? md.fullName() : settings.title();
         final var family = md.familyName() != null ? md.familyName() : fontName;
 
         var weight = md.weight();
@@ -128,14 +130,15 @@ public class SvgExportServiceImpl implements SvgExportService {
         output.write(", ".getBytes(StandardCharsets.UTF_8));
         output.write(escape(family).getBytes(StandardCharsets.UTF_8));
         output.write(", ".getBytes(StandardCharsets.UTF_8));
-        output.write(escape(fontName).getBytes(StandardCharsets.UTF_8));
+        output.write(escape(fullName).getBytes(StandardCharsets.UTF_8));
         output.write(", ".getBytes(StandardCharsets.UTF_8));
         output.write(escape(weight).getBytes(StandardCharsets.UTF_8));
         output.write(", ".getBytes(StandardCharsets.UTF_8));
         output.write(escape(copyright).getBytes(StandardCharsets.UTF_8));
         output.write(", ".getBytes(StandardCharsets.UTF_8));
         output.write(escape(version).getBytes(StandardCharsets.UTF_8));
-        output.write(")\n\n".getBytes(StandardCharsets.UTF_8));
+        output.write(")\n".getBytes(StandardCharsets.UTF_8));
+        output.write("Reencode(\"unicode\")\n\n".getBytes(StandardCharsets.UTF_8));
     }
 
     private static void writeGlyphScript(
@@ -171,6 +174,10 @@ public class SvgExportServiceImpl implements SvgExportService {
 
     private static String escape(final String str) {
         return "\"" + str.replace("\"", "\\\"").replace("\\", "\\\\") + '"';
+    }
+
+    private static String makeName(final String title) {
+        return title.replaceAll("[^A-Z^a-z^0-9]+", "");
     }
 
     private static class IOWrapper extends RuntimeException {
