@@ -7,7 +7,6 @@ import java.awt.event.KeyEvent;
 import java.io.IOError;
 import java.io.IOException;
 import java.nio.BufferUnderflowException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
@@ -33,9 +32,11 @@ import pixelj.services.BasicImageWriter;
 import pixelj.services.DBFileService;
 import pixelj.services.ExportServiceImpl;
 import pixelj.services.FileService;
+import pixelj.services.FontMetadata;
 import pixelj.services.JavaPropertiesService;
 import pixelj.services.RecentItem;
 import pixelj.services.Svg;
+import pixelj.services.SvgExportServiceImpl;
 import pixelj.views.homewindow.HomeWindow;
 import pixelj.views.projectwindow.FntExportDialog;
 import pixelj.views.projectwindow.SvgExportDialog;
@@ -229,109 +230,31 @@ public final class ProjectWindowActions implements Actions {
         final var path = exportDialog.getResult();
         exportDialog.dispose();
         if (path != null) {
-            savePe(path);
+            saveFontScript(path);
         }
     }
 
     private void saveSvg(final Path path) {
-        final var svgStream = getSvg();
+        final var settings = project.getDocumentSettings();
+        final var service = new SvgExportServiceImpl();
         try {
-            svgStream.forEach(svg -> {
-                final var out = Paths.get(path.toString(), "g" + svg.getId() + ".svg");
-                try {
-                    final var file = out.toFile();
-                    if (file.exists()) {
-                        file.delete();
-                    }
-                    Files.writeString(out, svg.getXml(), StandardOpenOption.CREATE);
-                } catch (IOException e) {
-                    JOptionPane.showMessageDialog(window, Resources.get().formatString(out.getFileName().toString()));
-                    throw new RuntimeException("break");
-                }
-            });
-        } catch (RuntimeException e) {
-            // Pass
+            service.write(path, project.getGlyphs().getElements(), settings);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(window, e.getMessage());
         }
     }
 
-    private void savePe(final Path path) {
+    private void saveFontScript(final Path path) {
         final var settings = project.getDocumentSettings();
-        final var pePath = Paths.get(
-            path.toString(),
-            project.getPath() != null
-                ? project.getPath().getFileName().toString() + ".pe"
-                : "untitled.pe"
-        );
+        final var script = project.getPath() != null
+            ? project.getPath().getFileName().toString()
+            : "untitled";
+        final var service = new SvgExportServiceImpl();
+        final var md = new FontMetadata();
         try {
-            final var peFile = pePath.toFile();
-            if (peFile.exists()) {
-                peFile.delete();
-            }
-            final var peStream = Files.newOutputStream(pePath, StandardOpenOption.CREATE);
-            peStream.write("New()\n".getBytes(StandardCharsets.UTF_8));
-            peStream.write((
-                "ScaleToEm(" +
-                    (settings.ascender() * Svg.UNITS_PER_PIXEL) +
-                    ", " +
-                    (settings.descender() * Svg.UNITS_PER_PIXEL) +
-                    ")\n\n"
-            ).getBytes(
-                StandardCharsets.UTF_8));
-
-            final var svgStream = getSvg();
-            try {
-                svgStream.forEach(svg -> {
-                    final var out = Paths.get(path.toString(), "g" + svg.getId() + ".svg");
-                    try {
-
-                        peStream.write(("Select(" + svg.getId() + ")\n").getBytes(StandardCharsets.UTF_8));
-                        peStream.write((
-                            "Import(\"" +
-                                out.toAbsolutePath().toString().replace('\\', '/') +
-                                "\")\n"
-                        ).getBytes(
-                            StandardCharsets.UTF_8));
-                        peStream.write("Simplify()\n".getBytes(StandardCharsets.UTF_8));
-                        peStream.write(("SetWidth(" + svg.getWidth() + ")\n").getBytes(StandardCharsets.UTF_8));
-                        peStream.write("SetLBearing(0)\n".getBytes(StandardCharsets.UTF_8));
-                        peStream.write((
-                            "SetRBearing(" +
-                                (settings.letterSpacing() * Svg.UNITS_PER_PIXEL) +
-                                ")\n"
-                        ).getBytes(StandardCharsets.UTF_8));
-                        peStream.write(("SetGlyphName(NameFromUnicode(" + svg.getId() + "))\n\n").getBytes(
-                            StandardCharsets.UTF_8));
-
-                        final var file = out.toFile();
-                        if (file.exists()) {
-                            file.delete();
-                        }
-                        Files.writeString(out, svg.getXml(), StandardOpenOption.CREATE);
-                    } catch (IOException e) {
-                        JOptionPane.showMessageDialog(
-                            window,
-                            Resources.get().formatString("svgWriteError", out.getFileName().toString())
-                        );
-
-                        throw new RuntimeException("break");
-                    }
-                });
-            } catch (RuntimeException e) {
-                try {
-                    peStream.close();
-                } catch (IOException ex) {
-                    // TODO
-                }
-            }
-
-            final var projectPath = project.getPath() != null
-                ? project.getPath().getFileName().toString() + ".sfd"
-                : "untitled.sfd";
-
-            peStream.write(("Save(\"" + projectPath.replace('\\', '/') + "\")\n\n").getBytes(StandardCharsets.UTF_8));
-            peStream.close();
+            service.write(path, project.getGlyphs().getElements(), settings, script, md);
         } catch (IOException e) {
-            // TODO
+            JOptionPane.showMessageDialog(window, e.getMessage());
         }
     }
 
