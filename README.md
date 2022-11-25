@@ -15,7 +15,7 @@ You can find pre-compiled Windows and Linux packages on the [releases](https://g
 LibGDX, and (as far as I know) Godot use BMFont config format for bitmap fonts. MonoGame.Extended package adds
 BMFont support to MonoGame.
 
-### Creating OTF/TTF
+## Creating OTF/TTF
 
 Load a project, and from the menu select _"Export SVG"_ command (shortcut Ctrl + Shift + E). On the opened dialog, select a directory to save the exported files and press _"Export"_. If you didn't uncheck the option, this will also create a file with _.pe_ extension. Open the save directory in the terminal and run (assuming you have FontForge installed and on the path)
 
