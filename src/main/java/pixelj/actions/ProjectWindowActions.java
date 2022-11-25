@@ -116,7 +116,8 @@ public final class ProjectWindowActions implements Actions {
 
         svgExportAction = new ApplicationAction("svgExportAction", this::exportSvg)
             .withText()
-            .setIcon(Icon.FILE_EXPORT);
+            .setIcon(Icon.FILE_EXPORT)
+            .setAccelerator(KeyEvent.VK_E, menuShortcutMask | ActionEvent.SHIFT_MASK);;
 
         quitAction = new ApplicationAction("quitAction", this::quit)
             .withText()

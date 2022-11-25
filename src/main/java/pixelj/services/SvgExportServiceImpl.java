@@ -113,8 +113,21 @@ public class SvgExportServiceImpl implements SvgExportService {
 
         final var asc = settings.ascender() * Svg.UNITS_PER_PIXEL;
         final var desc = (settings.descender() + settings.lineSpacing()) * Svg.UNITS_PER_PIXEL;
+        final var weight = settings.isBold() ? "\"Bold\"" : "\"Regular\"";
         writeStrLn(output, "ScaleToEm(", asc, ", ", desc, ')');
-        writeStrLn(output, "SetFontNames(", escape(makeName(settings.title())), ", ", escape(settings.title()), ")");
+        writeStrLn(
+            output,
+            "SetFontNames(",
+            escape(makeName(settings.title())),
+            ", ",
+            escape(settings.title()),
+            ", ",
+            escape(settings.title()),
+            ", ",
+            weight,
+            ')'
+        );
+        writeStrLn(output, "AddSizeFeature(", settings.ascender(), ')');
         writeStrLn(output, "Reencode(\"unicode\")\n");
     }
 
