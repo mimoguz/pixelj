@@ -32,6 +32,7 @@ public final class Help {
         HOME("https://github.com/mimoguz/pixelj/wiki/Home-Window"),
         DOCUMENT_SETTINGS(WIKI),
         EXPORT(WIKI),
+        EXPORT_SVG(WIKI),
         GLYPHS(WIKI),
         KERNING_PAIRS(WIKI),
         PREVIEW(WIKI);

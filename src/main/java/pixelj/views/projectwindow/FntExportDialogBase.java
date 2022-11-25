@@ -8,14 +8,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
+import javax.swing.*;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
@@ -25,7 +18,7 @@ import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 
 /** Export dialog design. */
-abstract class ExportDialogBase extends JDialog {
+abstract class FntExportDialogBase extends JDialog {
 
     protected final JButton exportButton = new JButton(Resources.get().getString("export"));
     protected final JButton cancelButton = new JButton(Resources.get().getString("cancel"));
@@ -34,7 +27,7 @@ abstract class ExportDialogBase extends JDialog {
     protected final JSpinner heightIn = new JSpinner();
     protected final JButton helpButton = new JButton();
 
-    ExportDialogBase(final Frame owner) {
+    FntExportDialogBase(final Frame owner) {
         super(owner, Resources.get().getString("exportDialogTitle"), Dialog.ModalityType.APPLICATION_MODAL);
 
         Components.setFixedSize(exportButton, Dimensions.TEXT_BUTTON_SIZE);

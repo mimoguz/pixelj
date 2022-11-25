@@ -65,7 +65,9 @@ public final class ProjectWindow extends ProjectWindowBase {
     private void fillMenu(final ProjectWindowActions actions) {
         mainMenu.add(actions.saveAction);
         mainMenu.add(actions.saveAsAction);
-        mainMenu.add(actions.exportAction);
+        mainMenu.add(new JSeparator(SwingConstants.HORIZONTAL));
+        mainMenu.add(actions.fntExportAction);
+        mainMenu.add(actions.svgExportAction);
         mainMenu.add(new JSeparator(SwingConstants.HORIZONTAL));
         mainMenu.add(actions.showDocumentSettingsAction);
         mainMenu.add(actions.showOptionsAction);
