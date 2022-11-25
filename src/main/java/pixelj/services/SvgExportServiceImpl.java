@@ -140,7 +140,8 @@ public class SvgExportServiceImpl implements SvgExportService {
         try {
             writeStrLn(output, "Select(", svg.getId(), ')');
             writeStrLn(output, "Import(\"", svgPathString(outDir, svg.getId()), "\")");
-            writeStrLn(output, "Simplify()");
+            // TODO: Running simplify causes non-integer coordinates. Investigate.
+            // writeStrLn(output, "Simplify()");
             writeStrLn(output, "RoundToInt(", Svg.UNITS_PER_PIXEL, ')');
             writeStrLn(output, "SetWidth(", svg.getWidth(), ')');
             writeStrLn(output, "SetLBearing(0)");
