@@ -133,28 +133,32 @@ public class Svg {
 
     private static boolean sameLine(
         // @formatter:off
-        final double p1x, final double p1y,
-        final double p2x, final double p2y,
-        final double p3x, final double p3y
+        final int p1x, final int p1y,
+        final int p2x, final int p2y,
+        final int p3x, final int p3y
         // @formatter:on
     ) {
-        return (almostEqual(p1x, p2x) && almostEqual(p2x, p3x)) || (almostEqual(p1y, p2y) && almostEqual(p2y, p3y));
-    }
-
-    private static boolean almostEqual(final double a, final double b) {
-        return Math.abs(a - b) <= 0.001;
+        return ((p1x == p2x) && (p2x == p3x)) || ((p1y == p2y) && (p2y == p3y));
     }
 
     private sealed interface Node {
         String str();
 
-        record MoveTo(Double x, Double y) implements Node {
+        record MoveTo(int x, int y) implements Node {
+            public MoveTo(double x, double y) {
+                this((int)x, (int)y);
+            }
+
             public String str() {
                 return "M" + x + ' ' + y;
             }
         }
 
-        record LineTo(Double x, Double y) implements Node {
+        record LineTo(int x, int y) implements Node {
+            public LineTo(double x, double y) {
+                this((int)x, (int)y);
+            }
+
             public String str() {
                 return "L" + x + ' ' + y;
             }
