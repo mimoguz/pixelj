@@ -33,7 +33,7 @@ public class SvgExportDialogBase extends JDialog {
         final var content = new JPanel(new BorderLayout());
         final var inputPanel = new JPanel(new MigLayout(
             "insets 2lp",
-            "[left, min!]" + Dimensions.LARGE_PADDING + "lp[left, grow]" + Dimensions.MEDIUM_PADDING + "lp[left, min!]",
+            "[left, min!]" + Dimensions.LARGE_PADDING + "lp[left, 400lp:400lp:400lp]" + Dimensions.MEDIUM_PADDING + "lp[left, min!]",
             "[center, min!]" + Dimensions.LARGE_PADDING + "lp[center, min!]"
         ));
         inputPanel.setBorder(Borders.LARGE_EMPTY);
@@ -57,7 +57,6 @@ public class SvgExportDialogBase extends JDialog {
         setContentPane(content);
         getRootPane().setDefaultButton(exportButton);
         pack();
-        setSize(640, 172);
         setResizable(false);
         setLocationRelativeTo(owner);
     }
