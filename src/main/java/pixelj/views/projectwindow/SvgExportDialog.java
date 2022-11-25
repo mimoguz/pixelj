@@ -24,6 +24,8 @@ public class SvgExportDialog extends SvgExportDialogBase {
     public SvgExportDialog(final Frame owner) {
         super(owner);
 
+        genScriptCheckBox.setSelected(true);
+
         selectPathButton.addActionListener((e) -> {
             final var path = showSelectDirectoryDialog();
             if (path != null) {

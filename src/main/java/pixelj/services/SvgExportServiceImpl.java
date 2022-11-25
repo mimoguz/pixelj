@@ -3,6 +3,7 @@ package pixelj.services;
 import pixelj.graphics.BinaryImage;
 import pixelj.models.DocumentSettings;
 import pixelj.models.Glyph;
+import pixelj.models.KerningPair;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -32,22 +33,24 @@ public class SvgExportServiceImpl implements SvgExportService {
     public void writeWithScript(
         final Path outDir,
         final Collection<Glyph> glyphs,
+        final Collection<KerningPair> kerningPairs,
         final DocumentSettings settings,
         final String documentName
     ) throws IOException {
-        // TODO: Kerning pairs, space size (implemented but not yet checked), line height, integer coordinates.
+        // TODO: integer coordinates.
 
         if (!outDir.toFile().isDirectory()) {
             throw new IOException("Out path is not a directory");
         }
+
         final var scriptPath = outDir.resolve(documentName + ".pe");
         final var scriptFile = scriptPath.toFile();
         if (scriptFile.exists()) {
             scriptFile.delete();
         }
-        final var script = Files.newOutputStream(scriptPath, StandardOpenOption.CREATE);
 
-        try {
+        try (var script = Files.newOutputStream(scriptPath, StandardOpenOption.CREATE)) {
+
             writeScriptHeader(script, settings);
 
             try {
@@ -59,9 +62,11 @@ public class SvgExportServiceImpl implements SvgExportService {
                 throw wrapper.getInner();
             }
 
-            final var space = getSpace(settings);
-            writeSvg(space, outDir);
-            writeGlyphScript(script, outDir, space, settings);
+            writeSpace(script, settings);
+
+            for (var pair : kerningPairs) {
+                writeKerningPairScript(script, pair);
+            }
 
             script.write("Save(".getBytes(StandardCharsets.UTF_8));
             script.write(
@@ -69,10 +74,9 @@ public class SvgExportServiceImpl implements SvgExportService {
                     .getBytes(StandardCharsets.UTF_8)
             );
             script.write(")\n\n".getBytes(StandardCharsets.UTF_8));
-            script.close();
-        } catch (IOException ex) {
-            script.close();
-            throw ex;
+
+        } catch (IOWrapper ex) {
+            throw ex.getInner();
         }
     }
 
@@ -80,15 +84,15 @@ public class SvgExportServiceImpl implements SvgExportService {
         return glyphs.stream().map(g -> new Svg(g, settings));
     }
 
-    private static Svg getSpace(final DocumentSettings settings) {
-        return new Svg(
-            new Glyph(
-                32,
-                settings.isMonospaced() ? settings.defaultWidth() : settings.spaceSize(),
-                BinaryImage.of(settings.canvasWidth(), settings.canvasHeight(), true)
-            ),
-            settings
-        );
+    private static void writeSpace(final OutputStream output, final DocumentSettings settings) throws IOException {
+        final var width = settings.isMonospaced()
+            ? settings.defaultWidth() + settings.letterSpacing()
+            : settings.spaceSize();
+        output.write("Select(32)\n".getBytes(StandardCharsets.UTF_8));
+        output.write("SetWidth(0)\n".getBytes(StandardCharsets.UTF_8));
+        output.write("SetLBearing(0)\n".getBytes(StandardCharsets.UTF_8));
+        output.write(("SetRBearing(" + (width * Svg.UNITS_PER_PIXEL) + ")\n").getBytes(StandardCharsets.UTF_8));
+        output.write("SetGlyphName(NameFromUnicode(32))\n\n".getBytes(StandardCharsets.UTF_8));
     }
 
     private static void writeSvg(final Svg svg, final Path outDir) {
@@ -109,7 +113,7 @@ public class SvgExportServiceImpl implements SvgExportService {
         output.write("New()\n".getBytes(StandardCharsets.UTF_8));
 
         final var asc = settings.ascender() * Svg.UNITS_PER_PIXEL;
-        final var desc = settings.descender() * Svg.UNITS_PER_PIXEL;
+        final var desc = (settings.descender() + settings.lineSpacing()) * Svg.UNITS_PER_PIXEL;
         output.write(("ScaleToEm(" + asc + ", " + desc + ")\n").getBytes(StandardCharsets.UTF_8));
 
         output.write("SetFontNames(".getBytes(StandardCharsets.UTF_8));
@@ -141,6 +145,16 @@ public class SvgExportServiceImpl implements SvgExportService {
         } catch (IOException ex) {
             throw new IOWrapper(ex);
         }
+    }
+
+    private static void writeKerningPairScript(final OutputStream output, final KerningPair pair) throws IOException {
+        output.write(("Select(" + pair.getLeft().getCodePoint() + ")\n").getBytes(StandardCharsets.UTF_8));
+        output.write(
+            (
+                "SetKern(" + pair.getRight().getCodePoint() + ", " +
+                    (pair.getKerningValue() * Svg.UNITS_PER_PIXEL) + ")\n\n"
+            ).getBytes(StandardCharsets.UTF_8)
+        );
     }
 
     private static Path svgPath(final Path outDir, final int id) {

@@ -2,6 +2,7 @@ package pixelj.services;
 
 import pixelj.models.DocumentSettings;
 import pixelj.models.Glyph;
+import pixelj.models.KerningPair;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -13,6 +14,7 @@ public interface SvgExportService {
     void writeWithScript(
         final Path outDir,
         final Collection<Glyph> glyphs,
+        final Collection<KerningPair> kerningPairs,
         final DocumentSettings settings,
         final String fontForgeScriptName
     ) throws IOException;

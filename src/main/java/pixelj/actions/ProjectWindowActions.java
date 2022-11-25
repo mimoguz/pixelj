@@ -251,7 +251,13 @@ public final class ProjectWindowActions implements Actions {
             : "untitled";
         final var service = new SvgExportServiceImpl();
         try {
-            service.writeWithScript(path, project.getGlyphs().getElements(), settings, documentName);
+            service.writeWithScript(
+                path,
+                project.getGlyphs().getElements(),
+                project.getKerningPairs().getElements(),
+                settings,
+                documentName
+            );
         } catch (IOException e) {
             JOptionPane.showMessageDialog(window, e.getMessage());
         }
