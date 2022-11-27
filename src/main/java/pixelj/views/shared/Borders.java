@@ -1,5 +1,7 @@
 package pixelj.views.shared;
 
+import pixelj.resources.Resources;
+
 import javax.swing.BorderFactory;
 import javax.swing.border.Border;
 

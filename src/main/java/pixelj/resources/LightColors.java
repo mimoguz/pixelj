@@ -9,6 +9,7 @@ public final class LightColors implements Colors {
     private final Color disabledIcon = new Color(176, 176, 176);
     private final Color inactive = new Color(114, 114, 114);
     private final Color icon = new Color(96, 96, 100);
+    private final Color panel = new Color(244, 244, 244);
     private final Color separator = new Color(219, 219, 220);
 
     @Override
@@ -36,7 +37,12 @@ public final class LightColors implements Colors {
     public Color inactive() {
         return inactive;
     }
-    
+
+    @Override
+    public Color panel() {
+        return panel;
+    }
+
     @Override
     public Color separator() {
         return separator;

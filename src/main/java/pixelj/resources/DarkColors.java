@@ -9,6 +9,7 @@ public final class DarkColors implements Colors {
     private final Color disabledIcon = new Color(68, 75, 89);
     private final Color inactive = new Color(106, 112, 122);
     private final Color icon = new Color(151, 159, 173);
+    private final Color panel = new Color(40, 44, 52);
     private final Color separator = new Color(53, 64, 72);
 
     @Override
@@ -34,6 +35,11 @@ public final class DarkColors implements Colors {
     @Override
     public Color inactive() {
         return inactive;
+    }
+
+    @Override
+    public Color panel() {
+        return panel;
     }
     
     @Override

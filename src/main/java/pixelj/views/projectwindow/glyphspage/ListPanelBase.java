@@ -1,15 +1,8 @@
 package pixelj.views.projectwindow.glyphspage;
 
-import java.awt.Dimension;
+import java.awt.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 
 import pixelj.models.Block;
 import pixelj.models.Glyph;
@@ -21,17 +14,26 @@ import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 import pixelj.views.shared.GlyphCellRenderer;
 
-/** ListPanel design. */
+/**
+ * ListPanel design.
+ */
 abstract class ListPanelBase extends JPanel {
 
     protected final JComboBox<Block> filterBox = new SearchableComboBox<>(Resources.get().getBlocks());
     protected final JList<Glyph> list = new JList<>();
     protected final CoupledActionsButton addButton = new CoupledActionsButton();
     protected final JButton removeButton = new JButton();
+    protected final JButton gridViewButton = new JButton();
+    protected final JPopupMenu gridViewPopup = new JPopupMenu();
+    protected final JPanel gridView = new JPanel(new GridLayout(10, 10, 1, 1));
 
     ListPanelBase() {
         Components.setFixedSize(addButton, Dimensions.TEXT_BUTTON_SIZE);
         Components.setFixedSize(removeButton, Dimensions.TEXT_BUTTON_SIZE);
+        Components.setFixedSize(
+            gridViewButton,
+            new Dimension(Dimensions.TEXT_BUTTON_SIZE.height, Dimensions.TEXT_BUTTON_SIZE.height)
+        );
 
         list.setCellRenderer(new GlyphCellRenderer(48));
         list.setMaximumSize(Dimensions.MAXIMUM);
@@ -48,11 +50,13 @@ abstract class ListPanelBase extends JPanel {
         final var buttonPanel = new JPanel();
         buttonPanel.setBorder(Borders.SMALL_EMPTY);
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+        buttonPanel.add(Box.createHorizontalStrut(Dimensions.TEXT_BUTTON_SIZE.height));
         buttonPanel.add(Box.createHorizontalGlue());
         buttonPanel.add(addButton);
         buttonPanel.add(Box.createRigidArea(Dimensions.MEDIUM_SQUARE));
         buttonPanel.add(removeButton);
         buttonPanel.add(Box.createHorizontalGlue());
+        buttonPanel.add(gridViewButton);
         add(buttonPanel);
 
         final var filterPanel = new JPanel();
@@ -65,5 +69,10 @@ abstract class ListPanelBase extends JPanel {
         scrollPanel.setMaximumSize(Dimensions.MAXIMUM);
         scrollPanel.setBorder(Borders.EMPTY);
         add(scrollPanel);
+
+        gridView.setBackground(Resources.get().colors.separator());
+        final var gridViewScroll = new JScrollPane(gridView);
+        gridViewScroll.setBorder(Borders.EMPTY);
+        gridViewPopup.add(gridViewScroll);
     }
 }

@@ -1,16 +1,19 @@
 package pixelj.views.projectwindow.glyphspage;
 
-import javax.swing.DefaultListSelectionModel;
-import javax.swing.JFrame;
-import javax.swing.ListSelectionModel;
+import javax.swing.*;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
+import pixelj.actions.ApplicationAction;
 import pixelj.actions.GlyphListActions;
 import pixelj.models.Block;
 import pixelj.models.FilteredList;
 import pixelj.models.Glyph;
 import pixelj.models.Project;
 import pixelj.models.SortedList;
+import pixelj.resources.Icon;
 import pixelj.util.Detachable;
+import pixelj.views.shared.Dimensions;
 
 public final class ListPanel extends ListPanelBase implements Detachable {
 
@@ -43,6 +46,31 @@ public final class ListPanel extends ListPanelBase implements Detachable {
                 filteredListModel.setFilter(chr -> true);
             }
         });
+
+        gridViewButton.setAction(new ApplicationAction("gridViewAction", (event, action) -> {
+            gridViewPopup.show(gridViewButton, 0, gridViewButton.getHeight() + Dimensions.SMALL_PADDING);
+        }).setIcon(Icon.GRID));
+
+        gridViewPopup.addPopupMenuListener(new PopupMenuListener() {
+            @Override
+            public void popupMenuWillBecomeVisible(final PopupMenuEvent e) {
+                synchronized (listModel) {
+                    for (var i = 0; i < listModel.getSize(); i++) {
+                        gridView.add(new GridCell(listModel.getElementAt(i)));
+                    }
+                }
+            }
+
+            @Override
+            public void popupMenuWillBecomeInvisible(final PopupMenuEvent e) {
+                gridView.removeAll();
+            }
+
+            @Override
+            public void popupMenuCanceled(final PopupMenuEvent e) {
+                gridView.removeAll();
+            }
+        });
     }
 
     public ListSelectionModel getSelectionModel() {
@@ -68,6 +96,5 @@ public final class ListPanel extends ListPanelBase implements Detachable {
         }
         actions.addGlyphsAction.setEnabled(value);
         actions.removeGlyphsAction.setEnabled(value && (selectionModel.getMinSelectionIndex() >= 0));
-
     }
 }

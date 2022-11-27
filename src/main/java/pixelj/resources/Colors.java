@@ -29,6 +29,11 @@ public interface Colors {
      * @return Inactive window title text color.
      */
     Color inactive();
+
+    /**
+     * @return Panel background color.
+     */
+    Color panel();
     
     /**
      * @return Background color for separators.
