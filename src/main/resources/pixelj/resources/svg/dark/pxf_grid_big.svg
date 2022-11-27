@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g id="gdark">
+        <g id="rotate_ccw_shadow">
+        </g>
+        <g id="rotate_cw_shadow">
+        </g>
+        <g id="move_shadow">
+        </g>
+        <g id="move_shadow1" serif:id="move_shadow">
+        </g>
+        <g id="move_shadow2" serif:id="move_shadow">
+        </g>
+        <g id="move_shadow3" serif:id="move_shadow">
+        </g>
+        <g id="folder_shadow">
+        </g>
+        <g id="export_shadow">
+        </g>
+        <g id="copy_shadow">
+        </g>
+        <g id="copy_shadow1" serif:id="copy_shadow">
+        </g>
+        <g style="filter:url(#_Effect1);">
+        </g>
+        <g id="clip_shadow">
+        </g>
+        <g id="clip_shadow1" serif:id="clip_shadow">
+        </g>
+        <g id="cut_shadow">
+        </g>
+        <path d="M14.99,16C15.548,16 16,15.548 16,14.99L16,1.01C16,0.452 15.548,0 14.99,0L1.01,0C0.452,0 0,0.452 -0,1.01L0,14.99C0,15.548 0.452,16 1.01,16L14.99,16ZM9,9L9,14L14,14L14,9L9,9ZM2,9L2,14L7,14L7,9L2,9ZM2,2L2,7L7,7L7,2L2,2ZM9,2L9,7L14,7L14,2L9,2Z" style="fill:rgb(41,121,255);"/>
+        <path d="M4,6L4,4L5,4L5,6L6,6L6,3L3,3L3,6L4,6Z" style="fill:rgb(151,159,173);"/>
+        <path d="M12,3L12,5L11,5L11,3L10,3L10,6L13,6L13,3L12,3Z" style="fill:rgb(151,159,173);"/>
+        <path d="M13,10L10,10L10,13L13,13L13,10ZM12,11L11,11L11,12L12,12L12,11Z" style="fill:rgb(151,159,173);"/>
+        <path d="M4,11L4,12L3,12L3,13L6,13L6,12L5,12L5,11L6,11L6,10L3,10L3,11L4,11Z" style="fill:rgb(151,159,173);"/>
+    </g>
+    <g id="menu">
+    </g>
+    <defs>
+        <filter id="_Effect1" filterUnits="userSpaceOnUse" x="-26.3588" y="22.5346" width="20.3241" height="20.3241">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="0.5"/>
+        </filter>
+    </defs>
+</svg>
