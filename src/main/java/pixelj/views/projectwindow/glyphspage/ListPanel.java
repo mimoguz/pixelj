@@ -12,7 +12,9 @@ import pixelj.models.Glyph;
 import pixelj.models.Project;
 import pixelj.models.SortedList;
 import pixelj.resources.Icon;
+import pixelj.resources.Resources;
 import pixelj.util.Detachable;
+import pixelj.views.shared.Borders;
 import pixelj.views.shared.Dimensions;
 
 public final class ListPanel extends ListPanelBase implements Detachable {
@@ -55,8 +57,14 @@ public final class ListPanel extends ListPanelBase implements Detachable {
             @Override
             public void popupMenuWillBecomeVisible(final PopupMenuEvent e) {
                 synchronized (listModel) {
-                    for (var i = 0; i < listModel.getSize(); i++) {
-                        gridView.add(new GridCell(listModel.getElementAt(i)));
+                    if (listModel.getSize() == 0) {
+                        final var msg = new JLabel(Resources.get().getString("emptyListMessage"));
+                        msg.setBorder(Borders.LARGE_EMPTY);
+                        gridView.add(msg);
+                    } else {
+                        for (var i = 0; i < listModel.getSize(); i++) {
+                            gridView.add(new GridCell(listModel.getElementAt(i)));
+                        }
                     }
                 }
             }
