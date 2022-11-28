@@ -17,6 +17,8 @@ import pixelj.util.Detachable;
 import pixelj.views.shared.Borders;
 import pixelj.views.shared.Dimensions;
 
+import java.awt.*;
+
 public final class ListPanel extends ListPanelBase implements Detachable {
 
     private final GlyphListActions actions;
@@ -57,14 +59,27 @@ public final class ListPanel extends ListPanelBase implements Detachable {
             @Override
             public void popupMenuWillBecomeVisible(final PopupMenuEvent e) {
                 synchronized (listModel) {
-                    if (listModel.getSize() == 0) {
+                    gridView.removeAll();
+
+                    final var size = listModel.getSize();
+                    if (size == 0) {
+                        gridView.setLayout(new BoxLayout(gridView, BoxLayout.X_AXIS));
                         final var msg = new JLabel(Resources.get().getString("emptyListMessage"));
                         msg.setBorder(Borders.LARGE_EMPTY);
                         gridView.add(msg);
+                        SwingUtilities.invokeLater(() -> gridViewPopup.setPopupSize(
+                            msg.getWidth() + 2,
+                            msg.getHeight() + 2
+                        ));
                     } else {
+                        gridView.setLayout(new GridLayout((size + 1) / 10, Math.min(10, size), 1, 1));
                         for (var i = 0; i < listModel.getSize(); i++) {
                             gridView.add(new GridCell(listModel.getElementAt(i)));
                         }
+                        SwingUtilities.invokeLater(() -> gridViewPopup.setPopupSize(
+                            gridView.getWidth() + 2,
+                            Math.min(gridView.getHeight() + 2, 500)
+                        ));
                     }
                 }
             }

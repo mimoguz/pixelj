@@ -73,6 +73,8 @@ abstract class ListPanelBase extends JPanel {
         gridView.setBackground(Resources.get().colors.separator());
         final var gridViewScroll = new JScrollPane(gridView);
         gridViewScroll.setBorder(Borders.EMPTY);
+        gridViewScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         gridViewPopup.add(gridViewScroll);
+        gridViewPopup.setPopupSize(500, 500);
     }
 }

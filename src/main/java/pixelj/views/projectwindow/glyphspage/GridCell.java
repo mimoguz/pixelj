@@ -15,7 +15,7 @@ import java.awt.*;
 public class GridCell extends JPanel {
 
     GridCell(final Glyph glyph) {
-        setLayout(new MigLayout("insets 4lp", "[center, grow]", "[top]4lp[center, grow]"));
+        setLayout(new MigLayout("insets 6lp 8lp 10lp 8lp", "[center, grow]", "[top]4lp[center, grow]"));
 
         final var cellTitle = new JLabel((char) glyph.getCodePoint() + " (0x" + Integer.toHexString(glyph.getCodePoint()) + ')');
         cellTitle.setHorizontalTextPosition(SwingConstants.CENTER);
