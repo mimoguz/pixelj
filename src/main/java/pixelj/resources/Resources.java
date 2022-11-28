@@ -1,10 +1,6 @@
 package pixelj.resources;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.GraphicsEnvironment;
-import java.awt.Image;
+import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -167,9 +163,9 @@ public final class Resources {
     private static List<Image> loadApplicationIcons() {
         return Stream.of(16, 24, 32, 64, 128, 256).map(size -> {
             try {
-                return new ImageIcon(
-                    Resources.class.getResource("applicationIcon/icon" + size + "px.png").getPath()
-                ).getImage();
+                return Toolkit.getDefaultToolkit().getImage(
+                    Resources.class.getResource("applicationIcon/icon" + size + "px.png")
+                );
             } catch (NullPointerException e) {
                 e.printStackTrace();
                 return null;
