@@ -66,10 +66,10 @@ public final class ListPanel extends ListPanelBase implements Detachable {
                 synchronized (listModel) {
                     gridView.removeAll();
 
-                    final var size = listModel.getSize();
+                    final var count = listModel.getSize();
                     final var location = gridViewButton.getLocationOnScreen();
 
-                    if (size == 0) {
+                    if (count == 0) {
                         gridView.setLayout(new BoxLayout(gridView, BoxLayout.X_AXIS));
                         final var msg = new JLabel(Resources.get().getString("emptyListMessage"));
                         msg.setBorder(Borders.LARGE_EMPTY);
@@ -84,7 +84,8 @@ public final class ListPanel extends ListPanelBase implements Detachable {
                             );
                         });
                     } else {
-                        gridView.setLayout(new GridLayout((size + 1) / 10, Math.min(10, size), 1, 1));
+                        final var layout = new GridLayout((count + 1) / 10, Math.min(10, count), 1, 1);
+                        gridView.setLayout(layout);
                         for (var i = 0; i < listModel.getSize(); i++) {
                             gridView.add(new GridCell(listModel.getElementAt(i)));
                         }
@@ -92,8 +93,9 @@ public final class ListPanel extends ListPanelBase implements Detachable {
                         // Fix popup size and location
                         SwingUtilities.invokeLater(() -> {
                             final var maxHeight = ListPanel.this.getGraphicsConfiguration().getBounds().height / 3 * 2;
-                            var popupWidth = gridView.getWidth() + 2;
-                            var popupHeight = gridView.getHeight() + 2;
+                            final var size = layout.minimumLayoutSize(gridView);
+                            var popupWidth = size.width + 2;
+                            var popupHeight = size.height + 2;
                             if (popupHeight > maxHeight) {
                                 popupHeight = maxHeight;
                                 popupWidth += 10;
