@@ -70,7 +70,7 @@ public abstract class InfoPanelBase extends JPanel {
         cons.gridy = 0;
         cons.gridwidth = 2;
         cons.weighty = 0.0;
-        cons.insets = new Insets(pad - focusWidth, pad, pad, pad - divWidth);
+        cons.insets = new Insets(pad, pad, pad, pad - divWidth);
         final var glyphBackground = new JPanel(new GridLayout());
         // noinspection SuspiciousNameCombination
         Components.setFixedSize(glyphBackground, new Dimension(innerWidth, innerWidth));

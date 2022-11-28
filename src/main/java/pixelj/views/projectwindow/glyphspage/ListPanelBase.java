@@ -48,7 +48,7 @@ abstract class ListPanelBase extends JPanel {
         setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Resources.get().colors.separator()));
 
         final var buttonPanel = new JPanel();
-        buttonPanel.setBorder(Borders.SMALL_EMPTY);
+        buttonPanel.setBorder(Borders.MEDIUM_EMPTY);
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
         buttonPanel.add(Box.createHorizontalStrut(Dimensions.TEXT_BUTTON_SIZE.height));
         buttonPanel.add(Box.createHorizontalGlue());
@@ -60,7 +60,7 @@ abstract class ListPanelBase extends JPanel {
         add(buttonPanel);
 
         final var filterPanel = new JPanel();
-        filterPanel.setBorder(Borders.SMALL_EMPTY_CUP);
+        filterPanel.setBorder(Borders.MEDIUM_EMPTY_CUP);
         filterPanel.setLayout(new BoxLayout(filterPanel, BoxLayout.X_AXIS));
         filterPanel.add(filterBox);
         add(filterPanel);

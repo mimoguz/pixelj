@@ -49,6 +49,7 @@ abstract class HomeWindowBase extends JFrame {
         Components.setFixedSize(loadSelectedButton, Dimensions.HOME_BUTTON_SIZE);
         Components.setFixedSize(openProjectButton, Dimensions.HOME_BUTTON_SIZE);
         toolBar.putClientProperty(FlatClientProperties.STYLE_CLASS, "header");
+        toolBar.setBorder(Borders.EMPTY);
 
         final var pad = Dimensions.MEDIUM_PADDING;
         final var northLayout = new MigLayout(
@@ -58,7 +59,7 @@ abstract class HomeWindowBase extends JFrame {
         );
         final var north = new JPanel(northLayout);
         north.putClientProperty(FlatClientProperties.STYLE_CLASS, "header");
-        north.setBorder(Borders.LARGE_EMPTY);
+        north.setBorder(Borders.MEDIUM_EMPTY);
         Components.addOuterBorder(
             north,
             BorderFactory.createMatteBorder(0, 0, 1, 0, Resources.get().colors.separator())

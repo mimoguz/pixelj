@@ -17,7 +17,8 @@ public final class Borders {
      */
     public static final Border
         LARGE_EMPTY =
-        BorderFactory.createEmptyBorder(Dimensions.LARGE_PADDING,
+        BorderFactory.createEmptyBorder(
+            Dimensions.LARGE_PADDING,
             Dimensions.LARGE_PADDING,
             Dimensions.LARGE_PADDING,
             Dimensions.LARGE_PADDING
@@ -28,7 +29,8 @@ public final class Borders {
      */
     public static final Border
         LIST_ITEM =
-        BorderFactory.createEmptyBorder(Dimensions.SMALL_PADDING,
+        BorderFactory.createEmptyBorder(
+            Dimensions.SMALL_PADDING,
             Dimensions.MEDIUM_PADDING,
             Dimensions.SMALL_PADDING,
             Dimensions.MEDIUM_PADDING
@@ -39,7 +41,20 @@ public final class Borders {
      */
     public static final Border
         MEDIUM_EMPTY =
-        BorderFactory.createEmptyBorder(Dimensions.MEDIUM_PADDING,
+        BorderFactory.createEmptyBorder(
+            Dimensions.MEDIUM_PADDING,
+            Dimensions.MEDIUM_PADDING,
+            Dimensions.MEDIUM_PADDING,
+            Dimensions.MEDIUM_PADDING
+        );
+
+    /**
+     * MEDIUM_PADDING sized empty border with 0 top width.
+     */
+    public static final Border
+        MEDIUM_EMPTY_CUP =
+        BorderFactory.createEmptyBorder(
+            0,
             Dimensions.MEDIUM_PADDING,
             Dimensions.MEDIUM_PADDING,
             Dimensions.MEDIUM_PADDING
@@ -50,7 +65,8 @@ public final class Borders {
      */
     public static final Border
         SMALL_EMPTY =
-        BorderFactory.createEmptyBorder(Dimensions.SMALL_PADDING,
+        BorderFactory.createEmptyBorder(
+            Dimensions.SMALL_PADDING,
             Dimensions.SMALL_PADDING,
             Dimensions.SMALL_PADDING,
             Dimensions.SMALL_PADDING
@@ -68,7 +84,8 @@ public final class Borders {
      */
     public static final Border
         SMALL_EMPTY_CENTER_PANEL =
-        BorderFactory.createEmptyBorder(Dimensions.SMALL_PADDING,
+        BorderFactory.createEmptyBorder(
+            Dimensions.SMALL_PADDING,
             Dimensions.SMALL_PADDING,
             Dimensions.SMALL_PADDING,
             0
@@ -79,7 +96,8 @@ public final class Borders {
      */
     public static final Border
         SMALL_EMPTY_CUP =
-        BorderFactory.createEmptyBorder(0,
+        BorderFactory.createEmptyBorder(
+            0,
             Dimensions.SMALL_PADDING,
             Dimensions.SMALL_PADDING,
             Dimensions.SMALL_PADDING

@@ -39,7 +39,7 @@ public abstract class PainterPanelBase extends JPanel {
     public PainterPanelBase(final InfoPanel infoPanel) {
         this.infoPanel = infoPanel;
 
-        toolBar.setBorder(BorderFactory.createEmptyBorder(0, Dimensions.SMALL_PADDING, 0, Dimensions.SMALL_PADDING));
+        toolBar.setBorder(Borders.MEDIUM_EMPTY_CUP);
         Components.addOuterBorder(toolBar,
             BorderFactory.createMatteBorder(0, 0, 0, 1, Resources.get().colors.separator())
         );
