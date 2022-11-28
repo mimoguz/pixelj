@@ -46,8 +46,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ needs.prepare_release.outputs.upload_url }}
-        asset_path: ./target/pixelj-without-jre-1.0-SNAPSHOT-linux.zip
-        asset_name: pixelj-without-jre-1.0-SNAPSHOT-linux.zip
+        asset_path: ./target/pixelj-no-jre-1.0-SNAPSHOT-linux.zip
+        asset_name: pixelj-no-jre-1.0-SNAPSHOT-linux.zip
         asset_content_type: application/zip
     - name: Attach Linux package with JRE
       id: attach_with_jre_linux
@@ -56,8 +56,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ needs.prepare_release.outputs.upload_url }}
-        asset_path: ./target/pixelj-with-jre-1.0-SNAPSHOT-linux.zip
-        asset_name: pixelj-with-jre-1.0-SNAPSHOT-linux.zip
+        asset_path: ./target/pixelj-1.0-SNAPSHOT-linux.zip
+        asset_name: pixelj-1.0-SNAPSHOT-linux.zip
         asset_content_type: application/zip
 
   build_windows:
@@ -80,8 +80,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ needs.prepare_release.outputs.upload_url }}
-        asset_path: ./target/pixelj-without-jre-1.0-SNAPSHOT-windows.zip
-        asset_name: pixelj-without-jre-1.0-SNAPSHOT-windows.zip
+        asset_path: ./target/pixelj-no-jre-1.0-SNAPSHOT-windows.zip
+        asset_name: pixelj-no-jre-1.0-SNAPSHOT-windows.zip
         asset_content_type: application/zip
     - name: Attach Windows package with JRE
       id: attach_with_jre_windows
@@ -90,6 +90,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ needs.prepare_release.outputs.upload_url }}
-        asset_path: ./target/pixelj-with-jre-1.0-SNAPSHOT-windows.zip
-        asset_name: pixelj-with-jre-1.0-SNAPSHOT-windows.zip
+        asset_path: ./target/pixelj-1.0-SNAPSHOT-windows.zip
+        asset_name: pixelj-SNAPSHOT-windows.zip
         asset_content_type: application/zip
