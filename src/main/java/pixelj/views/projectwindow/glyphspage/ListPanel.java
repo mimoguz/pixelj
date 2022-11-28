@@ -74,6 +74,8 @@ public final class ListPanel extends ListPanelBase implements Detachable {
                         final var msg = new JLabel(Resources.get().getString("emptyListMessage"));
                         msg.setBorder(Borders.LARGE_EMPTY);
                         gridView.add(msg);
+
+                        // Fix popup size and location
                         SwingUtilities.invokeLater(() -> {
                             gridViewPopup.setPopupSize(msg.getWidth() + 2, msg.getHeight() + 2);
                             gridViewPopup.setLocation(
@@ -86,11 +88,17 @@ public final class ListPanel extends ListPanelBase implements Detachable {
                         for (var i = 0; i < listModel.getSize(); i++) {
                             gridView.add(new GridCell(listModel.getElementAt(i)));
                         }
+
+                        // Fix popup size and location
                         SwingUtilities.invokeLater(() -> {
-                            gridViewPopup.setPopupSize(
-                                gridView.getWidth() + 2,
-                                Math.min(gridView.getHeight() + 2, 500)
-                            );
+                            final var maxHeight = 500;
+                            var popupWidth = gridView.getWidth() + 2;
+                            var popupHeight = gridView.getHeight() + 2;
+                            if (popupHeight > maxHeight) {
+                                popupHeight = maxHeight;
+                                popupWidth += 10;
+                            }
+                            gridViewPopup.setPopupSize(popupWidth, popupHeight);
                             gridViewPopup.setLocation(
                                 location.x,
                                 location.y + gridViewButton.getHeight() + Dimensions.MEDIUM_PADDING
