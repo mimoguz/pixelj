@@ -91,7 +91,7 @@ public final class ListPanel extends ListPanelBase implements Detachable {
 
                         // Fix popup size and location
                         SwingUtilities.invokeLater(() -> {
-                            final var maxHeight = 500;
+                            final var maxHeight = ListPanel.this.getGraphicsConfiguration().getBounds().height / 3 * 2;
                             var popupWidth = gridView.getWidth() + 2;
                             var popupHeight = gridView.getHeight() + 2;
                             if (popupHeight > maxHeight) {

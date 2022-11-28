@@ -91,5 +91,5 @@ jobs:
       with:
         upload_url: ${{ needs.prepare_release.outputs.upload_url }}
         asset_path: ./target/pixelj-1.0-SNAPSHOT-windows.zip
-        asset_name: pixelj-SNAPSHOT-windows.zip
+        asset_name: pixelj-1.0-SNAPSHOT-windows.zip
         asset_content_type: application/zip
