@@ -1,6 +1,6 @@
 package pixelj.util.bmreader2;
 
-import org.eclipse.collections.api.list.primitive.IntList;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
 
 public sealed interface Tag permits Tag.Info, Tag.Common, Tag.Page, Tag.Chars, Tag.Char, Tag.Kerning {
 
@@ -13,8 +13,8 @@ public sealed interface Tag permits Tag.Info, Tag.Common, Tag.Page, Tag.Chars, T
         int stretchH,
         int smooth,
         int aa,
-        IntList padding,
-        IntList spacing,
+        IntArrayList padding,
+        IntArrayList spacing,
         int outline
     ) implements Tag {
 

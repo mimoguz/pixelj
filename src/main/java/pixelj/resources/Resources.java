@@ -1,5 +1,16 @@
 package pixelj.resources;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.dataformat.smile.databind.SmileMapper;
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import pixelj.models.Block;
+import pixelj.models.Scalar;
+import pixelj.services.AppState;
+import pixelj.services.AppState.IconTheme;
+import pixelj.views.shared.GrayscaleFilter;
+
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,22 +25,6 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.swing.ImageIcon;
-
-import org.eclipse.collections.api.map.primitive.ImmutableIntObjectMap;
-import org.eclipse.collections.impl.map.mutable.primitive.IntObjectHashMap;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.dataformat.smile.databind.SmileMapper;
-import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.extras.FlatSVGIcon;
-
-import pixelj.models.Block;
-import pixelj.models.Scalar;
-import pixelj.services.AppState;
-import pixelj.services.AppState.IconTheme;
-import pixelj.views.shared.GrayscaleFilter;
-
 public final class Resources {
 
     private static final String BASE = "pixelj/resources/";
@@ -41,9 +36,9 @@ public final class Resources {
     public final Colors colors;
 
     private final Collection<Block> blocks;
-    private final ImmutableIntObjectMap<Block> blocksTable;
-    private final ImmutableIntObjectMap<Scalar> scalarsTable;
-    private final ImmutableIntObjectMap<Collection<Scalar>> scalarsInBlock;
+    private final Int2ObjectOpenHashMap<Block> blocksTable;
+    private final Int2ObjectOpenHashMap<Scalar> scalarsTable;
+    private final Int2ObjectOpenHashMap<Collection<Scalar>> scalarsInBlock;
     private final Strings strings;
     private final AppState.IconTheme iconTheme;
     private final FlatSVGIcon.ColorFilter monochromeFilter;
@@ -55,24 +50,21 @@ public final class Resources {
         blockList.addAll(loadBlocks());
         blocks = Collections.unmodifiableCollection(blockList);
 
-        final var blockMap = new IntObjectHashMap<Block>(blockList.size());
+        blocksTable = new Int2ObjectOpenHashMap<>(blockList.size());
         for (final var block : blockList) {
-            blockMap.put(block.id(), block);
+            blocksTable.put(block.id(), block);
         }
-        blocksTable = blockMap.toImmutable();
 
         final Collection<Scalar> scalarRecords = loadScalarRecords();
-        final var scalars = new IntObjectHashMap<Scalar>(scalarRecords.size());
+        scalarsTable = new Int2ObjectOpenHashMap<>(scalarRecords.size());
         for (final var scalar : scalarRecords) {
-            scalars.put(scalar.codePoint(), scalar);
+            scalarsTable.put(scalar.codePoint(), scalar);
         }
-        scalarsTable = scalars.toImmutable();
 
-        final var scalarsByBlock = new IntObjectHashMap<Collection<Scalar>>();
+        scalarsInBlock = new Int2ObjectOpenHashMap<>();
         scalarRecords.stream()
             .collect(Collectors.groupingBy(Scalar::blockId))
-            .forEach((key, value) -> scalarsByBlock.put(key, Collections.unmodifiableCollection(value)));
-        scalarsInBlock = scalarsByBlock.toImmutable();
+            .forEach((key, value) -> scalarsInBlock.putIfAbsent(key, Collections.unmodifiableCollection(value)));
 
         colors = colorTheme == AppState.ColorTheme.DARK ? new DarkColors() : new LightColors();
         strings = new Strings(loadResourceBundle());
