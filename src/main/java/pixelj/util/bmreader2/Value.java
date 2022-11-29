@@ -1,10 +1,10 @@
 package pixelj.util.bmreader2;
 
-import org.eclipse.collections.api.list.primitive.IntList;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
 
 public sealed interface Value permits Value.Text, Value.Numbers {
 
-    record Numbers(IntList values) implements Value { }
+    record Numbers(IntArrayList values) implements Value { }
 
     record Text(String value) implements Value { }
 }

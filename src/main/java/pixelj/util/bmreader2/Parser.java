@@ -1,10 +1,10 @@
 package pixelj.util.bmreader2;
 
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.eclipse.collections.impl.list.mutable.primitive.IntArrayList;
 
 public final class Parser {
 
