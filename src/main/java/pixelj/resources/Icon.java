@@ -9,6 +9,7 @@ public enum Icon {
     CLIPBOARD_CUT("pxf_clipboard_cut.svg"),
     CLIPBOARD_IMPORT("pxf_clipboard_import.svg"),
     CLIPBOARD_PASTE("pxf_clipboard_paste.svg"),
+    CLIPBOARD_PASTE_MULTIPLE("pxf_clipboard_paste_multiple.svg"),
     ELLIPSIS("pxf_ellipsis.svg"),
     ERASE("pxf_erase.svg"),
     EXIT("pxf_exit.svg"),

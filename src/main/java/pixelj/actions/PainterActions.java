@@ -1,7 +1,9 @@
 package pixelj.actions;
 
 import pixelj.graphics.Snapshot;
+import pixelj.messaging.CopyFromMessage;
 import pixelj.messaging.GlyphChangedMessage;
+import pixelj.messaging.Receiver;
 import pixelj.resources.Icon;
 import pixelj.resources.Resources;
 import pixelj.util.ChangeableValue;
@@ -30,7 +32,7 @@ import java.util.function.Consumer;
  */
 public final class PainterActions implements Actions {
 
-    private static final int MAX_UNDO = 64;
+    private static final int MAX_UNDO = 128;
 
     /**
      * Copy image to both the application and the system clipboards.

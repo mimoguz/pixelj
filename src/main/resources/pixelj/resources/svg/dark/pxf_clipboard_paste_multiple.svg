@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1,0,0,1,-144,-72)">
+        <g id="gdark">
+            <g id="rotate_ccw_shadow">
+            </g>
+            <g id="rotate_cw_shadow">
+            </g>
+            <g id="move_shadow">
+            </g>
+            <g id="move_shadow1" serif:id="move_shadow">
+            </g>
+            <g id="move_shadow2" serif:id="move_shadow">
+            </g>
+            <g id="move_shadow3" serif:id="move_shadow">
+            </g>
+            <g id="folder_shadow">
+            </g>
+            <g id="export_shadow">
+            </g>
+            <g id="copy_shadow">
+            </g>
+            <g id="copy_shadow1" serif:id="copy_shadow">
+            </g>
+            <g id="clip_shadow">
+            </g>
+            <g id="clip_shadow1" serif:id="clip_shadow">
+            </g>
+            <g id="cut_shadow">
+            </g>
+            <g transform="matrix(1,0,0,1,23,-1)">
+                <path d="M134,78.002C134,77.449 133.551,77 132.998,77C132.388,77 126.612,77 126.002,77C125.449,77 125,77.449 125,78.002C125,78.612 125,83.388 125,83.998C125,84.551 125.449,85 126.002,85C126.612,85 132.388,85 132.998,85C133.551,85 134,84.551 134,83.998C134,83.388 134,78.612 134,78.002Z" style="fill:rgb(229,115,26);"/>
+            </g>
+            <g transform="matrix(1,0,0,1,0.5,-0.5)">
+                <circle cx="150" cy="82" r="0.5" style="fill:white;"/>
+            </g>
+            <g transform="matrix(1,0,0,1,0.5,-0.5)">
+                <circle cx="152" cy="82" r="0.5" style="fill:white;"/>
+            </g>
+            <g transform="matrix(1,0,0,1,0.5,-0.5)">
+                <circle cx="154" cy="82" r="0.5" style="fill:white;"/>
+            </g>
+            <g>
+                <clipPath id="_clip1">
+                    <path d="M157,77.002C157,76.449 156.551,76 155.998,76C155.388,76 149.612,76 149.002,76C148.449,76 148,76.449 148,77.002C148,77.612 148,82.388 148,82.998C148,83.551 148.449,84 149.002,84C149.612,84 155.388,84 155.998,84C156.551,84 157,83.551 157,82.998C157,82.388 157,77.612 157,77.002Z"/>
+                </clipPath>
+                <g clip-path="url(#_clip1)">
+                    <g opacity="0.5">
+                        <g style="filter:url(#_Effect2);">
+                            <path d="M151,76C151,75.172 151.672,74.5 152.5,74.5C153.328,74.5 154,75.172 154,76L154,77L154.5,77C154.776,77 155,77.224 155,77.5C155,77.661 155,77.839 155,78C155,78.133 154.947,78.26 154.854,78.354C154.76,78.447 154.633,78.5 154.5,78.5C153.542,78.5 151.458,78.5 150.5,78.5C150.367,78.5 150.24,78.447 150.146,78.354C150.053,78.26 150,78.133 150,78C150,77.839 150,77.661 150,77.5C150,77.224 150.224,77 150.5,77C150.75,77 151,77 151,77L151,76ZM152.5,75.5C152.776,75.5 153,75.724 153,76C153,76.276 152.776,76.5 152.5,76.5C152.224,76.5 152,76.276 152,76C152,75.724 152.224,75.5 152.5,75.5Z"/>
+                        </g>
+                    </g>
+                </g>
+            </g>
+            <path d="M151,76C151,75.172 151.672,74.5 152.5,74.5C153.328,74.5 154,75.172 154,76L154,77L154.5,77C154.776,77 155,77.224 155,77.5C155,77.661 155,77.839 155,78C155,78.133 154.947,78.26 154.854,78.354C154.76,78.447 154.633,78.5 154.5,78.5C153.542,78.5 151.458,78.5 150.5,78.5C150.367,78.5 150.24,78.447 150.146,78.354C150.053,78.26 150,78.133 150,78C150,77.839 150,77.661 150,77.5C150,77.224 150.224,77 150.5,77C150.75,77 151,77 151,77L151,76ZM152.5,75.5C152.776,75.5 153,75.724 153,76C153,76.276 152.776,76.5 152.5,76.5C152.224,76.5 152,76.276 152,76C152,75.724 152.224,75.5 152.5,75.5Z" style="fill:rgb(188,192,200);"/>
+            <g transform="matrix(1,0,0,1,143,25)">
+                <path d="M12,52.498C12,52.366 11.947,52.239 11.854,52.146C11.761,52.053 11.634,52 11.502,52L7.498,52C7.366,52 7.239,52.053 7.146,52.146C7.053,52.239 7,52.366 7,52.498L7,53L12,53L12,52.498Z" style="fill:url(#_Linear3);"/>
+            </g>
+            <g transform="matrix(0.75,0,0,0.75,146.5,38.5)">
+                <path d="M8,49C8.552,49 9,49.448 9,50C9,50.552 8.552,51 8,51C7.448,51 7,50.552 7,50C7,49.448 7.448,49 8,49ZM8,49.333C8.368,49.333 8.667,49.632 8.667,50C8.667,50.368 8.368,50.667 8,50.667C7.632,50.667 7.333,50.368 7.333,50C7.333,49.632 7.632,49.333 8,49.333Z" style="fill:url(#_Linear4);"/>
+            </g>
+        </g>
+        <g id="menu">
+        </g>
+    </g>
+    <defs>
+        <filter id="_Effect2" filterUnits="userSpaceOnUse" x="147" y="71.5" width="11" height="10">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="0.5"/>
+        </filter>
+        <linearGradient id="_Linear3" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(6.12323e-17,-1,1,6.12323e-17,9,53)"><stop offset="0" style="stop-color:white;stop-opacity:0"/><stop offset="1" style="stop-color:white;stop-opacity:0.4"/></linearGradient>
+        <linearGradient id="_Linear4" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(7.74585e-17,1.26499,-0.158124,9.68232e-18,8,50)"><stop offset="0" style="stop-color:black;stop-opacity:0.2"/><stop offset="1" style="stop-color:white;stop-opacity:0.5"/></linearGradient>
+    </defs>
+</svg>

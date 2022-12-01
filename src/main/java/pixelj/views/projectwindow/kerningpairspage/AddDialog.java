@@ -27,7 +27,6 @@ public final class AddDialog extends AddDialogBase {
     private final ListSelectionModel selectionModel = new DefaultListSelectionModel();
     private Glyph left;
     private Glyph right;
-    private KerningPair result;
 
     public AddDialog(final Frame owner, final Project project) {
         super(owner);
@@ -67,7 +66,7 @@ public final class AddDialog extends AddDialogBase {
         });
 
         helpButton.setAction(new ApplicationAction(
-                "documentSettingsHelpAction",
+                "addKerningPairHelpAction",
                 (e, action) -> Help.showPage(Help.Page.KERNING_PAIRS)
             )
                 .setIcon(Icon.HELP)
@@ -92,14 +91,9 @@ public final class AddDialog extends AddDialogBase {
         );
     }
 
-    public KerningPair getResult() {
-        return result;
-    }
-
     @Override
     public void setVisible(final boolean visible) {
         if (visible) {
-            result = null;
             selectionModel.clearSelection();
         }
         super.setVisible(visible);

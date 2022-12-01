@@ -28,7 +28,7 @@ public final class Util {
             throw new ReadError(CANT_FIND + key);
         }
         if (value instanceof Value.Numbers num && num.values().size() == 1) {
-            return num.values().get(0);
+            return num.values().getInt(0);
         }
         throw new ReadError(VALUE_OF_KEY + key + "is not an integer");
     }
