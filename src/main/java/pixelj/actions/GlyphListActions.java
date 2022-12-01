@@ -10,9 +10,9 @@ import pixelj.resources.Icon;
 import pixelj.resources.Resources;
 import pixelj.views.projectwindow.glyphspage.AddCodePointDialog;
 import pixelj.views.projectwindow.glyphspage.AddDialog;
+import pixelj.views.projectwindow.glyphspage.CopyDialog;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -32,18 +32,21 @@ public final class GlyphListActions implements Actions {
      */
     public final ApplicationAction addCodePointAction;
     /**
+     * Display a dialog to transfer image from another glyph to selected glyphs.
+     */
+    public final ApplicationAction copyFromOtherAction;
+    /**
      * Remove the selected glyphs.
      */
     public final ApplicationAction removeGlyphsAction;
 
     private final Collection<ApplicationAction> all;
-    private Dimension canvasSize;
-    private int defaultWidth;
     private final AddDialog addDialog;
     private final AddCodePointDialog addCodePointDialog;
     private final JFrame window;
     private final ListSelectionModel selectionModel;
     private final FilteredList<Glyph> listModel;
+    private final CopyDialog copyDialog;
 
     public GlyphListActions(
         final Project project,
@@ -56,6 +59,7 @@ public final class GlyphListActions implements Actions {
         this.window = window;
         addDialog = new AddDialog(window);
         addCodePointDialog = new AddCodePointDialog(window, project);
+        copyDialog = new CopyDialog(window, project);
 
         addGlyphsAction =
             new ApplicationAction("addGlyphsAction", this::showAddDialog)
@@ -70,23 +74,24 @@ public final class GlyphListActions implements Actions {
                     KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.ALT_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK)
                 );
 
+        copyFromOtherAction =
+            new ApplicationAction("copyFromOtherAction", this::showCopyFromDialog)
+                .setIcon(Icon.NUMBER)
+                .setTooltip(Resources.get().getString("copyFromOtherActionTooltip"));
+
         removeGlyphsAction =
             new ApplicationAction("removeGlyphsAction", this::showRemoveDialog)
                 .withText()
                 .setTooltipWithAccelerator(null, KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.ALT_DOWN_MASK));
 
-        all = List.of(addGlyphsAction, addCodePointAction, removeGlyphsAction);
+        all = List.of(addGlyphsAction, addCodePointAction, copyFromOtherAction, removeGlyphsAction);
 
         final var documentSettings = project.getDocumentSettings();
-        canvasSize = new Dimension(documentSettings.canvasWidth(), documentSettings.canvasHeight());
-        defaultWidth = documentSettings.defaultWidth();
-        project.documentSettingsProperty.addChangeListener((source, settings) -> {
-            canvasSize = new Dimension(settings.canvasWidth(), settings.canvasHeight());
-            defaultWidth = settings.defaultWidth();
+        selectionModel.addListSelectionListener(e -> {
+            final var isSelected = selectionModel.getMinSelectionIndex() >= 0;
+            removeGlyphsAction.setEnabled(isSelected);
+            copyFromOtherAction.setEnabled(isSelected);
         });
-
-        selectionModel.addListSelectionListener(e -> removeGlyphsAction.setEnabled(selectionModel.getMinSelectionIndex() >=
-            0));
     }
 
     @Override
@@ -101,6 +106,12 @@ public final class GlyphListActions implements Actions {
 
     private void showAddCodePointDialog(final ActionEvent event, final Action action) {
         addCodePointDialog.setVisible(true);
+    }
+
+    private void showCopyFromDialog(final ActionEvent actionEvent, final Action action) {
+        final var targets = Arrays.stream(selectionModel.getSelectedIndices()).map(i -> listModel.getElementAt(i).getCodePoint()).toArray();
+        copyDialog.setTargets(targets);
+        copyDialog.setVisible(true);
     }
 
     private void showRemoveDialog(final ActionEvent event, final Action action) {

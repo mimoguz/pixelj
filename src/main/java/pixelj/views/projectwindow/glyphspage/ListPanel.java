@@ -39,6 +39,7 @@ public final class ListPanel extends ListPanelBase implements Detachable {
         actions.removeGlyphsAction.setEnabled(false);
         addButton.setPrimaryAction(actions.addGlyphsAction);
         addButton.setSecondaryAction(actions.addCodePointAction);
+        copyFromOtherButton.setAction(actions.copyFromOtherAction);
         removeButton.setAction(actions.removeGlyphsAction);
 
         filterBox.addActionListener(event -> {
@@ -145,5 +146,6 @@ public final class ListPanel extends ListPanelBase implements Detachable {
         }
         actions.addGlyphsAction.setEnabled(value);
         actions.removeGlyphsAction.setEnabled(value && (selectionModel.getMinSelectionIndex() >= 0));
+        actions.copyFromOtherAction.setEnabled(value && (selectionModel.getMinSelectionIndex() >= 0));
     }
 }

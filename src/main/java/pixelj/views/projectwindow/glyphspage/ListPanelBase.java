@@ -24,6 +24,7 @@ abstract class ListPanelBase extends JPanel {
     protected final CoupledActionsButton addButton = new CoupledActionsButton();
     protected final JButton removeButton = new JButton();
     protected final JButton gridViewButton = new JButton();
+    protected final JButton copyFromOtherButton = new JButton();
     protected final JPopupMenu gridViewPopup = new JPopupMenu();
     protected final JPanel gridView = new JPanel(new GridLayout(10, 10, 1, 1));
 
@@ -32,6 +33,10 @@ abstract class ListPanelBase extends JPanel {
         Components.setFixedSize(removeButton, Dimensions.TEXT_BUTTON_SIZE);
         Components.setFixedSize(
             gridViewButton,
+            new Dimension(Dimensions.TEXT_BUTTON_SIZE.height, Dimensions.TEXT_BUTTON_SIZE.height)
+        );
+        Components.setFixedSize(
+            copyFromOtherButton,
             new Dimension(Dimensions.TEXT_BUTTON_SIZE.height, Dimensions.TEXT_BUTTON_SIZE.height)
         );
 
@@ -50,13 +55,15 @@ abstract class ListPanelBase extends JPanel {
         final var buttonPanel = new JPanel();
         buttonPanel.setBorder(Borders.MEDIUM_EMPTY);
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
-        buttonPanel.add(Box.createHorizontalStrut(Dimensions.TEXT_BUTTON_SIZE.height));
         buttonPanel.add(Box.createHorizontalGlue());
         buttonPanel.add(addButton);
-        buttonPanel.add(Box.createRigidArea(Dimensions.MEDIUM_SQUARE));
+        buttonPanel.add(Box.createHorizontalStrut(Dimensions.MEDIUM_PADDING));
         buttonPanel.add(removeButton);
-        buttonPanel.add(Box.createHorizontalGlue());
+        buttonPanel.add(Box.createHorizontalStrut(Dimensions.MEDIUM_PADDING * 2));
+        buttonPanel.add(copyFromOtherButton);
+        buttonPanel.add(Box.createHorizontalStrut(Dimensions.SMALL_PADDING));
         buttonPanel.add(gridViewButton);
+        buttonPanel.add(Box.createHorizontalGlue());
         add(buttonPanel);
 
         final var filterPanel = new JPanel();
