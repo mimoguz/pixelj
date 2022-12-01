@@ -1,16 +1,15 @@
 package pixelj.models;
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+
+import javax.swing.*;
+import javax.swing.event.EventListenerList;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
-
-import javax.swing.ListModel;
-import javax.swing.event.EventListenerList;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
-
-import org.eclipse.collections.impl.map.mutable.primitive.LongObjectHashMap;
 
 /**
  * A list model that keeps its elements always sorted.
@@ -22,7 +21,7 @@ import org.eclipse.collections.impl.map.mutable.primitive.LongObjectHashMap;
 public class SortedList<E extends Comparable<E> & HasId> implements ListModel<E> {
     protected final ArrayList<E> display = new ArrayList<>();
     protected final EventListenerList listeners = new EventListenerList();
-    protected final LongObjectHashMap<E> source = new LongObjectHashMap<>();
+    protected final Long2ObjectOpenHashMap<E> source = new Long2ObjectOpenHashMap<>();
 
     public SortedList() {
     }
@@ -34,7 +33,7 @@ public class SortedList<E extends Comparable<E> & HasId> implements ListModel<E>
             }
             source.put(elem.getId(), elem);
         }
-        display.addAll(source.toList());
+        display.addAll(source.values().stream().toList());
     }
 
     /**
@@ -49,7 +48,7 @@ public class SortedList<E extends Comparable<E> & HasId> implements ListModel<E>
      * @return True if the element was added (if it wasn't already in the list), false otherwise.
      */
     public boolean add(final E element) {
-        if (element == null || source.contains(element)) {
+        if (element == null || source.containsKey(element.getId())) {
             return false;
         }
         source.put(element.getId(), element);
@@ -65,7 +64,7 @@ public class SortedList<E extends Comparable<E> & HasId> implements ListModel<E>
         var index0 = -1;
         var index1 = -1;
         for (final var element : collection) {
-            if (element == null || source.contains(element)) {
+            if (element == null || source.containsKey(element.getId())) {
                 continue;
             }
             source.put(element.getId(), element);
@@ -93,6 +92,7 @@ public class SortedList<E extends Comparable<E> & HasId> implements ListModel<E>
         }
         final var index1 = source.size() - 1;
         source.clear();
+        source.trim();
         display.clear();
         fireIntervalRemovedEvent(0, index1);
     }
@@ -102,7 +102,7 @@ public class SortedList<E extends Comparable<E> & HasId> implements ListModel<E>
      * @return The number of elements which the predicate tests true.
      */
     public int countWhere(final Predicate<E> predicate) {
-        return (int) source.stream().filter(predicate).count();
+        return (int) source.values().stream().filter(predicate).count();
     }
 
     /**
@@ -110,7 +110,7 @@ public class SortedList<E extends Comparable<E> & HasId> implements ListModel<E>
      * @return The list of elements which the predicate tests true.
      */
     public List<E> find(final Predicate<E> predicate) {
-        return source.stream().filter(predicate).toList();
+        return source.values().stream().filter(predicate).toList();
     }
 
     /**
@@ -118,7 +118,7 @@ public class SortedList<E extends Comparable<E> & HasId> implements ListModel<E>
      * @return The first which the predicate tests true. Null if there were no matches.
      */
     public E findFirst(final Predicate<E> predicate) {
-        return source.stream().filter(predicate).findFirst().orElse(null);
+        return source.values().stream().filter(predicate).findFirst().orElse(null);
     }
 
     /**
@@ -136,7 +136,7 @@ public class SortedList<E extends Comparable<E> & HasId> implements ListModel<E>
      * @return True if the element is in the list, false otherwise.
      */
     public boolean sourceContains(final E element) {
-        return source.contains(element);
+        return source.values().contains(element);
     }
 
     /**
@@ -164,6 +164,7 @@ public class SortedList<E extends Comparable<E> & HasId> implements ListModel<E>
             return null;
         }
         final var existing = source.remove(element.getId());
+        source.trim();
         final var index = display.indexOf(existing);
         if (display.remove(existing)) {
             fireIntervalRemovedEvent(index, index);
@@ -193,6 +194,7 @@ public class SortedList<E extends Comparable<E> & HasId> implements ListModel<E>
             }
         }
         display.removeAll(collection);
+        source.trim();
         if (index0 >= 0) {
             fireIntervalRemovedEvent(index0, index1);
         }
@@ -204,6 +206,7 @@ public class SortedList<E extends Comparable<E> & HasId> implements ListModel<E>
     public void removeElementAt(final int index) {
         final var element = display.get(index);
         source.remove(element.getId());
+        source.trim();
         display.remove(index);
         fireIntervalRemovedEvent(index, index);
     }
@@ -218,6 +221,7 @@ public class SortedList<E extends Comparable<E> & HasId> implements ListModel<E>
         }
         final var elements = display.subList(from, to + 1);
         elements.forEach(e -> source.remove(e.getId()));
+        source.trim();
         display.removeAll(elements);
         fireIntervalRemovedEvent(from, to - 1);
     }

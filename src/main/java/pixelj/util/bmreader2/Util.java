@@ -1,8 +1,8 @@
 package pixelj.util.bmreader2;
 
-import java.util.Map;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
 
-import org.eclipse.collections.api.list.primitive.IntList;
+import java.util.Map;
 
 public final class Util {
 
@@ -33,7 +33,7 @@ public final class Util {
         throw new ReadError(VALUE_OF_KEY + key + "is not an integer");
     }
 
-    public static IntList getIntList(final Map<Word, Value> map, final Word key, final int expectedSize)
+    public static IntArrayList getIntList(final Map<Word, Value> map, final Word key, final int expectedSize)
         throws ReadError {
         final var value = map.get(key);
         if (value == null) {
