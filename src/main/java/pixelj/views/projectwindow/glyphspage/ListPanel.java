@@ -39,7 +39,7 @@ public final class ListPanel extends ListPanelBase implements Detachable {
         actions.removeGlyphsAction.setEnabled(false);
         addButton.setPrimaryAction(actions.addGlyphsAction);
         addButton.setSecondaryAction(actions.addCodePointAction);
-        copyFromOtherButton.setAction(actions.copyFromOtherAction);
+        copyFromButton.setAction(actions.copyFromAction);
         removeButton.setAction(actions.removeGlyphsAction);
 
         filterBox.addActionListener(event -> {
@@ -52,14 +52,18 @@ public final class ListPanel extends ListPanelBase implements Detachable {
             }
         });
 
-        gridViewButton.setAction(new ApplicationAction(
-            "gridViewAction",
-            (event, action) -> gridViewPopup.show(
-                gridViewButton,
-                0,
-                gridViewButton.getHeight() + Dimensions.MEDIUM_PADDING
+        gridViewButton.setAction(
+            new ApplicationAction(
+                "gridViewAction",
+                (event, action) -> gridViewPopup.show(
+                    gridViewButton,
+                    0,
+                    gridViewButton.getHeight() + Dimensions.MEDIUM_PADDING
+                )
             )
-        ).setIcon(Icon.GRID));
+                .setIcon(Icon.GRID)
+                .setTooltip(Resources.get().getString("gridViewActionTooltip"))
+        );
 
         gridViewPopup.addPopupMenuListener(new PopupMenuListener() {
             @Override
@@ -146,6 +150,6 @@ public final class ListPanel extends ListPanelBase implements Detachable {
         }
         actions.addGlyphsAction.setEnabled(value);
         actions.removeGlyphsAction.setEnabled(value && (selectionModel.getMinSelectionIndex() >= 0));
-        actions.copyFromOtherAction.setEnabled(value && (selectionModel.getMinSelectionIndex() >= 0));
+        actions.copyFromAction.setEnabled(value && (selectionModel.getMinSelectionIndex() >= 0));
     }
 }

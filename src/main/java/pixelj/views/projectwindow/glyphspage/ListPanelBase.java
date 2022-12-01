@@ -4,6 +4,7 @@ import java.awt.*;
 
 import javax.swing.*;
 
+import com.formdev.flatlaf.FlatClientProperties;
 import pixelj.models.Block;
 import pixelj.models.Glyph;
 import pixelj.resources.Resources;
@@ -24,21 +25,25 @@ abstract class ListPanelBase extends JPanel {
     protected final CoupledActionsButton addButton = new CoupledActionsButton();
     protected final JButton removeButton = new JButton();
     protected final JButton gridViewButton = new JButton();
-    protected final JButton copyFromOtherButton = new JButton();
+    protected final JButton copyFromButton = new JButton();
     protected final JPopupMenu gridViewPopup = new JPopupMenu();
     protected final JPanel gridView = new JPanel(new GridLayout(10, 10, 1, 1));
 
     ListPanelBase() {
         Components.setFixedSize(addButton, Dimensions.TEXT_BUTTON_SIZE);
         Components.setFixedSize(removeButton, Dimensions.TEXT_BUTTON_SIZE);
+
         Components.setFixedSize(
             gridViewButton,
             new Dimension(Dimensions.TEXT_BUTTON_SIZE.height, Dimensions.TEXT_BUTTON_SIZE.height)
         );
+        gridViewButton.setFocusable(false);
+
         Components.setFixedSize(
-            copyFromOtherButton,
+            copyFromButton,
             new Dimension(Dimensions.TEXT_BUTTON_SIZE.height, Dimensions.TEXT_BUTTON_SIZE.height)
         );
+        copyFromButton.setFocusable(false);
 
         list.setCellRenderer(new GlyphCellRenderer(48));
         list.setMaximumSize(Dimensions.MAXIMUM);
@@ -47,8 +52,8 @@ abstract class ListPanelBase extends JPanel {
         filterBox.setMinimumSize(Dimensions.MINIMUM_COMBO_BOX_SIZE);
 
         setBorder(Borders.EMPTY);
-        setPreferredSize(new Dimension(300, 100));
-        setMinimumSize(new Dimension(220, 100));
+        setPreferredSize(new Dimension(360, 100));
+        setMinimumSize(new Dimension(280, 100));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Resources.get().colors.separator()));
 
@@ -59,11 +64,10 @@ abstract class ListPanelBase extends JPanel {
         buttonPanel.add(addButton);
         buttonPanel.add(Box.createHorizontalStrut(Dimensions.MEDIUM_PADDING));
         buttonPanel.add(removeButton);
-        buttonPanel.add(Box.createHorizontalStrut(Dimensions.MEDIUM_PADDING * 2));
-        buttonPanel.add(copyFromOtherButton);
+        buttonPanel.add(Box.createHorizontalGlue());
+        buttonPanel.add(copyFromButton);
         buttonPanel.add(Box.createHorizontalStrut(Dimensions.SMALL_PADDING));
         buttonPanel.add(gridViewButton);
-        buttonPanel.add(Box.createHorizontalGlue());
         add(buttonPanel);
 
         final var filterPanel = new JPanel();

@@ -34,7 +34,7 @@ public final class GlyphListActions implements Actions {
     /**
      * Display a dialog to transfer image from another glyph to selected glyphs.
      */
-    public final ApplicationAction copyFromOtherAction;
+    public final ApplicationAction copyFromAction;
     /**
      * Remove the selected glyphs.
      */
@@ -74,23 +74,23 @@ public final class GlyphListActions implements Actions {
                     KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.ALT_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK)
                 );
 
-        copyFromOtherAction =
-            new ApplicationAction("copyFromOtherAction", this::showCopyFromDialog)
-                .setIcon(Icon.NUMBER)
-                .setTooltip(Resources.get().getString("copyFromOtherActionTooltip"));
+        copyFromAction =
+            new ApplicationAction("copyFromAction", this::showCopyFromDialog)
+                .setIcon(Icon.CLIPBOARD_PASTE_MULTIPLE)
+                .setTooltip(Resources.get().getString("copyFromActionTooltip"));
 
         removeGlyphsAction =
             new ApplicationAction("removeGlyphsAction", this::showRemoveDialog)
                 .withText()
                 .setTooltipWithAccelerator(null, KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.ALT_DOWN_MASK));
 
-        all = List.of(addGlyphsAction, addCodePointAction, copyFromOtherAction, removeGlyphsAction);
+        all = List.of(addGlyphsAction, addCodePointAction, copyFromAction, removeGlyphsAction);
 
         final var documentSettings = project.getDocumentSettings();
         selectionModel.addListSelectionListener(e -> {
             final var isSelected = selectionModel.getMinSelectionIndex() >= 0;
             removeGlyphsAction.setEnabled(isSelected);
-            copyFromOtherAction.setEnabled(isSelected);
+            copyFromAction.setEnabled(isSelected);
         });
     }
 

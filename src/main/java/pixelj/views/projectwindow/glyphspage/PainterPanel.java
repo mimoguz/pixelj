@@ -24,10 +24,8 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
     private static final Color CAP_HEIGHT = new Color(41, 191, 18);
     private static final int INITIAL_ZOOM = 12;
     private static final Color X_HEIGHT = CAP_HEIGHT;
-
     private final PainterActions actions = new PainterActions();
     private BufferedImage overlay;
-
     public PainterPanel(final Project project, final JFrame window) {
         super(new InfoPanel(project));
 
@@ -70,6 +68,34 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
         setMetrics(project.getDocumentSettings());
         project.documentSettingsProperty.addChangeListener((source, settings) -> setMetrics(settings));
         setEnabled(false);
+    }
+
+    private static void fillToolbar(final JToolBar toolBar, final PainterActions actions) {
+        toolBar.add(actions.historyUndoAction);
+        toolBar.add(actions.historyRedoAction);
+        toolBar.addSeparator();
+        toolBar.add(actions.clipboardCutAction);
+        toolBar.add(actions.clipboardCopyAction);
+        toolBar.add(actions.clipboardPasteAction);
+        toolBar.add(actions.clipboardImportAction);
+        toolBar.addSeparator();
+        toolBar.add(actions.flipHorizontallyAction);
+        toolBar.add(actions.flipVerticallyAction);
+        toolBar.add(actions.rotateLeftAction);
+        toolBar.add(actions.rotateRightAction);
+        toolBar.addSeparator();
+        toolBar.add(actions.moveLeftAction);
+        toolBar.add(actions.moveRightAction);
+        toolBar.add(actions.moveUpAction);
+        toolBar.add(actions.moveDownAction);
+        toolBar.addSeparator();
+        toolBar.add(new JToggleButton(actions.symmetryToggleAction));
+        toolBar.addSeparator();
+        toolBar.add(actions.eraseAction);
+    }
+
+    public PainterActions getActions() {
+        return actions;
     }
 
     public Glyph getModel() {
@@ -136,29 +162,5 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
             );
         final var baseLine = new Line(Orientation.HORIZONTAL, settings.canvasHeight() - settings.descender(), BASELINE);
         painter.addLines(capHeight, xHeight, baseLine);
-    }
-
-    private static void fillToolbar(final JToolBar toolBar, final PainterActions actions) {
-        toolBar.add(actions.historyUndoAction);
-        toolBar.add(actions.historyRedoAction);
-        toolBar.addSeparator();
-        toolBar.add(actions.clipboardCutAction);
-        toolBar.add(actions.clipboardCopyAction);
-        toolBar.add(actions.clipboardPasteAction);
-        toolBar.add(actions.clipboardImportAction);
-        toolBar.addSeparator();
-        toolBar.add(actions.flipHorizontallyAction);
-        toolBar.add(actions.flipVerticallyAction);
-        toolBar.add(actions.rotateLeftAction);
-        toolBar.add(actions.rotateRightAction);
-        toolBar.addSeparator();
-        toolBar.add(actions.moveLeftAction);
-        toolBar.add(actions.moveRightAction);
-        toolBar.add(actions.moveUpAction);
-        toolBar.add(actions.moveDownAction);
-        toolBar.addSeparator();
-        toolBar.add(new JToggleButton(actions.symmetryToggleAction));
-        toolBar.addSeparator();
-        toolBar.add(actions.eraseAction);
     }
 }
