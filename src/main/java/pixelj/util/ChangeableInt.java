@@ -89,7 +89,7 @@ public final class ChangeableInt {
 
     /**
      * @param that LHS
-     * @return this > that
+     * @return this >= that
      */
     public ReadOnlyBoolean ge(final int that) {
         return comparison(that, (a, b) -> a >= b);
@@ -147,7 +147,7 @@ public final class ChangeableInt {
      * @return !this
      */
     public ReadOnlyInt negate() {
-        final var result = new ChangeableInt();
+        final var result = new ChangeableInt(-value);
         final Listener listener = a -> result.setValue(-a);
         addChangeListener(listener);
         return new ReadOnlyInt(result, () -> this.removeChangeListener(listener));
@@ -158,14 +158,14 @@ public final class ChangeableInt {
      * @return If the predicate returns true
      */
     public ReadOnlyBoolean test(final Predicate<Integer> predicate) {
-        final var result = new ChangeableBoolean();
+        final var result = new ChangeableBoolean(predicate.test(value));
         final Listener listener = a -> result.setValue(predicate.test(a));
         addChangeListener(listener);
         return new ReadOnlyBoolean(result, () -> this.removeChangeListener(listener));
     }
 
     private ReadOnlyInt binaryOp(final ChangeableInt that, final BinaryOperator operator) {
-        final var result = new ChangeableInt();
+        final var result = new ChangeableInt(operator.calculate(value, that.value));
         final Listener listenerThis = a -> result.setValue(operator.calculate(a, that.value));
         final Listener listenerThat = b -> result.setValue(operator.calculate(value, b));
         this.addChangeListener(listenerThis);
@@ -177,7 +177,7 @@ public final class ChangeableInt {
     }
 
     private ReadOnlyBoolean comparison(final ChangeableInt that, final Comparison cmp) {
-        final var result = new ChangeableBoolean();
+        final var result = new ChangeableBoolean(cmp.check(value, that.value));
         final Listener listenerThis = a -> result.setValue(cmp.check(a, that.value));
         final Listener listenerThat = b -> result.setValue(cmp.check(value, b));
         this.addChangeListener(listenerThis);
@@ -189,7 +189,7 @@ public final class ChangeableInt {
     }
 
     private ReadOnlyBoolean comparison(final int that, final Comparison cmp) {
-        final var result = new ChangeableBoolean();
+        final var result = new ChangeableBoolean(cmp.check(value, that));
         final Listener listenerThis = a -> result.setValue(cmp.check(a, that));
         this.addChangeListener(listenerThis);
         return new ReadOnlyBoolean(result, () -> this.removeChangeListener(listenerThis));

@@ -43,7 +43,7 @@ public final class ChangeableBoolean {
      * @return !this
      */
     public ReadOnlyBoolean not() {
-        final var result = new ChangeableBoolean();
+        final var result = new ChangeableBoolean(!value);
         final Listener listener = a -> result.setValue(!a);
         addChangeListener(listener);
         return new ReadOnlyBoolean(result, () -> this.removeChangeListener(listener));
@@ -75,7 +75,7 @@ public final class ChangeableBoolean {
     }
 
     private ReadOnlyBoolean binaryOp(final ChangeableBoolean that, final BinaryOperator operator) {
-        final var result = new ChangeableBoolean();
+        final var result = new ChangeableBoolean(operator.op(value, that.value));
         final Listener listenerThis = a -> result.setValue(operator.op(a, that.value));
         final Listener listenerThat = b -> result.setValue(operator.op(value, b));
         this.addChangeListener(listenerThis);

@@ -6,6 +6,10 @@ import pixelj.util.ChangeableValue;
 import pixelj.util.ReadOnlyBoolean;
 import pixelj.util.ReadOnlyInt;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public record DocumentSettings(
     String title,
     int canvasWidth,
@@ -110,11 +114,11 @@ public record DocumentSettings(
         /**
          * Check cap height.
          */
-        public final ReadOnlyBoolean validCapHeight = capHeight.le(ascender).and(capHeight.gt(0));
+        public final ReadOnlyBoolean validCapHeight = capHeight.le(ascender).and(capHeight.ge(0));
         /**
          * Check x height.
          */
-        public final ReadOnlyBoolean validXHeight = xHeight.le(capHeight).and(xHeight.gt(0));
+        public final ReadOnlyBoolean validXHeight = xHeight.le(capHeight).and(xHeight.ge(0));
         /**
          * Check default glyph width.
          */
@@ -122,7 +126,7 @@ public record DocumentSettings(
         /**
          * Check descender.
          */
-        public final ReadOnlyBoolean validDescender = descender.le(canvasHeight).and(descender.gt(0));
+        public final ReadOnlyBoolean validDescender = descender.le(canvasHeight).and(descender.ge(0));
         /**
          * Check line spacing.
          */
@@ -157,7 +161,19 @@ public record DocumentSettings(
          */
         public DocumentSettings build() throws InvalidStateException {
             if (!validAll.getValue()) {
-                throw new InvalidStateException("Not all fields are valid");
+                final var invalid = Stream.of(
+                    validCanvasHeight,
+                    validCanvasWidth,
+                    validAscender,
+                    validDescender,
+                    validCapHeight,
+                    validXHeight,
+                    validDefaultWidth,
+                    validLetterSpacing,
+                    validLineSpacing,
+                    validSpaceSize
+                ).map(b -> Boolean.toString(b.getValue())).collect(Collectors.joining(", "));
+                throw new InvalidStateException("Not all fields are valid: " + invalid);
             }
             return new DocumentSettings(
                 title.getValue(),
