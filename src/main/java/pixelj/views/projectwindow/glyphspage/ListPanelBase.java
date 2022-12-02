@@ -53,7 +53,7 @@ abstract class ListPanelBase extends JPanel {
 
         setBorder(Borders.EMPTY);
         setPreferredSize(new Dimension(360, 100));
-        setMinimumSize(new Dimension(288, 100));
+        setMinimumSize(new Dimension(296, 100));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Resources.get().colors.separator()));
 
@@ -64,8 +64,9 @@ abstract class ListPanelBase extends JPanel {
         buttonPanel.add(addButton);
         buttonPanel.add(Box.createHorizontalStrut(Dimensions.MEDIUM_PADDING));
         buttonPanel.add(removeButton);
-        buttonPanel.add(Box.createHorizontalStrut(Dimensions.MEDIUM_PADDING));
-        buttonPanel.add(Box.createHorizontalGlue());
+        final var glue = Box.createHorizontalGlue();
+        glue.setMinimumSize(new Dimension(Dimensions.MEDIUM_PADDING, 0));
+        buttonPanel.add(glue);
         buttonPanel.add(copyFromButton);
         buttonPanel.add(Box.createHorizontalStrut(Dimensions.SMALL_PADDING));
         buttonPanel.add(gridViewButton);
