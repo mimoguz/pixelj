@@ -127,7 +127,7 @@ public class SvgExportServiceImpl implements SvgExportService {
             weight,
             ')'
         );
-        writeStrLn(output, "AddSizeFeature(", settings.ascender(), ')');
+        writeStrLn(output, "AddSizeFeature(", settings.ascender() + settings.descender() + settings.lineSpacing(), ')');
         writeStrLn(output, "Reencode(\"unicode\")\n");
     }
 
@@ -140,12 +140,7 @@ public class SvgExportServiceImpl implements SvgExportService {
         try {
             writeStrLn(output, "Select(", svg.getId(), ')');
             writeStrLn(output, "Import(\"", svgPathString(outDir, svg.getId()), "\")");
-            // TODO: Running simplify causes non-integer coordinates. Investigate.
-            // writeStrLn(output, "Simplify()");
-            writeStrLn(output, "RoundToInt(", Svg.UNITS_PER_PIXEL, ')');
-            writeStrLn(output, "SetWidth(", svg.getWidth(), ')');
-            writeStrLn(output, "SetLBearing(0)");
-            writeStrLn(output, "SetRBearing(", settings.letterSpacing() * Svg.UNITS_PER_PIXEL, ')');
+            writeStrLn(output, "SetWidth(", svg.getWidth() + settings.letterSpacing() * Svg.UNITS_PER_PIXEL, ')');
             writeStrLn(output, "SetGlyphName(NameFromUnicode(", svg.getId(), "))\n");
         } catch (IOException ex) {
             throw new IOWrapper(ex);
