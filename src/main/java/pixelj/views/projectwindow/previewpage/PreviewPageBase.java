@@ -92,7 +92,9 @@ abstract class PreviewPageBase extends JPanel {
         inputPanel.setMinimumSize(new Dimension(200, 144));
         inputPanel.setPreferredSize(new Dimension(600, 144));
         inputPanel.setMaximumSize(new Dimension(800, 144));
-        inputPanel.add(textInput);
+        final var inputScroll = new JScrollPane(textInput);
+        inputScroll.setBorder(Borders.EMPTY);
+        inputPanel.add(inputScroll);
         inputPanel.add(Box.createRigidArea(Dimensions.SMALL_SQUARE));
         inputPanel.add(buttonPanel);
 
