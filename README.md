@@ -1,6 +1,6 @@
 # PixelJ
 
-My pixel font editor (redux), still in its early stages. It can export
+My pixel font editor (redux). It can export
 [AngelCode BMFont](http://www.angelcode.com/products/bmfont/) files, or SVGs optionally accompanied with a script to
 generate a FontForge project.
 
@@ -29,7 +29,7 @@ Now you will see a new file with _.sfd_ extension. You can open it using FontFor
 
 ## Building
 
-You'll need JDK 18 and Maven. Then, open a terminal in the project root and run
+You'll need JDK 18+ and Maven. Then, open a terminal in the project root and run
 
     mvn package
 
