@@ -21,6 +21,10 @@ import javax.swing.JOptionPane;
 import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.util.nfd.NativeFileDialog;
 
+import pixelj.messaging.DocumentSettingsChangedMessage;
+import pixelj.messaging.DocumentSettingsQuestion;
+import pixelj.messaging.Messenger;
+import pixelj.models.DocumentSettings;
 import pixelj.models.Project;
 import pixelj.resources.Icon;
 import pixelj.resources.Resources;
@@ -117,7 +121,7 @@ public final class ProjectWindowActions implements Actions {
         svgExportAction = new ApplicationAction("svgExportAction", this::exportSvg)
             .withText()
             .setIcon(Icon.FILE_EXPORT)
-            .setAccelerator(KeyEvent.VK_E, menuShortcutMask | ActionEvent.SHIFT_MASK);;
+            .setAccelerator(KeyEvent.VK_E, menuShortcutMask | ActionEvent.SHIFT_MASK);
 
         quitAction = new ApplicationAction("quitAction", this::quit)
             .withText()
@@ -277,6 +281,7 @@ public final class ProjectWindowActions implements Actions {
             ex.printStackTrace();
         }
         Shared.checkUnsaved(project, window, saveAction);
+        project.detach();
         System.exit(0);
     }
 
@@ -348,11 +353,14 @@ public final class ProjectWindowActions implements Actions {
     }
 
     private void showDocumentSettings(final ActionEvent event, final Action action) {
-        documentSettingsDialog.set(project.getDocumentSettings());
+        final var settings = Messenger
+            .get(DocumentSettingsQuestion.class, DocumentSettings.class)
+            .askOne(DocumentSettingsQuestion.get());
+        documentSettingsDialog.set(settings);
         documentSettingsDialog.setVisible(true);
         final var result = documentSettingsDialog.getResult();
-        if (result != null && !project.getDocumentSettings().equals(result)) {
-            project.setDocumentSettings(result);
+        if (result != null) {
+            Messenger.get(DocumentSettingsChangedMessage.class).send(new DocumentSettingsChangedMessage(result));
         }
     }
 

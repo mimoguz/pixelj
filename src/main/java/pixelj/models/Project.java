@@ -14,6 +14,8 @@ import pixelj.graphics.BinaryImage;
 import pixelj.messaging.AddCharactersMessage;
 import pixelj.messaging.AddKerningPairMessage;
 import pixelj.messaging.DependentPairsQuestion;
+import pixelj.messaging.DocumentSettingsChangedMessage;
+import pixelj.messaging.DocumentSettingsQuestion;
 import pixelj.messaging.GlyphChangedMessage;
 import pixelj.messaging.KerningPairChangedMessage;
 import pixelj.messaging.ProjectModifiedMessage;
@@ -47,8 +49,6 @@ public final class Project implements Detachable {
 
     private final SortedList<Glyph> glyphs;
     private final SortedList<KerningPair> kerningPairs;
-    private final ChangeableValue<String> title;
-    private final DocumentSettings settings;
 
     private final Receiver<AddCharactersMessage, Void> addCharactersReceiver;
     private final Receiver<AddKerningPairMessage, Void> addKerningPairReceiver;
@@ -58,6 +58,8 @@ public final class Project implements Detachable {
     private final Receiver<ProjectModifiedMessage, Void> projectModifiedReceiver;
     private final Receiver<RemoveGlyphsMessage, Void> removeGlyphsReceiver;
     private final Receiver<RemoveKerningPairsMessage, Void> removeKerningPairsReceiver;
+    private final Receiver<DocumentSettingsQuestion, DocumentSettings> documentSettingsResponder;
+    private final Receiver<DocumentSettingsChangedMessage, Void> documentSettingsChangedReceiver;
 
     public Project(
         final SortedList<Glyph> glyphs,
@@ -65,13 +67,11 @@ public final class Project implements Detachable {
         final DocumentSettings settings,
         final Path path
     ) {
-        title = new ChangeableValue<>(settings.title());
-        titleProperty = new ReadOnlyValue<>(title);
         this.glyphs = glyphs;
         this.kerningPairs = kerningPairs;
-        this.settings = settings;
-        pathProperty = new ChangeableValue<>(path);
         documentSettingsProperty = new ChangeableValue<>(settings);
+        titleProperty = documentSettingsProperty.map(DocumentSettings::title);
+        pathProperty = new ChangeableValue<>(path);
 
         // Ignore
         // Kerning pairs which depend on non-existing characters
@@ -139,7 +139,16 @@ public final class Project implements Detachable {
             setDirty(true);
             return null;
         };
+        documentSettingsChangedReceiver = msg -> {
+            if (msg.settings().equals(documentSettingsProperty.getValue())) {
+                return null;
+            }
+            documentSettingsProperty.setValue(msg.settings());
+            setDirty(true);
+            return null;
+        };
         dependentPairsResponder = q -> countDependent(q.glyphs());
+        documentSettingsResponder = q -> documentSettingsProperty.getValue();
 
         Messenger.get(ProjectModifiedMessage.class).register(projectModifiedReceiver);
         Messenger.get(AddCharactersMessage.class).register(addCharactersReceiver);
@@ -148,7 +157,9 @@ public final class Project implements Detachable {
         Messenger.get(RemoveGlyphsMessage.class).register(removeGlyphsReceiver);
         Messenger.get(GlyphChangedMessage.class).register(glyphChangedReceiver);
         Messenger.get(KerningPairChangedMessage.class).register(kerningPairChangedReceiver);
+        Messenger.get(DocumentSettingsChangedMessage.class).register(documentSettingsChangedReceiver);
         Messenger.get(DependentPairsQuestion.class, Integer.class).register(dependentPairsResponder);
+        Messenger.get(DocumentSettingsQuestion.class, DocumentSettings.class).register(documentSettingsResponder);
     }
 
     /**
@@ -184,12 +195,6 @@ public final class Project implements Detachable {
         return documentSettingsProperty.getValue();
     }
 
-    public void setDocumentSettings(final DocumentSettings value) {
-        documentSettingsProperty.setValue(value);
-        setDirty(true);
-        title.setValue(value.title());
-    }
-
     public boolean isDirty() {
         return dirtyProperty.getValue();
     }
@@ -211,6 +216,7 @@ public final class Project implements Detachable {
     }
 
     public void addCharacters(final int... codePoints) {
+        final var settings = documentSettingsProperty.getValue();
         glyphs.addAll(
             Arrays
                 .stream(codePoints)
@@ -259,5 +265,7 @@ public final class Project implements Detachable {
         Messenger.get(GlyphChangedMessage.class).unregister(glyphChangedReceiver);
         Messenger.get(KerningPairChangedMessage.class).unregister(kerningPairChangedReceiver);
         Messenger.get(DependentPairsQuestion.class).unregister(dependentPairsResponder);
+        Messenger.get(DocumentSettingsChangedMessage.class).unregister(documentSettingsChangedReceiver);
+        Messenger.get(DocumentSettingsQuestion.class, DocumentSettings.class).unregister(documentSettingsResponder);
     }
 }

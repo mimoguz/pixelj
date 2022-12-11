@@ -1,8 +1,10 @@
 package pixelj.views.projectwindow.glyphspage;
 
 import pixelj.actions.PainterActions;
+import pixelj.messaging.DocumentSettingsChangedMessage;
 import pixelj.messaging.GlyphChangedMessage;
 import pixelj.messaging.Messenger;
+import pixelj.messaging.Receiver;
 import pixelj.models.DocumentSettings;
 import pixelj.models.Glyph;
 import pixelj.models.Project;
@@ -25,7 +27,9 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
     private static final int INITIAL_ZOOM = 12;
     private static final Color X_HEIGHT = CAP_HEIGHT;
     private final PainterActions actions = new PainterActions();
+    private final Receiver<DocumentSettingsChangedMessage, Void> documentSettingsChangedReceiver;
     private BufferedImage overlay;
+
     public PainterPanel(final Project project, final JFrame window) {
         super(new InfoPanel(project));
 
@@ -66,7 +70,13 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
         painter.addMouseListener(mouseAdapter);
 
         setMetrics(project.getDocumentSettings());
-        project.documentSettingsProperty.addChangeListener((source, settings) -> setMetrics(settings));
+
+        documentSettingsChangedReceiver = msg -> {
+            setMetrics(msg.settings());
+            return null;
+        };
+        Messenger.get(DocumentSettingsChangedMessage.class).register(documentSettingsChangedReceiver);
+
         setEnabled(false);
     }
 
@@ -150,13 +160,15 @@ public final class PainterPanel extends PainterPanelBase implements Detachable {
         painter.setTop(settings.descender() + settings.ascender());
         final var
             capHeight =
-            new Line(Orientation.HORIZONTAL,
+            new Line(
+                Orientation.HORIZONTAL,
                 settings.canvasHeight() - settings.descender() - settings.capHeight(),
                 CAP_HEIGHT
             );
         final var
             xHeight =
-            new Line(Orientation.HORIZONTAL,
+            new Line(
+                Orientation.HORIZONTAL,
                 settings.canvasHeight() - settings.descender() - settings.xHeight(),
                 X_HEIGHT
             );

@@ -70,7 +70,7 @@ public final class DocumentSettingsDialog extends DocumentSettingsDialogBase {
             }
         });
 
-        builder.validAll.addChangeListener(value -> applyButton.setEnabled(value));
+        builder.validAll.addChangeListener(applyButton::setEnabled);
         applyButton.addActionListener(event -> {
             if (builder.validAll.getValue()) {
                 try {
@@ -142,7 +142,9 @@ public final class DocumentSettingsDialog extends DocumentSettingsDialogBase {
     ) {
         final var numberModel = new SpinnerNumberModel(value.getValue(), minimum, 512, 1);
         spinner.setModel(numberModel);
-        spinner.addChangeListener(e -> value.setValue(numberModel.getNumber().intValue()));
+        spinner.addChangeListener(e ->
+            value.setValue(numberModel.getNumber().intValue())
+        );
         valid.addChangeListener(isValid -> spinner.putClientProperty(
             FlatClientProperties.OUTLINE,
             isValid ? null : FlatClientProperties.OUTLINE_ERROR
