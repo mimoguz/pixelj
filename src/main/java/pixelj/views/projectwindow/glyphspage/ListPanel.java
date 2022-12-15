@@ -34,6 +34,13 @@ public final class ListPanel extends ListPanelBase implements Detachable {
         list.setModel(filteredListModel);
         list.setSelectionModel(selectionModel);
         selectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        gridView.setModel(filteredListModel);
+
+        final var settings = project.getDocumentSettings();
+        gridView.setCellSize(
+            Math.max(48, Math.min(Dimensions.MAXIMUM_PREVIEW_SIZE, settings.canvasWidth())) + 36,
+            Math.max(48, Math.min(Dimensions.MAXIMUM_PREVIEW_SIZE, settings.canvasHeight())) + 24
+        );
 
         actions = new GlyphListActions(project, selectionModel, listModel, window);
         actions.removeGlyphsAction.setEnabled(false);
@@ -68,61 +75,33 @@ public final class ListPanel extends ListPanelBase implements Detachable {
         gridViewPopup.addPopupMenuListener(new PopupMenuListener() {
             @Override
             public void popupMenuWillBecomeVisible(final PopupMenuEvent e) {
-                synchronized (listModel) {
-                    gridView.removeAll();
 
-                    final var count = listModel.getSize();
-                    final var location = gridViewButton.getLocationOnScreen();
+                final var location = gridViewButton.getLocationOnScreen();
 
-                    if (count == 0) {
-                        gridView.setLayout(new BoxLayout(gridView, BoxLayout.X_AXIS));
-                        final var msg = new JLabel(Resources.get().getString("emptyListMessage"));
-                        msg.setBorder(Borders.LARGE_EMPTY);
-                        gridView.add(msg);
-
-                        // Fix popup size and location
-                        SwingUtilities.invokeLater(() -> {
-                            gridViewPopup.setPopupSize(msg.getWidth() + 2, msg.getHeight() + 2);
-                            gridViewPopup.setLocation(
-                                location.x,
-                                location.y + gridViewButton.getHeight() + Dimensions.MEDIUM_PADDING
-                            );
-                        });
-                    } else {
-                        final var layout = new GridLayout((count + 1) / 10, Math.min(10, count), 1, 1);
-                        gridView.setLayout(layout);
-                        for (var i = 0; i < listModel.getSize(); i++) {
-                            gridView.add(new GridCell(listModel.getElementAt(i)));
-                        }
-
-                        // Fix popup size and location
-                        SwingUtilities.invokeLater(() -> {
-                            final var maxHeight = ListPanel.this.getGraphicsConfiguration().getBounds().height / 3 * 2;
-                            final var size = layout.minimumLayoutSize(gridView);
-                            var popupWidth = size.width + 2;
-                            var popupHeight = size.height + 2;
-                            if (popupHeight > maxHeight) {
-                                popupHeight = maxHeight;
-                                popupWidth += 10;
-                            }
-                            gridViewPopup.setPopupSize(popupWidth, popupHeight);
-                            gridViewPopup.setLocation(
-                                location.x,
-                                location.y + gridViewButton.getHeight() + Dimensions.MEDIUM_PADDING
-                            );
-                        });
-                    }
-                }
+                // Fix popup size and location
+                SwingUtilities.invokeLater(() -> {
+                    final var maxHeight = ListPanel.this.getGraphicsConfiguration().getBounds().height / 3 * 2;
+                    final var gridSize = gridView.getMinimumSize();
+                    gridView.setPreferredSize(gridSize);
+                    gridViewPopup.setPopupSize(
+                        gridSize.width + gridScroll.getVerticalScrollBar().getWidth(),
+                        Math.min(maxHeight, gridSize.height)
+                    );
+                    gridViewPopup.setLocation(
+                        location.x,
+                        location.y + gridViewButton.getHeight() + Dimensions.MEDIUM_PADDING
+                    );
+                });
             }
 
             @Override
             public void popupMenuWillBecomeInvisible(final PopupMenuEvent e) {
-                gridView.removeAll();
+                // Ignore
             }
 
             @Override
             public void popupMenuCanceled(final PopupMenuEvent e) {
-                gridView.removeAll();
+                // Ignore
             }
         });
     }
