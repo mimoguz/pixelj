@@ -18,6 +18,7 @@ public class GridCellRenderer implements Grid.GridCellRenderer<Glyph> {
     private final JPanel component = new JPanel();
     private final JPanel emptyComponent = new JPanel();
     private final JLabel title = new JLabel();
+    private final JLabel emptyCellLabel = new JLabel();
     private final GlyphView picture = new GlyphView(Resources.get().colors.disabledIcon());
 
     public GridCellRenderer() {
@@ -35,9 +36,15 @@ public class GridCellRenderer implements Grid.GridCellRenderer<Glyph> {
         pictureFrame.setBorder(Borders.SMALL_EMPTY);
         pictureFrame.setBackground(Color.WHITE);
         Components.addOuterBorder(pictureFrame, BorderFactory.createMatteBorder(1, 1, 1, 1, Resources.get().colors.separator()));
+        pictureFrame.add(picture);
         component.add(pictureFrame);
 
-        emptyComponent.setBackground(Resources.get().colors.disabledIcon());
+        emptyComponent.setLayout(new MigLayout(
+            "",
+            "[center, grow, fill]",
+            "[center, grow, fill]"
+        ));
+        emptyComponent.add(emptyCellLabel);
     }
 
     @Override
@@ -66,15 +73,12 @@ public class GridCellRenderer implements Grid.GridCellRenderer<Glyph> {
         }
         picture.setModel(value, false);
 
-        final var minimumWidth = Math.max(picture.getWidth(), 32) + 14;
-        final var minimumHeight = Math.max(picture.getHeight(), 32) + 14 + 24;
-        component.setPreferredSize(new Dimension(minimumWidth, minimumHeight));
-
         return component;
     }
 
     @Override
-    public JComponent getEmpty(final Dimension size) {
+    public JComponent getEmpty(final String message) {
+        emptyCellLabel.setText(message);
         return emptyComponent;
     }
 }

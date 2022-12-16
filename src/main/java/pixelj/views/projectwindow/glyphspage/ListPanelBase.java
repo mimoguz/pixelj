@@ -55,6 +55,7 @@ abstract class ListPanelBase extends JPanel {
 
         gridView.setCellRenderer(new GridCellRenderer());
         gridView.setColumnCount(8);
+        gridView.setLineColor(Resources.get().colors.separator());
 
         setBorder(Borders.EMPTY);
         setPreferredSize(new Dimension(360, 100));
@@ -93,6 +94,7 @@ abstract class ListPanelBase extends JPanel {
         gridScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         gridScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         gridViewPopup.add(gridScroll);
+        Components.addInnerBorder(gridViewPopup, Borders.MEDIUM_EMPTY);
         // gridViewPopup.setPopupSize(500, 500);
     }
 }

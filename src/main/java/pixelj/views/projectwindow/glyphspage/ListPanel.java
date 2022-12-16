@@ -38,8 +38,8 @@ public final class ListPanel extends ListPanelBase implements Detachable {
 
         final var settings = project.getDocumentSettings();
         gridView.setCellSize(
-            Math.max(48, Math.min(Dimensions.MAXIMUM_PREVIEW_SIZE, settings.canvasWidth())) + 36,
-            Math.max(48, Math.min(Dimensions.MAXIMUM_PREVIEW_SIZE, settings.canvasHeight())) + 24
+            Math.max(32, Math.min(Dimensions.MAXIMUM_PREVIEW_SIZE, settings.canvasWidth())) + 24,
+            Math.max(32, Math.min(Dimensions.MAXIMUM_PREVIEW_SIZE, settings.canvasHeight())) + 48
         );
 
         actions = new GlyphListActions(project, selectionModel, listModel, window);
@@ -82,11 +82,20 @@ public final class ListPanel extends ListPanelBase implements Detachable {
                 SwingUtilities.invokeLater(() -> {
                     final var maxHeight = ListPanel.this.getGraphicsConfiguration().getBounds().height / 3 * 2;
                     final var gridSize = gridView.getMinimumSize();
+                    final var popupInsets = gridViewPopup.getInsets();
+                    final var scrollInsets = gridScroll.getInsets();
+
+                    final var w = gridSize.width
+                        + gridScroll.getVerticalScrollBar().getWidth()
+                        + popupInsets.left + popupInsets.right
+                        + scrollInsets.left + scrollInsets.right;
+
+                    final var h = Math.min(maxHeight, gridSize.height)
+                        + popupInsets.top + popupInsets.bottom
+                        + scrollInsets.top + scrollInsets.bottom;
+
                     gridView.setPreferredSize(gridSize);
-                    gridViewPopup.setPopupSize(
-                        gridSize.width + gridScroll.getVerticalScrollBar().getWidth(),
-                        Math.min(maxHeight, gridSize.height)
-                    );
+                    gridViewPopup.setPopupSize(w, h);
                     gridViewPopup.setLocation(
                         location.x,
                         location.y + gridViewButton.getHeight() + Dimensions.MEDIUM_PADDING
