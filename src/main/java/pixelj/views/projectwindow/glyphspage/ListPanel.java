@@ -6,6 +6,7 @@ import javax.swing.event.PopupMenuListener;
 
 import pixelj.actions.ApplicationAction;
 import pixelj.actions.GlyphListActions;
+import pixelj.graphics.BinaryImage;
 import pixelj.models.Block;
 import pixelj.models.FilteredList;
 import pixelj.models.Glyph;
@@ -37,10 +38,7 @@ public final class ListPanel extends ListPanelBase implements Detachable {
         gridView.setModel(filteredListModel);
 
         final var settings = project.getDocumentSettings();
-        gridView.setCellSize(
-            Math.max(32, Math.min(Dimensions.MAXIMUM_PREVIEW_SIZE, settings.canvasWidth())) + 24,
-            Math.max(32, Math.min(Dimensions.MAXIMUM_PREVIEW_SIZE, settings.canvasHeight())) + 48
-        );
+        gridView.setSample(new Glyph(0, settings.defaultWidth(), BinaryImage.of(settings.canvasWidth(), settings.canvasHeight())));
 
         actions = new GlyphListActions(project, selectionModel, listModel, window);
         actions.removeGlyphsAction.setEnabled(false);
@@ -85,7 +83,7 @@ public final class ListPanel extends ListPanelBase implements Detachable {
                     final var popupInsets = gridViewPopup.getInsets();
                     final var scrollInsets = gridScroll.getInsets();
 
-                    final var w = gridSize.width
+                    var w = gridSize.width
                         + gridScroll.getVerticalScrollBar().getWidth()
                         + popupInsets.left + popupInsets.right
                         + scrollInsets.left + scrollInsets.right;
@@ -139,5 +137,9 @@ public final class ListPanel extends ListPanelBase implements Detachable {
         actions.addGlyphsAction.setEnabled(value);
         actions.removeGlyphsAction.setEnabled(value && (selectionModel.getMinSelectionIndex() >= 0));
         actions.copyFromAction.setEnabled(value && (selectionModel.getMinSelectionIndex() >= 0));
+    }
+
+    private static  int clamp(final int value, final int min, final int max) {
+        return  Math.min(max, Math.max(min, value));
     }
 }

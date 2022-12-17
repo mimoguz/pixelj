@@ -2,6 +2,7 @@ package pixelj.views.projectwindow.glyphspage;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
+import pixelj.graphics.BinaryImage;
 import pixelj.models.Glyph;
 import pixelj.resources.Resources;
 import pixelj.views.controls.GlyphView;
@@ -23,7 +24,7 @@ public class GridCellRenderer implements Grid.GridCellRenderer<Glyph> {
 
     public GridCellRenderer() {
         component.setLayout(new MigLayout(
-            "insets 6lp 4lp 8lp 4lp",
+            "insets 4lp 4lp 8lp 4lp",
             "[center, grow]",
             "[top]6lp[center, grow]"
         ));
@@ -44,6 +45,7 @@ public class GridCellRenderer implements Grid.GridCellRenderer<Glyph> {
             "[center, grow, fill]",
             "[center, grow, fill]"
         ));
+        emptyCellLabel.putClientProperty(FlatClientProperties.STYLE_CLASS, "h3");
         emptyComponent.add(emptyCellLabel);
     }
 
@@ -52,12 +54,31 @@ public class GridCellRenderer implements Grid.GridCellRenderer<Glyph> {
         if (value == null) {
             return emptyComponent;
         }
-
         title.setText((char) value.getCodePoint() + " (0x" + Integer.toHexString(value.getCodePoint()) + ')');
+        picture.setModel(value, false);
+        fixPictureSize(value);
+        return component;
+    }
 
-        final int imageWidth = value.getImage().getImageWidth();
-        final int imageHeight = value.getImage().getImageHeight();
+    @Override
+    public JComponent getEmpty(final String message) {
+        emptyCellLabel.setText(message);
+        return emptyComponent;
+    }
+
+    @Override
+    public Dimension getFixedSize(final Glyph sample) {
+        final var pictureSize = fixPictureSize(sample);
+        final var w = 4 + Math.max(42, pictureSize.width) + 2 * Dimensions.SMALL_PADDING + 2 + 4;
+        final var h = 4 + 20 + 6 + pictureSize.height + 2 * Dimensions.SMALL_PADDING + 2 + 8;
+        return new Dimension(w, h);
+    }
+
+    private Dimension fixPictureSize(final Glyph model) {
+        final int imageWidth = model.getImage().getImageWidth();
+        final int imageHeight = model.getImage().getImageHeight();
         final var imageSize = Math.max(imageWidth, imageHeight);
+        picture.setModel(model, false);
         if (imageSize > Dimensions.MAXIMUM_PREVIEW_SIZE) {
             picture.setZoom(0);
             final var scale = ((double) Dimensions.MAXIMUM_PREVIEW_SIZE) / imageSize;
@@ -71,14 +92,6 @@ public class GridCellRenderer implements Grid.GridCellRenderer<Glyph> {
         } else {
             picture.setZoom(1);
         }
-        picture.setModel(value, false);
-
-        return component;
-    }
-
-    @Override
-    public JComponent getEmpty(final String message) {
-        emptyCellLabel.setText(message);
-        return emptyComponent;
+        return picture.getPreferredSize();
     }
 }

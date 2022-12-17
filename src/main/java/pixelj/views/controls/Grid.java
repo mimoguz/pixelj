@@ -1,5 +1,8 @@
 package pixelj.views.controls;
 
+import pixelj.resources.Resources;
+import pixelj.views.shared.Dimensions;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -7,17 +10,30 @@ import java.awt.*;
 public class Grid<T> extends JPanel {
 
     private final Dimension cellSize = new Dimension(64, 64);
+    private final Dimension fixedSize = new Dimension(64, 64);
+    private final CellRendererPane renderPane = new CellRendererPane();
     private int columnCount = 4;
     private GridCellRenderer<T> cellRenderer = null;
     private ListModel<T> model = null;
-    private final CellRendererPane renderPane = new CellRendererPane();
-
     private Color lineColor;
-
+    private T sample;
     public Grid() {
         super();
         add(renderPane);
         lineColor = getBackground().darker();
+    }
+
+    public Dimension getFixedSize() {
+        return fixedSize;
+    }
+
+    public T getSample() {
+        return sample;
+    }
+
+    public void setSample(final T sample) {
+        this.sample = sample;
+        fixSize();
     }
 
     public GridCellRenderer<T> getCellRenderer() {
@@ -26,23 +42,18 @@ public class Grid<T> extends JPanel {
 
     public void setCellRenderer(GridCellRenderer<T> cellRenderer) {
         this.cellRenderer = cellRenderer;
-        if (isShowing()) {
-            repaint();
-        }
+        fixSize();
     }
 
     public Dimension getCellSize() {
         return new Dimension(cellSize);
     }
 
-    public void setCellSize(final int width, final int height) {
+    public void setFixedSize(final int width, final int height) {
         assert width > 0;
         assert height > 0;
-        cellSize.setSize(width, height);
+        fixedSize.setSize(width, height);
         fixSize();
-        if (isShowing()) {
-            repaint();
-        }
     }
 
     public int getColumnCount() {
@@ -53,9 +64,6 @@ public class Grid<T> extends JPanel {
         assert columnCount > 0;
         this.columnCount = columnCount;
         fixSize();
-        if (isShowing()) {
-            repaint();
-        }
     }
 
     public Color getLineColor() {
@@ -82,39 +90,6 @@ public class Grid<T> extends JPanel {
             // Add listener
         }
         fixSize();
-        if (isShowing()) {
-            repaint();
-        }
-    }
-
-    @Override
-    public void setBorder(final Border border) {
-        super.setBorder(border);
-        fixSize();
-        if (isShowing()) {
-            repaint();
-        }
-    }
-
-    @Override
-    public Dimension getMinimumSize() {
-        final var sz = cellSize == null ? new Dimension(0, 0) : cellSize;
-        if (model == null || model.getSize() == 0) {
-            return new Dimension(sz.width, sz.height);
-        }
-        final var rows = Math.ceilDiv(model.getSize(), columnCount);
-        final var cols = Math.min(model.getSize(), columnCount);
-        final var insets = getInsets();
-        // Leave 1 pixel gap between cells:
-        return new Dimension(
-            cols * sz.width + (cols - 1) + insets.left + insets.right,
-            rows * sz.height + (rows - 1) + insets.top + insets.bottom
-        );
-    }
-
-    @Override
-    public void setMinimumSize(Dimension minimumSize) {
-        throw new UnsupportedOperationException("Can't set the minimum size of a grid view.");
     }
 
     // TODO: Don't paint the invisible parts.
@@ -138,15 +113,15 @@ public class Grid<T> extends JPanel {
         final var numRows = Math.ceilDiv(numItems, columnCount);
 
         if (numItems == 0) {
-            final var component = cellRenderer.getEmpty("Empty");
+            final var component = cellRenderer.getEmpty(Resources.get().getString("emptyListMessage"));
             renderPane.paintComponent(g, component, this, 0, 0, cellSize.width, cellSize.height, true);
         } else {
             for (var column = 0; column < numColumns; column++) {
                 final var x = column * (cellSize.width + 1);
                 for (var row = 0; row < numRows; row++) {
                     final var y = row * (cellSize.height + 1);
-                    final var component = getComponentAtIndex(column + row * this.columnCount);
-                    renderPane.paintComponent(g, component, this, x, y, cellSize.width, cellSize.height, true);
+                    final var renderer = getRendererForIndex(column + row * this.columnCount);
+                    renderPane.paintComponent(g, renderer, this, x, y, cellSize.width, cellSize.height, true);
                 }
             }
         }
@@ -155,11 +130,39 @@ public class Grid<T> extends JPanel {
         g.setClip(clip);
     }
 
-    private JComponent getComponentAtIndex(final int n) {
-        if (model == null) {
-            return  null;
+    @Override
+    public void setBorder(final Border border) {
+        super.setBorder(border);
+        fixSize();
+        if (isShowing()) {
+            repaint();
         }
-        if (cellRenderer == null) {
+    }
+
+    @Override
+    public Dimension getMinimumSize() {
+        var sz = cellSize;
+        sz = sz != null ? sz : new Dimension(0, 0);
+        if (model == null || model.getSize() == 0) {
+            return new Dimension(sz.width, sz.height);
+        }
+        final var rows = Math.ceilDiv(model.getSize(), columnCount);
+        final var cols = Math.min(model.getSize(), columnCount);
+        final var insets = getInsets();
+        // Leave 1 pixel gap between cells:
+        return new Dimension(
+            cols * sz.width + (cols - 1) + insets.left + insets.right,
+            rows * sz.height + (rows - 1) + insets.top + insets.bottom
+        );
+    }
+
+    @Override
+    public void setMinimumSize(Dimension minimumSize) {
+        throw new UnsupportedOperationException("Can't set the minimum size of a grid view.");
+    }
+
+    private JComponent getRendererForIndex(final int n) {
+        if (model == null || cellRenderer == null) {
             return new JPanel();
         }
         if (n >= model.getSize()) {
@@ -169,6 +172,9 @@ public class Grid<T> extends JPanel {
     }
 
     private void fixSize() {
+        if (sample != null && cellRenderer != null) {
+            cellSize.setSize(cellRenderer.getFixedSize(sample));
+        }
         final var minSize = getMinimumSize();
         super.setMinimumSize(minSize);
         if (renderPane == null) {
@@ -176,25 +182,22 @@ public class Grid<T> extends JPanel {
         }
         renderPane.setMinimumSize(minSize);
         renderPane.setPreferredSize(minSize);
-    }
-
-    private int getFirstRow(final int y) {
-        if (model == null || model.getSize() == 0) {
-            return 0;
+        if (isShowing()) {
+            repaint();
         }
-        return Math.floorDiv(y, cellSize.height + 1);
-    }
-
-    private int getFirstColumn(final int x) {
-        if (model == null || model.getSize() == 0) {
-            return 0;
-        }
-        return Math.floorDiv(x, cellSize.width + 1);
     }
 
     public interface GridCellRenderer<T> {
         JComponent getComponent(final T value, final int index);
 
         JComponent getEmpty(final String message);
+
+        Dimension getFixedSize(final T sample);
     }
+
+
+
+
+
+
 }
