@@ -19,7 +19,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <flatlaf.version>2.6</flatlaf.version>
-        <fastutil.core.version>8.5.9</fastutil.core.version>
+        <fastutil.core.version>8.5.11</fastutil.core.version>
         <guice.version>5.1.0</guice.version>
         <h2.version>2.1.214</h2.version>
         <lwjgl.version>3.3.1</lwjgl.version> <!-- LWJGL3 provides a wrapper for NativeFileDialog library -->
