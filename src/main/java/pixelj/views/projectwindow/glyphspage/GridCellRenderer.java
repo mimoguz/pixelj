@@ -2,7 +2,6 @@ package pixelj.views.projectwindow.glyphspage;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
-import pixelj.graphics.BinaryImage;
 import pixelj.models.Glyph;
 import pixelj.resources.Resources;
 import pixelj.views.controls.GlyphView;
@@ -24,7 +23,7 @@ public class GridCellRenderer implements Grid.GridCellRenderer<Glyph> {
 
     public GridCellRenderer() {
         component.setLayout(new MigLayout(
-            "insets 4lp 4lp 8lp 4lp",
+            "insets 2lp 4lp 8lp 2lp",
             "[center, grow]",
             "[top]6lp[center, grow]"
         ));
@@ -69,7 +68,7 @@ public class GridCellRenderer implements Grid.GridCellRenderer<Glyph> {
     @Override
     public Dimension getFixedSize(final Glyph sample) {
         final var pictureSize = fixPictureSize(sample);
-        final var w = 4 + Math.max(42, pictureSize.width) + 2 * Dimensions.SMALL_PADDING + 2 + 4;
+        final var w = 2 + Math.max(60, pictureSize.width) + 2 * Dimensions.SMALL_PADDING + 2 + 2;
         final var h = 4 + 20 + 6 + pictureSize.height + 2 * Dimensions.SMALL_PADDING + 2 + 8;
         return new Dimension(w, h);
     }

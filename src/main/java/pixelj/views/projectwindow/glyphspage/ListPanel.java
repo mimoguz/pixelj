@@ -1,9 +1,5 @@
 package pixelj.views.projectwindow.glyphspage;
 
-import javax.swing.*;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
-
 import pixelj.actions.ApplicationAction;
 import pixelj.actions.GlyphListActions;
 import pixelj.graphics.BinaryImage;
@@ -15,10 +11,11 @@ import pixelj.models.SortedList;
 import pixelj.resources.Icon;
 import pixelj.resources.Resources;
 import pixelj.util.Detachable;
-import pixelj.views.shared.Borders;
 import pixelj.views.shared.Dimensions;
 
-import java.awt.*;
+import javax.swing.*;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 public final class ListPanel extends ListPanelBase implements Detachable {
 
@@ -38,7 +35,11 @@ public final class ListPanel extends ListPanelBase implements Detachable {
         gridView.setModel(filteredListModel);
 
         final var settings = project.getDocumentSettings();
-        gridView.setSample(new Glyph(0, settings.defaultWidth(), BinaryImage.of(settings.canvasWidth(), settings.canvasHeight())));
+        gridView.setSample(new Glyph(
+            0,
+            settings.defaultWidth(),
+            BinaryImage.of(settings.canvasWidth(), settings.canvasHeight())
+        ));
 
         actions = new GlyphListActions(project, selectionModel, listModel, window);
         actions.removeGlyphsAction.setEnabled(false);
@@ -77,28 +78,26 @@ public final class ListPanel extends ListPanelBase implements Detachable {
                 final var location = gridViewButton.getLocationOnScreen();
 
                 // Fix popup size and location
-                SwingUtilities.invokeLater(() -> {
-                    final var maxHeight = ListPanel.this.getGraphicsConfiguration().getBounds().height / 3 * 2;
-                    final var gridSize = gridView.getMinimumSize();
-                    final var popupInsets = gridViewPopup.getInsets();
-                    final var scrollInsets = gridScroll.getInsets();
+                final var maxHeight = ListPanel.this.getGraphicsConfiguration().getBounds().height / 3 * 2;
+                final var gridSize = gridView.getMinimumSize();
+                final var popupInsets = gridViewPopup.getInsets();
+                final var scrollInsets = gridScroll.getInsets();
 
-                    var w = gridSize.width
-                        + gridScroll.getVerticalScrollBar().getWidth()
-                        + popupInsets.left + popupInsets.right
-                        + scrollInsets.left + scrollInsets.right;
+                var w = gridSize.width
+                    + gridScroll.getVerticalScrollBar().getWidth()
+                    + popupInsets.left + popupInsets.right
+                    + scrollInsets.left + scrollInsets.right;
 
-                    final var h = Math.min(maxHeight, gridSize.height)
-                        + popupInsets.top + popupInsets.bottom
-                        + scrollInsets.top + scrollInsets.bottom;
+                final var h = Math.min(maxHeight, gridSize.height)
+                    + popupInsets.top + popupInsets.bottom
+                    + scrollInsets.top + scrollInsets.bottom;
 
-                    gridView.setPreferredSize(gridSize);
-                    gridViewPopup.setPopupSize(w, h);
-                    gridViewPopup.setLocation(
-                        location.x,
-                        location.y + gridViewButton.getHeight() + Dimensions.MEDIUM_PADDING
-                    );
-                });
+                gridView.setPreferredSize(gridSize);
+                gridViewPopup.setPopupSize(w, h);
+                gridViewPopup.setLocation(
+                    location.x,
+                    location.y + gridViewButton.getHeight() + Dimensions.MEDIUM_PADDING
+                );
             }
 
             @Override
@@ -137,9 +136,5 @@ public final class ListPanel extends ListPanelBase implements Detachable {
         actions.addGlyphsAction.setEnabled(value);
         actions.removeGlyphsAction.setEnabled(value && (selectionModel.getMinSelectionIndex() >= 0));
         actions.copyFromAction.setEnabled(value && (selectionModel.getMinSelectionIndex() >= 0));
-    }
-
-    private static  int clamp(final int value, final int min, final int max) {
-        return  Math.min(max, Math.max(min, value));
     }
 }
