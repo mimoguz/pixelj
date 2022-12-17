@@ -8,7 +8,7 @@ You can find pre-compiled Windows and Linux packages on the [releases](https://g
 
 ![New project dialog](.github/new_project_2022_11_19.png)
 
-![Project view](.github/glyphs_screen_2022_12_01.png)
+![Project view](.github/glyphs_screen_2022_12_17.png)
 
 ## Engine/Framework Support
 
