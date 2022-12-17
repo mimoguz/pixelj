@@ -1,19 +1,18 @@
 package pixelj.views.projectwindow.glyphspage;
 
-import java.awt.*;
-
-import javax.swing.*;
-
-import com.formdev.flatlaf.FlatClientProperties;
 import pixelj.models.Block;
 import pixelj.models.Glyph;
 import pixelj.resources.Resources;
 import pixelj.views.controls.CoupledActionsButton;
+import pixelj.views.controls.Grid;
 import pixelj.views.controls.SearchableComboBox;
 import pixelj.views.shared.Borders;
 import pixelj.views.shared.Components;
 import pixelj.views.shared.Dimensions;
 import pixelj.views.shared.GlyphCellRenderer;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * ListPanel design.
@@ -27,7 +26,8 @@ abstract class ListPanelBase extends JPanel {
     protected final JButton gridViewButton = new JButton();
     protected final JButton copyFromButton = new JButton();
     protected final JPopupMenu gridViewPopup = new JPopupMenu();
-    protected final JPanel gridView = new JPanel(new GridLayout(10, 10, 1, 1));
+    protected final Grid<Glyph> gridView = new Grid<>();
+    protected final JScrollPane gridScroll = new JScrollPane(gridView);
 
     ListPanelBase() {
         Components.setFixedSize(addButton, Dimensions.TEXT_BUTTON_SIZE);
@@ -50,6 +50,10 @@ abstract class ListPanelBase extends JPanel {
 
         filterBox.setMaximumSize(Dimensions.MAXIMUM_COMBO_BOX_SIZE);
         filterBox.setMinimumSize(Dimensions.MINIMUM_COMBO_BOX_SIZE);
+
+        gridView.setCellRenderer(new GridCellRenderer());
+        gridView.setColumnCount(8);
+        gridView.setLineColor(Resources.get().colors.separator());
 
         setBorder(Borders.EMPTY);
         setPreferredSize(new Dimension(360, 100));
@@ -84,10 +88,10 @@ abstract class ListPanelBase extends JPanel {
         add(scrollPanel);
 
         gridView.setBackground(Resources.get().colors.separator());
-        final var gridViewScroll = new JScrollPane(gridView);
-        gridViewScroll.setBorder(Borders.EMPTY);
-        gridViewScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        gridViewPopup.add(gridViewScroll);
-        gridViewPopup.setPopupSize(500, 500);
+        gridScroll.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Resources.get().colors.separator()));
+        Components.addOuterBorder(gridScroll, Borders.MEDIUM_EMPTY);
+        gridScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        gridScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        gridViewPopup.add(gridScroll);
     }
 }

@@ -1,11 +1,8 @@
 package pixelj.views.projectwindow.glyphspage;
 
-import javax.swing.*;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
-
 import pixelj.actions.ApplicationAction;
 import pixelj.actions.GlyphListActions;
+import pixelj.graphics.BinaryImage;
 import pixelj.models.Block;
 import pixelj.models.FilteredList;
 import pixelj.models.Glyph;
@@ -14,10 +11,11 @@ import pixelj.models.SortedList;
 import pixelj.resources.Icon;
 import pixelj.resources.Resources;
 import pixelj.util.Detachable;
-import pixelj.views.shared.Borders;
 import pixelj.views.shared.Dimensions;
 
-import java.awt.*;
+import javax.swing.*;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 public final class ListPanel extends ListPanelBase implements Detachable {
 
@@ -34,6 +32,14 @@ public final class ListPanel extends ListPanelBase implements Detachable {
         list.setModel(filteredListModel);
         list.setSelectionModel(selectionModel);
         selectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        gridView.setModel(filteredListModel);
+
+        final var settings = project.getDocumentSettings();
+        gridView.setSample(new Glyph(
+            0,
+            settings.defaultWidth(),
+            BinaryImage.of(settings.canvasWidth(), settings.canvasHeight())
+        ));
 
         actions = new GlyphListActions(project, selectionModel, listModel, window);
         actions.removeGlyphsAction.setEnabled(false);
@@ -68,61 +74,40 @@ public final class ListPanel extends ListPanelBase implements Detachable {
         gridViewPopup.addPopupMenuListener(new PopupMenuListener() {
             @Override
             public void popupMenuWillBecomeVisible(final PopupMenuEvent e) {
-                synchronized (listModel) {
-                    gridView.removeAll();
 
-                    final var count = listModel.getSize();
-                    final var location = gridViewButton.getLocationOnScreen();
+                final var location = gridViewButton.getLocationOnScreen();
 
-                    if (count == 0) {
-                        gridView.setLayout(new BoxLayout(gridView, BoxLayout.X_AXIS));
-                        final var msg = new JLabel(Resources.get().getString("emptyListMessage"));
-                        msg.setBorder(Borders.LARGE_EMPTY);
-                        gridView.add(msg);
+                // Fix popup size and location
+                final var maxHeight = ListPanel.this.getGraphicsConfiguration().getBounds().height / 3 * 2;
+                final var gridSize = gridView.getMinimumSize();
+                final var popupInsets = gridViewPopup.getInsets();
+                final var scrollInsets = gridScroll.getInsets();
 
-                        // Fix popup size and location
-                        SwingUtilities.invokeLater(() -> {
-                            gridViewPopup.setPopupSize(msg.getWidth() + 2, msg.getHeight() + 2);
-                            gridViewPopup.setLocation(
-                                location.x,
-                                location.y + gridViewButton.getHeight() + Dimensions.MEDIUM_PADDING
-                            );
-                        });
-                    } else {
-                        final var layout = new GridLayout((count + 1) / 10, Math.min(10, count), 1, 1);
-                        gridView.setLayout(layout);
-                        for (var i = 0; i < listModel.getSize(); i++) {
-                            gridView.add(new GridCell(listModel.getElementAt(i)));
-                        }
+                var w = gridSize.width
+                    + (gridSize.height > maxHeight ? gridScroll.getVerticalScrollBar().getWidth() : 0)
+                    + popupInsets.left + popupInsets.right
+                    + scrollInsets.left + scrollInsets.right;
 
-                        // Fix popup size and location
-                        SwingUtilities.invokeLater(() -> {
-                            final var maxHeight = ListPanel.this.getGraphicsConfiguration().getBounds().height / 3 * 2;
-                            final var size = layout.minimumLayoutSize(gridView);
-                            var popupWidth = size.width + 2;
-                            var popupHeight = size.height + 2;
-                            if (popupHeight > maxHeight) {
-                                popupHeight = maxHeight;
-                                popupWidth += 10;
-                            }
-                            gridViewPopup.setPopupSize(popupWidth, popupHeight);
-                            gridViewPopup.setLocation(
-                                location.x,
-                                location.y + gridViewButton.getHeight() + Dimensions.MEDIUM_PADDING
-                            );
-                        });
-                    }
-                }
+                final var h = Math.min(maxHeight, gridSize.height)
+                    + popupInsets.top + popupInsets.bottom
+                    + scrollInsets.top + scrollInsets.bottom;
+
+                gridView.setPreferredSize(gridSize);
+                gridViewPopup.setPopupSize(w, h);
+                gridViewPopup.setLocation(
+                    location.x,
+                    location.y + gridViewButton.getHeight() + Dimensions.MEDIUM_PADDING
+                );
             }
 
             @Override
             public void popupMenuWillBecomeInvisible(final PopupMenuEvent e) {
-                gridView.removeAll();
+                // Ignore
             }
 
             @Override
             public void popupMenuCanceled(final PopupMenuEvent e) {
-                gridView.removeAll();
+                // Ignore
             }
         });
     }

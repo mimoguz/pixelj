@@ -6,8 +6,7 @@ import java.io.IOException;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 
-import javax.swing.UIManager;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLaf;
@@ -61,6 +60,7 @@ public final class Main {
 
     private static void initializeResources(final AppState state) {
         Resources.initialize(state.getColorTheme(), state.getIconTheme());
+        JPopupMenu.setDefaultLightWeightPopupEnabled(false);
         UIManager.put("Component.grayFilter", new DisabledIconFilter(Resources.get().colors.disabledIcon()));
         FlatLaf.registerCustomDefaultsSource("pixelj.themes");
         if (state.isDarkTheme()) {
