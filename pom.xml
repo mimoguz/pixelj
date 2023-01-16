@@ -31,7 +31,7 @@
         <miglayout.version>11.0</miglayout.version>
         <maven.assembly.plugin.version>3.4.2</maven.assembly.plugin.version>
         <maven.compiler.plugin.version>3.10.1</maven.compiler.plugin.version>
-        <checkstyle.version>3.2.0</checkstyle.version>
+        <checkstyle.version>3.2.1</checkstyle.version>
     </properties>
     <repositories>
         <repository>
